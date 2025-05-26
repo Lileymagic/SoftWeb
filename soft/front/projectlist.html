@@ -17,18 +17,19 @@
             color:rgb(25, 25, 52);
             border: 1px solid rgba(0, 0, 0, 0.25);
             font-size: small;
-            font-weight: 300;   
+            font-weight: 300;  
             margin-bottom: 10px;
             border-radius: 4px;
             font-family: 'Pretendard-Regular';
         }
         
         .modal_nw {
-            width: 600px;               
-            height: 600px;          
-            padding: 20px;   
+            width: 600px;           
+            height: 600px;         
+            padding: 20px;  
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            border: 1px solid gray; /* 원본 유지 */
         }
         dialog.modal_nw::backdrop {
             background: rgba(0,0,0,0.4);
@@ -82,6 +83,7 @@
             font-size: small;
             font-weight: 300;
             font-family: 'Pretendard-Regular';
+            background-color: transparent; /* 원본 유지 */
         }
         input:focus {
             outline: none;
@@ -148,7 +150,7 @@
             color:rgb(25, 54, 52);
             border: none;
             font-size: medium;
-            font-weight: 700;   
+            font-weight: 700;  
             border-radius: 4px;
             font-family: 'Pretendard-Regular';
 
@@ -159,7 +161,7 @@
         }
         .button_yes {
             background-color: transparent;
-            border: solid 1px rgb(112, 165, 139);            
+            border: solid 1px rgb(112, 165, 139);          
 
             height:25px;
             width:50px;
@@ -180,7 +182,7 @@
         }
         .button_no {
             background-color: transparent;
-            border: solid 1px rgb(173, 98, 98);            
+            border: solid 1px rgb(173, 98, 98);          
 
             height:25px;
             width:50px;
@@ -214,43 +216,17 @@
                 <hr style="border: 1px solid rgb(0, 0, 0); "/>
             </div>
         
-            <div style="margin-top:20px; margin-right: 70px;">
-                <label>프로젝트 명</label>
-                <input class="button_nw" type="text" id="worktitle" placeholder="프로젝트 명"/>
+            <div style="margin-top:20px; margin-right: 70px;"> <label for="projectTitle_modal">프로젝트 명</label>
+                <input class="button_nw" type="text" id="projectTitle_modal" placeholder="프로젝트 명"/>
             </div>
-            <div style="margin-top:10px; margin-right: 195px;">
-                <label onclick="openFindid()">초대 유저</label>
-                <button style="background-color:rgb(209, 209, 209); border:none; border-radius: 4px;" onclick="openFindid()">유저 찾기</button>
-                <img src="public/icon/addfriend.png" style="height: 35px; width:35px;"/>
+            
+            <div style="margin-top:10px; margin-right: 70px;">
+                <label for="projectDescription_modal">프로젝트 설명</label>
+                <textarea class="button_nw" id="projectDescription_modal" placeholder="프로젝트 설명" style="height: 100px; resize: vertical;"></textarea>
             </div>
-            <div style="margin-top:10px; margin-left: 155px;">
-                <div class="box5">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>
-                                    <img src ="public/icon/user2.png" style="height:25px; width:25px; margin-right:10px;"/>
-                                </th>
-                                <th style="font-size: small; font-weight: 100;">닉네임</th>
-                                <th style="font-size: small; font-weight: 100;">#태그</th>
-                                <th>
-                                    <img src="public/icon/minus.png" style="height:15px; width:15px; margin-bottom:3px; margin-left: 10px;" class="drag1"/>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody id="tbody_fd">
-                            
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div style="margin-top:20px; margin-right: 90px;">
-                <label>최종 마감 기한</label>
-                <input class="button_nw" type="datetime-local" id="deadline"/>
-            </div>
+
             <div style="margin-top:20px; display: flex; justify-content: center;">
-                <button class="button_pj" style="width:80px; margin-right:5px;" onclick="addproject()">생성</button>
-                <form method="dialog">
+                <button class="button_pj" style="width:80px; margin-right:5px;" onclick="addProject()">생성</button> <form method="dialog">
                     <button class="button_pj" style="background-color: rgb(184, 185, 186); width:80px;">취소</button>
                 </form>
             </div>
@@ -265,85 +241,44 @@
 
                     <div class="find" style="width: 30%; display: flex; align-items: center;">
                         <input class="button_find" type="text" id="find" placeholder="프로젝트 검색" style="font-size: small; width: 400px;"/> 
-                        <img src="public/icon/finding.png" style="width: 25px; height: 25px; margin: 5px"/>                    
+                        <img src="public/icon/finding.png" style="width: 25px; height: 25px; margin: 5px"/>                     
                     </div>
 
                     <button class="button_pj" style="margin-left: auto;" id="addnewproject">새 프로젝트 생성</button> 
                 </div>
                 <div class="mid" style="background-color: rgb(245, 245, 245); padding: 15px;">
                     <div class="box4">
-                        <table class="table1">
+                        <table class="table table-hover"> 
                             <thead>
-                                <tr>
-                                    <th>
-                                        <img src="public/icon/folder.png" style="height:20px; width:20px;"/>
-                                    </th>
-                                    <th style="font-size: medium; font-weight: 100;" onclick="window.location.href='projectboard.html';">임시 프로젝트 (지울예정)</th>
-                                </tr>
-                            </thead>
+                                </thead>
                             <tbody id="tbody_pj">
                             </tbody>
                         </table>
-
-                    </div>            
+                    </div>             
                 </div>
 
             </div>
 
             <div class="sub">
                 <div class="content_w" style="height: 60px; padding: 15px; border-bottom: solid 1px; border-color: rgba(163, 163, 163, 0.5);">
-                    <div class="black" style="margin: 5px;">초대 요청 프로젝트</div>                 
+                    <div class="black" style="margin: 5px;">초대 요청 프로젝트</div>                
                 </div>
 
                 <div>
                     <table class="table">
                         <tbody id="tbody_invitepj">
-                            <tr>
-                                <th>
-                                    <div style="display: flex; flex-direction: column;">
-                                        <div class="lenCut_container" style="font-size: medium; font-weight: 50;">
-                                            <span class="lenCut">임시 프로젝트 (지울예정)</span>
-                                            <div class="tooltip1" id="tooltip"></div>                                        
-                                        </div>
-                                        <div style="display: flex; flex-direction: row; font-size: medium; font-weight: 50; font-size: small; color: gray; gap: 5px; max-width: 150px; white-space: nowrap;">
-                                            <span>초대자 :</span>
-                                            <div class="lenCut_container">
-                                                <span class="lenCutN">닉네임</span>
-                                                <div class="tooltip1" id="tooltip"></div>                                        
-                                            </div> 
-                                            <div class="lenCut_container">
-                                                <span class="lenCutE">(identification)</span>
-                                                <div class="tooltip1" id="tooltip"></div>                                        
-                                            </div> 
-                                        </div>
-                               
-                                    </div> 
-                                    <div style="margin-left: auto;">
-                                        <button class="button_yes">수락</button>
-                                        <button class="button_no">삭제</button>
-                                    </div>
-                                </th>
-                            </tr>
-                        </tbody>
+                            </tbody>
                     </table>
 
                 </div>
 
-            </div>     
+            </div>      
 
         </div>
     </div>
     
 </body>
 <script>
-    function openFindid() {
-        window.open(
-            'findid_pop.html',       
-            'Findid',     
-            'width=600,height=600,left=100,top=100' 
-        );
-    }
-
     function closeModal(dialog){
         dialog.addEventListener('click', function(e){
             if(e.target === dialog){
@@ -353,106 +288,211 @@
     }
     window.closeModal = closeModal;
 
-    document.addEventListener('DOMContentLoaded', () => {
-        const newpj = document.getElementById('addnewproject');
-        const modal = document.querySelector('.modal_nw');
+    function openFindid() {
+        window.open(
+            'findid_pop.html',
+            'Findid',
+            'width=600,height=600,left=100,top=100'
+        );
+    }
 
-        closeModal(modal); 
-        newpj.addEventListener('click', () => {
-            modal.showModal();
-        });
-    });
+    // 백엔드 API 호출하여 프로젝트 생성하는 함수로 수정
+    async function addProject() {
+        const titleInput = document.getElementById("projectTitle_modal"); // HTML 모달의 input id를 projectTitle_modal로 가정
+        const descriptionInput = document.getElementById("projectDescription_modal"); // HTML 모달에 projectDescription_modal ID를 가진 textarea가 있다고 가정
 
-    function addproject(){
-        const worktitle = document.getElementById("worktitle");
-        const deadline = document.getElementById("deadline");
-        const friend = document.getElementById("tbody_fd");
-
-        const title = worktitle.value.trim();
-        const dl = deadline.value.trim();
+        const title = titleInput.value.trim();
+        const description = descriptionInput.value.trim();
 
         if (!title) {
             alert("프로젝트 명을 입력해주세요.");
-            title.focus();
-        }
-        else if(!dl){
-            alert("최종 마감 기간을 설정해주세요.");
+            titleInput.focus();
             return;
         }
-        
-        const tbody = document.querySelector("#tbody_pj");
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-            <td>
-                <img src="public/icon/folder.png" style="height:20px; width:20px;"/>
-            </td>
-            <td style="font-size: medium; font-weight: 100;">${title}</td>
-        `;
-        tbody.appendChild(tr);
 
-        worktitle.value = "";
-        deadline.value  = "";
-        friend.value = "";
-        
-        const modal = document.querySelector(".modal_nw");
-        modal.close();
+        const projectData = {
+            title: title,
+            description: description
+        };
 
-    }
-    
+        try {
+            const response = await fetch('/api/projects', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(projectData)
+            });
 
-    //말줄임표, 전문 툴팁
-    document.querySelectorAll('.lenCut_container').forEach(container => {
-        const spanText = container.querySelector(".lenCut");
-        const spanTextE = container.querySelector(".lenCutE");
-        const spanTextN = container.querySelector(".lenCutN");
-        const tooltip = container.querySelector('.tooltip1');
+            const result = await response.json();
 
-        if (spanText) {
-            const spanTextOriginal = spanText.textContent;
-            if ( spanTextOriginal.length > 15) {
-                spanText.textContent = spanTextOriginal.slice(0, 15) + "...";
-                
-                spanText.addEventListener('mouseenter', function () {
-                    tooltip.style.display = 'block';
-                    tooltip.textContent = spanTextOriginal;
-                });
-                spanText.addEventListener('mouseleave', function () {
-                    tooltip.style.display = 'none';
-                });            
+            if (response.ok && result.status === 201) {
+                alert(result.message || "프로젝트가 성공적으로 생성되었습니다.");
+
+                const modal = document.querySelector(".modal_nw");
+                if (modal) modal.close();
+
+                titleInput.value = "";
+                if(descriptionInput) descriptionInput.value = ""; // descriptionInput이 존재할 경우에만 초기화
+
+                loadMyProjects();
+            } else {
+                alert(`프로젝트 생성 실패: ${result.message || '알 수 없는 오류'} (상태: ${response.status})`);
             }
+        } catch (error) {
+            console.error("Error during project creation:", error);
+            alert("프로젝트 생성 중 오류가 발생했습니다. 네트워크 또는 서버 상태를 확인해주세요.");
+        }
+    }
+
+    // 사용자의 프로젝트 목록을 불러와 화면에 표시하는 함수
+    async function loadMyProjects() {
+        const tbodyPj = document.getElementById("tbody_pj");
+        if (!tbodyPj) return;
+        tbodyPj.innerHTML = '<tr><td colspan="2" style="text-align:center; color:grey;">프로젝트 목록을 불러오는 중...</td></tr>';
+
+        try {
+            const response = await fetch('/api/projects', {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                }
+            });
+
+            if (response.status === 401) {
+                alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+                window.location.href = "/front/login.html";
+                return;
+            }
+
+            const result = await response.json();
+
+            if (response.ok && result.status === 200) {
+                const projects = result.data;
+                tbodyPj.innerHTML = '';
+
+                if (projects && projects.length > 0) {
+                    projects.forEach(project => {
+                        const tr = document.createElement("tr");
+                        tr.innerHTML = `
+                            <td>
+                                <img src="/icon/folder.png" style="height:20px; width:20px;"/>
+                            </td>
+                            <td style="font-size: medium; font-weight: 100; cursor:pointer;" onclick="goToProjectBoard(${project.idx})">${project.title}</td>
+                        `;
+                        tbodyPj.appendChild(tr);
+                    });
+                } else {
+                    tbodyPj.innerHTML = '<tr><td colspan="2" style="text-align:center; color:grey;">참여 중인 프로젝트가 없습니다. 새 프로젝트를 생성해보세요!</td></tr>';
+                }
+            } else {
+                tbodyPj.innerHTML = `<tr><td colspan="2" style="text-align:center; color:red;">프로젝트 목록을 불러오는 데 실패했습니다: ${result.message || '서버 오류'}</td></tr>`;
+                console.error("Failed to load projects:", result.message);
+            }
+        } catch (error) {
+            if(tbodyPj) tbodyPj.innerHTML = '<tr><td colspan="2" style="text-align:center; color:red;">프로젝트 목록 로드 중 네트워크 오류 발생.</td></tr>';
+            console.error("Error loading projects:", error);
+        }
+    }
+
+    // 프로젝트 보드로 이동하는 함수
+    function goToProjectBoard(projectId) {
+        if (projectId) {
+            window.location.href = `projectboard.html?projectId=${projectId}`;
+        }
+    }
+
+    // 초대된 프로젝트 목록 로드 (다음 단계에서 구현 - 현재는 원본 HTML의 구조만 유지)
+    async function loadPendingInvitations() {
+        const tbodyInvitePj = document.getElementById("tbody_invitepj");
+        if (!tbodyInvitePj) return;
+        // 현재는 원본 HTML에 있는 임시 tr>th 구조를 그대로 두거나, 비워두거나,
+        // "초대받은 프로젝트가 없습니다"와 같은 메시지를 표시할 수 있습니다.
+        // API 연동은 다음 단계에서 진행합니다.
+        tbodyInvitePj.innerHTML = '<tr><th>초대받은 프로젝트가 없습니다.</th></tr>'; // 비워두거나 메시지 표시
+    }
+
+    async function acceptInvitation(projectId) {
+        alert(`프로젝트 ${projectId} 초대를 수락합니다. (API 연동 필요)`);
+    }
+
+    async function rejectInvitation(projectId) {
+        alert(`프로젝트 ${projectId} 초대를 거절합니다. (API 연동 필요)`);
+    }
+
+    // DOMContentLoaded 이벤트 리스너 (기존 로직 유지 및 loadMyProjects, loadPendingInvitations 호출 추가)
+    document.addEventListener('DOMContentLoaded', () => {
+        const newpjBtn = document.getElementById('addnewproject'); // 원본 HTML의 ID 사용
+        const modal = document.querySelector('.modal_nw');
+
+        if (modal) {
+            closeModal(modal);
         }
 
-        if (spanTextE){
-            const spanTextOriginalE = spanTextE.textContent;
-            if ( spanTextOriginalE.length > 12) {
-                spanTextE.textContent = spanTextOriginalE.slice(0, 12) + "...";
-                
-                spanTextE.addEventListener('mouseenter', function () {
-                    tooltip.style.display = 'block';
-                    tooltip.textContent = spanTextOriginalE;
-                });
-                spanTextE.addEventListener('mouseleave', function () {
-                    tooltip.style.display = 'none';
-                });            
-            }            
+        if (newpjBtn) {
+            newpjBtn.addEventListener('click', () => {
+                // 모달 내 입력 필드 초기화 (선택적)
+                const titleInput = document.getElementById("projectTitle_modal");
+                const descriptionInput = document.getElementById("projectDescription_modal");
+                if(titleInput) titleInput.value = "";
+                if(descriptionInput) descriptionInput.value = "";
+
+                if (modal) modal.showModal();
+            });
         }
 
-        if (spanTextN){
-            const spanTextOriginalN = spanTextN.textContent;
-            if ( spanTextOriginalN.length > 8) {
-                spanTextN.textContent = spanTextOriginalN.slice(0, 8) + "...";
-                
-                spanTextN.addEventListener('mouseenter', function () {
-                    tooltip.style.display = 'block';
-                    tooltip.textContent = spanTextOriginalN;
-                });
-                spanTextN.addEventListener('mouseleave', function () {
-                    tooltip.style.display = 'none';
-                });            
-            }            
-        }
-        
+        loadMyProjects();
+        loadPendingInvitations(); // 현재는 임시 데이터 또는 비어있음
 
+        // 원본 HTML에 있던 말줄임표 스크립트 위치 (수정 없음)
+        document.querySelectorAll('.lenCut_container').forEach(container => {
+            const spanText = container.querySelector(".lenCut");
+            const spanTextE = container.querySelector(".lenCutE");
+            const spanTextN = container.querySelector(".lenCutN");
+            const tooltip = container.querySelector('.tooltip1'); // 각 container 내부에서 tooltip 찾기
+
+            if (spanText && tooltip) {
+                const spanTextOriginal = spanText.textContent;
+                if (spanTextOriginal.length > 15) { // 원본 HTML의 길이 기준에 따름 (예시)
+                    spanText.textContent = spanTextOriginal.slice(0, 15) + "...";
+                    spanText.addEventListener('mouseenter', function () {
+                        tooltip.style.display = 'block';
+                        tooltip.textContent = spanTextOriginal;
+                    });
+                    spanText.addEventListener('mouseleave', function () {
+                        tooltip.style.display = 'none';
+                    });
+                }
+            }
+
+            if (spanTextE && tooltip){
+                const spanTextOriginalE = spanTextE.textContent;
+                if (spanTextOriginalE.length > 12) { // 원본 HTML의 길이 기준에 따름 (예시)
+                    spanTextE.textContent = spanTextOriginalE.slice(0, 12) + "...";
+                    spanTextE.addEventListener('mouseenter', function () {
+                        tooltip.style.display = 'block';
+                        tooltip.textContent = spanTextOriginalE;
+                    });
+                    spanTextE.addEventListener('mouseleave', function () {
+                        tooltip.style.display = 'none';
+                    });
+                }
+            }
+
+            if (spanTextN && tooltip){
+                const spanTextOriginalN = spanTextN.textContent;
+                if (spanTextOriginalN.length > 8) { // 원본 HTML의 길이 기준에 따름 (예시)
+                    spanTextN.textContent = spanTextOriginalN.slice(0, 8) + "...";
+                    spanTextN.addEventListener('mouseenter', function () {
+                        tooltip.style.display = 'block';
+                        tooltip.textContent = spanTextOriginalN;
+                    });
+                    spanTextN.addEventListener('mouseleave', function () {
+                        tooltip.style.display = 'none';
+                    });
+                }
+            }
+        });
     });
 </script>
 </html>
