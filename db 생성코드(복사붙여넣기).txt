@@ -1,0 +1,241 @@
+create database softengineerwebpr;
+
+use softengineerwebpr;
+
+-- 외래 키 제약 조건 검사 임시 비활성화 (테이블 생성 순서에 따른 오류 방지)
+SET FOREIGN_KEY_CHECKS=0;
+
+-- user (사용자) 테이블
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE `user` (
+    `idx` BIGINT NOT NULL AUTO_INCREMENT COMMENT '사용자의 고유 식별자',
+    `nickname` VARCHAR(20) NOT NULL COMMENT '닉네임',
+    `email` VARCHAR(255) NULL COMMENT '이메일',
+    `identification_code` VARCHAR(4) NOT NULL COMMENT '인식 코드 (닉네임 뒤 #네자리숫자)',
+    `profile_image` VARCHAR(255) NULL COMMENT '프로필 사진 경로',
+    `bio` TEXT NULL COMMENT '자기소개',
+    `last_login` TIMESTAMP NULL COMMENT '최근 접속일',
+    `is_online` BOOLEAN NOT NULL DEFAULT FALSE COMMENT '접속여부',
+    PRIMARY KEY (`idx`),
+    UNIQUE KEY `uk_user_nickname_identification_code` (`nickname`, `identification_code`),
+    UNIQUE KEY `uk_user_email_identification_code` (`email`, `identification_code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='사용자 기본 정보';
+
+-- oauth2_providers (OAuth2 Provider 관리) 테이블
+DROP TABLE IF EXISTS `oauth2_providers`;
+CREATE TABLE `oauth2_providers` (
+    `idx` BIGINT NOT NULL AUTO_INCREMENT COMMENT '제공자의 고유 식별자',
+    `name` VARCHAR(50) NOT NULL COMMENT '제공자 이름 (예: NAVER, KAKAO)',
+    `activation` BOOLEAN NOT NULL DEFAULT TRUE COMMENT '제공자의 활성화 상태',
+    PRIMARY KEY (`idx`),
+    UNIQUE KEY `uk_oauth2_providers_name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='지원하는 OAuth2 제공자 정보';
+
+-- user_oauth_connections (사용자-OAuth2 연동 관리) 테이블
+DROP TABLE IF EXISTS `user_oauth_connections`;
+CREATE TABLE `user_oauth_connections` (
+    `idx` BIGINT NOT NULL AUTO_INCREMENT COMMENT '연결의 고유 식별자',
+    `user_idx` BIGINT NOT NULL COMMENT '사용자의 고유 식별자',
+    `provider_idx` BIGINT NOT NULL COMMENT 'OAuth2 제공자의 고유 식별자',
+    `oauth2_user_id` VARCHAR(255) NOT NULL COMMENT 'OAuth2 제공자에서 제공하는 사용자 ID',
+    PRIMARY KEY (`idx`),
+    UNIQUE KEY `uk_user_oauth_connection_user_provider` (`user_idx`, `provider_idx`),
+    KEY `fk_user_oauth_connection_user_key` (`user_idx`),
+    KEY `fk_user_oauth_connection_provider_key` (`provider_idx`),
+    CONSTRAINT `fk_user_oauth_connection_user` FOREIGN KEY (`user_idx`) REFERENCES `user` (`idx`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `fk_user_oauth_connection_provider` FOREIGN KEY (`provider_idx`) REFERENCES `oauth2_providers` (`idx`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='사용자와 OAuth2 제공자 간의 연결 정보';
+
+-- user_credential (사용자 자격 증명 관리) 테이블 -- 테이블 이름 수정: user_credentials -> user_credential
+DROP TABLE IF EXISTS `user_credential`;
+CREATE TABLE `user_credential` ( -- 테이블 이름 수정
+    `idx` BIGINT NOT NULL AUTO_INCREMENT COMMENT '자격 증명의 고유 식별자',
+    `user_idx` BIGINT NOT NULL COMMENT '사용자의 고유 식별자',
+    `id` VARCHAR(20) NOT NULL COMMENT '사용자 로그인 ID',
+    `password` VARCHAR(255) NOT NULL COMMENT '사용자 비밀번호 (해시된 값)',
+    PRIMARY KEY (`idx`),
+    UNIQUE KEY `uk_user_credentials_user_idx` (`user_idx`),
+    UNIQUE KEY `uk_user_credentials_id` (`id`),
+    CONSTRAINT `fk_user_credentials_user` FOREIGN KEY (`user_idx`) REFERENCES `user` (`idx`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='일반 로그인용 사용자 ID/PW'; -- [cite: 12]
+
+-- project (프로젝트 정보) 테이블
+DROP TABLE IF EXISTS `project`;
+CREATE TABLE `project` (
+    `idx` BIGINT NOT NULL AUTO_INCREMENT COMMENT '프로젝트의 고유 식별자',
+    `title` VARCHAR(255) NOT NULL COMMENT '프로젝트명',
+    `created_by` BIGINT NOT NULL COMMENT '프로젝트 생성 유저 식별자',
+    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '프로젝트 생성 시간',
+    `description` TEXT NULL COMMENT '프로젝트 설명',
+    PRIMARY KEY (`idx`),
+    KEY `fk_project_user_created_by` (`created_by`),
+    CONSTRAINT `fk_project_user_created_by` FOREIGN KEY (`created_by`) REFERENCES `user` (`idx`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='프로젝트 정보';
+
+-- project_member (프로젝트 멤버) 테이블
+DROP TABLE IF EXISTS `project_member`;
+CREATE TABLE `project_member` (
+    `user_idx` BIGINT NOT NULL COMMENT '참여한 유저 식별자',
+    `project_idx` BIGINT NOT NULL COMMENT '참여된 프로젝트 식별자',
+    `role` ENUM('관리자', '일반 사용자') NOT NULL DEFAULT '일반 사용자' COMMENT '이용자 권한',
+    PRIMARY KEY (`user_idx`, `project_idx`),
+    KEY `fk_project_member_project` (`project_idx`),
+    CONSTRAINT `fk_project_member_user` FOREIGN KEY (`user_idx`) REFERENCES `user` (`idx`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `fk_project_member_project` FOREIGN KEY (`project_idx`) REFERENCES `project` (`idx`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='프로젝트 멤버 및 역할';
+
+-- task (업무) 테이블
+DROP TABLE IF EXISTS `task`;
+CREATE TABLE `task` (
+    `idx` BIGINT NOT NULL AUTO_INCREMENT COMMENT '업무의 고유 식별자',
+    `project_idx` BIGINT NOT NULL COMMENT '업무가 속한 프로젝트의 식별자',
+    `title` VARCHAR(255) NOT NULL COMMENT '업무명',
+    `status` ENUM('To Do', 'In Progress', 'Done') NOT NULL DEFAULT 'To Do' COMMENT '업무 상태',
+    `description` TEXT NULL COMMENT '업무 설명',
+    `deadline` DATETIME NULL COMMENT '업무 마감 기한',
+    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '업무 생성 시간',
+    `created_by` BIGINT NOT NULL COMMENT '업무 생성 유저 식별자',
+    PRIMARY KEY (`idx`),
+    KEY `fk_task_project` (`project_idx`),
+    KEY `fk_task_user_created_by` (`created_by`),
+    CONSTRAINT `fk_task_project` FOREIGN KEY (`project_idx`) REFERENCES `project` (`idx`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `fk_task_user_created_by` FOREIGN KEY (`created_by`) REFERENCES `user` (`idx`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='업무 정보';
+
+-- task_member (업무 멤버) 테이블
+DROP TABLE IF EXISTS `task_member`;
+CREATE TABLE `task_member` (
+    `user_idx` BIGINT NOT NULL COMMENT '업무에 참여한 유저의 식별자',
+    `task_idx` BIGINT NOT NULL COMMENT '참여된 업무의 식별자',
+    PRIMARY KEY (`user_idx`, `task_idx`),
+    KEY `fk_task_member_task` (`task_idx`),
+    CONSTRAINT `fk_task_member_user` FOREIGN KEY (`user_idx`) REFERENCES `user` (`idx`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `fk_task_member_task` FOREIGN KEY (`task_idx`) REFERENCES `task` (`idx`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='업무 담당자';
+
+-- `group` (그룹) 테이블
+DROP TABLE IF EXISTS `group`;
+CREATE TABLE `group` (
+    `idx` BIGINT NOT NULL AUTO_INCREMENT COMMENT '그룹의 고유 식별자',
+    `project_idx` BIGINT NOT NULL COMMENT '그룹이 속한 프로젝트의 식별자',
+    `name` VARCHAR(255) NOT NULL COMMENT '그룹의 이름',
+    `color` VARCHAR(20) NULL COMMENT '그룹의 색상 (예: #RRGGBB)',
+    `permission` INT NULL COMMENT '그룹의 권한 (세부 정의 필요)',
+    PRIMARY KEY (`idx`),
+    KEY `fk_group_project` (`project_idx`),
+    CONSTRAINT `fk_group_project` FOREIGN KEY (`project_idx`) REFERENCES `project` (`idx`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='프로젝트 내 사용자 그룹';
+
+-- group_member (그룹 멤버) 테이블
+DROP TABLE IF EXISTS `group_member`;
+CREATE TABLE `group_member` (
+    `user_idx` BIGINT NOT NULL COMMENT '그룹에 참여한 유저의 식별자',
+    `group_idx` BIGINT NOT NULL COMMENT '참여된 그룹의 식별자',
+    PRIMARY KEY (`user_idx`, `group_idx`),
+    KEY `fk_group_member_group` (`group_idx`),
+    CONSTRAINT `fk_group_member_user` FOREIGN KEY (`user_idx`) REFERENCES `user` (`idx`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `fk_group_member_group` FOREIGN KEY (`group_idx`) REFERENCES `group` (`idx`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='그룹 멤버';
+
+-- post (게시글) 테이블
+DROP TABLE IF EXISTS `post`;
+CREATE TABLE `post` (
+    `idx` BIGINT NOT NULL AUTO_INCREMENT COMMENT '게시글의 고유 식별자',
+    `task_idx` BIGINT NOT NULL COMMENT '게시글이 속한 업무의 식별자',
+    `user_idx` BIGINT NOT NULL COMMENT '게시글을 쓴 유저의 식별자',
+    `title` VARCHAR(255) NOT NULL COMMENT '제목',
+    `content` TEXT NOT NULL COMMENT '내용',
+    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '작성 시간',
+    `updated_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '수정 시간',
+    PRIMARY KEY (`idx`),
+    KEY `fk_post_task` (`task_idx`),
+    KEY `fk_post_user` (`user_idx`),
+    CONSTRAINT `fk_post_task` FOREIGN KEY (`task_idx`) REFERENCES `task` (`idx`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `fk_post_user` FOREIGN KEY (`user_idx`) REFERENCES `user` (`idx`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='업무 관련 게시글';
+
+-- comment (댓글) 테이블
+DROP TABLE IF EXISTS `comment`;
+CREATE TABLE `comment` (
+    `idx` BIGINT NOT NULL AUTO_INCREMENT COMMENT '댓글의 고유 식별자',
+    `post_idx` BIGINT NOT NULL COMMENT '댓글이 속한 게시글의 식별자',
+    `user_idx` BIGINT NOT NULL COMMENT '댓글을 쓴 유저의 식별자',
+    `parent_comment_idx` BIGINT NULL COMMENT '부모 댓글 식별자 (대댓글용)',
+    `content` TEXT NOT NULL COMMENT '내용',
+    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '작성 시간',
+    `updated_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '수정 시간',
+    PRIMARY KEY (`idx`),
+    KEY `fk_comment_post` (`post_idx`),
+    KEY `fk_comment_user` (`user_idx`),
+    KEY `fk_comment_parent` (`parent_comment_idx`),
+    CONSTRAINT `fk_comment_post` FOREIGN KEY (`post_idx`) REFERENCES `post` (`idx`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `fk_comment_user` FOREIGN KEY (`user_idx`) REFERENCES `user` (`idx`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `fk_comment_parent` FOREIGN KEY (`parent_comment_idx`) REFERENCES `comment` (`idx`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='게시글 및 댓글에 대한 댓글';
+
+-- friend (친구) 테이블
+DROP TABLE IF EXISTS `friend`;
+CREATE TABLE `friend` (
+    `user_idx1` BIGINT NOT NULL COMMENT '유저1 (항상 작은 idx 값)',
+    `user_idx2` BIGINT NOT NULL COMMENT '유저2 (항상 큰 idx 값)',
+    `status` ENUM('요청', '수락', '거절') NOT NULL DEFAULT '요청' COMMENT '친구요청 수락 여부',
+    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '친구 관계 생성 시간 (요청 또는 수락 시점)',
+    PRIMARY KEY (`user_idx1`, `user_idx2`),
+    KEY `fk_friend_user2` (`user_idx2`),
+    CONSTRAINT `fk_friend_user1` FOREIGN KEY (`user_idx1`) REFERENCES `user` (`idx`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `fk_friend_user2` FOREIGN KEY (`user_idx2`) REFERENCES `user` (`idx`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `chk_user_order` CHECK (`user_idx1` < `user_idx2`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='사용자 간 친구 관계';
+
+-- notification (알림) 테이블
+DROP TABLE IF EXISTS `notification`;
+CREATE TABLE `notification` (
+    `idx` BIGINT NOT NULL AUTO_INCREMENT COMMENT '알림의 고유 식별자',
+    `user_idx` BIGINT NOT NULL COMMENT '알림을 받을 유저 식별자',
+    `type` VARCHAR(50) NOT NULL COMMENT '알림 종류 (예: NEW_TASK_ASSIGNED, DEADLINE_REMINDER, PROJECT_INVITED, FRIEND_REQUEST, NEW_COMMENT)',
+    `content` TEXT NOT NULL COMMENT '알림 내용',
+    `is_read` BOOLEAN NOT NULL DEFAULT FALSE COMMENT '읽음 여부',
+    `reference_idx` BIGINT NULL COMMENT '참조 대상 식별자 (업무 idx, 프로젝트 idx, 친구 요청 idx 등)',
+    `reference_type` VARCHAR(50) NULL COMMENT '참조 대상 유형 (예: TASK, PROJECT, FRIEND_REQUEST)',
+    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '알림 생성 시각',
+    PRIMARY KEY (`idx`),
+    KEY `fk_notification_user` (`user_idx`),
+    CONSTRAINT `fk_notification_user` FOREIGN KEY (`user_idx`) REFERENCES `user` (`idx`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='사용자 알림';
+
+-- file (파일) 테이블
+DROP TABLE IF EXISTS `file`;
+CREATE TABLE `file` (
+    `idx` BIGINT NOT NULL AUTO_INCREMENT COMMENT '파일의 고유 식별자',
+    `reference_type` ENUM('post', 'comment', 'task') NOT NULL COMMENT '파일이 첨부된 대상 유형',
+    `reference_idx` BIGINT NOT NULL COMMENT '참조 대상 식별자 (post.idx, comment.idx, task.idx 등)',
+    `file_name` VARCHAR(255) NOT NULL COMMENT '원본 파일 이름',
+    `file_path` VARCHAR(500) NOT NULL COMMENT '파일 저장 경로 또는 식별자',
+    `file_size` INT NULL COMMENT '파일 크기 (bytes)',
+    `uploaded_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '업로드 시간',
+    `uploaded_by` BIGINT NOT NULL COMMENT '업로드한 사용자 식별자',
+    PRIMARY KEY (`idx`),
+    KEY `idx_file_reference` (`reference_type`, `reference_idx`),
+    KEY `fk_file_user_uploaded_by` (`uploaded_by`),
+    CONSTRAINT `fk_file_user_uploaded_by` FOREIGN KEY (`uploaded_by`) REFERENCES `user` (`idx`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='첨부 파일 정보';
+
+-- history (히스토리) 테이블
+DROP TABLE IF EXISTS `history`;
+CREATE TABLE `history` (
+    `idx` BIGINT NOT NULL AUTO_INCREMENT COMMENT '히스토리의 고유 식별자',
+    `project_idx` BIGINT NOT NULL COMMENT '히스토리가 속한 프로젝트의 식별자',
+    `action_type` ENUM('업무추가', '상태변경', '멤버추가', '멤버제거') NOT NULL COMMENT '행동 유형',
+    `target_id` BIGINT NULL COMMENT '행동 대상 식별자 (업무 idx, 사용자 idx 등)',
+    `description` TEXT NULL COMMENT '상세 설명 (예: "User A가 Task B의 상태를 In Progress로 변경")',
+    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '히스토리 생성 시간',
+    `created_by` BIGINT NOT NULL COMMENT '행동을 취한 사용자 식별자',
+    PRIMARY KEY (`idx`),
+    KEY `fk_history_project` (`project_idx`),
+    KEY `fk_history_user_created_by` (`created_by`),
+    CONSTRAINT `fk_history_project` FOREIGN KEY (`project_idx`) REFERENCES `project` (`idx`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `fk_history_user_created_by` FOREIGN KEY (`created_by`) REFERENCES `user` (`idx`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='프로젝트 활동 히스토리';
+
+-- 외래 키 제약 조건 검사 재활성화
+SET FOREIGN_KEY_CHECKS=1;

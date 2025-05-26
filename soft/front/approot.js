@@ -37,7 +37,7 @@
                           </td>
                           <td>
                               <div>
-                                  <img src="/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
+                                  <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
                               </div>
                           </td>
                       </tr>
@@ -55,7 +55,7 @@
                           </td>
                           <td>
                               <div>
-                                  <img src="/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
+                                  <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
                               </div>
                           </td> 
                       </tr>
@@ -74,7 +74,7 @@
                           </td>
                           <td>
                               <div>
-                                  <img src="/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
+                                  <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
                               </div>
                           </td> 
                       </tr>
@@ -90,7 +90,7 @@
                           </td>
                           <td>
                               <div>
-                                  <img src="/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
+                                  <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
                               </div>
                           </td>
                       </tr>
@@ -106,7 +106,7 @@
                           </td>
                           <td>
                               <div>
-                                  <img src="/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
+                                  <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
                               </div>
                           </td>
                       </tr>
@@ -122,7 +122,7 @@
                           </td>
                           <td>
                               <div>
-                                  <img src="/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
+                                  <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
                               </div>
                           </td>
                       </tr>
@@ -138,7 +138,7 @@
                           </td>
                           <td>
                               <div>
-                                  <img src="/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
+                                  <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
                               </div>
                           </td>
                       </tr>
@@ -154,7 +154,7 @@
                           </td>
                           <td>
                               <div>
-                                  <img src="/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
+                                  <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
                               </div>
                           </td>
                       </tr>
@@ -170,7 +170,7 @@
                           </td>
                           <td>
                               <div>
-                                  <img src="/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
+                                  <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
                               </div>
                           </td>
                       </tr>
@@ -222,7 +222,7 @@
                       <table class="table table-hover">
                           <thead>
                               <tr>
-                                  <th><img src="/user2.png" style="height: 25px; width: 25px; "/></th>
+                                  <th><img src="/icon/user2.png" style="height: 25px; width: 25px; "/></th>
                                   <th>닉네임</th>
                                   <th>#태그</th>
                                   <th>마지막 접속시간</th>
@@ -264,17 +264,17 @@
                       </div>
                       <div style="margin-bottom: 10px; margin-left: 10px;">
                           <input class="button_find2" type="text" id="findid" placeholder="닉네임 #태그"/>
-                          <img src="/finding.png" style="height: 25px; width: 25px;" class="margin2 drag1"/>
+                          <img src="/icon/finding.png" style="height: 25px; width: 25px;" class="margin2 drag1"/>
                       </div>
                       <div style="margin-left: 10px;">
                           <div class="box8 ">
                               <table class="table table-hover">
                                   <thead>
                                       <tr>
-                                          <th><img src="/user2.png" style="height: 25px; width: 25px; margin:5px;"/></th>
+                                          <th><img src="/icon/user2.png" style="height: 25px; width: 25px; margin:5px;"/></th>
                                           <th>닉네임</th>
                                           <th>#태그</th>
-                                          <th><img src="/adduser.png" style="height: 15px; width: 15px;"/></th>
+                                          <th><img src="/icon/adduser.png" style="height: 15px; width: 15px;"/></th>
                                       </tr>
                                   </thead>
                                   <tbody>
@@ -315,7 +315,7 @@
                       <table class="table table-hover">
                           <thead>
                               <tr>
-                                  <th><img src="/user2.png" style="height: 25px; width: 25px; margin:5px;"/></th>
+                                  <th><img src="/icon/user2.png" style="height: 25px; width: 25px; margin:5px;"/></th>
                                   <th>닉네임</th>
                                   <th>#태그</th>
                                   <th>수락</th>
@@ -368,10 +368,10 @@
       }
       const modalBtnFriend = document.querySelector("#friend");
       
-      if (modalBtnFriend) { // null 체크 추가
+      if (modalBtnFriend) { 
           modalBtnFriend.addEventListener("click", () => {
               const modal = document.querySelector(".modal2"); 
-              if(modal) modal.showModal(); // modal이 null일 수 있음에 대한 방어 코드 추가
+              if(modal) modal.showModal(); 
           });
       }
     }
@@ -431,7 +431,7 @@
                   </form>
               </div>
               <div style="display: flex;">
-                  <img src="/user2.png" style="height:100px; width:100px; margin:30px;"/>
+                  <img src="/icon/user2.png" style="height:100px; width:100px; margin:30px;"/>
                   <div style="margin:50px ;">
                       <div class="black">닉네임</div>
                       <div style="display: flex;">
@@ -453,10 +453,10 @@
       }
   
       const modelBtn = document.querySelector("#mypage"); 
-      if (modelBtn) { //null 체크 추가
+      if (modelBtn) { 
           modelBtn.addEventListener("click", () => { 
               const modalToOpen = document.querySelector(".modal3");
-              if(modalToOpen) modalToOpen.showModal(); // modalToOpen이 null일 수 있음에 대한 방어 코드 추가
+              if(modalToOpen) modalToOpen.showModal(); 
           });
       }
     }
@@ -472,7 +472,7 @@
       createElement(
         'button',
         { className: 'left1 drag1 clear', onClick: openProjectList},
-        createElement('img', { src: '/logo.png', className: 'logo', style: {height: '50px'} })
+        createElement('img', { src: '/icon/logo.png', className: 'logo', style: {height: '50px'} })
       ),
       createElement(
         'button',
@@ -494,13 +494,13 @@
     createRoot(document.getElementById('root')).render(createElement(approot));
     
     let target = document.querySelector("#root");
-    if (target) { // null 체크 추가
+    if (target) { 
       let observer = new MutationObserver(() => {
           openAlert();
           openFriend();
           openMyPage();   
       });   
-      window.onload = function() {openAlert(); openFriend(); openMyPage();}; 
+      window.addEventListener('load', function() {openAlert(); openFriend(); openMyPage();}); 
   
       let option = { attributes: true, childList: true, characterData: true };
       observer.observe(target, option);

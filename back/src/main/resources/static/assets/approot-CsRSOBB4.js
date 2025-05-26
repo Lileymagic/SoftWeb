@@ -19,7 +19,7 @@
                           </td>
                           <td>
                               <div>
-                                  <img src="/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
+                                  <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
                               </div>
                           </td>
                       </tr>
@@ -37,7 +37,7 @@
                           </td>
                           <td>
                               <div>
-                                  <img src="/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
+                                  <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
                               </div>
                           </td> 
                       </tr>
@@ -56,7 +56,7 @@
                           </td>
                           <td>
                               <div>
-                                  <img src="/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
+                                  <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
                               </div>
                           </td> 
                       </tr>
@@ -72,7 +72,7 @@
                           </td>
                           <td>
                               <div>
-                                  <img src="/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
+                                  <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
                               </div>
                           </td>
                       </tr>
@@ -88,7 +88,7 @@
                           </td>
                           <td>
                               <div>
-                                  <img src="/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
+                                  <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
                               </div>
                           </td>
                       </tr>
@@ -104,7 +104,7 @@
                           </td>
                           <td>
                               <div>
-                                  <img src="/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
+                                  <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
                               </div>
                           </td>
                       </tr>
@@ -120,7 +120,7 @@
                           </td>
                           <td>
                               <div>
-                                  <img src="/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
+                                  <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
                               </div>
                           </td>
                       </tr>
@@ -136,7 +136,7 @@
                           </td>
                           <td>
                               <div>
-                                  <img src="/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
+                                  <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
                               </div>
                           </td>
                       </tr>
@@ -152,7 +152,7 @@
                           </td>
                           <td>
                               <div>
-                                  <img src="/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
+                                  <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
                               </div>
                           </td>
                       </tr>
@@ -186,7 +186,7 @@
                       <table class="table table-hover">
                           <thead>
                               <tr>
-                                  <th><img src="/user2.png" style="height: 25px; width: 25px; "/></th>
+                                  <th><img src="/icon/user2.png" style="height: 25px; width: 25px; "/></th>
                                   <th>닉네임</th>
                                   <th>#태그</th>
                                   <th>마지막 접속시간</th>
@@ -228,17 +228,17 @@
                       </div>
                       <div style="margin-bottom: 10px; margin-left: 10px;">
                           <input class="button_find2" type="text" id="findid" placeholder="닉네임 #태그"/>
-                          <img src="/finding.png" style="height: 25px; width: 25px;" class="margin2 drag1"/>
+                          <img src="/icon/finding.png" style="height: 25px; width: 25px;" class="margin2 drag1"/>
                       </div>
                       <div style="margin-left: 10px;">
                           <div class="box8 ">
                               <table class="table table-hover">
                                   <thead>
                                       <tr>
-                                          <th><img src="/user2.png" style="height: 25px; width: 25px; margin:5px;"/></th>
+                                          <th><img src="/icon/user2.png" style="height: 25px; width: 25px; margin:5px;"/></th>
                                           <th>닉네임</th>
                                           <th>#태그</th>
-                                          <th><img src="/adduser.png" style="height: 15px; width: 15px;"/></th>
+                                          <th><img src="/icon/adduser.png" style="height: 15px; width: 15px;"/></th>
                                       </tr>
                                   </thead>
                                   <tbody>
@@ -279,7 +279,7 @@
                       <table class="table table-hover">
                           <thead>
                               <tr>
-                                  <th><img src="/user2.png" style="height: 25px; width: 25px; margin:5px;"/></th>
+                                  <th><img src="/icon/user2.png" style="height: 25px; width: 25px; margin:5px;"/></th>
                                   <th>닉네임</th>
                                   <th>#태그</th>
                                   <th>수락</th>
@@ -334,7 +334,7 @@
                   </form>
               </div>
               <div style="display: flex;">
-                  <img src="/user2.png" style="height:100px; width:100px; margin:30px;"/>
+                  <img src="/icon/user2.png" style="height:100px; width:100px; margin:30px;"/>
                   <div style="margin:50px ;">
                       <div class="black">닉네임</div>
                       <div style="display: flex;">
@@ -349,4 +349,4 @@
                   <button class="button_pro" onclick="logout()">로그아웃</button>
               </div>
           </div>  
-        </dialog>`,document.body.appendChild(d);const i=document.querySelector(".modal3");s(i)}const e=document.querySelector("#mypage");e&&e.addEventListener("click",()=>{const d=document.querySelector(".modal3");d&&d.showModal()})}function f(){window.location.href="/front/projectlist.html"}function g(){return r("div",{className:"root"},r("button",{className:"left1 drag1 clear",onClick:f},r("img",{src:"/logo.png",className:"logo",style:{height:"50px"}})),r("button",{className:"right3 drag1 clear",onClick:u,id:"mypage"},r("i",{className:"fa-solid fa-user fa-2x",style:{fontSize:"25px"}})),r("button",{className:"right2 drag1 clear",onClick:l,id:"friend"},r("i",{className:"fa-solid fa-user-group fa-2x",style:{fontSize:"25px"}})),r("button",{className:"right1 drag1 clear",onClick:o,id:"alert"},r("i",{className:"fa-solid fa-bell fa-2x",style:{fontSize:"25px"}})))}v(document.getElementById("root")).render(r(g));let y=document.querySelector("#root");if(y){let t=new MutationObserver(()=>{o(),l(),u()});window.onload=function(){o(),l(),u()};let e={attributes:!0,childList:!0,characterData:!0};t.observe(y,e)}document.querySelectorAll(".lenCut_container").forEach(t=>{const e=t.querySelector(".lenCut"),d=t.querySelector(".lenCutE"),i=t.querySelector(".tooltip1");if(e){const n=e.textContent;n.length>6&&(e.textContent=n.slice(0,6)+"...",i&&(e.addEventListener("mouseenter",function(){i.style.display="block",i.textContent=n}),e.addEventListener("mouseleave",function(){i.style.display="none"})))}if(d){const n=d.textContent;n.length>15&&(d.textContent=n.slice(0,15)+"...",i&&(d.addEventListener("mouseenter",function(){i.style.display="block",i.textContent=n}),d.addEventListener("mouseleave",function(){i.style.display="none"})))}}),document.querySelectorAll(".button_select").forEach(t=>{let e=!1;t.addEventListener("click",()=>{e=!e,t.classList.toggle("active"),e?t.textContent="취소":t.textContent="선택"}),t.addEventListener("mouseenter",()=>{e&&(t.textContent="취소")}),t.addEventListener("mouseleave",()=>{e&&(t.textContent="선택")})})})();
+        </dialog>`,document.body.appendChild(d);const i=document.querySelector(".modal3");s(i)}const e=document.querySelector("#mypage");e&&e.addEventListener("click",()=>{const d=document.querySelector(".modal3");d&&d.showModal()})}function f(){window.location.href="/front/projectlist.html"}function g(){return r("div",{className:"root"},r("button",{className:"left1 drag1 clear",onClick:f},r("img",{src:"/icon/logo.png",className:"logo",style:{height:"50px"}})),r("button",{className:"right3 drag1 clear",onClick:u,id:"mypage"},r("i",{className:"fa-solid fa-user fa-2x",style:{fontSize:"25px"}})),r("button",{className:"right2 drag1 clear",onClick:l,id:"friend"},r("i",{className:"fa-solid fa-user-group fa-2x",style:{fontSize:"25px"}})),r("button",{className:"right1 drag1 clear",onClick:o,id:"alert"},r("i",{className:"fa-solid fa-bell fa-2x",style:{fontSize:"25px"}})))}v(document.getElementById("root")).render(r(g));let y=document.querySelector("#root");if(y){let t=new MutationObserver(()=>{o(),l(),u()});window.addEventListener("load",function(){o(),l(),u()});let e={attributes:!0,childList:!0,characterData:!0};t.observe(y,e)}document.querySelectorAll(".lenCut_container").forEach(t=>{const e=t.querySelector(".lenCut"),d=t.querySelector(".lenCutE"),i=t.querySelector(".tooltip1");if(e){const n=e.textContent;n.length>6&&(e.textContent=n.slice(0,6)+"...",i&&(e.addEventListener("mouseenter",function(){i.style.display="block",i.textContent=n}),e.addEventListener("mouseleave",function(){i.style.display="none"})))}if(d){const n=d.textContent;n.length>15&&(d.textContent=n.slice(0,15)+"...",i&&(d.addEventListener("mouseenter",function(){i.style.display="block",i.textContent=n}),d.addEventListener("mouseleave",function(){i.style.display="none"})))}}),document.querySelectorAll(".button_select").forEach(t=>{let e=!1;t.addEventListener("click",()=>{e=!e,t.classList.toggle("active"),e?t.textContent="취소":t.textContent="선택"}),t.addEventListener("mouseenter",()=>{e&&(t.textContent="취소")}),t.addEventListener("mouseleave",()=>{e&&(t.textContent="선택")})})})();
