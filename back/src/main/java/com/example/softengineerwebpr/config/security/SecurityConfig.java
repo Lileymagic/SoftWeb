@@ -58,6 +58,7 @@ public class SecurityConfig {
                         ).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/api/auth/**")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/front/login"), new AntPathRequestMatcher("/oauth2/**")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/api/projects/**")).authenticated()
                         // API 문서화 도구 경로 (예: Swagger UI 또는 Spring REST Docs)가 있다면 permitAll 추가
                         // .requestMatchers(new AntPathRequestMatcher("/swagger-ui/**"), new AntPathRequestMatcher("/v3/api-docs/**")).permitAll()
                         .anyRequest().authenticated()
@@ -75,7 +76,7 @@ public class SecurityConfig {
 
                 .oauth2Login(oauth2 -> oauth2
                                 .loginPage("/front/login.html")
-                                .defaultSuccessUrl("/front/index.html") // 성공 핸들러를 사용하면 이 설정은 무시될 수 있음
+                                .defaultSuccessUrl("/front/projectlist.html") // 성공 핸들러를 사용하면 이 설정은 무시될 수 있음
                                 .userInfoEndpoint(userInfo -> userInfo
                                         .userService(customOAuth2UserService)
                                 )
