@@ -87,7 +87,7 @@ public class SecurityConfig {
 
                 .logout(logout -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/api/auth/logout"))
-                        .logoutSuccessUrl("/")
+                        .logoutSuccessUrl("/front/login.html")
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID") // 세션 쿠키 이름 (기본값)
                         .permitAll()
