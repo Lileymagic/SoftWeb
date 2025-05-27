@@ -15,7 +15,7 @@
             color:rgb(25, 25, 52);
             border: 1px solid rgba(0, 0, 0, 0.25);
             font-size: small;
-            font-weight: 300;   
+            font-weight: 300;
             margin-bottom: 10px;
             border-radius: 4px;
             font-family: 'Pretendard-Regular';
@@ -27,69 +27,150 @@
             color:rgb(25, 25, 52);
             border: 1px solid rgba(0, 0, 0, 0.25);
             font-size: small;
-            font-weight: 300;   
+            font-weight: 300;
             margin-bottom: 10px;
             border-radius: 4px;
             font-family: 'Pretendard-Regular';
+            resize: vertical;
+            padding: 5px;
+            box-sizing: border-box;
         }
-        .margin10 {
-            position: absolute;
-            margin: 10px;
+        input:focus, textarea:focus {
+            outline: none;
+            background-color: rgb(245, 245, 245);
         }
-
-
+        #profileImageDisplay {
+            height: 80px;
+            width: 80px;
+            margin-bottom:10px;
+            border-radius: 50%; /* 원형 이미지 */
+            object-fit: cover; /* 이미지가 영역에 맞게 잘리도록 */
+            border: 1px solid #ccc; /* 테두리 추가 */
+        }
+        #profileImageUrl {
+            margin-top: 5px; /* 이미지 아래에 약간의 간격 */
+        }
     </style>
-  <script type="module" crossorigin src="/assets/approot-CsRSOBB4.js"></script>
-  <link rel="stylesheet" crossorigin href="/css/approot.B6dGfGpS.css">
+  <script type="module" crossorigin src="/assets/approot-LA72Ilwj.js"></script>
+  <link rel="stylesheet" crossorigin href="/css/approot.BpJkzV3q.css">
   <link rel="stylesheet" crossorigin href="/css/bootstrap.CyjhP-aL.css">
 </head>
 <body>
     <div id="root"></div>
     <div class="middle">
-        <div class="box" style="height:400px;">
+        <div class="box" style="height:auto; padding-top: 20px; padding-bottom: 20px;">
             <div class="green">프로필 수정</div>
             <div style="width: 80%;">
                 <hr style="border: 1px solid rgb(0, 0, 0); "/>
             </div>
-            <div>
-                <img src="/user2.Dp3ZRFZz.png"  style="height: 80px; width: 80px; margin-bottom:10px;"/>
+            <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+                <img src="/user2.Dp3ZRFZz.png" id="profileImageDisplay" alt="프로필 이미지"/>
+                
+                <div style="display: flex; align-items: center; margin-bottom: 10px; width: 300px;">
+                    <label for="profileImageUrl" style="width: 100px; text-align: right; margin-right: 10px; font-weight: bold;">이미지 URL:</label>
+                    <input class="button_pro" style="width: 200px;" type="text" id="profileImageUrl" placeholder="프로필 이미지 URL (선택)"/>
+                </div>
+
+                <div style="display: flex; align-items: center; margin-bottom: 10px; width: 300px;">
+                    <label for="nickname" style="width: 100px; text-align: right; margin-right: 10px; font-weight: bold;">닉네임:</label>
+                    <input class="button_pro" style="width: 200px;" type="text" id="nickname" placeholder="2 ~ 20자"/>
+                </div>
+
+                <div style="display: flex; align-items: flex-start; margin-bottom: 10px; width: 300px;">
+                    <label for="bio" style="width: 100px; text-align: right; margin-right: 10px; font-weight: bold; margin-top: 5px;">자기소개:</label>
+                    <textarea class="button_int" style="width: 200px;" id="bio" placeholder="자기소개를 입력하세요."></textarea>
+                </div>
             </div>
             <div>
-                <input class="button_pro" type="text" id="nickname" placeholder="닉네임 (2 ~ 20자)" />
-            </div>
-            <div>
-                <input class="button_int" type="text" id="intro" placeholder="자기소개를 입력하세요."/>
-            </div>
-            <div>
-                <button class="button_final" style="width:80px;" onclick="save()">저장</button>
+                <button class="button_final" style="width:80px;" onclick="saveProfile()">저장</button>
             </div>
         </div>
     </div>
 </body>
 
 <script>
-    async function save(){
-            if(nickname.value.length < 1){
-                alert("닉네임을 입력하세요.")
-                nickname.focus();
+    // 페이지 로드 시 사용자 프로필 정보 가져와서 필드 채우기
+    document.addEventListener('DOMContentLoaded', async function() {
+        try {
+            const response = await fetch('/api/users/me'); // UserResponseDto 반환 기대
+            if (!response.ok) {
+                if (response.status === 401) {
+                    alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+                    window.location.href = "/front/login.html";
+                } else {
+                    throw new Error(`Failed to fetch profile: ${response.status}`);
+                }
+                return;
             }
-            else if(nickname.value.length < 2){
-                alert("닉네임은 2자 이상이어야 합니다.");
-                nickname.focus();
-            }
-            else if(nickname.value.length > 20){
-                alert("닉네임은 20자 이하여야 합니다.");
-                nickname.focus();
-            }
-            else if(/[^A-Za-z0-9\uAC00-\uD7A3\-_]/.test(nickname.value)) {
-                alert("허용되지 않은 특수기호가 사용되었습니다. (허용 특수기호: -,_)");
-                nickname.focus();
-            }
-            else{
-                alert("저장되었습니다.")
-                window.location.href = "p"
-            }
-        }
+            const result = await response.json();
+            const user = result.data || result; // API 응답 구조에 따라
 
+            if (user) {
+                document.getElementById('nickname').value = user.nickname || '';
+                document.getElementById('bio').value = user.bio || ''; // bio로 ID 변경 (textarea)
+                if (user.profileImage) {
+                    document.getElementById('profileImageDisplay').src = user.profileImage;
+                    document.getElementById('profileImageUrl').value = user.profileImage; // URL 입력 필드에도 설정
+                }
+            }
+        } catch (error) {
+            console.error("Error loading profile:", error);
+            alert("프로필 정보를 불러오는 데 실패했습니다.");
+        }
+    });
+
+    async function saveProfile() { // 함수 이름 변경 (save -> saveProfile)
+        const nicknameInput = document.getElementById("nickname");
+        const bioInput = document.getElementById("bio"); // id를 bio로 변경
+        const profileImageUrlInput = document.getElementById("profileImageUrl");
+
+        const nickname = nicknameInput.value.trim();
+        const bio = bioInput.value.trim();
+        const profileImage = profileImageUrlInput.value.trim() || null; // 비어있으면 null
+
+        // 클라이언트 측 유효성 검사 (기존 로직 활용 및 개선)
+        if (nickname.length < 2 || nickname.length > 20) {
+            alert("닉네임은 2자 이상 20자 이하이어야 합니다.");
+            nicknameInput.focus();
+            return;
+        }
+        if (/[^A-Za-z0-9\uAC00-\uD7A3\-_]/.test(nickname)) { // 명세서 기준
+            alert("닉네임에는 한글, 영어, 숫자, 대시(-), 언더스코어(_)만 사용할 수 있습니다.");
+            nicknameInput.focus();
+            return;
+        }
+        // bio, profileImage에 대한 추가적인 유효성 검사 (필요시)
+
+        const updateData = {
+            nickname: nickname,
+            bio: bio,
+            profileImage: profileImage // profileImage가 null이거나 빈 문자열이면 백엔드에서 기존 값 유지 또는 null 처리
+        };
+
+        try {
+            const response = await fetch('/api/users/me', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // CSRF 토큰이 활성화된 경우 헤더에 추가해야 함
+                },
+                body: JSON.stringify(updateData)
+            });
+
+            const result = await response.json();
+
+            if (response.ok && result.status === 200) {
+                alert(result.message || "프로필이 성공적으로 업데이트되었습니다.");
+                // 성공 시, 현재 페이지에 머무르거나, 다른 페이지로 이동할 수 있습니다.
+                // 예: window.location.reload(); // 페이지 새로고침으로 변경사항 반영
+                // 또는 "내 정보" 모달을 다시 열 경우 새 정보가 보이도록 approot.js의 로직과 연계
+            } else {
+                alert(`프로필 업데이트 실패: ${result.message || '알 수 없는 오류'} (상태: ${response.status})`);
+            }
+        } catch (error) {
+            console.error("Error updating profile:", error);
+            alert("프로필 업데이트 중 오류가 발생했습니다.");
+        }
+    }
 </script>
 </html>

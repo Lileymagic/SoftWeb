@@ -12,14 +12,18 @@
     window.closeModal = closeModal;
   
     function openAlert() {
-        const modal = document.querySelector(".modal1");
-        
-        if (!modal) {
-          const div = document.createElement("div");
-          div.innerHTML =  `
-          <dialog class="modal1">
-          <div class="box_scroll" style="padding: 15px;">
+      let modal = document.querySelector(".modal1"); 
+      
+      if (!modal) {
+        const div = document.createElement("div");
+        div.innerHTML =  `<dialog class="modal1" style="overflow-y:scroll; ">
                 <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
                     <tbody>
                         <tr>
                             <td>
@@ -177,38 +181,23 @@
                         <button style="background-color:none; border:none;" class="font1">닫기</button>
                     </form>  
                 </div>
-            </div>
             </dialog>`;
-            document.body.appendChild(div);
-            const closemodal = document.querySelector('.modal1');
-            closeModal(closemodal);
-        }
-        
-        const modalBtn = document.querySelector("#alert");
-    
-        const updateModalPosition = () => {
-            const rect = modalBtn.getBoundingClientRect();
-            const modalRect = modal.getBoundingClientRect();
-            modal.style.position = "fixed";
-            modal.style.left = `${rect.right - modalRect.width}px`;
-            modal.style.top = `${rect.bottom}px`;
-        };
-    
+          document.body.appendChild(div);
+          modal = document.querySelector('.modal1'); 
+          if (modal) closeModal(modal); 
+      }
+      
+      const modalBtn = document.querySelector("#alert"); 
+      if (modalBtn) { 
         modalBtn.addEventListener("click", () => {
-            modal.showModal();
-            updateModalPosition();
+            const currentModal = document.querySelector(".modal1"); 
+            if(currentModal) currentModal.showModal(); 
         });
-    
-        window.addEventListener("resize", () => {
-            if (modal.open) {
-                updateModalPosition();
-            }
-        });
-        
+      }
     }
   
     function openFriend() {
-      const modal = document.querySelector(".modal2");
+      let modal = document.querySelector(".modal2"); 
       if(!modal){
         const div = document.createElement("div");
         div.innerHTML=`
@@ -405,16 +394,16 @@
                   </form>  
               </div>
           </dialog>`;
-          document.body.appendChild(div);
-          const closemodal = document.querySelector('.modal2');
-          closeModal(closemodal);
+        document.body.appendChild(div);
+        modal = document.querySelector('.modal2'); 
+        if (modal) closeModal(modal); 
       }
       const modalBtnFriend = document.querySelector("#friend");
       
       if (modalBtnFriend) { 
           modalBtnFriend.addEventListener("click", () => {
-              const modal = document.querySelector(".modal2"); 
-              if(modal) modal.showModal(); 
+              const currentModal = document.querySelector(".modal2"); 
+              if(currentModal) currentModal.showModal(); 
           });
       }
     }
@@ -461,111 +450,166 @@
     }
     window.logout = logout;
   
-    function openMyPage() {
-        const modal = document.querySelector(".modal3");
-        if(!modal){
-          const div = document.createElement("div");
-          div.innerHTML=`
-          <dialog class="modal3">
-            <div class="middle3">
-                    
-                <div style="display: flex; justify-content: flex-end;" >
-                    <form method="dialog">
-                        <button style="background-color:none; border:none;" class="font1">X</button>
-                    </form>
-                </div>
-    
-                <div style="display: flex;">
-                    <img src="/icon/user2.png" style="height:100px; width:100px; margin:10px; margin-right: 30px; margin-left: 20px"/>
-                    <div style="display: flex; flex-direction: column; justify-content: center; padding: 5px;">
-                        <div style="display: flex; gap: 5px;">
-                            <div class="black" style="font-size: larger;">닉네임</div>
-                            <div style="color:green">#0000</div>
-                        </div>
-                        <div style="color:gray;">identification</div>
-                        <div class="box_introduce">
-                            자기소개ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ
-                        </div>
-    
-                        <div style="display: flex; flex-direction: row; margin-top: 30px;">
-                            <button class="button_pro" style="margin-right:5px;" onclick="window.location.href='profile.html';">프로필 수정</button>
-                            <button class="button_pro" onclick="logout()">로그아웃</button>
-                        </div>  
-    
-                    </div>
-                </div> 
-    
-            </div>  
-          </dialog>`;
-          document.body.appendChild(div);
-          const closemodal = document.querySelector('.modal3');
-          closeModal(closemodal);
-    
+    function createMyPageModalIfNeeded() {
+      let modal = document.querySelector(".modal3");
+      if (!modal) {
+        const div = document.createElement("div");
+        div.innerHTML = `
+        <dialog class="modal3" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 10px; padding: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
+          <div class="middle3">
+              <div style="display: flex; justify-content: flex-end;" >
+                  <form method="dialog">
+                      <button style="background-color:transparent; border:none; font-size: 1.2em; cursor: pointer;" class="font1">X</button>
+                  </form>
+              </div>
+              <div style="display: flex;">
+                  <img id="myPageProfileImage" src="/icon/user2.png" style="height:100px; width:100px; margin:30px; border-radius: 50%;"/>
+                  <div style="margin:50px ;">
+                      <div id="myPageDisplayId" class="black" style="margin-bottom: 2px; font-weight: bold;">ID 로딩 중...</div>
+                      <div style="display: flex;">
+                          <div id="myPageNickname" style="color:green">닉네임 로딩 중</div>
+                          <div id="myPageTag" style="color:green; margin-left: 2px;"></div>
+                      </div>
+                      <div id="myPageBio" style="margin-top: 5px; color: #555;">자기소개 로딩 중...</div>
+                  </div>
+              </div>
+              <div style="display: flex; justify-content: flex-end; margin:5px 5px 0 0; ">
+                  <button class="button_pro" style="margin-right:5px;" onclick="document.querySelector('.modal3').close(); window.location.href='/front/profile.html';">프로필 수정</button>
+                  <button class="button_pro" onclick="logout()">로그아웃</button>
+              </div>
+          </div>  
+        </dialog>`;
+        document.body.appendChild(div);
+        modal = document.querySelector('.modal3');
+        if (modal) {
+            closeModal(modal);
+        } else {
+            console.error("Failed to create or find .modal3 for mypage.");
         }
-        const modalBtn = document.querySelector("#mypage");
-    
-        const updateModalPosition = () => {
-            const rect = modalBtn.getBoundingClientRect();
-            const modalRect = modal.getBoundingClientRect();
-            modal.style.position = "fixed";
-            modal.style.left = `${rect.right - modalRect.width}px`;
-            modal.style.top = `${rect.bottom}px`;
-        };
-    
-        modalBtn.addEventListener("click", () => {
-          modal.showModal();
-          updateModalPosition();
-        });
-    
-        window.addEventListener("resize", () => {
-            if (modal.open) {
-                updateModalPosition();
-            }
-        });
-        
       }
-  
+      return modal;
+    }
+
+    async function fetchAndDisplayMyPageInfo() {
+      const modalDisplayId = document.getElementById('myPageDisplayId');
+      const modalNickname = document.getElementById('myPageNickname');
+      const modalTag = document.getElementById('myPageTag');
+      const modalBio = document.getElementById('myPageBio');
+      const modalProfileImage = document.getElementById('myPageProfileImage');
+
+      if (!modalDisplayId || !modalNickname || !modalTag || !modalBio || !modalProfileImage) {
+          console.error("MyPage modal elements not found. Ensure createMyPageModalIfNeeded ran successfully.");
+          return;
+      }
+
+      try {
+        const response = await fetch('/api/users/me'); 
+        if (!response.ok) {
+          if (response.status === 401) { 
+            modalDisplayId.textContent = "로그인 필요";
+            modalNickname.textContent = "";
+            modalTag.textContent = "";
+            modalBio.textContent = "로그인 후 이용해주세요.";
+            return;
+          }
+          throw new Error(`Failed to fetch user info: ${response.status}`);
+        }
+
+        const result = await response.json();
+        const user = result.data || result; 
+
+        if (user) {
+          if (user.loginId && user.loginId.trim() !== "") { 
+            modalDisplayId.textContent = user.loginId;
+          } else { 
+            modalDisplayId.textContent = "소셜 로그인";
+          }
+          modalNickname.textContent = user.nickname || "닉네임 정보 없음";
+          modalTag.textContent = user.identificationCode ? `#${user.identificationCode}` : "";
+          modalBio.textContent = user.bio || "자기소개가 없습니다.";
+          modalProfileImage.src = user.profileImage || "/icon/user2.png";
+        } else {
+          console.error("User info data is not in expected format:", result);
+          modalDisplayId.textContent = "정보 형식 오류";
+          modalNickname.textContent = "";
+          modalTag.textContent = "";
+        }
+      } catch (error) {
+          console.error("Error fetching user info:", error);
+          modalDisplayId.textContent = "정보 로드 오류";
+          modalNickname.textContent = "";
+          modalTag.textContent = "";
+          modalBio.textContent = "정보를 불러오는 데 실패했습니다.";
+      }
+    }
+
+    async function handleMyPageClick() {
+      let modalInstance = createMyPageModalIfNeeded();
+      if (modalInstance) {
+        await fetchAndDisplayMyPageInfo();
+        modalInstance.showModal();
+      } else {
+        console.error("Mypage modal (.modal3) could not be initialized for showing.");
+      }
+    }
+
     function openProjectList() {
       window.location.href=('/front/projectlist.html');
     }
   
     function approot() {
-    return createElement(
-      'div',
-      { className: 'root' },
-      createElement(
-        'button',
-        { className: 'left1 drag1 clear', onClick: openProjectList},
-        createElement('img', { src: '/icon/logo.png', className: 'logo', style: {height: '50px'} })
-      ),
-      createElement(
-        'button',
-        { className: 'right3 drag1 clear', onClick: openMyPage, id: 'mypage'},
-        createElement('i', { className: 'fa-solid fa-user fa-2x', style: { fontSize: '25px'} })
-      ),
-      createElement(
-        'button',
-        { className: 'right2 drag1 clear', onClick: openFriend, id:'friend'},
-        createElement('i', { className: 'fa-solid fa-user-group fa-2x', style: { fontSize: '25px'} })
-      ),
-      createElement(
-        'button',
-        { className: 'right1 drag1 clear', onClick: openAlert, id:'alert' },
-        createElement('i', { className: 'fa-solid fa-bell fa-2x', style: { fontSize: '25px'}})
-      )
-    );
-  }
+      return createElement(
+        'div',
+        { className: 'root' },
+        createElement(
+          'button',
+          { className: 'left1 drag1 clear', onClick: openProjectList},
+          createElement('img', { src: '/icon/logo.png', className: 'logo', style: {height: '50px'} })
+        ),
+        createElement(
+          'button',
+          { className: 'right3 drag1 clear', onClick: handleMyPageClick, id: 'mypage'},
+          createElement('i', { className: 'fa-solid fa-user fa-2x', style: { fontSize: '25px'} })
+        ),
+        createElement(
+          'button',
+          { className: 'right2 drag1 clear', 
+            onClick: () => { 
+              let friendModal = document.querySelector(".modal2"); 
+              if (!friendModal) { openFriend(); friendModal = document.querySelector(".modal2");} 
+              if (friendModal) friendModal.showModal();
+            }, 
+            id:'friend'
+          },
+          createElement('i', { className: 'fa-solid fa-user-group fa-2x', style: { fontSize: '25px'} })
+        ),
+        createElement(
+          'button',
+          { className: 'right1 drag1 clear', 
+            onClick: () => { 
+              let alertModal = document.querySelector(".modal1"); 
+              if (!alertModal) { openAlert(); alertModal = document.querySelector(".modal1"); }
+              if (alertModal) alertModal.showModal();
+            }, 
+            id:'alert' 
+          },
+          createElement('i', { className: 'fa-solid fa-bell fa-2x', style: { fontSize: '25px'}})
+        )
+      );
+    }
     createRoot(document.getElementById('root')).render(createElement(approot));
     
+    function initializeAppModals() {
+        if (!document.querySelector(".modal1")) openAlert();
+        if (!document.querySelector(".modal2")) openFriend();
+        createMyPageModalIfNeeded();
+    }
+    
+    window.addEventListener('load', initializeAppModals); 
+  
     let target = document.querySelector("#root");
     if (target) { 
-      let observer = new MutationObserver(() => {
-          openAlert();
-          openFriend();
-          openMyPage();   
-      });   
-      window.addEventListener('load', function() {openAlert(); openFriend(); openMyPage();}); 
-  
+      let observer = new MutationObserver(initializeAppModals);   
       let option = { attributes: true, childList: true, characterData: true };
       observer.observe(target, option);
     }
@@ -586,7 +630,7 @@
                   });
                   spanText.addEventListener('mouseleave', function () {
                       tooltip.style.display = 'none';
-                  });            
+                  });         
               }
           }
       }
@@ -602,9 +646,9 @@
                   });
                   spanTextE.addEventListener('mouseleave', function () {
                       tooltip.style.display = 'none';
-                  });            
+                  });         
               }
-          }            
+          }         
       }
     });
   
