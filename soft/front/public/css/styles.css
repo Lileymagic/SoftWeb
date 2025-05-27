@@ -337,10 +337,10 @@ dialog.modal3::backdrop {
 .button_pro2 {
     background-color: transparent;
     height:30px;
-    width:100px;
+    width:90px;
     color:rgb(25, 54, 52);
     border: solid 1px rgb(112, 165, 139);
-    font-size: medium;
+    font-size: 13px;
     font-weight: 300;   
     margin-bottom: 10px;
     font-family: 'Pretendard-Regular';

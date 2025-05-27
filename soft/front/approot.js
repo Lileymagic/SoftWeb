@@ -525,7 +525,7 @@
                     </div>
 
                     <div style="display: flex; flex-direction: row; margin-top: 30px;">
-                        <button class="button_pro2" style="margin-right:5px;" onclick="document.querySelector('.modal3').close(); window.location.href='/front/profile.html';">프로필 수정</button>
+                        <button class="button_pro2" style="margin-right:5px; margin-left:7px;" onclick="document.querySelector('.modal3').close(); window.location.href='/front/profile.html';">프로필 수정</button>
                         <button class="button_pro2" onclick="logout()">로그아웃</button>
                     </div>  
 
