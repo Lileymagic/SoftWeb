@@ -58,6 +58,7 @@ public class SecurityConfig {
                         ).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/api/auth/**")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/front/login"), new AntPathRequestMatcher("/oauth2/**")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/api/projects/**")).authenticated()
                         // API 문서화 도구 경로 (예: Swagger UI 또는 Spring REST Docs)가 있다면 permitAll 추가
                         // .requestMatchers(new AntPathRequestMatcher("/swagger-ui/**"), new AntPathRequestMatcher("/v3/api-docs/**")).permitAll()
                         .anyRequest().authenticated()
@@ -68,14 +69,14 @@ public class SecurityConfig {
                         .loginProcessingUrl("/api/auth/perform_login") // ② 로그인 폼 데이터를 POST로 보낼 URL (Spring Security가 처리)
                         .usernameParameter("loginId") // ③ 프론트엔드 폼의 아이디 필드 name 속성
                         .passwordParameter("password")// ④ 프론트엔드 폼의 비밀번호 필드 name 속성
-                        .defaultSuccessUrl("/front/index.html")     // ⑤ 로그인 성공 시 리다이렉트될 기본 URL
+                        .defaultSuccessUrl("/front/projectlist.html")     // ⑤ 로그인 성공 시 리다이렉트될 기본 URL
                         .failureUrl("/front/login.html?error=true") // ⑥ 로그인 실패 시 리다이렉트될 URL
                         .permitAll()                 // ⑦ 로그인 페이지 자체 및 처리 URL은 누구나 접근 가능해야 함
                 )
 
                 .oauth2Login(oauth2 -> oauth2
                                 .loginPage("/front/login.html")
-                                .defaultSuccessUrl("/front/index.html") // 성공 핸들러를 사용하면 이 설정은 무시될 수 있음
+                                .defaultSuccessUrl("/front/projectlist.html") // 성공 핸들러를 사용하면 이 설정은 무시될 수 있음
                                 .userInfoEndpoint(userInfo -> userInfo
                                         .userService(customOAuth2UserService)
                                 )
