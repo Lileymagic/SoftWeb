@@ -12,187 +12,199 @@
     window.closeModal = closeModal;
   
     function openAlert() {
-      const modal = document.querySelector(".modal1");
-      
-      if (!modal) {
-        const div = document.createElement("div");
-        div.innerHTML =  `<dialog class="modal1" style="overflow-y:scroll; ">
-              <table class="table table-hover">
-                  <thead>
-                      <tr>
-                          <th></th>
-                          <th></th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                      <tr>
-                          <td>
-                              <div style="display: flex;">
-                                  <div>프로젝트 1에 업무가 추가되었습니다.</div>
-                              </div>
-                              <br/>
-                              <div style="display: flex;">
-                                  <div style="font-size: small;">2025/05/05 12:00</div>
-                              </div>
-                          </td>
-                          <td>
-                              <div>
-                                  <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
-                              </div>
-                          </td>
-                      </tr>
-                      <tr>
-                          <td>
-                              <div style="display: flex;">
-                                  <div>QWER님께서 친구를 요청합니다.</div>
-                                  <button style="margin-left:10px;" class="button_ale">수락</button>
-                                  <button style="margin-left:5px;" class="button_ale">거부</button>
-                              </div>
-                              <br/>
-                              <div style="display: flex;">
-                                  <div style="font-size: small;">2025/05/05 12:00</div>
-                              </div>
-                          </td>
-                          <td>
-                              <div>
-                                  <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
-                              </div>
-                          </td> 
-                      </tr>
-                      <tr>
-                          <td>
-                              <div style="display: flex;">
-                                  <div>프로젝트 2에 초대되었습니다.</div>
-                                  <div style="margin-left:10px;">(초대 유저: asdf12)</div>
-                                  <button style="margin-left:10px;" class="button_ale">수락</button>
-                                  <button style="margin-left:5px;" class="button_ale">거부</button>
-                              </div>
-                              <br/>
-                              <div style="display: flex;">
-                                  <div style="font-size: small;">2025/05/05 12:00</div>
-                              </div>
-                          </td>
-                          <td>
-                              <div>
-                                  <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
-                              </div>
-                          </td> 
-                      </tr>
-                      <tr>
-                          <td>
-                              <div style="display: flex;">
-                                  <div>프로젝트 1에 업무가 추가되었습니다.</div>
-                              </div>
-                              <br/>
-                              <div style="display: flex;">
-                                  <div style="font-size: small;">2025/05/05 12:00</div>
-                              </div>
-                          </td>
-                          <td>
-                              <div>
-                                  <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
-                              </div>
-                          </td>
-                      </tr>
-                      <tr>
-                          <td>
-                              <div style="display: flex;">
-                                  <div>프로젝트 2에 업무가 추가되었습니다.</div>
-                              </div>
-                              <br/>
-                              <div style="display: flex;">
-                                  <div style="font-size: small;">2025/05/05 12:00</div>
-                              </div>
-                          </td>
-                          <td>
-                              <div>
-                                  <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
-                              </div>
-                          </td>
-                      </tr>
-                      <tr>
-                          <td>
-                              <div style="display: flex;">
-                                  <div>스크롤 확인용1</div>
-                              </div>
-                              <br/>
-                              <div style="display: flex;">
-                                  <div style="font-size: small;">2025/05/05 12:00</div>
-                              </div>
-                          </td>
-                          <td>
-                              <div>
-                                  <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
-                              </div>
-                          </td>
-                      </tr>
-                      <tr>
-                          <td>
-                              <div style="display: flex;">
-                                  <div>스크롤 확인용1</div>
-                              </div>
-                              <br/>
-                              <div style="display: flex;">
-                                  <div style="font-size: small;">2025/05/05 12:00</div>
-                              </div>
-                          </td>
-                          <td>
-                              <div>
-                                  <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
-                              </div>
-                          </td>
-                      </tr>
-                      <tr>
-                          <td>
-                              <div style="display: flex;">
-                                  <div>스크롤 확인용1</div>
-                              </div>
-                              <br/>
-                              <div style="display: flex;">
-                                  <div style="font-size: small;">2025/05/05 12:00</div>
-                              </div>
-                          </td>
-                          <td>
-                              <div>
-                                  <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
-                              </div>
-                          </td>
-                      </tr>
-                      <tr>
-                          <td>
-                              <div style="display: flex;">
-                                  <div>스크롤 확인용1</div>
-                              </div>
-                              <br/>
-                              <div style="display: flex;">
-                                  <div style="font-size: small;">2025/05/05 12:00</div>
-                              </div>
-                          </td>
-                          <td>
-                              <div>
-                                  <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
-                              </div>
-                          </td>
-                      </tr>
-                  </tbody>
-              </table>
-              <div style="display: flex; justify-content: flex-end; ">
-                  <form method="dialog">
-                      <button style="background-color:none; border:none;" class="font1">닫기</button>
-                  </form>  
-              </div>
-          </dialog>`;
-          document.body.appendChild(div);
-          const closemodal = document.querySelector('.modal1');
-          closeModal(closemodal);
-      }
-      
-      const modalBtn = document.querySelector("#alert"); 
-  
-      modalBtn.addEventListener("click", () => { 
-          modal.showModal(); 
-      });
-     
+        const modal = document.querySelector(".modal1");
+        
+        if (!modal) {
+          const div = document.createElement("div");
+          div.innerHTML =  `
+          <dialog class="modal1">
+          <div class="box_scroll" style="padding: 15px;">
+                <table class="table table-hover">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div style="display: flex;">
+                                    <div>프로젝트 1에 업무가 추가되었습니다.</div>
+                                </div>
+                                <br/>
+                                <div style="display: flex;">
+                                    <div style="font-size: small;">2025/05/05 12:00</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="display: flex;">
+                                    <div>QWER님께서 친구를 요청합니다.</div>
+                                    <button style="margin-left:10px;" class="button_ale">수락</button>
+                                    <button style="margin-left:5px;" class="button_ale">거부</button>
+                                </div>
+                                <br/>
+                                <div style="display: flex;">
+                                    <div style="font-size: small;">2025/05/05 12:00</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
+                                </div>
+                            </td> 
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="display: flex;">
+                                    <div>프로젝트 2에 초대되었습니다.</div>
+                                    <div style="margin-left:10px;">(초대 유저: asdf12)</div>
+                                    <button style="margin-left:10px;" class="button_ale">수락</button>
+                                    <button style="margin-left:5px;" class="button_ale">거부</button>
+                                </div>
+                                <br/>
+                                <div style="display: flex;">
+                                    <div style="font-size: small;">2025/05/05 12:00</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
+                                </div>
+                            </td> 
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="display: flex;">
+                                    <div>프로젝트 1에 업무가 추가되었습니다.</div>
+                                </div>
+                                <br/>
+                                <div style="display: flex;">
+                                    <div style="font-size: small;">2025/05/05 12:00</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="display: flex;">
+                                    <div>프로젝트 2에 업무가 추가되었습니다.</div>
+                                </div>
+                                <br/>
+                                <div style="display: flex;">
+                                    <div style="font-size: small;">2025/05/05 12:00</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="display: flex;">
+                                    <div>스크롤 확인용1</div>
+                                </div>
+                                <br/>
+                                <div style="display: flex;">
+                                    <div style="font-size: small;">2025/05/05 12:00</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="display: flex;">
+                                    <div>스크롤 확인용1</div>
+                                </div>
+                                <br/>
+                                <div style="display: flex;">
+                                    <div style="font-size: small;">2025/05/05 12:00</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="display: flex;">
+                                    <div>스크롤 확인용1</div>
+                                </div>
+                                <br/>
+                                <div style="display: flex;">
+                                    <div style="font-size: small;">2025/05/05 12:00</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="display: flex;">
+                                    <div>스크롤 확인용1</div>
+                                </div>
+                                <br/>
+                                <div style="display: flex;">
+                                    <div style="font-size: small;">2025/05/05 12:00</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div style="display: flex; justify-content: flex-end; ">
+                    <form method="dialog">
+                        <button style="background-color:none; border:none;" class="font1">닫기</button>
+                    </form>  
+                </div>
+            </div>
+            </dialog>`;
+            document.body.appendChild(div);
+            const closemodal = document.querySelector('.modal1');
+            closeModal(closemodal);
+        }
+        
+        const modalBtn = document.querySelector("#alert");
+    
+        const updateModalPosition = () => {
+            const rect = modalBtn.getBoundingClientRect();
+            const modalRect = modal.getBoundingClientRect();
+            modal.style.position = "fixed";
+            modal.style.left = `${rect.right - modalRect.width}px`;
+            modal.style.top = `${rect.bottom}px`;
+        };
+    
+        modalBtn.addEventListener("click", () => {
+            modal.showModal();
+            updateModalPosition();
+        });
+    
+        window.addEventListener("resize", () => {
+            if (modal.open) {
+                updateModalPosition();
+            }
+        });
+        
     }
   
     function openFriend() {
@@ -419,47 +431,68 @@
     window.logout = logout;
   
     function openMyPage() {
-      const modal = document.querySelector(".modal3");
-      if(!modal){
-        const div = document.createElement("div");
-        div.innerHTML=`
-        <dialog class="modal3">
-          <div class="middle3">
-              <div style="display: flex; justify-content: flex-end;" >
-                  <form method="dialog">
-                      <button style="background-color:none; border:none;" class="font1">X</button>
-                  </form>
-              </div>
-              <div style="display: flex;">
-                  <img src="/icon/user2.png" style="height:100px; width:100px; margin:30px;"/>
-                  <div style="margin:50px ;">
-                      <div class="black">닉네임</div>
-                      <div style="display: flex;">
-                          <div style="color:green">아이디</div>
-                          <div style="color:green">#태그</div>
-                      </div>
-                      <div>자기소개</div>
-                  </div>
-              </div>
-              <div style="display: flex; justify-content: flex-end; margin:5px 5px 0 0; ">
-                  <button class="button_pro" style="margin-right:5px;" onclick="window.location.href='/front/profile.html'; document.querySelector('.modal3').close();">프로필 수정</button>
-                  <button class="button_pro" onclick="logout()">로그아웃</button>
-              </div>
-          </div>  
-        </dialog>`;
-        document.body.appendChild(div);
-        const closemodal = document.querySelector('.modal3');
-        closeModal(closemodal);
+        const modal = document.querySelector(".modal3");
+        if(!modal){
+          const div = document.createElement("div");
+          div.innerHTML=`
+          <dialog class="modal3">
+            <div class="middle3">
+                    
+                <div style="display: flex; justify-content: flex-end;" >
+                    <form method="dialog">
+                        <button style="background-color:none; border:none;" class="font1">X</button>
+                    </form>
+                </div>
+    
+                <div style="display: flex;">
+                    <img src="/icon/user2.png" style="height:100px; width:100px; margin:10px; margin-right: 30px; margin-left: 20px"/>
+                    <div style="display: flex; flex-direction: column; justify-content: center; padding: 5px;">
+                        <div style="display: flex; gap: 5px;">
+                            <div class="black" style="font-size: larger;">닉네임</div>
+                            <div style="color:green">#0000</div>
+                        </div>
+                        <div style="color:gray;">identification</div>
+                        <div class="box_introduce">
+                            자기소개ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ
+                        </div>
+    
+                        <div style="display: flex; flex-direction: row; margin-top: 30px;">
+                            <button class="button_pro" style="margin-right:5px;" onclick="window.location.href='profile.html';">프로필 수정</button>
+                            <button class="button_pro" onclick="logout()">로그아웃</button>
+                        </div>  
+    
+                    </div>
+                </div> 
+    
+            </div>  
+          </dialog>`;
+          document.body.appendChild(div);
+          const closemodal = document.querySelector('.modal3');
+          closeModal(closemodal);
+    
+        }
+        const modalBtn = document.querySelector("#mypage");
+    
+        const updateModalPosition = () => {
+            const rect = modalBtn.getBoundingClientRect();
+            const modalRect = modal.getBoundingClientRect();
+            modal.style.position = "fixed";
+            modal.style.left = `${rect.right - modalRect.width}px`;
+            modal.style.top = `${rect.bottom}px`;
+        };
+    
+        modalBtn.addEventListener("click", () => {
+          modal.showModal();
+          updateModalPosition();
+        });
+    
+        window.addEventListener("resize", () => {
+            if (modal.open) {
+                updateModalPosition();
+            }
+        });
+        
       }
-  
-      const modelBtn = document.querySelector("#mypage"); 
-      if (modelBtn) { 
-          modelBtn.addEventListener("click", () => { 
-              const modalToOpen = document.querySelector(".modal3");
-              if(modalToOpen) modalToOpen.showModal(); 
-          });
-      }
-    }
   
     function openProjectList() {
       window.location.href=('/front/projectlist.html');
