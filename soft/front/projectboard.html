@@ -369,33 +369,23 @@
     const name = document.getElementById("pjname");
     const edit = document.getElementById("edit");
     let oldname = name.textContent;
-    edit.addEventListener("click", () => {
-            name.contentEditable = "true";
-            name.style.outline = "1px solid #aaa";
-            name.focus();
 
-            oldname = name.textContent;
+    edit.addEventListener("click", () => {
+            const newname = prompt("새 프로젝트 이름을 입력하세요.");
+            if(!newname){
+                return;
+            }
+            else{
+                if(newname !== oldname){
+                    const result = confirm("프로젝트 이름을 변경하겠습니까?");
+                    if(result){
+                        name.textContent = newname;
+                    }
+                }
+
+            }
         }
     );
-    name.addEventListener("keydown", e => {
-            if (e.key === "Enter") {
-                e.preventDefault();
-                name.blur();
-            }
-        }
-    );   
-
-    name.addEventListener("blur", () => {
-            name.contentEditable = "false";
-            name.style.outline = "none";
-            if(name.textContent !== oldname){
-                const result = confirm("프로젝트 이름을 변경하겠습니까?");
-                if(!result){
-                    name.textContent = oldname;
-                }
-            }
-        }
-    );        
 
     function openhistory() {
         window.open(

@@ -545,7 +545,7 @@
                                             <span class="lenCut" id="groupname">그룹명이 매우길다랗다 우와악</span>
                                             <div class="tooltip1" id="tooltip"></div>                                        
                                         </div>  
-                                        <img src="public/icon/edit.png" style="height:20px; width:20px;" id="edit"/>                        
+                                        <img src="public/icon/edit.png" style="height:20px; width:20px;"  class="edit_gn"/>
                                     </div>
                                     <div style="margin-left: auto; display: flex; flex-direction: row; gap: 10px;">
                                         <span>그룹 색상 수정</span>
@@ -558,7 +558,7 @@
                                             <span class="lenCut" id="groupname">그루우우우우우ㅜ웁명</span>
                                             <div class="tooltip1" id="tooltip"></div>                                        
                                         </div>   
-                                        <img src="public/icon/edit.png" style="height:20px; width:20px;" id="edit"/>                        
+                                        <img src="public/icon/edit.png" style="height:20px; width:20px;"  class="edit_gn" />
                                     </div>
                                     <div style="margin-left: auto; display: flex; flex-direction: row; gap: 10px;">
                                         <span>그룹 색상 수정</span>
@@ -855,7 +855,7 @@
                 <td class="group_list_2">
                     <div style="display: flex; flex-direction: row; gap: 10px;">
                         <span>${groupName}</span>   
-                        <img src="public/icon/edit.png" style="height:20px; width:20px;" id="edit"/>                        
+                        <img src="public/icon/edit.png" style="height:20px; width:20px;"  class="edit_gn" />
                     </div>
                     <div style="margin-left: auto; display: flex; flex-direction: row; gap: 10px;">
                         <span>그룹 색상 수정</span>
@@ -865,6 +865,7 @@
             `;
             tr.appendChild(td);
             container.appendChild(tr);
+            attachEditListeners();
 
             td.addEventListener('click',function() {
                 if(td.classList.contains('active')) {
@@ -897,7 +898,7 @@
                         }, 10);
                     }
                 }
-                    
+
             });
         });
 
@@ -974,42 +975,40 @@
 
     
 
-</script>        
+ </script>
   
 </body>
 <script>
-    //첫번쨰 그룹만 이름수정 가능함. 왜지.
     const name = document.getElementById("groupname");
     const edit = document.getElementById("edit");
-    let oldname = name.textContent;
-    edit.addEventListener("click", () => {
-            name.contentEditable = "true";
-            name.style.outline = "1px solid #aaa";
-            name.focus();
-
-            oldname = name.textContent;
+    let oldname = name.textContent.trim();
+    function editName(e){
+        e.stopPropagation();
+        const newname = prompt("새 그룹 이름을 입력하세요.");
+        if(!newname){
+            return;
         }
-    );
-    name.addEventListener("keydown", e => {
-            if (e.key === "Enter") {
-                e.preventDefault();
-                name.blur();
-            }
-        }
-    );   
-
-    name.addEventListener("blur", () => {
-            name.contentEditable = "false";
-            name.style.outline = "none";
-            if(name.textContent !== oldname){
-                const result = confirm("그룹명을 변경하겠습니까?");
-                if(!result){
-                    name.textContent = oldname;
+        else{
+            if(newname !== oldname){
+                const result = confirm("그룹명을 변경하셌습니까?");
+                if(result){
+                    name.textContent = newname;
                 }
             }
         }
-    );
-    
+    }
+
+    /*모든 class = edit_gn에 적용되는함수*/
+    function attachEditListeners() {
+        document.querySelectorAll('.edit_gn').forEach(img => {
+            img.removeEventListener('click', editName);
+            img.addEventListener('click', editName);
+        });
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+        attachEditListeners();
+    });
+
     function Watchdiv2(i){
         const sections = ['1', '2', '3'];
         sections.forEach(id => {
