@@ -91,7 +91,7 @@ CREATE TABLE `task` (
     `idx` BIGINT NOT NULL AUTO_INCREMENT COMMENT '업무의 고유 식별자',
     `project_idx` BIGINT NOT NULL COMMENT '업무가 속한 프로젝트의 식별자',
     `title` VARCHAR(255) NOT NULL COMMENT '업무명',
-    `status` ENUM('To Do', 'In Progress', 'Done') NOT NULL DEFAULT 'To Do' COMMENT '업무 상태',
+    `status` ENUM('ToDo', 'InProgress', 'Done') NOT NULL DEFAULT 'ToDo' COMMENT '업무 상태',
     `description` TEXT NULL COMMENT '업무 설명',
     `deadline` DATETIME NULL COMMENT '업무 마감 기한',
     `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '업무 생성 시간',

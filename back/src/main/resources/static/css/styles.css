@@ -130,11 +130,12 @@ body {
     font-size: 12px;
 }
 .button_friend {
-    background-color:rgb(183, 228, 206);
+    background-color: white;
+    border: none;
     height:45px;
     width:205px;
+    margin: 5px;
     color:rgb(25, 54, 52);
-    border: none;
     font-size: medium;
     font-weight: 700;   
     border-radius: 4px;
@@ -144,10 +145,9 @@ body {
     justify-content: center;
     align-items: center;
 }
-
 .button_friend.active {
-    background-color: rgb(255, 146, 146);
-    border: solid 1px rgb(255, 63, 63);
+    background-color:rgb(183, 228, 206);
+    border: none;
 }
 .button_final {
     background-color:rgb(183, 228, 206);
@@ -165,7 +165,7 @@ body {
     justify-content: center;
     align-items: center;
 }
-.button_final.active { /* 선생님 이 친구가 자꾸 다른 곳에서 날뜁니다 따로설정해주세요 */
+.button_final.active {
     background-color: rgb(255, 255, 255);
     border: solid 1px rgb(183, 228, 206);
 }
@@ -225,7 +225,7 @@ dialog.modal1 {
     overflow: hidden;
     border: none;
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
 
     padding: 0px;
     margin: 0px;
@@ -235,12 +235,13 @@ dialog.modal1::backdrop {
     background: transparent;
 }
 
-.modal2 {
+dialog.modal2 {
     width: 900px;               
     height: 900px;          
     padding: 20px;   
     border-radius: 8px;
     display: none;
+    overflow: hidden;
  }
 
 dialog.modal2[open] {
@@ -252,13 +253,25 @@ dialog.modal2::backdrop {
     background: rgba(0,0,0,0.1);
     backdrop-filter: blur(3px);
 }
+.modal2 td, .modal2 th {
+    height: 45px;
+    max-width: 100px;
+    text-align: left;
+    vertical-align: middle;
+}
+.modal2 th {
+    position: sticky;
+    top: 0px;
+    background-color: white !important;
+    z-index: 5;
+}
 
 dialog.modal3 {
     width: 400px;               
-    height: 270px;   
+    height: 250px;   
     border: none;
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    box-shadow: 0 0px 4px rgba(0,0,0,0.2);
     overflow: hidden;
 
     padding: 10px;
@@ -268,14 +281,17 @@ dialog.modal3::backdrop {
     background: transparent;
 }
 
-.box_friend {
-    position: absolute;
+.position_modal2 {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.box_friend {    
     border: 1px solid gray;
     height: 800px;
     width: 600px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -284,7 +300,6 @@ dialog.modal3::backdrop {
     border: none;
     box-shadow : 0px 0px 3px rgba(150, 150, 150, 0.8);
     background-color: white;
-    padding-top: 35px;
 }
 .box8{
     border: 1px solid gray;
@@ -319,20 +334,20 @@ dialog.modal3::backdrop {
     position: relative;
     width: 100%;
 }
-.button_pro {
-    background-color:rgb(183, 228, 206);
+.button_pro2 {
+    background-color: transparent;
     height:30px;
     width:100px;
     color:rgb(25, 54, 52);
-    border: none;
+    border: solid 1px rgb(112, 165, 139);
     font-size: medium;
     font-weight: 300;   
     margin-bottom: 10px;
     font-family: 'Pretendard-Regular';
     border-radius: 4px;
 }
-.button_pro:hover{
-    background-color: rgb(138, 196, 183);
+.button_pro2:hover{
+    background-color: rgb(240,240,240);
 }
 .middle_pb {
             position: relative;
@@ -377,10 +392,14 @@ input:focus {
     outline: none;
     background-color: rgb(245, 245, 245);
 }
+textarea:focus {
+    outline: none;
+    background-color: rgb(245, 245, 245);
+}
 .find3{
     background-color:rgba(255, 255, 255, 0);
     height:35px;
-    width:500px;
+    width:350px;
     color:rgb(25, 25, 52);
     border: 1px solid rgba(0, 0, 0, 0.25); 
 
@@ -400,27 +419,13 @@ input:focus {
 .box10{
     border: 1px solid gray;
     border-radius: 10px;
-    height: 600px;
+    height: 350px;
     width: 500px;
     display: flex;  
     flex-direction: column;
 
-    overflow-y: scroll;
+    overflow-y: auto;
 } 
-.box10::-webkit-scrollbar{
-    width: 5px;      
-}
-.box10::-webkit-scrollbar-thumb {
-    background-color: rgba(230, 230, 230);
-    border-radius: 10px;
-}
-.box10::-webkit-scrollbar-thumb:active {
-    background-color: rgba(200, 200, 200);
-    border-radius: 10px;   
-}
-.box10::-webkit-scrollbar-track {
-    background-color: transparent;
-}
 .box10 td, .box10 th {
     height: 45px;
     max-width: 100px;
@@ -469,11 +474,25 @@ input:focus {
     border: solid 1px rgb(112, 165, 139);
     color:rgb(112, 165, 139); 
 }
+.button_sent {
+    background-color: rgb(220, 220, 220);
+    border: none;
+
+    height: 35px;
+    width: 50px;
+
+    color:rgb(50, 50, 50); 
+    font-size: 15px;
+    font-weight: 500;
+    border-radius: 4px;
+    font-family: 'Pretendard-Regular';
+}
+
 .container_radio {
-    width: 500px;
+    width: 150px;
     display: flex; 
     flex-direction: row; 
-    justify-content: flex-end;
+    justify-content: center;
     align-items: center;
 }
 
@@ -511,7 +530,6 @@ input:focus {
     width: 100%;
     height: 100%;
     overflow-y: scroll;
-    padding: 15px;
 }
 .box_scroll::-webkit-scrollbar{
     width: 5px;      
@@ -527,3 +545,63 @@ input:focus {
 .box_scroll::-webkit-scrollbar-track {
     background-color: transparent;
 }
+
+.fccc{
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    align-items: center;
+}
+.wh100{
+    width: 100%;
+    height: 100%;
+}
+
+.button_yes {
+    background-color: transparent;
+    border: solid 1px rgb(112, 165, 139);            
+
+    height:25px;
+    width:45px;
+
+    color:rgb(112, 165, 139);
+    font-size: 15px;
+    font-weight: 500;
+    border-radius: 4px;
+    font-family: 'Pretendard-Regular';
+}
+.button_yes:hover{
+    background-color: rgb(112, 165, 139);
+    color:white;
+}
+.button_yes:active{
+    background-color: transparent;
+    color:rgb(112, 165, 139);
+}
+.button_no {
+    background-color: transparent;
+    border: solid 1px rgb(173, 98, 98);            
+
+    height:25px;
+    width:45px;
+
+    color:rgb(173, 98, 98);
+    font-size: 15px;
+    font-weight: 500;
+    border-radius: 4px;
+    font-family: 'Pretendard-Regular';
+}
+.button_no:hover{
+    background-color: rgb(173, 98, 98);
+    color:white;
+}
+.button_no:active{
+    background-color: transparent;
+    color:rgb(173, 98, 98);
+}
+
+/* 테이블 열 너비 고정 */
+.table {
+    table-layout: fixed;
+    width: 100%;
+  }

@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 public enum ErrorCode {
-    // Auth
+    // Auth (기존 코드 생략)
     NICKNAME_DUPLICATION(HttpStatus.CONFLICT, "AUTH_001", "이미 사용 중인 닉네임입니다."),
     EMAIL_DUPLICATION(HttpStatus.CONFLICT, "AUTH_002", "이미 사용 중인 이메일입니다."),
     LOGIN_ID_DUPLICATION(HttpStatus.CONFLICT, "AUTH_003", "이미 사용 중인 아이디입니다."),
@@ -18,7 +18,7 @@ public enum ErrorCode {
     USER_INFO_MISMATCH(HttpStatus.BAD_REQUEST, "AUTH_010", "입력하신 사용자 정보가 일치하지 않습니다."),
     PASSWORD_RESET_NOT_SUPPORTED_FOR_SOCIAL(HttpStatus.BAD_REQUEST, "AUTH_011", "소셜 로그인 사용자는 이 기능을 사용할 수 없습니다."),
 
-    // Project & Member Errors
+    // Project & Member Errors (기존 코드 생략)
     PROJECT_NOT_FOUND(HttpStatus.NOT_FOUND, "PROJECT_001", "해당 프로젝트를 찾을 수 없습니다."),
     NOT_PROJECT_MEMBER(HttpStatus.FORBIDDEN, "PROJECT_002", "해당 프로젝트의 멤버가 아니므로 접근 권한이 없습니다."),
     ALREADY_PROJECT_MEMBER(HttpStatus.CONFLICT, "PROJECT_003", "이미 해당 프로젝트의 멤버입니다."),
@@ -30,15 +30,24 @@ public enum ErrorCode {
     CANNOT_MODIFY_OWN_ROLE_OR_REMOVE_ONESELF_AS_ADMIN(HttpStatus.BAD_REQUEST, "PROJECT_009", "관리자는 자신의 역할을 변경하거나 자신을 프로젝트에서 제외할 수 없습니다. 다른 관리자에게 요청하세요."),
     ROLE_UPDATE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "PROJECT_010", "멤버 역할 변경 중 오류가 발생했습니다."),
     MEMBER_REMOVAL_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "PROJECT_011", "멤버 제외 중 오류가 발생했습니다."),
-    NO_PENDING_INVITATION(HttpStatus.NOT_FOUND, "PROJECT_012", "수락 또는 거절할 수 있는 초대 정보를 찾을 수 없습니다."), // 새로 추가
-    INVITATION_ALREADY_PROCESSED(HttpStatus.BAD_REQUEST, "PROJECT_013", "이미 처리된 초대입니다."), // 새로 추가 (필요시 사용)
+    NO_PENDING_INVITATION(HttpStatus.NOT_FOUND, "PROJECT_012", "수락 또는 거절할 수 있는 초대 정보를 찾을 수 없습니다."),
+    INVITATION_ALREADY_PROCESSED(HttpStatus.BAD_REQUEST, "PROJECT_013", "이미 처리된 초대입니다."),
 
 
-    // Common
+    // Task Errors (새로 추가되는 부분)
+    TASK_NOT_FOUND(HttpStatus.NOT_FOUND, "TASK_001", "해당 업무를 찾을 수 없습니다."), // 기존 RESOURCE_NOT_FOUND 대신 사용 가능
+    USER_ALREADY_ASSIGNED_TO_TASK(HttpStatus.CONFLICT, "TASK_002", "이미 해당 업무에 할당된 사용자입니다."),
+    USER_NOT_ASSIGNED_TO_TASK(HttpStatus.NOT_FOUND, "TASK_003", "해당 사용자는 이 업무의 담당자가 아닙니다."),
+    NO_AUTHORITY_TO_MANAGE_TASK(HttpStatus.FORBIDDEN, "TASK_004", "이 업무를 관리할(수정/삭제/담당자 변경 등) 권한이 없습니다."),
+    TASK_ASSIGNEE_NOT_PROJECT_MEMBER(HttpStatus.BAD_REQUEST, "TASK_005", "프로젝트 멤버가 아닌 사용자는 업무에 할당할 수 없습니다."),
+    // INVALID_TASK_UPDATE_OPERATION(HttpStatus.BAD_REQUEST, "TASK_006", "허용되지 않는 업무 수정 작업입니다."), // 필요시 추가
+
+
+    // Common (기존 코드 생략)
     INVALID_INPUT_VALUE(HttpStatus.BAD_REQUEST, "COMMON_001", "입력 값이 올바르지 않습니다."),
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "COMMON_002", "서버 내부 오류가 발생했습니다."),
-    ACCESS_DENIED(HttpStatus.FORBIDDEN, "COMMON_003", "접근 권한이 없습니다."),
-    RESOURCE_NOT_FOUND(HttpStatus.NOT_FOUND, "COMMON_004", "요청하신 리소스를 찾을 수 없습니다.");
+    ACCESS_DENIED(HttpStatus.FORBIDDEN, "COMMON_003", "접근 권한이 없습니다."), // 일반적인 접근 거부
+    RESOURCE_NOT_FOUND(HttpStatus.NOT_FOUND, "COMMON_004", "요청하신 리소스를 찾을 수 없습니다."); // 특정 도메인 리소스가 아닐 때
 
 
     private final HttpStatus status;

@@ -44,23 +44,30 @@ public class SecurityConfig {
                                 new AntPathRequestMatcher("/front/join.html"),
                                 new AntPathRequestMatcher("/front/findmyid.html"),
                                 new AntPathRequestMatcher("/front/findmypw.html"),
-                                // 정적 리소스 경로는 빌드 결과에 따라 그대로 유지하거나 확인 필요
-                                // (예: /css/**, /assets/**, /icon/** 등은 보통 루트 기준이므로 변경 불필요할 수 있음)
                                 new AntPathRequestMatcher("/css/**"),
                                 new AntPathRequestMatcher("/assets/**"),
-                                new AntPathRequestMatcher("/js/**"), // 만약 사용한다면
+                                new AntPathRequestMatcher("/js/**"),
                                 new AntPathRequestMatcher("/icon/**"),
-                                new AntPathRequestMatcher("/*.png"), // 루트 경로의 png (예: static/logo.png)
+                                new AntPathRequestMatcher("/*.png"),
                                 new AntPathRequestMatcher("/*.ico"),
                                 new AntPathRequestMatcher("/error"),
-                                // API 경로는 변경 없음
-                                new AntPathRequestMatcher("/api/auth/**")
+                                new AntPathRequestMatcher("/api/auth/**") // 인증 관련 API는 대부분 permitAll (회원가입, 로그인 등)
                         ).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/api/auth/**")).permitAll()
+                        // OAuth2 관련 경로도 permitAll (로그인 시도 경로)
                         .requestMatchers(new AntPathRequestMatcher("/front/login"), new AntPathRequestMatcher("/oauth2/**")).permitAll()
+
+                        // --- 업무(Task) 관련 API 경로 추가 ---
+                        // 프로젝트 내 업무 생성 및 조회
+                        .requestMatchers(new AntPathRequestMatcher("/api/projects/*/tasks/**")).authenticated()
+                        // 개별 업무 조회, 수정, 삭제, 멤버 관리 등
+                        .requestMatchers(new AntPathRequestMatcher("/api/tasks/**")).authenticated()
+                        // ------------------------------------
+
+                        // 기존 프로젝트 API 경로 (이미 authenticated()로 설정되어 있음)
                         .requestMatchers(new AntPathRequestMatcher("/api/projects/**")).authenticated()
-                        // API 문서화 도구 경로 (예: Swagger UI 또는 Spring REST Docs)가 있다면 permitAll 추가
-                        // .requestMatchers(new AntPathRequestMatcher("/swagger-ui/**"), new AntPathRequestMatcher("/v3/api-docs/**")).permitAll()
+                        // 사용자 프로필 API 경로 (예: /api/users/me)
+                        .requestMatchers(new AntPathRequestMatcher("/api/users/me")).authenticated()
+                        // 기타 모든 요청은 인증 필요
                         .anyRequest().authenticated()
                 )
 
@@ -95,7 +102,7 @@ public class SecurityConfig {
 
                 .sessionManagement(session -> session
                                 .maximumSessions(1) // 동시 세션 제어: 한 사용자당 하나의 세션만 허용
-                                .expiredUrl("/login?expired=true") // 세션 만료 또는 중복 로그인으로 기존 세션 만료 시 이동할 URL
+                                .expiredUrl("/front/login.html?expired=true")
                         // .maxSessionsPreventsLogin(true) // 선택: true면 새 로그인 차단, false(기본)면 이전 세션 만료
                 );
 

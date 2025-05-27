@@ -65,7 +65,8 @@
             padding: 20px;
 
             border: none;
-            overflow-y: scroll;
+            overflow-y: scroll; 
+            overflow-x: auto; 
         }
         .middle7 {
             position: relative;
@@ -74,7 +75,8 @@
         }
 
         .workhead {
-            position: sticky;
+            position: sticky; 
+            top: 0; 
             flex-shrink: 0;
             background-color: rgb(81,123,95);
             height:35px;
@@ -90,14 +92,13 @@
         }
         .workbox {
             position: relative;
-            height: 130px;
+            min-height: 100px; 
             width: 300px;
             flex-shrink: 0;
 
             background-color: white;
             margin:10px;
             padding: 10px;
-            gap: 5px;
             border: none;
             border-radius: 10px;
             box-shadow : 1px 1px 3px rgba(150, 150, 150, 0.8);
@@ -105,6 +106,7 @@
 
             display: flex;
             flex-direction: column;
+            cursor: pointer;
         }
         .workbox:hover {
             background-color: rgb(240, 240, 240)
@@ -114,6 +116,10 @@
             flex-direction: column;
             align-items: center;
         }
+        .tasks-container {
+            width: 100%;
+        }
+
 
         .users {
             height:200px;
@@ -131,18 +137,21 @@
         }
         .aside_left {
             position: sticky;
+            top:0; 
             height: 100vh;            
             width: 300px;
             border-right: solid 1px;
             border-color: grey;
             float: left;
-
             background-color: white;
+            z-index: 10; 
         }
         .aside_left ul {
             width: 100%;
             margin: 0;
             padding: 0;
+            max-height: calc(100vh - 60px); 
+            overflow-y: auto; 
         }
         .aside_left li{
             width: 100%;
@@ -150,59 +159,73 @@
             color: rgb(10, 10, 10);
             font-size: medium;
             text-decoration-line: none;
-
             padding: 25px;
-
             border-bottom: solid 1px rgb(200, 200, 200);
+            cursor: pointer;
         }
         .aside_left li:hover {
             background-color: rgb(230, 230, 230);
         }
-        li.on {
-            background-color: white;
-            border-bottom: solid 2px green;
-            pointer-events: none;
+        li.on { 
+            background-color: rgb(220, 240, 220); 
+            border-left: solid 4px green; 
+            font-weight: bold;
+            padding-left: 21px; 
         }
         .box_option {
             display: flex;
             justify-content: flex-start;
             align-items: center;
             background-color: white;
-
             height: 60px;
             padding: 20px;
-
             font-size: medium;
             font-weight: bold;
-
             border-bottom: solid 1.5px rgb(150, 150, 150);
         } 
         .user_and_history{
-            height: 100%;         
+            position: sticky; 
+            top: 0; 
+            height: 100vh;      
             width: 350px;
-            transform: translate( 0%, -100%);
-            float: right;
-
             display: flex;
-            align-items: center;
-
+            flex-direction: column; 
             border-left: solid 1px rgb(200, 200, 200);
             background-color: white;
-
             padding: 10px;
+            box-sizing: border-box;
+            z-index: 10;
         }
-        .main {
-            position: relative;
+        .main_content_area { 
+            flex-grow: 1; 
+            display: flex; 
+            overflow-x: auto; 
+            height: calc(100vh - 60px); 
+            background-color: rgb(245, 245, 245);
+        }
+        .main { 
+            display: flex; 
+            width: 100%;
+            height: 100vh;
+            overflow: hidden; 
+        }
+        .main_app_area { 
+            display: flex;
+            flex-direction: column;
             flex-grow: 1;
-            padding-bottom: 80px;
-            overflow:hidden;
+            height: 100vh;
+            overflow: hidden;
         }
         .project_memu{
-            position: sticky;
+            position: sticky; 
+            top: 0;
             height: 60px;
-
             padding: 15px;
             border-bottom: solid 1.5px rgb(200, 200, 200);
+            background-color: white; 
+            z-index: 15; 
+            display: flex; 
+            align-items: center; 
         }
         .user_list{
             display: flex;
@@ -213,8 +236,8 @@
         }
 
     </style>
-  <script type="module" crossorigin src="/assets/approot-LA72Ilwj.js"></script>
-  <link rel="stylesheet" crossorigin href="/css/approot.BpJkzV3q.css">
+  <script type="module" crossorigin src="/assets/approot-CqyTUh2l.js"></script>
+  <link rel="stylesheet" crossorigin href="/css/approot.BzKG-uOR.css">
   <link rel="stylesheet" crossorigin href="/css/bootstrap.CyjhP-aL.css">
 </head>
 
@@ -228,240 +251,510 @@
                 <hr style="border: 1px solid rgb(0, 0, 0); "/>
             </div>
         
-            <div style="margin-top:20px; margin-right: 55px;">
-                <label>업무 제목</label>
+            <div style="margin-top:20px;">
+                <label for="worktitle" style="display:inline-block; width:90px; text-align:right; margin-right:5px;">업무 제목</label>
                 <input class="button_pb" type="text" id="worktitle" placeholder="업무 제목"/>
             </div>
-            <div style="margin-top:20px; margin-right: 58px;">
-                <label>업무 내용</label>
-                <input class="button_pb" type="text" id="workcontent" placeholder="업무 내용"/>
+            <div style="margin-top:10px;">
+                <label for="workcontent" style="display:inline-block; width:90px; text-align:right; margin-right:5px;">업무 내용</label>
+                <textarea class="button_pb" id="workcontent" placeholder="업무 내용" style="height: 80px; resize: vertical; padding: 5px; box-sizing: border-box;"></textarea>
             </div>
-            <div style="margin-top:20px; margin-right: 90px;">
-                <label>업무 마감 기한</label>
+            <div style="margin-top:10px;">
+                <label for="deadline_pb" style="display:inline-block; width:90px; text-align:right; margin-right:5px;">마감 기한</label>
                 <input class="button_pb" type="datetime-local" id="deadline_pb"/>
             </div>
             <div style="margin-top:20px; display: flex; justify-content: center;">
                 <button class="button_pb2" style="width:80px;" onclick="addwork()">생성</button>
+                 <button class="button_pb2" style="width:80px; background-color: #ccc; margin-left: 10px;" onclick="document.querySelector('.modal_pb').close();">취소</button>
             </div>
         </div>
     </dialog>
     
-    <aside class="aside_left">
-        <div class="box_option">프로젝트 선택</div>
-        <ul>
-            <li>다른 프로젝트1</li>
-            <li>다른 프로젝트2</li>
-            <li>다른 프로젝트3</li>
-            <li>다른 프로젝트4</li>
-        </ul>
-    </aside>
+    <div class="main"> 
+        <aside class="aside_left">
+            <div class="box_option">프로젝트 선택</div>
+            <ul id="projectListAside">
+            </ul>
+        </aside>
 
-    <div class="main">
-        <div class="project_memu">
-            <div style="display: flex; align-items: center; margin-top: 5px; font-weight: bold;" >
-                <div style="display: flex; align-items: center; gap: 10px; margin-left: 30px;">
-                    <div id="pjname" contenteditable="false">프로젝트 이름</div>
-                    <img id="edit" class="drag1" src="/edit.BiAatf6L.png" style="height:20px; width:20px; margin-left: 10px; "/>
+        <div class="main_app_area"> 
+            <div class="project_memu">
+                <div style="display: flex; align-items: center; font-weight: bold; width: 100%;" >
+                    <div style="display: flex; align-items: center; gap: 10px; margin-left: 30px;">
+                        <div id="pjname" contenteditable="false">프로젝트 이름 로딩 중...</div>
+                        <img id="edit" class="drag1" src="/edit.BiAatf6L.png" style="height:20px; width:20px; margin-left: 10px; cursor:pointer;"/>
+                    </div>
+                    <img src="/gear.C0dvKnnU.png" class="drag1" style="height:20px; width:20px; margin-right: 10px; margin-left: auto; cursor:pointer;" onclick="goToProjectManage()"/>
                 </div>
-                <img src="/gear.C0dvKnnU.png" class="drag1" style="height:20px; width:20px; margin-right: 10px; margin-left: auto;" onclick="window.location.href='projectmanage.html';"/>
             </div>
-        </div>
 
-        <div class="middle7">
-
-            <div class="box7">
-
-                <div style="flex-direction: column;">
-                    <section class="worksection" id="todowork">
-                        <div class="workhead">To do</div>
-                        <div class="workbox" onclick="window.location.href='worklist.html';">
-                            <span>업무명</span>
-                            <div style="border-bottom: solid 1px rgb(200, 200, 200);"></div>
-                            <span style="color: gray; font-size: smaller;">마감 - 2025/00/00 00:00</span>
-                            <div style="display: flex; flex-direction: row; margin-top: auto; gap: 5px;">
-                                <img src="/user2.Dp3ZRFZz.png" style="height: 25px; width: 25px;"/>
-                                <img src="/user2.Dp3ZRFZz.png" style="height: 25px; width: 25px;"/>                                         
-                                <img src="/user2.Dp3ZRFZz.png" style="height: 25px; width: 25px;"/>                                
+            <div class="middle7">
+                <div class="box7">
+                    <div style="display: flex; flex-direction: column;"> 
+                        <section class="worksection" id="todo_section">
+                            <div class="workhead">To Do</div>
+                            <div class="tasks-container" id="todo_tasks_container">
                             </div>
+                        </section>
+                        <section class="worksection" style="padding-top: 10px;"> 
+                            <img src="/add.DjzDncey.png" style="height:30px; width:30px; cursor:pointer;" id="newwork"/>                        
+                        </section>
+                    </div>
+                    
+                    <section class="worksection" id="inprogress_section">
+                        <div class="workhead">In Progress</div>
+                        <div class="tasks-container" id="inprogress_tasks_container">
                         </div>
+                    </section>
 
-                    </section>
-                    <section class="worksection">
-                        <img src="/add.DjzDncey.png" style="height:30px; width:30px;" id="newwork"/>                        
-                    </section>
+                    <section class="worksection" id="done_section">
+                        <div class="workhead">Done</div>
+                        <div class="tasks-container" id="done_tasks_container">
+                        </div>
+                    </section>     
                 </div>
-                
-                <section class="worksection">
-                    <div class="workhead">In progress</div>
-                        <div class="workbox" onclick="window.location.href='worklist.html';">
-                            <span>업무명</span>
-                            <div style="border-bottom: solid 1px rgb(200, 200, 200);"></div>
-                            <span style="color: gray; font-size: smaller;">마감 - 2025/00/00 00:00</span>
-                            <div style="display: flex; flex-direction: row; margin-top: auto; gap: 5px;">
-                                <div style="background-color: black; height: 20px; width: 20px; border-radius: 50%;"></div>
-                                <span>그룹명</span>
-                            </div>
-                        </div>                    
-                </section>
-
-                <section class="worksection">
-                    <div class="workhead">Done</div>
-                </section>     
-
-            </div>
-        </div>    
+            </div>    
+        </div>
         
-        <div class="user_and_history" style="flex-direction: column;">
-            <div class="users" style="top: 0; height: 60%;">
-                <div style="position: sticky; top: 0; background-color: white;">
+        <div class="user_and_history">
+            <div class="users" style="height: 60%; margin-bottom: 10px;">
+                <div style="position: sticky; top: 0; background-color: white; padding-top:5px; padding-bottom:5px;">
                     <span class="green" style="font-size: medium;">참여 유저</span>
-                    <hr style="margin: 0;">                        
+                    <hr style="margin-top: 5px; margin-bottom: 0;">                        
                 </div>
-
-                <table class="table table-hover">
-                    <tbody>
-                        <tr><td class="user_list">
-                            <img src="/user2.Dp3ZRFZz.png" style="height: 30px; width: 30px; margin:5px;"/>
-                            <span>닉네임</span>
-                            <span style="font-size: small; color: rgba(0, 0, 0, 0.5);">identification</span>
-                            <span style="color: #3a6b5b;">#0000</span>   
-                            <div style="background-color: black; height: 20px; width: 20px; border-radius: 50%; margin-left: auto;"></div>                                 
-                        </td></tr>
+                <table class="table table-hover" style="margin-top:0;">
+                    <tbody id="projectMemberListSidebar">
                     </tbody>
                 </table>
             </div>
 
-            <div class="users" style="bottom: 0; height: 38%;" onclick="openhistory()">
-                <div style="position: sticky; top: 0; background-color: white;">
+            <div class="users" style="height: calc(40% - 20px); cursor:pointer;" onclick="openhistory()">
+                <div style="position: sticky; top: 0; background-color: white; padding-top:5px; padding-bottom:5px;">
                     <span class="green" style="font-size: medium;">히스토리</span>
-                    <hr style="margin: 0;">                        
+                    <hr style="margin-top: 5px; margin-bottom: 0;">                        
                 </div>
+                <table class="table table-hover" style="margin-top:0;">
+                    <tbody id="projectHistorySidebar">
 
-                <table class="table table-hover">
-                    <tbody>
-                        <tr><td>
-                            <div style="display: flex; flex-direction: row; align-items: center;">
-                                <span>업무1 내용 수정</span>
-                                <div style="margin-left: auto;">
-                                    <span style="color: gray;">닉네임</span>
-                                    <span style="color: #3a6b5b; margin-left: 5px;">2025/00/00</span>                                
-                                </div>
-                            </div>
-                        </td></tr>
-                        <tr><td>
-                            <div style="display: flex; flex-direction: row; align-items: center;">
-                                <span>ㅇㅇ(유저) 초대</span>
-                                <div style="margin-left: auto;">
-                                    <span style="color: gray;">닉네임</span>
-                                    <span style="color: #3a6b5b; margin-left: 5px;">2025/00/00</span>                                
-                                </div>
-                            </div>
-                        </td></tr>
                     </tbody>
                 </table>
             </div>
-            </div>                    
+        </div>                    
     </div>
 
 </body>
 <script>
-    
-    const name = document.getElementById("pjname");
-    const edit = document.getElementById("edit");
-    let oldname = name.textContent;
-    edit.addEventListener("click", () => {
-            name.contentEditable = "true";
-            name.style.outline = "1px solid #aaa";
-            name.focus();
+    let CURRENT_PROJECT_ID = null; 
 
-            oldname = name.textContent;
-        }
-    );
-    name.addEventListener("keydown", e => {
+    const nameElement = document.getElementById("pjname");
+    const editButton = document.getElementById("edit");
+    if (nameElement && editButton) {
+        let oldName = nameElement.textContent;
+        editButton.addEventListener("click", () => {
+            nameElement.contentEditable = "true";
+            nameElement.style.outline = "1px solid #aaa";
+            nameElement.focus();
+            oldName = nameElement.textContent;
+        });
+        nameElement.addEventListener("keydown", e => {
             if (e.key === "Enter") {
                 e.preventDefault();
-                name.blur();
+                nameElement.blur();
             }
-        }
-    );   
+        });   
+        nameElement.addEventListener("blur", async () => { // async 추가
+            nameElement.contentEditable = "false";
+            nameElement.style.outline = "none";
+            const newName = nameElement.textContent.trim();
 
-    name.addEventListener("blur", () => {
-            name.contentEditable = "false";
-            name.style.outline = "none";
-            if(name.textContent !== oldname){
-                const result = confirm("프로젝트 이름을 변경하겠습니까?");
-                if(!result){
-                    name.textContent = oldname;
-                }
+            if (newName === oldName) { // 변경 사항이 없으면 아무것도 안 함
+                return;
             }
-        }
-    );        
+            
+            if (!newName) { // 이름이 비어있으면 원래대로 복원
+                alert("프로젝트 이름은 비워둘 수 없습니다.");
+                nameElement.textContent = oldName;
+                return;
+            }
+
+            // (선택적) 클라이언트 측에서 간단한 유효성 검사 (예: 길이)
+            if (newName.length > 255) {
+                alert("프로젝트 이름은 255자를 넘을 수 없습니다.");
+                nameElement.textContent = oldName;
+                nameElement.focus(); // 다시 수정하도록 포커스
+                return;
+            }
+
+            const result = confirm(`프로젝트 이름을 "${newName}" (으)로 변경하시겠습니까?`);
+            if (result) {
+                try {
+                    // 현재 프로젝트 설명은 가져올 방법이 없으므로, null 또는 기존 설명을 보내야 함
+                    // 설명을 수정하는 UI가 없다면, title만 보내거나, description은 기존값을 보내는 로직이 필요
+                    // 여기서는 title만 변경하는 것으로 가정하고, description은 변경하지 않음 (또는 빈 값으로)
+                    // ProjectUpdateRequestDto는 title과 description을 받으므로, 
+                    // 현재 페이지에서 description을 관리하지 않는다면, 기존 description을 함께 보내거나,
+                    // 백엔드에서 title만 업데이트하도록 API/서비스 수정 필요.
+                    // 가장 간단하게는, 현재 description을 알 수 없으므로 title만 보내는 DTO를 만들거나,
+                    // ProjectUpdateRequestDto에서 description을 nullable하게 처리하고,
+                    // title만 있는 요청을 백엔드가 title만 업데이트하도록 해야함.
+                    // 여기서는 현재 description을 알 수 없으므로, title만 있는 객체를 보내도록 가정합니다.
+                    // (실제로는 ProjectUpdateRequestDto가 title, description을 모두 가지므로,
+                    //  description을 가져올 방법이 없다면 빈 문자열이나 null로 보내야 함.
+                    //  혹은 ProjectService.updateProjectDetails에서 description이 null이면 기존 값 유지하도록 구현)
+
+                    const projectDataToUpdate = {
+                        title: newName
+                        // description: 현재 페이지에서 관리하지 않으므로 보내지 않거나, 
+                        //              기존 description 값을 어딘가에서 가져와야 함.
+                        //              null로 보내면 백엔드에서 기존 값 유지하도록 처리 필요.
+                    };
+
+                    const response = await fetch(`/api/projects/${CURRENT_PROJECT_ID}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(projectDataToUpdate)
+                    });
+
+                    const apiResult = await response.json();
+
+                    if (!response.ok) {
+                        throw new Error(apiResult.message || `프로젝트 이름 변경 실패 (상태: ${response.status})`);
+                    }
+
+                    if (apiResult.status === 200 && apiResult.data) {
+                        alert("프로젝트 이름이 성공적으로 변경되었습니다.");
+                        oldName = apiResult.data.title; // 성공 시 oldName 업데이트
+                        nameElement.textContent = apiResult.data.title; // 서버 응답으로 다시 설정 (정합성)
+                        // 왼쪽 사이드바의 프로젝트 목록도 업데이트 필요
+                        loadProjectListForAside(); 
+                    } else {
+                        throw new Error(apiResult.message || "프로젝트 이름 변경은 성공했으나 응답이 올바르지 않습니다.");
+                    }
+
+                } catch (error) {
+                    console.error("Error updating project name:", error);
+                    alert(`오류: ${error.message}`);
+                    nameElement.textContent = oldName; // 실패 시 원래 이름으로 복원
+                }
+            } else {
+                nameElement.textContent = oldName; // 사용자가 취소한 경우
+            }
+        });
+    }
 
     function openhistory() {
-        window.open(
-            'history_pop.html',       
-            'history',     
-            'width=800,height=800' 
-        );
+        if (!CURRENT_PROJECT_ID) {
+            alert("프로젝트를 먼저 선택해주세요.");
+            return;
+        }
+        window.open(`history_pop.html?projectId=${CURRENT_PROJECT_ID}`, 'history', 'width=800,height=800');
     }
 
     function closeModal(dialog){
+        if (!dialog) return;
         dialog.addEventListener('click', function(e){
             if(e.target === dialog){
                 dialog.close();
             }
         });
     }
-    window.closeModal = closeModal;
+
+    function goToProjectManage() {
+        if (!CURRENT_PROJECT_ID) {
+            alert("프로젝트를 먼저 선택해주세요.");
+            return;
+        }
+        window.location.href = `projectmanage.html?projectId=${CURRENT_PROJECT_ID}`;
+    }
 
     document.addEventListener('DOMContentLoaded', () => {
         const newWorkBtn = document.getElementById('newwork');
         const modal = document.querySelector('.modal_pb');
 
-        closeModal(modal); 
-        newWorkBtn.addEventListener('click', () => {
-            modal.showModal();
-        });
+        if (modal) closeModal(modal); 
+        
+        if (newWorkBtn && modal) {
+            newWorkBtn.addEventListener('click', () => {
+                if (!CURRENT_PROJECT_ID) {
+                    alert("업무를 생성할 프로젝트를 먼저 선택해주세요.");
+                    return;
+                }
+                document.getElementById("worktitle").value = "";
+                document.getElementById("workcontent").value = ""; 
+                document.getElementById("deadline_pb").value = "";
+                modal.showModal();
+            });
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const projectIdFromUrl = urlParams.get('projectId');
+        
+        if (projectIdFromUrl) {
+            CURRENT_PROJECT_ID = parseInt(projectIdFromUrl, 10);
+            if (isNaN(CURRENT_PROJECT_ID)) {
+                document.getElementById("pjname").textContent = "잘못된 프로젝트 ID입니다.";
+                return;
+            }
+            loadProjectDetails(CURRENT_PROJECT_ID);
+            loadTasks(CURRENT_PROJECT_ID);
+            loadProjectMembersForSidebar(CURRENT_PROJECT_ID); 
+        } else {
+            document.getElementById("pjname").textContent = "프로젝트 ID가 URL에 없습니다. 프로젝트 목록에서 선택해주세요.";
+        }
+        loadProjectListForAside();
     });
 
-    function addwork() {
-        const worktitle = document.getElementById("worktitle");
-        const workcontent = document.getElementById("workcontent");
-        const deadline = document.getElementById("deadline_pb");
-
-        const title = worktitle.value.trim();
-        const content = workcontent.value.trim();   
-        const dl = deadline.value;
-
-        if (!title) {
-            alert("업무 제목을 입력하세요.");
-            title.focus();
-        }
-        else if (!dl) {
-            alert("업무 마감 기한을 설정하세요.");
+    async function addwork() {
+        if (!CURRENT_PROJECT_ID) {
+            alert("업무를 생성할 프로젝트 ID가 없습니다. 페이지를 새로고침하거나 프로젝트를 다시 선택해주세요.");
             return;
         }
 
-        const todosection = document.getElementById("todowork");
-        const box = document.createElement("div");
-        box.className = "workbox";
-        box.innerHTML = `
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <span style="font-size: medium; font-weight: 100;">${title}</span>
-            </div>
-            <div style="font-size: small;">${content}</div>
-            <div style="font-size: small; color: gray;">${dl}</div>
-        `;
-        todosection.appendChild(box);
-        
-        worktitle.value = "";
-        workcontent.value = "";
-        deadline.value = "";
+        const worktitleInput = document.getElementById("worktitle");
+        const workcontentInput = document.getElementById("workcontent"); 
+        const deadlineInput = document.getElementById("deadline_pb");
 
-        const modal = document.querySelector(".modal_pb");
-        modal.close();
-    
+        const title = worktitleInput.value.trim();
+        const description = workcontentInput.value.trim();   
+        const deadlineValue = deadlineInput.value;
+        const deadline = deadlineValue ? (deadlineValue.includes('T') ? deadlineValue + ":00" : deadlineValue + "T00:00:00") : null;
+
+
+        if (!title) {
+            alert("업무 제목을 입력하세요.");
+            worktitleInput.focus();
+            return;
+        }
+        
+        const taskData = {
+            title: title,
+            description: description,
+            deadline: deadline 
+        };
+
+        try {
+            const response = await fetch(`/api/projects/${CURRENT_PROJECT_ID}/tasks`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(taskData)
+            });
+
+            const result = await response.json(); 
+
+            if (!response.ok) { 
+                throw new Error(result.message || `업무 생성 실패 (상태: ${response.status})`);
+            }
+            
+            if (response.status === 201 && result.status === 201 && result.data) {
+                alert("업무가 성공적으로 생성되었습니다.");
+                appendTaskToBoard(result.data); 
+                
+                worktitleInput.value = "";
+                workcontentInput.value = "";
+                deadlineInput.value = "";
+                document.querySelector(".modal_pb").close();
+            } else {
+                throw new Error(result.message || "업무 생성은 성공했으나, 서버 응답 데이터가 올바르지 않습니다.");
+            }
+
+        } catch (error) {
+            console.error("Error creating task:", error);
+            alert(`업무 생성 중 오류 발생: ${error.message}`);
+        }
+    }
+    window.addwork = addwork; 
+
+    async function loadProjectDetails(projectId) {
+        const pjnameDiv = document.getElementById("pjname");
+        pjnameDiv.textContent = `프로젝트 로딩 중... (ID: ${projectId})`;
+        try {
+            const response = await fetch(`/api/projects/${projectId}`); 
+            if (!response.ok) {
+                if (response.status === 401) { window.location.href = "/front/login.html"; return; }
+                const errorResult = await response.json().catch(() => ({message: "프로젝트 정보를 가져오지 못했습니다."}));
+                throw new Error(errorResult.message || `Failed to fetch project details: ${response.status}`);
+            }
+            const result = await response.json(); 
+            if (result.status === 200 && result.data) {
+                pjnameDiv.textContent = result.data.title;
+            } else {
+                pjnameDiv.textContent = "프로젝트 정보 로드 실패";
+                console.error("Failed to load project details:", result.message);
+            }
+        } catch (error) {
+            console.error("Error loading project details:", error);
+            pjnameDiv.textContent = "프로젝트 정보 로드 오류";
+        }
     }
 
+    async function loadTasks(projectId) {
+        const todoContainer = document.getElementById("todo_tasks_container");
+        const inprogressContainer = document.getElementById("inprogress_tasks_container");
+        const doneContainer = document.getElementById("done_tasks_container");
+
+        if(!todoContainer || !inprogressContainer || !doneContainer) {
+            console.error("Task container elements not found!");
+            return;
+        }
+
+        todoContainer.innerHTML = '<div style="text-align:center; color:grey; margin-top:20px;">업무 로딩 중...</div>'; 
+        inprogressContainer.innerHTML = '<div style="text-align:center; color:grey; margin-top:20px;">업무 로딩 중...</div>';
+        doneContainer.innerHTML = '<div style="text-align:center; color:grey; margin-top:20px;">업무 로딩 중...</div>';
+
+        try {
+            const response = await fetch(`/api/projects/${projectId}/tasks`);
+            if (!response.ok) {
+                if (response.status === 401) { window.location.href = "/front/login.html"; return; }
+                const errorResult = await response.json().catch(() => ({message: "업무 목록을 가져오지 못했습니다."}));
+                throw new Error(errorResult.message || `Failed to fetch tasks: ${response.status}`);
+            }
+            const result = await response.json(); 
+
+            if (result.status === 200 && Array.isArray(result.data)) {
+                todoContainer.innerHTML = ''; 
+                inprogressContainer.innerHTML = '';
+                doneContainer.innerHTML = '';
+
+                if (result.data.length === 0) {
+                    const noTaskMsg = '<div style="text-align:center; color:grey; margin-top:20px;">업무가 없습니다.</div>';
+                    todoContainer.innerHTML = noTaskMsg;
+                } else {
+                    result.data.forEach(task => {
+                        appendTaskToBoard(task);
+                    });
+                }
+            } else {
+                throw new Error(result.message || "업무 목록을 가져오는데 실패했습니다.");
+            }
+        } catch (error) {
+            console.error("Error loading tasks:", error);
+            const errorMsg = `<div style="text-align:center; color:red; margin-top:20px;">업무 로드 오류: ${error.message}</div>`;
+            todoContainer.innerHTML = errorMsg;
+            inprogressContainer.innerHTML = ''; 
+            doneContainer.innerHTML = '';
+        }
+    }
+
+    function appendTaskToBoard(taskData) {
+        const todoContainer = document.getElementById("todo_tasks_container");
+        const inprogressContainer = document.getElementById("inprogress_tasks_container");
+        const doneContainer = document.getElementById("done_tasks_container");
+
+        const workBox = document.createElement("div");
+        workBox.className = "workbox";
+        workBox.setAttribute('data-task-id', taskData.idx); 
+        workBox.onclick = () => { 
+            window.location.href = `worklist.html?taskId=${taskData.idx}&projectId=${CURRENT_PROJECT_ID}`; 
+        };
+        
+        let deadlineText = '마감 기한 없음';
+        if (taskData.deadline) {
+            try {
+                const date = new Date(taskData.deadline);
+                deadlineText = `마감 - ${date.getFullYear()}/${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+            } catch (e) {
+                console.warn("Invalid date format for deadline:", taskData.deadline);
+                deadlineText = `마감 - ${taskData.deadline}`; 
+            }
+        }
+
+        workBox.innerHTML = `
+            <span style="font-weight: 500; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${taskData.title}">${taskData.title}</span>
+            ${taskData.description ? `<span style="font-size: smaller; color: #555; margin-top: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;">${taskData.description}</span>` : ''}
+            <div style="border-bottom: solid 1px rgb(220, 220, 220); margin-top: 5px; margin-bottom: 5px;"></div>
+            <span style="color: gray; font-size: smaller; margin-bottom: 5px;">${deadlineText}</span>
+            <div style="margin-top: auto; min-height: 5px;"></div>
+        `;
+
+        if (taskData.status === "ToDo") {
+            if(todoContainer.textContent === '업무가 없습니다.' || todoContainer.textContent === '업무 로딩 중...' || todoContainer.textContent.includes('업무 로드 오류')) todoContainer.innerHTML = '';
+            todoContainer.appendChild(workBox);
+        } else if (taskData.status === "InProgress") {
+            if(inprogressContainer.textContent === '업무가 없습니다.' || inprogressContainer.textContent === '업무 로딩 중...' || inprogressContainer.textContent.includes('업무 로드 오류')) inprogressContainer.innerHTML = '';
+            inprogressContainer.appendChild(workBox);
+        } else if (taskData.status === "Done") {
+            if(doneContainer.textContent === '업무가 없습니다.' || doneContainer.textContent === '업무 로딩 중...' || doneContainer.textContent.includes('업무 로드 오류')) doneContainer.innerHTML = '';
+            doneContainer.appendChild(workBox);
+        }
+    }
+
+    async function loadProjectListForAside() {
+        const projectListUl = document.getElementById("projectListAside");
+        if (!projectListUl) return;
+        projectListUl.innerHTML = '<li>프로젝트 목록 로딩 중...</li>';
+        try {
+            const response = await fetch('/api/projects'); 
+            if (!response.ok) {
+                if (response.status === 401) { window.location.href = "/front/login.html"; return; }
+                const errorResult = await response.json().catch(() => ({message: "프로젝트 목록을 가져오지 못했습니다."}));
+                throw new Error(errorResult.message || `Failed to fetch project list: ${response.status}`);
+            }
+            const result = await response.json();
+            if (result.status === 200 && Array.isArray(result.data)) {
+                projectListUl.innerHTML = '';
+                if (result.data.length === 0) {
+                    projectListUl.innerHTML = '<li style="padding-left: 10px; color: grey;">참여중인 프로젝트가 없습니다.</li>';
+                }
+                result.data.forEach(project => {
+                    const li = document.createElement('li');
+                    li.textContent = project.title;
+                    li.onclick = () => {
+                        window.location.href = `projectboard.html?projectId=${project.idx}`;
+                    };
+                    if (project.idx === CURRENT_PROJECT_ID) {
+                        li.classList.add('on'); 
+                    }
+                    projectListUl.appendChild(li);
+                });
+            } else {
+                projectListUl.innerHTML = `<li style="color:red;">프로젝트 목록 로드 실패: ${result.message || '데이터 형식 오류'}</li>`;
+            }
+        } catch (error) {
+            console.error("Error loading project list for aside:", error);
+            projectListUl.innerHTML = `<li style="color:red;">프로젝트 목록 로드 오류.</li>`;
+        }
+    }
+
+    async function loadProjectMembersForSidebar(projectId) {
+        const memberListTbody = document.getElementById("projectMemberListSidebar");
+        if (!memberListTbody) return;
+        memberListTbody.innerHTML = '<tr><td style="text-align:center; color:grey;">멤버 로딩 중...</td></tr>';
+        try {
+            const response = await fetch(`/api/projects/${projectId}/members`);
+            if (!response.ok) {
+                if (response.status === 401) { window.location.href = "/front/login.html"; return; }
+                const errorResult = await response.json().catch(() => ({message: "프로젝트 멤버 정보를 가져오지 못했습니다."}));
+                throw new Error(errorResult.message || `Failed to fetch project members: ${response.status}`);
+            }
+            const result = await response.json(); 
+            if (result.status === 200 && Array.isArray(result.data)) {
+                memberListTbody.innerHTML = '';
+                if (result.data.length === 0) {
+                    memberListTbody.innerHTML = '<tr><td style="text-align:center; color:grey;">참여중인 멤버가 없습니다.</td></tr>';
+                }
+                result.data.forEach(member => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td class="user_list">
+                            <img src="${member.profileImage || '/icon/user2.png'}" style="height: 30px; width: 30px; border-radius: 50%; margin-right:5px; object-fit: cover;"/>
+                            <span title="${member.nickname} (${member.role})">${member.nickname}</span>
+                            <span style="font-size: smaller; color: rgba(0, 0, 0, 0.5); margin-left: 5px;">${member.identificationCode ? '#' + member.identificationCode : ''}</span>   
+                            ${member.role === '관리자' ? '<img src="/icon/crown.png" title="관리자" style="height: 16px; width: 16px; margin-left: auto;"/>' : '<div style="margin-left: auto; width:16px;"></div>'}                                 
+                        </td>
+                    `;
+                    memberListTbody.appendChild(tr);
+                });
+            } else {
+                memberListTbody.innerHTML = `<tr><td style="text-align:center; color:red;">멤버 목록 로드 실패: ${result.message || '데이터 형식 오류'}</td></tr>`;
+            }
+        } catch (error) {
+            console.error("Error loading project members for sidebar:", error);
+            memberListTbody.innerHTML = `<tr><td style="text-align:center; color:red;">멤버 목록 로드 오류.</td></tr>`;
+        }
+    }
 </script>
 </html>

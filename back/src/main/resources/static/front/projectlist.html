@@ -24,7 +24,7 @@
         .modal_nw {
             width: 600px;           
             height: 600px;         
-            padding: 20px;  
+            padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
             border: 1px solid gray; /* 원본 유지 */
@@ -143,10 +143,29 @@
         }
         .button_pj {
             background-color:rgb(183, 228, 206);
+            border: none;
             height:45px;
             width:205px;
             color:rgb(25, 54, 52);
-            border: none;
+            font-size: medium;
+            font-weight: 700;  
+            border-radius: 4px;
+            font-family: 'Pretendard-Regular';
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .button_pj:hover {
+            background-color: rgb(159, 211, 189);
+        }
+        .button_pj2 {
+            background-color: white;
+            border: solid 1px rgb(25, 54, 52);
+            height:45px;
+            width:205px;
+            color:rgb(25, 54, 52);
             font-size: medium;
             font-weight: 700;  
             border-radius: 4px;
@@ -199,10 +218,40 @@
             background-color: transparent;
             color:rgb(173, 98, 98);
         }
+        .box_modal_nw{
+            width: 100%;
+            height: 100%;
+
+            display: flex;
+            flex-direction: column;
+            justify-items: center;
+            align-items: center;
+        }
+
+        .form-row {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+            margin-bottom: 15px;
+            width: 80%;
+        }
+
+        .form-row label {
+            width: 120px;
+            text-align: left;
+            padding-top: 6px;
+        }
+
+        .form-row input,
+        .form-row textarea {
+            flex: 1;
+            padding: 8px;
+            box-sizing: border-box;
+        }
         
     </style>
-  <script type="module" crossorigin src="/assets/approot-LA72Ilwj.js"></script>
-  <link rel="stylesheet" crossorigin href="/css/approot.BpJkzV3q.css">
+  <script type="module" crossorigin src="/assets/approot-CqyTUh2l.js"></script>
+  <link rel="stylesheet" crossorigin href="/css/approot.BzKG-uOR.css">
   <link rel="stylesheet" crossorigin href="/css/bootstrap.CyjhP-aL.css">
 </head>
 
@@ -210,26 +259,127 @@
     <div id="root"></div>
     
     <dialog class="modal_nw">
-        <div class="middle" style="text-align: center;">
+        <div class="box_modal_nw" id="1">
             <div class="green">프로젝트 생성</div>
-            <div style="width: 100%;">
+            <div style="width: 100%; margin-bottom: 30px;">
                 <hr style="border: 1px solid rgb(0, 0, 0); "/>
             </div>
         
-            <div style="margin-top:20px; margin-right: 70px;"> <label for="projectTitle_modal">프로젝트 명</label>
+            <div class="form-row" style="gap: 10px;">
+                <label for="projectTitle_modal">프로젝트 명</label>
                 <input class="button_nw" type="text" id="projectTitle_modal" placeholder="프로젝트 명"/>
             </div>
             
-            <div style="margin-top:10px; margin-right: 70px;">
+            <div class="form-row" style="gap: 10px;">
                 <label for="projectDescription_modal">프로젝트 설명</label>
-                <textarea class="button_nw" id="projectDescription_modal" placeholder="프로젝트 설명" style="height: 100px; resize: vertical;"></textarea>
+                <textarea class="button_nw" id="projectDescription_modal" placeholder="프로젝트 설명" style="height: 330px; resize: vertical;"></textarea>
             </div>
 
+            <!--
             <div style="margin-top:20px; display: flex; justify-content: center;">
                 <button class="button_pj" style="width:80px; margin-right:5px;" onclick="addProject()">생성</button> <form method="dialog">
                     <button class="button_pj" style="background-color: rgb(184, 185, 186); width:80px;">취소</button>
                 </form>
             </div>
+            -->
+            <div style="position: absolute; bottom: 20px; right: 20px; display: flex; flex-direction: row; justify-content: center; gap: 10px;">
+                <button class="button_pj2" style="width:80px;" onclick="Watchdiv3('2')">다음</button>
+                <form method="dialog">
+                    <button class="button_pj2" style="background-color: rgb(220, 220, 220); border-color: gray; width:80px; color:rgb(50, 50, 50);">취소</button>
+                </form>
+            </div>
+
+        </div>
+
+        <div class="box_modal_nw" id="2">
+            <div class="green">유저 초대</div>
+            <div style="width: 100%; margin-bottom: 20px;">
+                <hr style="border: 1px solid rgb(0, 0, 0); "/>
+            </div>
+                
+            <div style="display: flex; flex-direction: row;">
+                <div class="find3">
+                    <input class="button_find3" type="text" id="find" placeholder="아이디 / 태그로 유저 검색" style="font-size: small; width: 400px;"/> 
+                    <img src="icon/finding.png" style="width: 25px; height: 25px; margin: 5px; margin-left: auto;"/>                    
+                </div>
+                <div class="container_radio">
+                    <input type="radio" name="option" style="height:15px; width:15px; margin: 5px;" checked="checked"><span>친구</span>
+                    <input type="radio" name="option" style="height:15px; width:15px; margin: 5px; margin-left: 15px;"><span>전체</span>
+                </div>             
+            </div>
+    
+            <div class="box10">
+            <div class="box_scroll">
+                <table class="table table-hover" style="border-collapse: separate; border-spacing: 0;">
+                    <thead>
+                        <tr>
+                            <th style="width: 55px;"></th>
+                            <th style="width: 100px;">닉네임</th>
+                            <th style="width: 100px;">아이디</th>
+                            <th style="width: 60px;">#태그</th>
+                            <th style="width: 50px;"></th>
+                            <!-- <img src="icon/plus.png" style="height: 15px; width: 15px;"/> -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <img src="icon/user2.png" style="height: 30px; width: 30px; margin:5px;"/>
+                            </td>
+                            <td class="lenCut_container">
+                                <span class="lenCut">닉네임이아주아주아주길어요</span>
+                                <div class="tooltip1" id="tooltip"></div>                                                      
+                            </td>
+                            <td>
+                                <div class="lenCut_container">
+                                    <span class="lenCutE" style="font-size: small; color: rgba(0, 0, 0, 0.5);">identification123</span>                            
+                                    <div class="tooltip1" id="tooltip"></div>                                        
+                                </div>                            
+                            </td>
+                            <td>
+                                <span style="color: #3a6b5b;">#0000</span>                               
+                            </td>  
+                            <td>
+                                <button class="button_select">선택</button>
+                            </td>                           
+                        </tr>
+                        <tr>
+                            <td>
+                                <img src="icon/user2.png" style="height: 30px; width: 30px; margin:5px;"/>
+                            </td>
+                            <td class="lenCut_container">
+                                <span class="lenCut">정예은</span>
+                                <div class="tooltip1" id="tooltip"></div>                                                      
+                            </td>
+                            <td>
+                                <div class="lenCut_container">
+                                    <span class="lenCutE" style="font-size: small; color: rgba(0, 0, 0, 0.5);">yeeun13</span>                            
+                                    <div class="tooltip1" id="tooltip"></div>                                        
+                                </div>                            
+                            </td>
+                            <td>
+                                <span style="color: #3a6b5b;">#3697</span>                               
+                            </td>  
+                            <td>
+                                <button class="button_select">선택</button>
+                            </td>                           
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            </div>
+            <br/>
+
+            <div style="position: absolute; bottom: 20px; left: 20px; display: flex; flex-direction: row; justify-content: center; gap: 10px;">
+                <button class="button_pj2" style="width:80px;" onclick="Watchdiv3('1')">이전</button>                
+            </div>
+            <div style="position: absolute; bottom: 20px; right: 20px; display: flex; flex-direction: row; justify-content: center; gap: 10px;">
+                <button class="button_pj2" style="border-color: rgb(67, 126, 126); width:80px;" onclick="addProject()">완료</button>
+                <form method="dialog">
+                    <button class="button_pj2" style="background-color: rgb(220, 220, 220); border-color: gray; width:80px; color:rgb(50, 50, 50);; width:80px;">취소</button>
+                </form>
+            </div>
+          </div>
         </div>
     </dialog>
 
@@ -437,7 +587,10 @@
                 if(titleInput) titleInput.value = "";
                 if(descriptionInput) descriptionInput.value = "";
 
-                if (modal) modal.showModal();
+                if (modal) {
+                    modal.showModal();
+                    Watchdiv3('1');
+                }
             });
         }
 
@@ -494,5 +647,31 @@
             }
         });
     });
+
+
+    // 프로젝트 생성창 (이름, 설명 - 유저초대 전환)
+    function Watchdiv3(i) {
+        const sections = ["1", "2"];
+        sections.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.style.display = (id === i) ? 'block' : 'none';
+            }
+        });
+  
+        const button = document.querySelectorAll('.button_friend');
+        button.forEach((btn,index) => {
+            if((index + 1).toString() === i){
+                btn.classList.add('active');
+            }
+            else{
+                btn.classList.remove('active');
+            }
+        });
+    }
+    window.addEventListener('load', () => Watchdiv3('1'));
+    window.Watchdiv3 = Watchdiv3;
+
+
 </script>
 </html>
