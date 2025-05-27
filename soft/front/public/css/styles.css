@@ -377,10 +377,14 @@ input:focus {
     outline: none;
     background-color: rgb(245, 245, 245);
 }
+textarea:focus {
+    outline: none;
+    background-color: rgb(245, 245, 245);
+}
 .find3{
     background-color:rgba(255, 255, 255, 0);
     height:35px;
-    width:500px;
+    width:350px;
     color:rgb(25, 25, 52);
     border: 1px solid rgba(0, 0, 0, 0.25); 
 
@@ -400,27 +404,13 @@ input:focus {
 .box10{
     border: 1px solid gray;
     border-radius: 10px;
-    height: 600px;
+    height: 350px;
     width: 500px;
     display: flex;  
     flex-direction: column;
 
-    overflow-y: scroll;
+    overflow-y: auto;
 } 
-.box10::-webkit-scrollbar{
-    width: 5px;      
-}
-.box10::-webkit-scrollbar-thumb {
-    background-color: rgba(230, 230, 230);
-    border-radius: 10px;
-}
-.box10::-webkit-scrollbar-thumb:active {
-    background-color: rgba(200, 200, 200);
-    border-radius: 10px;   
-}
-.box10::-webkit-scrollbar-track {
-    background-color: transparent;
-}
 .box10 td, .box10 th {
     height: 45px;
     max-width: 100px;
@@ -470,10 +460,10 @@ input:focus {
     color:rgb(112, 165, 139); 
 }
 .container_radio {
-    width: 500px;
+    width: 150px;
     display: flex; 
     flex-direction: row; 
-    justify-content: flex-end;
+    justify-content: center;
     align-items: center;
 }
 
@@ -511,7 +501,6 @@ input:focus {
     width: 100%;
     height: 100%;
     overflow-y: scroll;
-    padding: 15px;
 }
 .box_scroll::-webkit-scrollbar{
     width: 5px;      
