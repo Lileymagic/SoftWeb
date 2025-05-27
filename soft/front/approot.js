@@ -220,24 +220,25 @@
         const div = document.createElement("div");
         div.innerHTML=`
           <dialog class="modal2" style="border: none; background-color: transparent;">
-              <div style="margin-top:30px;">
+            <div class="position_modal2">
+              <div>
                   <div>
-                      <button class="button_friend" onclick="Watchdiv('1')">친구 목록</button>
+                      <button class="button_friend" style="border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;" onclick="Watchdiv('friend1')">친구 목록</button>
                   </div>
                   <div>
-                      <button class="button_friend" onclick="Watchdiv('2')">유저 찾기</button>
+                      <button class="button_friend" style="border-radius: 0px;" onclick="Watchdiv('friend2')">유저 찾기</button>
                   </div>
                   <div>
-                      <button class="button_friend" onclick="Watchdiv('3')">요청 대기</button>
+                      <button class="button_friend" style="border-top-left-radius: 0px; border-top-right-radius: 0px;" onclick="Watchdiv('friend3')">요청 대기</button>
                   </div>
               </div>
-              <div>
               <div class="box_friend">
-                  <div id="1">
+                  <div class="fccc wh100" id="friend1" style="display: none; padding: 20px;">
                       <div class="green" style="text-align: center;">친구 목록</div>
-                      <div style="width: 100%;">
-                          <hr style="border: 1px solid rgb(0, 0, 0); "/>
+                      <div style="width: 100%; margin-bottom: 20px;">
+                            <hr style="border: 1px solid rgb(0, 0, 0); "/>
                       </div>
+                      
                       <table class="table table-hover">
                           <thead>
                               <tr>
@@ -276,21 +277,19 @@
                       </table>
                   </div>
   
-                  <div id="2">
+                  <div class="fccc wh100" id="friend2" style="display: none; padding: 20px;">
                     <div class="green">유저 찾기</div>
-                
-                    <div class="container_radio">
-                        <input type="radio" name="option" style="height:15px; width:15px; margin: 5px;" checked="checked"><span>친구</span>
-                        <input type="radio" name="option" style="height:15px; width:15px; margin: 5px; margin-left: 35px;"><span>전체</span>
+                    <div style="width: 100%; margin-bottom: 20px;">
+                        <hr style="border: 1px solid rgb(0, 0, 0); "/>
                     </div>
-            
-                    <div class="find3">
+                
+                    <div class="find3" style="width: 500px">
                         <input class="button_find3" type="text" id="find" placeholder="아이디 / 태그로 유저 검색" style="font-size: small; width: 400px;"/> 
                         <img src="icon/finding.png" style="width: 25px; height: 25px; margin: 5px; margin-left: auto;"/>                    
-                    </div>
+                    </div>        
             
-            
-                    <div class="box10">
+                    <div class="box10" style="height: 550px;">
+                    <div class="box_scroll">
                         <table class="table table-hover" style="border-collapse: separate; border-spacing: 0;">
                             <thead>
                                 <tr>
@@ -298,7 +297,7 @@
                                     <th style="width: 100px;">닉네임</th>
                                     <th style="width: 100px;">아이디</th>
                                     <th style="width: 60px;">#태그</th>
-                                    <th style="width: 50px;">선택</th>
+                                    <th style="width: 80px;"></th>
                                     <!-- <img src="icon/plus.png" style="height: 15px; width: 15px;"/> -->
                                 </tr>
                             </thead>
@@ -321,7 +320,7 @@
                                         <span style="color: #3a6b5b;">#0000</span>                               
                                     </td>  
                                     <td>
-                                        <button class="button_select">선택</button>
+                                        <button class="button_select" style="width: 80px;">친구 신청</button>
                                     </td>                           
                                 </tr>
                                 <tr>
@@ -342,7 +341,7 @@
                                         <span style="color: #3a6b5b;">#3697</span>                               
                                     </td>  
                                     <td>
-                                        <button class="button_select">선택</button>
+                                        <button class="button_sent" style="width: 80px; " >요청 보냄</button>
                                     </td>                           
                                 </tr>
                                 <tr><td>
@@ -352,12 +351,9 @@
                             </tbody>
                         </table>
                     </div>
-                    <br/>
-                    <div>
-                        <button class="button_final">선택완료</button>
                     </div>
                   </div>
-                  <div id="3">
+                  <div class="fccc wh100" id="friend3" style="display: none; padding: 20px;">
                       <div class="green" style="text-align: center;">요청 대기</div>
                       <div style="width: 100%;">
                           <hr style="border: 1px solid rgb(0, 0, 0); "/>
@@ -411,9 +407,15 @@
                       <button style="background-color:transparent; border:none;" class="font1">닫기</button>
                   </form>  
               </div>
+            </div>
           </dialog>`;
         document.body.appendChild(div);
-        modal = document.querySelector('.modal2'); 
+        modal = document.querySelector('.modal2');
+
+        setTimeout(() => {
+            Watchdiv('friend1');
+        }, 0);
+
         if (modal) closeModal(modal); 
       }
       const modalBtnFriend = document.querySelector("#friend");
@@ -421,13 +423,18 @@
       if (modalBtnFriend) { 
           modalBtnFriend.addEventListener("click", () => {
               const currentModal = document.querySelector(".modal2"); 
-              if(currentModal) currentModal.showModal(); 
+              if(currentModal) {
+                currentModal.showModal();
+                setTimeout(() => {
+                    Watchdiv('friend1');
+                }, 0)
+            }
           });
       }
     }
   
     function Watchdiv(i) {
-        const sections = ["1", "2", "3"];
+        const sections = ["friend1", "friend2", "friend3"];
         sections.forEach(id => {
             const el = document.getElementById(id);
             if (el) {
@@ -437,7 +444,7 @@
   
         const button = document.querySelectorAll('.button_friend');
         button.forEach((btn,index) => {
-            if((index + 1).toString() === i){
+            if("friend" + (index + 1).toString() === i){
                 btn.classList.add('active');
             }
             else{
@@ -445,7 +452,7 @@
             }
         });
     }
-    window.addEventListener('load', () => Watchdiv('1'));
+    // window.addEventListener('load', () => Watchdiv('1'));
     window.Watchdiv = Watchdiv;
     
     function logout(){

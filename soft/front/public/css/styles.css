@@ -130,11 +130,12 @@ body {
     font-size: 12px;
 }
 .button_friend {
-    background-color:rgb(183, 228, 206);
+    background-color: white;
+    border: none;
     height:45px;
     width:205px;
+    margin: 5px;
     color:rgb(25, 54, 52);
-    border: none;
     font-size: medium;
     font-weight: 700;   
     border-radius: 4px;
@@ -144,10 +145,9 @@ body {
     justify-content: center;
     align-items: center;
 }
-
 .button_friend.active {
-    background-color: rgb(255, 146, 146);
-    border: solid 1px rgb(255, 63, 63);
+    background-color:rgb(183, 228, 206);
+    border: none;
 }
 .button_final {
     background-color:rgb(183, 228, 206);
@@ -235,12 +235,13 @@ dialog.modal1::backdrop {
     background: transparent;
 }
 
-.modal2 {
+dialog.modal2 {
     width: 900px;               
     height: 900px;          
     padding: 20px;   
     border-radius: 8px;
     display: none;
+    overflow: hidden;
  }
 
 dialog.modal2[open] {
@@ -268,14 +269,17 @@ dialog.modal3::backdrop {
     background: transparent;
 }
 
-.box_friend {
-    position: absolute;
+.position_modal2 {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.box_friend {    
     border: 1px solid gray;
     height: 800px;
     width: 600px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -284,7 +288,6 @@ dialog.modal3::backdrop {
     border: none;
     box-shadow : 0px 0px 3px rgba(150, 150, 150, 0.8);
     background-color: white;
-    padding-top: 35px;
 }
 .box8{
     border: 1px solid gray;
@@ -459,6 +462,20 @@ textarea:focus {
     border: solid 1px rgb(112, 165, 139);
     color:rgb(112, 165, 139); 
 }
+.button_sent {
+    background-color: rgb(220, 220, 220);
+    border: none;
+
+    height: 35px;
+    width: 50px;
+
+    color:rgb(50, 50, 50); 
+    font-size: 15px;
+    font-weight: 500;
+    border-radius: 4px;
+    font-family: 'Pretendard-Regular';
+}
+
 .container_radio {
     width: 150px;
     display: flex; 
@@ -515,4 +532,15 @@ textarea:focus {
 }
 .box_scroll::-webkit-scrollbar-track {
     background-color: transparent;
+}
+
+.fccc{
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    align-items: center;
+}
+.wh100{
+    width: 100%;
+    height: 100%;
 }
