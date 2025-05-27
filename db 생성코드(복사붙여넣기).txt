@@ -240,3 +240,6 @@ CREATE TABLE `history` (
 
 -- 외래 키 제약 조건 검사 재활성화
 SET FOREIGN_KEY_CHECKS=1;
+
+INSERT INTO `oauth2_providers` (`name`, `activation`) VALUES ('kakao', TRUE);
+INSERT INTO `oauth2_providers` (`name`, `activation`) VALUES ('naver', TRUE);
