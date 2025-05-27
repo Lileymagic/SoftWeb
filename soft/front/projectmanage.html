@@ -545,7 +545,7 @@
                                             <span class="lenCut" id="groupname">그룹명이 매우길다랗다 우와악</span>
                                             <div class="tooltip1" id="tooltip"></div>                                        
                                         </div>  
-                                        <img src="public/icon/edit.png" style="height:20px; width:20px;"  class="edit_gn"/>
+                                        <img src="public/icon/edit.png" style="height:20px; width:20px;"  class="edit_gn drag1"/>
                                     </div>
                                     <div style="margin-left: auto; display: flex; flex-direction: row; gap: 10px;">
                                         <span>그룹 색상 수정</span>
@@ -558,7 +558,7 @@
                                             <span class="lenCut" id="groupname">그루우우우우우ㅜ웁명</span>
                                             <div class="tooltip1" id="tooltip"></div>                                        
                                         </div>   
-                                        <img src="public/icon/edit.png" style="height:20px; width:20px;"  class="edit_gn" />
+                                        <img src="public/icon/edit.png" style="height:20px; width:20px;"  class="edit_gn drag1" />
                                     </div>
                                     <div style="margin-left: auto; display: flex; flex-direction: row; gap: 10px;">
                                         <span>그룹 색상 수정</span>
@@ -855,7 +855,7 @@
                 <td class="group_list_2">
                     <div style="display: flex; flex-direction: row; gap: 10px;">
                         <span>${groupName}</span>   
-                        <img src="public/icon/edit.png" style="height:20px; width:20px;"  class="edit_gn" />
+                        <img src="public/icon/edit.png" style="height:20px; width:20px;"  class="edit_gn drag1" />
                     </div>
                     <div style="margin-left: auto; display: flex; flex-direction: row; gap: 10px;">
                         <span>그룹 색상 수정</span>
@@ -979,6 +979,7 @@
   
 </body>
 <script>
+    let num = 0;
     const name = document.getElementById("groupname");
     const edit = document.getElementById("edit");
     let oldname = name.textContent.trim();
@@ -1092,15 +1093,6 @@
         }
         alert("변경 사항이 초기화되었습니다.");
     }
-
-    function openFindid() {
-        window.open(
-            'findid_pop.html',       
-            'Findid',     
-            'width=600,height=600,left=100,top=100' 
-        );
-    }
-
 
     // 그냥 스타일, html, 스크립트 죄다 긁어오고 newwor ID 붙였는데 안되네 (머슥) 
     //샘 이게 뭐 하다 만거죠?? 업무 추가 모달인가요?? 아니라면 ㅈㅅ 일단 제가 그렇게 바꾸는중
