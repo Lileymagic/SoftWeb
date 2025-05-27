@@ -165,7 +165,7 @@ body {
     justify-content: center;
     align-items: center;
 }
-.button_final.active { /* 선생님 이 친구가 자꾸 다른 곳에서 날뜁니다 따로설정해주세요 */
+.button_final.active {
     background-color: rgb(255, 255, 255);
     border: solid 1px rgb(183, 228, 206);
 }
@@ -252,6 +252,18 @@ dialog.modal2[open] {
 dialog.modal2::backdrop {
     background: rgba(0,0,0,0.1);
     backdrop-filter: blur(3px);
+}
+.modal2 td, .modal2 th {
+    height: 45px;
+    max-width: 100px;
+    text-align: left;
+    vertical-align: middle;
+}
+.modal2 th {
+    position: sticky;
+    top: 0px;
+    background-color: white !important;
+    z-index: 5;
 }
 
 dialog.modal3 {
@@ -544,3 +556,52 @@ textarea:focus {
     width: 100%;
     height: 100%;
 }
+
+.button_yes {
+    background-color: transparent;
+    border: solid 1px rgb(112, 165, 139);            
+
+    height:25px;
+    width:45px;
+
+    color:rgb(112, 165, 139);
+    font-size: 15px;
+    font-weight: 500;
+    border-radius: 4px;
+    font-family: 'Pretendard-Regular';
+}
+.button_yes:hover{
+    background-color: rgb(112, 165, 139);
+    color:white;
+}
+.button_yes:active{
+    background-color: transparent;
+    color:rgb(112, 165, 139);
+}
+.button_no {
+    background-color: transparent;
+    border: solid 1px rgb(173, 98, 98);            
+
+    height:25px;
+    width:45px;
+
+    color:rgb(173, 98, 98);
+    font-size: 15px;
+    font-weight: 500;
+    border-radius: 4px;
+    font-family: 'Pretendard-Regular';
+}
+.button_no:hover{
+    background-color: rgb(173, 98, 98);
+    color:white;
+}
+.button_no:active{
+    background-color: transparent;
+    color:rgb(173, 98, 98);
+}
+
+/* 테이블 열 너비 고정 */
+.table {
+    table-layout: fixed;
+    width: 100%;
+  }

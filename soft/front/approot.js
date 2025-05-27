@@ -233,48 +233,73 @@
                   </div>
               </div>
               <div class="box_friend">
-                  <div class="fccc wh100" id="friend1" style="display: none; padding: 20px;">
+                  <div class="fccc wh100" id="friend1" style="display: none; overflow: hidden; padding: 20px;">
                       <div class="green" style="text-align: center;">친구 목록</div>
                       <div style="width: 100%; margin-bottom: 20px;">
                             <hr style="border: 1px solid rgb(0, 0, 0); "/>
                       </div>
-                      
-                      <table class="table table-hover">
-                          <thead>
-                              <tr>
-                                  <th><img src="/icon/user2.png" style="height: 25px; width: 25px; "/></th>
-                                  <th>닉네임</th>
-                                  <th>#태그</th>
-                                  <th>마지막 접속시간</th>
-                              </tr>
-                          </thead>
-                          <tbody>
-                              <tr>
-                                  <td>1</td>
-                                  <td>1</td>
-                                  <td>1</td>
-                                  <td>1</td>
-                              </tr>
-                              <tr>
-                                  <td>1</td>
-                                  <td>1</td>
-                                  <td>1</td>
-                                  <td>1</td>
-                              </tr>
-                              <tr>
-                                  <td>1</td>
-                                  <td>1</td>
-                                  <td>1</td>
-                                  <td>1</td>
-                              </tr>
-                              <tr>
-                                  <td>1</td>
-                                  <td>1</td>
-                                  <td>1</td>
-                                  <td>1</td>
-                              </tr>
-                          </tbody>
-                      </table>
+                      <div class="box_scroll">
+                        <table class="table table-hover" style="border-collapse: separate; border-spacing: 0;">
+                            <thead>
+                                <tr>
+                                    <th style="width: 55px;"></th>
+                                    <th style="width: 80px;">닉네임</th>
+                                    <th style="width: 80px;">아이디</th>
+                                    <th style="width: 80px;">#태그</th>
+                                    <th style="width: 80px;">접속</th>
+                                    <!-- <img src="icon/plus.png" style="height: 15px; width: 15px;"/> -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <img src="icon/user2.png" style="height: 30px; width: 30px; margin:5px;"/>
+                                    </td>
+                                    <td class="lenCut_container">
+                                        <span class="lenCut">닉네임</span>
+                                        <div class="tooltip1" id="tooltip"></div>                                                      
+                                    </td>
+                                    <td>
+                                        <div class="lenCut_container">
+                                            <span class="lenCutE" style="font-size: small; color: rgba(0, 0, 0, 0.5);">identification123</span>                            
+                                            <div class="tooltip1" id="tooltip"></div>                                        
+                                        </div>                            
+                                    </td>
+                                    <td>
+                                        <span style="color: #3a6b5b;">#0000</span>                               
+                                    </td>  
+                                    <td>
+                                        <span style="font-size: small; color: rgba(0, 0, 0, 0.5);";>2025-05-27</span>
+                                    </td>                           
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <img src="icon/user2.png" style="height: 30px; width: 30px; margin:5px;"/>
+                                    </td>
+                                    <td class="lenCut_container">
+                                        <span class="lenCut">고구마</span>
+                                        <div class="tooltip1" id="tooltip"></div>                                                      
+                                    </td>
+                                    <td>
+                                        <div class="lenCut_container">
+                                            <span class="lenCutE" style="font-size: small; color: rgba(0, 0, 0, 0.5);">goguma04</span>                            
+                                            <div class="tooltip1" id="tooltip"></div>                                        
+                                        </div>                            
+                                    </td>
+                                    <td>
+                                        <span style="color: #3a6b5b;">#0000</span>                               
+                                    </td>  
+                                    <td>
+                                        <span style="font-size: small; color: rgba(0, 0, 0, 0.5);";>접속중</span>
+                                    </td>                           
+                                </tr>
+                                <tr><td>
+                                    스크롤테스트용ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ
+                                    ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ
+                                </td></tr>
+                            </tbody>
+                        </table>
+                        </div>
                   </div>
   
                   <div class="fccc wh100" id="friend2" style="display: none; padding: 20px;">
@@ -353,52 +378,50 @@
                     </div>
                     </div>
                   </div>
-                  <div class="fccc wh100" id="friend3" style="display: none; padding: 20px;">
+                  <div class="fccc wh100" id="friend3" style="display: none; overflow: hidden; padding: 20px;">
                       <div class="green" style="text-align: center;">요청 대기</div>
-                      <div style="width: 100%;">
+                      <div style="width: 100%; margin-bottom: 20px;">
                           <hr style="border: 1px solid rgb(0, 0, 0); "/>
                       </div>
-                      <table class="table table-hover">
+                      <div class="box_scroll">
+                      <table class="table table-hover" style="border-collapse: separate; border-spacing: 0;">
                           <thead>
                               <tr>
-                                  <th><img src="/icon/user2.png" style="height: 25px; width: 25px; margin:5px;"/></th>
-                                  <th>닉네임</th>
-                                  <th>#태그</th>
-                                  <th>수락</th>
-                                  <th>거절</th>
+                                  <th style="width: 55px;"></th>
+                                  <th style="width: 80px;">닉네임</th>
+                                  <th style="width: 80px;">아이디</th>
+                                  <th style="width: 80px;">#태그</th>
+                                  <th style="width: 80px;"></th>
                               </tr>
                           </thead>
                           <tbody>
                               <tr>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td><button style="background-color:rgb(55,158,144);">수락</button></td>
-                              <td><button style="background-color:rgb(255,127,127);">거절</button></td>
-                          </tr>
-                          <tr>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td><button style="background-color:rgb(55,158,144);">수락</button></td>
-                              <td><button style="background-color:rgb(255,127,127);">거절</button></td>
-                          </tr>
-                          <tr>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td><button style="background-color:rgb(55,158,144);">수락</button></td>
-                              <td><button style="background-color:rgb(255,127,127);">거절</button></td>
-                          </tr>
-                          <tr>
-                              <td>1</td>
-                              <td>1</td>
-                              <td>1</td>
-                              <td><button style="background-color:rgb(55,158,144);">수락</button></td>
-                              <td><button style="background-color:rgb(255,127,127);">거절</button></td>
-                          </tr>
+                                  <td>
+                                      <img src="icon/user2.png" style="height: 30px; width: 30px; margin:5px;"/>
+                                  </td>
+                                  <td class="lenCut_container">
+                                      <span class="lenCut">닉네임</span>
+                                      <div class="tooltip1" id="tooltip"></div>                                                      
+                                  </td>
+                                  <td>
+                                      <div class="lenCut_container">
+                                          <span class="lenCutE" style="font-size: small; color: rgba(0, 0, 0, 0.5);">identification123</span>                            
+                                          <div class="tooltip1" id="tooltip"></div>                                        
+                                      </div>                            
+                                  </td>
+                                  <td>
+                                      <span style="color: #3a6b5b;">#0000</span>                               
+                                  </td>  
+                                  <td>
+                                    <div style="display: flex; flex-direction: row; gap: 3px;">
+                                      <button class="button_yes">수락</button>
+                                      <button class="button_no">거절</button>
+                                    </div>
+                                  </td>                           
+                              </tr>
                           </tbody>
                       </table>
+                      </div>
                   </div>
                 </div>
               </div>

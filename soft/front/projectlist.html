@@ -145,10 +145,29 @@
         }
         .button_pj {
             background-color:rgb(183, 228, 206);
+            border: none;
             height:45px;
             width:205px;
             color:rgb(25, 54, 52);
-            border: none;
+            font-size: medium;
+            font-weight: 700;  
+            border-radius: 4px;
+            font-family: 'Pretendard-Regular';
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .button_pj:hover {
+            background-color: rgb(159, 211, 189);
+        }
+        .button_pj2 {
+            background-color: white;
+            border: solid 1px rgb(25, 54, 52);
+            height:45px;
+            width:205px;
+            color:rgb(25, 54, 52);
             font-size: medium;
             font-weight: 700;  
             border-radius: 4px;
@@ -264,9 +283,9 @@
             </div>
             -->
             <div style="position: absolute; bottom: 20px; right: 20px; display: flex; flex-direction: row; justify-content: center; gap: 10px;">
-                <button class="button_pj" style="width:80px;" onclick="Watchdiv3('2')">다음</button>
+                <button class="button_pj2" style="width:80px;" onclick="Watchdiv3('2')">다음</button>
                 <form method="dialog">
-                    <button class="button_pj" style="background-color: rgb(184, 185, 186); width:80px;">취소</button>
+                    <button class="button_pj2" style="background-color: rgb(220, 220, 220); border-color: gray; width:80px; color:rgb(50, 50, 50);">취소</button>
                 </form>
             </div>
 
@@ -352,12 +371,12 @@
             <br/>
 
             <div style="position: absolute; bottom: 20px; left: 20px; display: flex; flex-direction: row; justify-content: center; gap: 10px;">
-                <button class="button_pj" style="width:80px;" onclick="Watchdiv3('1')">이전</button>                
+                <button class="button_pj2" style="width:80px;" onclick="Watchdiv3('1')">이전</button>                
             </div>
             <div style="position: absolute; bottom: 20px; right: 20px; display: flex; flex-direction: row; justify-content: center; gap: 10px;">
-                <button class="button_pj" style="background-color: rgb(156, 193, 223); width:80px;" onclick="addProject()">완료</button>
+                <button class="button_pj2" style="border-color: rgb(67, 126, 126); width:80px;" onclick="addProject()">완료</button>
                 <form method="dialog">
-                    <button class="button_pj" style="background-color: rgb(184, 185, 186); width:80px;">취소</button>
+                    <button class="button_pj2" style="background-color: rgb(220, 220, 220); border-color: gray; width:80px; color:rgb(50, 50, 50);; width:80px;">취소</button>
                 </form>
             </div>
           </div>
@@ -630,7 +649,7 @@
     });
 
 
-    // 프로젝트 생성창 (이름, 설명 - 유저초대 전환)  (아직 안만짐.)
+    // 프로젝트 생성창 (이름, 설명 - 유저초대 전환)
     function Watchdiv3(i) {
         const sections = ["1", "2"];
         sections.forEach(id => {
