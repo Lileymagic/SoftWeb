@@ -225,7 +225,7 @@ dialog.modal1 {
     overflow: hidden;
     border: none;
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
 
     padding: 0px;
     margin: 0px;
@@ -255,10 +255,10 @@ dialog.modal2::backdrop {
 
 dialog.modal3 {
     width: 400px;               
-    height: 270px;   
+    height: 250px;   
     border: none;
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    box-shadow: 0 0px 4px rgba(0,0,0,0.2);
     overflow: hidden;
 
     padding: 10px;
@@ -319,20 +319,20 @@ dialog.modal3::backdrop {
     position: relative;
     width: 100%;
 }
-.button_pro {
-    background-color:rgb(183, 228, 206);
+.button_pro2 {
+    background-color: transparent;
     height:30px;
     width:100px;
     color:rgb(25, 54, 52);
-    border: none;
+    border: solid 1px rgb(112, 165, 139);
     font-size: medium;
     font-weight: 300;   
     margin-bottom: 10px;
     font-family: 'Pretendard-Regular';
     border-radius: 4px;
 }
-.button_pro:hover{
-    background-color: rgb(138, 196, 183);
+.button_pro2:hover{
+    background-color: rgb(240,240,240);
 }
 .middle_pb {
             position: relative;

@@ -16,14 +16,9 @@
       
       if (!modal) {
         const div = document.createElement("div");
-        div.innerHTML =  `<dialog class="modal1" style="overflow-y:scroll; ">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                    </thead>
+        div.innerHTML =  `<dialog class="modal1">
+                <div class="box_scroll">
+                <table class="table table-hover" style="overflow-y:auto;">
                     <tbody>
                         <tr>
                             <td>
@@ -176,9 +171,10 @@
                         </tr>
                     </tbody>
                 </table>
+                </div>
                 <div style="display: flex; justify-content: flex-end; ">
                     <form method="dialog">
-                        <button style="background-color:none; border:none;" class="font1">닫기</button>
+                        <button style="background-color:transparent; border:none;" class="font1">닫기</button>
                     </form>  
                 </div>
             </dialog>`;
@@ -188,12 +184,34 @@
       }
       
       const modalBtn = document.querySelector("#alert"); 
-      if (modalBtn) { 
-        modalBtn.addEventListener("click", () => {
-            const currentModal = document.querySelector(".modal1"); 
-            if(currentModal) currentModal.showModal(); 
+
+      // 창 새로고침 후 3초 정도 후에 알림창 열면 위치 정보를 못받아 잘못된 위치에 알림창이 이동하는 문제가 발생. (해결 필요)
+      // (즉시 열면 괜찮음)
+        const updateModalPosition = () => {
+            const rect = modalBtn.getBoundingClientRect();
+            const modalRect = modal.getBoundingClientRect();
+            modal.style.position = "fixed";
+            if (rect.right - modalRect.width > 0) {
+                modal.style.left = `${rect.right - modalRect.width}px`;            
+            }
+            modal.style.top = `${rect.bottom}px`;
+        };
+
+        if (modalBtn) { 
+            modalBtn.addEventListener("click", () => {
+                const currentModal = document.querySelector(".modal1"); 
+                if(currentModal) {
+                    currentModal.showModal();
+                    updateModalPosition();
+                }
+            });
+        }
+
+        window.addEventListener("resize", () => {
+            if (modal.open) {
+                updateModalPosition();
+            }
         });
-      }
     }
   
     function openFriend() {
@@ -390,7 +408,7 @@
               </div>
               <div style="display: flex; justify-content: flex-end; margin-top:450px; ">
                   <form method="dialog">
-                      <button style="background-color:none; border:none;" class="font1">닫기</button>
+                      <button style="background-color:transparent; border:none;" class="font1">닫기</button>
                   </form>  
               </div>
           </dialog>`;
@@ -455,30 +473,37 @@
       if (!modal) {
         const div = document.createElement("div");
         div.innerHTML = `
-        <dialog class="modal3" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 10px; padding: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
-          <div class="middle3">
-              <div style="display: flex; justify-content: flex-end;" >
-                  <form method="dialog">
-                      <button style="background-color:transparent; border:none; font-size: 1.2em; cursor: pointer;" class="font1">X</button>
-                  </form>
-              </div>
-              <div style="display: flex;">
-                  <img id="myPageProfileImage" src="/icon/user2.png" style="height:100px; width:100px; margin:30px; border-radius: 50%;"/>
-                  <div style="margin:50px ;">
-                      <div id="myPageDisplayId" class="black" style="margin-bottom: 2px; font-weight: bold;">ID 로딩 중...</div>
-                      <div style="display: flex;">
-                          <div id="myPageNickname" style="color:green">닉네임 로딩 중</div>
-                          <div id="myPageTag" style="color:green; margin-left: 2px;"></div>
-                      </div>
-                      <div id="myPageBio" style="margin-top: 5px; color: #555;">자기소개 로딩 중...</div>
-                  </div>
-              </div>
-              <div style="display: flex; justify-content: flex-end; margin:5px 5px 0 0; ">
-                  <button class="button_pro" style="margin-right:5px;" onclick="document.querySelector('.modal3').close(); window.location.href='/front/profile.html';">프로필 수정</button>
-                  <button class="button_pro" onclick="logout()">로그아웃</button>
-              </div>
-          </div>  
-        </dialog>`;
+        <dialog class="modal3">
+        <div class="middle3">
+                
+            <div style="display: flex; justify-content: flex-end;" >
+                <form method="dialog">
+                    <button style="background-color:transparent; border:none;" class="font1">X</button>
+                </form>
+            </div>
+
+            <div style="display: flex;">
+                <img id="myPageProfileImage" src="/icon/user2.png" style="height:100px; width:100px; margin:10px; margin-right: 30px; margin-left: 20px border-radius: 50%;"/>
+                <div style="display: flex; flex-direction: column; justify-content: center; padding: 5px;">
+                    <div style="display: flex; gap: 5px;">
+                        <div class="black" id="myPageNickname" style="font-size: larger;">닉네임 로딩 중</div>
+                        <div style="color:green" id="myPageTag">#0000</div>
+                    </div>
+                    <div id="myPageDisplayId" style="color:gray;">id 로딩 중...</div>
+                    <div class="box_introduce" id="myPageBio">
+                        자기소개 로딩 중...
+                    </div>
+
+                    <div style="display: flex; flex-direction: row; margin-top: 30px;">
+                        <button class="button_pro2" style="margin-right:5px;" onclick="document.querySelector('.modal3').close(); window.location.href='/front/profile.html';">프로필 수정</button>
+                        <button class="button_pro2" onclick="logout()">로그아웃</button>
+                    </div>  
+
+                </div>
+            </div> 
+
+        </div>  
+      </dialog>`;
         document.body.appendChild(div);
         modal = document.querySelector('.modal3');
         if (modal) {
@@ -487,8 +512,32 @@
             console.error("Failed to create or find .modal3 for mypage.");
         }
       }
-      return modal;
+        const modalBtn = document.querySelector("#mypage");
+
+        const updateModalPosition = () => {
+            const rect = modalBtn.getBoundingClientRect();
+            const modalRect = modal.getBoundingClientRect();
+            modal.style.position = "fixed";
+            modal.style.left = `${rect.right - modalRect.width}px`;
+            modal.style.top = `${rect.bottom}px`;
+        };
+
+        modalBtn.addEventListener("click", () => {
+        modal.showModal();
+        updateModalPosition();
+        });
+
+        window.addEventListener("resize", () => {
+            if (modal.open) {
+                updateModalPosition();
+            }
+        });
+
+        return modal;
     }
+    
+
+    
 
     async function fetchAndDisplayMyPageInfo() {
       const modalDisplayId = document.getElementById('myPageDisplayId');
