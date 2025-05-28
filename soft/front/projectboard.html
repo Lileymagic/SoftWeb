@@ -124,8 +124,9 @@
 
 
         .users {
-            height:200px;
-            width: 300px;
+            flex: 1;
+            min-height: 200px;
+            min-width: 300px;
             background-color: white;
             border: 1px solid gray;
             border-radius: 5px;
@@ -186,15 +187,14 @@
             border-bottom: solid 1.5px rgb(150, 150, 150);
         } 
         .user_and_history{
-            position: sticky; 
-            top: 0; 
-            height: 100vh;      
+            position: sticky;
+            top: 0;
+            height: 100%;
             width: 350px;
             display: flex;
-            flex-direction: column; 
+            flex-direction: column;
             border-left: solid 1px rgb(200, 200, 200);
             background-color: white;
-            padding: 10px;
             box-sizing: border-box;
             z-index: 10;
         }
@@ -208,7 +208,7 @@
         .main { 
             display: flex; 
             width: 100%;
-            height: 100vh;
+            height: 100%;
             overflow: hidden; 
         }
         .main_app_area { 
@@ -227,7 +227,8 @@
             background-color: white; 
             z-index: 15; 
             display: flex; 
-            align-items: center; 
+            align-items: center;
+            flex-shrink: 0;
         }
         .user_list{
             display: flex;
@@ -269,15 +270,15 @@
             </div>
         </div>
     </dialog>
-    
-    <div class="main"> 
+
+    <div class="main">
         <aside class="aside_left">
             <div class="box_option">프로젝트 선택</div>
             <ul id="projectListAside">
             </ul>
         </aside>
 
-        <div class="main_app_area"> 
+        <div class="main_app_area">
             <div class="project_memu">
                 <div style="display: flex; align-items: center; font-weight: bold; width: 100%;" >
                     <div style="display: flex; align-items: center; gap: 10px; margin-left: 30px;">
@@ -290,17 +291,17 @@
 
             <div class="middle7">
                 <div class="box7">
-                    <div style="display: flex; flex-direction: column;"> 
+                    <div style="display: flex; flex-direction: column;">
                         <section class="worksection" id="todo_section">
                             <div class="workhead">To Do</div>
                             <div class="tasks-container" id="todo_tasks_container">
                             </div>
                         </section>
-                        <section class="worksection" style="padding-top: 10px;"> 
-                            <img src="public/icon/add.png" style="height:30px; width:30px; cursor:pointer;" id="newwork"/>                        
+                        <section class="worksection" style="padding-top: 10px;">
+                            <img src="public/icon/add.png" style="height:30px; width:30px; cursor:pointer;" id="newwork"/>
                         </section>
                     </div>
-                    
+
                     <section class="worksection" id="inprogress_section">
                         <div class="workhead">In Progress</div>
                         <div class="tasks-container" id="inprogress_tasks_container">
@@ -311,35 +312,38 @@
                         <div class="workhead">Done</div>
                         <div class="tasks-container" id="done_tasks_container">
                         </div>
-                    </section>     
+                    </section>
                 </div>
-            </div>    
+            </div>
         </div>
-        
+
         <div class="user_and_history">
-            <div class="users" style="height: 60%; margin-bottom: 10px;">
-                <div style="position: sticky; top: 0; background-color: white; padding-top:5px; padding-bottom:5px;">
-                    <span class="green" style="font-size: medium;">참여 유저</span>
-                    <hr style="margin-top: 5px; margin-bottom: 0;">                        
+            <div class="project_memu"></div>
+            <div style="display: flex; flex-direction: column; padding: 10px; height: 100%;">
+                <div class="users" style="margin-bottom: 10px;">
+                    <div style="position: sticky; top: 0; background-color: white; padding-top:5px; padding-bottom:5px;">
+                        <span class="green" style="font-size: medium;">참여 유저</span>
+                        <hr style="margin-top: 5px; margin-bottom: 0;">
+                    </div>
+                    <table class="table table-hover" style="margin-top:0;">
+                        <tbody id="projectMemberListSidebar">
+                        </tbody>
+                    </table>
                 </div>
-                <table class="table table-hover" style="margin-top:0;">
-                    <tbody id="projectMemberListSidebar">
-                    </tbody>
-                </table>
+                <div class="users" style="cursor:pointer;" onclick="openhistory()">
+                    <div style="position: sticky; top: 0; background-color: white; padding-top:5px; padding-bottom:5px;">
+                        <span class="green" style="font-size: medium;">히스토리</span>
+                        <hr style="margin-top: 5px; margin-bottom: 0;">
+                    </div>
+                    <table class="table table-hover" style="margin-top:0;">
+                        <tbody id="projectHistorySidebar">
+
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
-            <div class="users" style="height: calc(40% - 20px); cursor:pointer;" onclick="openhistory()">
-                <div style="position: sticky; top: 0; background-color: white; padding-top:5px; padding-bottom:5px;">
-                    <span class="green" style="font-size: medium;">히스토리</span>
-                    <hr style="margin-top: 5px; margin-bottom: 0;">                        
-                </div>
-                <table class="table table-hover" style="margin-top:0;">
-                    <tbody id="projectHistorySidebar">
-
-                    </tbody>
-                </table>
-            </div>
-        </div>                    
+        </div>
     </div>
 
 </body>

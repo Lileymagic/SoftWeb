@@ -22,7 +22,7 @@
         }
         .button_int {
             background-color:rgba(255, 255, 255, 0);
-            height:80px;
+            height:100px;
             width:200px;
             color:rgb(25, 25, 52);
             border: 1px solid rgba(0, 0, 0, 0.25);
@@ -31,9 +31,16 @@
             margin-bottom: 10px;
             border-radius: 4px;
             font-family: 'Pretendard-Regular';
-            resize: vertical;
+            resize: none;
             padding: 5px;
             box-sizing: border-box;
+            overflow-y: auto;
+            overflow-x:hidden;
+
+            /*칸 넘어가면 줄바꿈*/
+            white-space: normal;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
         }
         input:focus, textarea:focus {
             outline: none;
@@ -51,8 +58,8 @@
             margin-top: 5px; /* 이미지 아래에 약간의 간격 */
         }
     </style>
-  <script type="module" crossorigin src="/assets/approot-CqyTUh2l.js"></script>
-  <link rel="stylesheet" crossorigin href="/css/approot.BzKG-uOR.css">
+  <script type="module" crossorigin src="/assets/approot-S7Hhl76v.js"></script>
+  <link rel="stylesheet" crossorigin href="/css/approot.D7cSAQw7.css">
   <link rel="stylesheet" crossorigin href="/css/bootstrap.CyjhP-aL.css">
 </head>
 <body>
@@ -66,23 +73,23 @@
             <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
                 <img src="/user2.Dp3ZRFZz.png" id="profileImageDisplay" alt="프로필 이미지"/>
                 
-                <div style="display: flex; align-items: center; margin-bottom: 10px; width: 300px;">
-                    <label for="profileImageUrl" style="width: 100px; text-align: right; margin-right: 10px; font-weight: bold;">이미지 URL:</label>
-                    <input class="button_pro" style="width: 200px;" type="text" id="profileImageUrl" placeholder="프로필 이미지 URL (선택)"/>
+                <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                    <label for="profileImageUrl" style="text-align: right; margin-right: 10px; font-weight: bold;">이미지 URL:</label>
+                    <input class="button_pro" style="width: 200px; margin-right:80px;" type="text" id="profileImageUrl" placeholder="프로필 이미지 URL (선택)" />
                 </div>
 
-                <div style="display: flex; align-items: center; margin-bottom: 10px; width: 300px;">
-                    <label for="nickname" style="width: 100px; text-align: right; margin-right: 10px; font-weight: bold;">닉네임:</label>
-                    <input class="button_pro" style="width: 200px;" type="text" id="nickname" placeholder="2 ~ 20자"/>
+                <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                    <label for="nickname" style=" text-align: right; margin-right: 10px; font-weight: bold;">닉네임:</label>
+                    <input class="button_pro" style="width: 200px; margin-right:45px;" type="text" id="nickname" placeholder="2 ~ 20자"/>
                 </div>
 
-                <div style="display: flex; align-items: flex-start; margin-bottom: 10px; width: 300px;">
+                <div style="display: flex; align-items: flex-start; margin-bottom: 10px;">
                     <label for="bio" style="width: 100px; text-align: right; margin-right: 10px; font-weight: bold; margin-top: 5px;">자기소개:</label>
-                    <textarea class="button_int" style="width: 200px;" id="bio" placeholder="자기소개를 입력하세요."></textarea>
+                    <textarea class="button_int" style="margin-right:100px;" id="bio" placeholder="자기소개를 입력하세요."></textarea>
                 </div>
             </div>
             <div>
-                <button class="button_final" style="width:80px;" onclick="saveProfile()">저장</button>
+                <button class="button_final" style="width:70px; height: 40px; margin:5px; " onclick="saveProfile()">저장</button>
             </div>
         </div>
     </div>
