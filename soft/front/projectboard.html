@@ -64,11 +64,28 @@
             transform: translate(-50%, -50%);
             display: flex;
             flex-direction: row;
+            align-items: flex-start;
+            justify-content: flex-start;
             padding: 20px;
+            gap: 20px;
 
             border: none;
             overflow-y: scroll; 
-            overflow-x: auto; 
+            overflow-x: hidden;
+        }
+        .box7::-webkit-scrollbar{
+            width: 5px;
+        }
+        .box7::-webkit-scrollbar-thumb {
+            background-color: rgba(230, 230, 230);
+            border-radius: 10px;
+        }
+        .box7::-webkit-scrollbar-thumb:active {
+            background-color: rgba(200, 200, 200);
+            border-radius: 10px;
+        }
+        .box7::-webkit-scrollbar-track {
+            background-color: transparent;
         }
         .middle7 {
             position: relative;
@@ -82,9 +99,10 @@
             flex-shrink: 0;
             background-color: rgb(81,123,95);
             height:35px;
-            width:300px;
+            width: 100%;
             color:white;
             margin: 10px;
+            padding: 10px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -94,12 +112,12 @@
         }
         .workbox {
             position: relative;
-            min-height: 100px; 
-            width: 300px;
+            min-height: 100px;
+            width: 100%;
             flex-shrink: 0;
 
             background-color: white;
-            margin:10px;
+            margin:10px 0;
             padding: 10px;
             border: none;
             border-radius: 10px;
@@ -114,12 +132,28 @@
             background-color: rgb(240, 240, 240)
         }
         .worksection{
+            flex-grow: 0;
+            flex-shrink: 1;
+            flex-basis: 300px;
+            max-width: 300px;
+            min-width: 200px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            box-sizing: border-box;
+        }
+        .worksection #newwork {
+            height: 30px !important;
+            width: 30px !important;
+            min-width: 0 !important;
+            object-fit: contain;
+            flex-shrink: 0;
+            padding-top: 10px;
+            cursor:pointer;
         }
         .tasks-container {
             width: 100%;
+            padding: 0;
         }
 
 
@@ -291,16 +325,12 @@
 
             <div class="middle7">
                 <div class="box7">
-                    <div style="display: flex; flex-direction: column;">
-                        <section class="worksection" id="todo_section">
-                            <div class="workhead">To Do</div>
-                            <div class="tasks-container" id="todo_tasks_container">
-                            </div>
-                        </section>
-                        <section class="worksection" style="padding-top: 10px;">
-                            <img src="public/icon/add.png" style="height:30px; width:30px; cursor:pointer;" id="newwork"/>
-                        </section>
-                    </div>
+                    <section class="worksection" id="todo_section">
+                        <div class="workhead">To Do</div>
+                        <div class="tasks-container" id="todo_tasks_container">
+                        </div>
+                        <img src="public/icon/add.png" id="newwork"/>
+                    </section>
 
                     <section class="worksection" id="inprogress_section">
                         <div class="workhead">In Progress</div>
@@ -760,5 +790,5 @@
             memberListTbody.innerHTML = `<tr><td style="text-align:center; color:red;">멤버 목록 로드 오류.</td></tr>`;
         }
     }
-</script>
+    </script>
 </html>
