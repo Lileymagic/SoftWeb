@@ -86,6 +86,7 @@
             align-items: center;
         }
         .button_return {
+            background-color: transparent;
             border: solid 1px black;
             border-radius: 3px;
             margin-left: auto;
@@ -93,6 +94,9 @@
             
             font-weight: 300;
             font-size: medium;
+        }
+        .button_return:hover {
+            background-color: rgba(0, 0, 0, 0.1);
         }
         .work_select_user {
             height: 100vh;
@@ -138,7 +142,8 @@
 
         .work_select {
             height: 100vh;
-            width: 700px;
+            width: calc(100% /3);
+            min-width: 500px;
 
             border-right: solid 1px rgb(200, 200, 200);
             background-color: white;
@@ -191,14 +196,18 @@
             z-index: 5;
         }
 
+        tr {
+            text-align: left;
+            align-content: flex-start;
+        }
         td{
             height: 50px;
-            display: flex;
-            flex-direction: row;
-            justify-content: flex-start;
-            align-items: center;
+            max-width: 150px;
+            text-align: left;
+            align-items: start;
+            vertical-align: middle;
         }
-        td.active {
+        tbody tr.active, tbody tr.active td{
             background-color: rgb(214, 238, 182) !important;
         }
 
@@ -318,7 +327,7 @@
             border-bottom: none;
             border-right: none;
         }
-        .button_yes{
+        .button_yes_m{
             background-color:rgb(183, 228, 206);
             height:45px;
             width:205px;
@@ -334,10 +343,10 @@
             justify-content: center;
             align-items: center;
         }
-        .button_yes:hover {
+        .button_yes_m:hover {
             background-color: rgb(138, 196, 183);
         }
-        .button_yes:active {
+        .button_yes_m:active {
             background-color: rgb(183, 228, 206);
         }
         .button_cancel{
@@ -448,6 +457,10 @@
         .hidden {
             display: none;
         }
+        .work_table_3{
+            width: 100%;
+            height: 100%;
+        }
 
     </style>    
   <script type="module" crossorigin src="/assets/approot-S7Hhl76v.js"></script>
@@ -478,7 +491,7 @@
         </div>
 
         <div class="complete">
-            <div class="button_yes" onclick="Saveproject()">변경사항 저장</div>
+            <div class="button_yes_m" onclick="Saveproject()">변경사항 저장</div>
             <div class="button_cancel" onclick="Nosave()">취소</div>
         </div> 
         <div id = "1">
@@ -496,25 +509,29 @@
                     <div class="work_select_user_content">
                         <table class="table table-hover" id="user_table_1">
                             <tbody>
-                                <tr><td class="user_list">
-                                        <img src="/user2.Dp3ZRFZz.png" style="height: 30px; width: 30px; margin:5px;"/>                                    
-                                    <div class="lenCut_container">
+                                <tr>
+                                    <td style="width: 55px;">
+                                        <img src="/user2.Dp3ZRFZz.png" style="height: 30px; width: 30px; margin:5px;"/>
+                                    </td>
+                                    <td class="lenCut_container" style="width: 100px;">
                                         <span class="lenCut">닉네임이아주길어요길어우하학</span>
-                                        <div class="tooltip1" id="tooltip"></div>                                        
-                                    </div>
-                                    <span style="font-size: small; color: rgba(0, 0, 0, 0.5);">identification</span>
-                                    <span style="color: #3a6b5b; margin-left:10px;">#0000</span>
-                                    <div style="margin-left: auto; margin-right: 10px; display: flex; flex-direction: row; align-items: center; gap: 10px;">
-                                        <div class="lenCut_container">
-                                            <span class="lenCut">그룹명</span>
-                                            <div class="tooltip1" id="tooltip"></div>                                        
+                                        <div class="tooltip1" id="tooltip"></div>
+                                    </td>
+                                    <td style="width: 100px; font-size: small; color: rgba(0, 0, 0, 0.5);">identification</td>
+                                    <td style="width: 60px; color: #3a6b5b;">#0000</td>
+                                    <td style="width: 150px;">
+                                        <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; gap: 10px;">
+                                            <div class="lenCut_container">
+                                                <span class="lenCut">그룹명</span>
+                                                <div class="tooltip1" id="tooltip"></div>
+                                            </div>
+                                            <div style="background-color: black; height: 20px; width: 20px; border-radius: 50%;"></div>
                                         </div>
-                                        <div style="background-color: black; height: 20px; width: 20px; border-radius: 50%;"></div>
-                                    </div>
-                                    <div style="margin-left: auto; margin-right: 10px; display: flex; flex-direction: row; align-items: center; gap: 10px;">
+                                    </td>
+                                    <td style="width: 100px;">
                                         <button class="button_expel" onclick="Deleteuser()">제명</button>
-                                    </div>                               
-                                </td></tr>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>                        
                     </div>
@@ -539,32 +556,48 @@
                     <div class="work_select_content">
                         <table class="table table-hover" id="group_table_2">
                             <tbody id="tbody_group">
-                                <tr><td class="group_list_2" id="group_-1">
-                                    <div style="display: flex; flex-direction: row; gap: 10px;">
+                                <tr>
+                                    <td style="width: 150px;">
                                         <div class="lenCut_container">
-                                            <span class="lenCut" id="groupname">그룹명이 매우길다랗다 우와악</span>
-                                            <div class="tooltip1" id="tooltip"></div>                                        
-                                        </div>  
+                                            <span class="lenCut" id="groupname">그룹명이 매우길다 ㅁㅁㅁㅁㅁ</span>
+                                            <div class="tooltip1" id="tooltip"></div>
+                                        </div>
+                                    </td>
+                                    <td style="width: 50px;">
                                         <img src="/edit.BiAatf6L.png" style="height:20px; width:20px;"  class="edit_gn drag1"/>
-                                    </div>
-                                    <div style="margin-left: auto; display: flex; flex-direction: row; gap: 10px;">
-                                        <span>그룹 색상 수정</span>
-                                        <input type="color" class="groupcolor"/>                            
-                                    </div>
-                                </td></tr>
-                                <tr><td class="group_list_2" id="group_0">
-                                    <div style="display: flex; flex-direction: row; gap: 10px;">
+                                    </td>
+                                    <td style="width: 150px;">
+                                        <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; gap: 10px;">
+                                            <span>그룹 색상 수정</span>
+                                            <input type="color" class="groupcolor"/>
+                                        </div>
+                                    </td>
+                                    <td style="width: 150px; align-items: end;">
+                                        <button class="button_return">유저 및 권한 관리</button>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td style="width: 100px;">
                                         <div class="lenCut_container">
-                                            <span class="lenCut" id="groupname">그루우우우우우ㅜ웁명</span>
-                                            <div class="tooltip1" id="tooltip"></div>                                        
-                                        </div>   
-                                        <img src="/edit.BiAatf6L.png" style="height:20px; width:20px;"  class="edit_gn drag1" />
-                                    </div>
-                                    <div style="margin-left: auto; display: flex; flex-direction: row; gap: 10px;">
-                                        <span>그룹 색상 수정</span>
-                                        <input type="color" class="groupcolor"/>                            
-                                    </div>
-                                </td></tr>
+                                            <span class="lenCut" id="groupname">그룹명2</span>
+                                            <div class="tooltip1" id="tooltip"></div>
+                                        </div>
+                                    </td>
+                                    <td style="width: 50px;">
+                                        <img src="/edit.BiAatf6L.png" style="height:20px; width:20px;"  class="edit_gn drag1"/>
+                                    </td>
+                                    <td style="width: 150px;">
+                                        <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; gap: 10px;">
+                                            <span>그룹 색상 수정</span>
+                                            <input type="color" class="groupcolor"/>
+                                        </div>
+                                    </td>
+                                    <td style="width: 150px; align-items: end;">
+                                        <button class="button_return">유저 및 권한 관리</button>
+                                    </td>
+
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -584,24 +617,17 @@
                     <div class="work_select_content">
                         <table class="table table-hover" id="user_table_2">
                             <tbody>
-                                <tr><td class="user_list">
-                                    <img src="/user2.Dp3ZRFZz.png" style="height: 30px; width: 30px; margin:5px;"/>
-                                    <div class="lenCut_container">
+                                <tr>
+                                    <td style="width: 55px;">
+                                        <img src="/user2.Dp3ZRFZz.png" style="height: 30px; width: 30px; margin:5px;"/>
+                                    </td>
+                                    <td class="lenCut_container" style="width: 100px;">
                                         <span class="lenCut">닉네임</span>
-                                        <div class="tooltip1" id="tooltip"></div>                                        
-                                    </div>
-                                    <span style="font-size: small; color: rgba(0, 0, 0, 0.5);">identification</span>
-                                    <span style="color: #3a6b5b; margin-left:10px;">#0000</span>                                      
-                                </td></tr>
-                                <tr><td class="user_list">
-                                    <img src="/user2.Dp3ZRFZz.png" style="height: 30px; width: 30px; margin:5px;"/>
-                                    <div class="lenCut_container">
-                                        <span class="lenCut">닉네임</span>
-                                        <div class="tooltip1" id="tooltip"></div>                                        
-                                    </div>
-                                    <span style="font-size: small; color: rgba(0, 0, 0, 0.5);">identification</span>
-                                    <span style="color: #3a6b5b; margin-left:10px;">#0000</span>                                      
-                                </td></tr>
+                                        <div class="tooltip1" id="tooltip"></div>
+                                    </td>
+                                    <td style="width: 100px; font-size: small; color: rgba(0, 0, 0, 0.5);">identification</td>
+                                    <td style="width: 60px; color: #3a6b5b;">#0000</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -667,7 +693,7 @@
 
                     <div class="work_select_content" id="work_list">
                         <div class="workhead">To do</div>
-                        <table class="table table-hover" id="work_table_3">
+                        <table class="table table-hover work_table_3">
                             <tbody id="todowork">
                                 <tr><td>업무1</td></tr>
                                 <tr><td>업무2</td></tr>
@@ -675,7 +701,7 @@
                             </tbody>
                         </table>
                         <div class="workhead">In Progress</div>
-                        <table class="table table-hover" id="work_table_3">
+                        <table class="table table-hover work_table_3">
                             <tbody>
                                 <tr><td>업무1</td></tr>
                                 <tr><td>업무2</td></tr>
@@ -683,7 +709,7 @@
                             </tbody>
                         </table>
                         <div class="workhead">Done</div>
-                        <table class="table table-hover" id="work_table_3">
+                        <table class="table table-hover work_table_3">
                             <tbody>
                                 <tr><td>업무1</td></tr>
                                 <tr><td>업무2</td></tr>
@@ -709,56 +735,66 @@
                     <div class="work_select_content" id="ug_list">
                         <table class="table table-hover" id="user_table_3">
                             <tbody>
-                                <tr><td class="user_list">
+                                <tr>
+                                    <td style="width: 55px;">
                                         <img src="/user2.Dp3ZRFZz.png" style="height: 30px; width: 30px; margin:5px;"/>
-                                        <div class="lenCut_container">
-                                            <span class="lenCut">닉네임</span>
-                                            <div class="tooltip1" id="tooltip"></div>                                        
-                                        </div>
-                                        <span style="font-size: small; color: rgba(0, 0, 0, 0.5);">identification</span>
-                                        <span style="color: #3a6b5b; margin-left:10px;">#0000</span>
-                                        <div style="margin-left: auto; margin-right: 10px; display: flex; flex-direction: row; align-items: center; gap: 10px;">
+                                    </td>
+                                    <td class="lenCut_container" style="width: 100px;">
+                                        <span class="lenCut">닉네임</span>
+                                        <div class="tooltip1" id="tooltip"></div>
+                                    </td>
+                                    <td style="width: 100px; font-size: small; color: rgba(0, 0, 0, 0.5);">identification</td>
+                                    <td style="width: 60px; color: #3a6b5b;">#0000</td>
+                                    <td style="width: 150px;">
+                                        <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; gap: 10px;">
                                             <div class="lenCut_container">
                                                 <span class="lenCut">그룹명</span>
-                                                <div class="tooltip1" id="tooltip"></div>                                        
+                                                <div class="tooltip1" id="tooltip"></div>
                                             </div>
                                             <div style="background-color: black; height: 20px; width: 20px; border-radius: 50%;"></div>
-                                        </div>                                       
-                                </td></tr>
-                                <tr><td class="user_list">
-                                        <img src="/user2.Dp3ZRFZz.png" style="height: 30px; width: 30px; margin:5px;"/>
-                                        <div class="lenCut_container">
-                                            <span class="lenCut">닉네임</span>
-                                            <div class="tooltip1" id="tooltip"></div>                                        
                                         </div>
-                                        <span style="font-size: small; color: rgba(0, 0, 0, 0.5);">identification</span>
-                                        <span style="color: #3a6b5b; margin-left:10px;">#0000</span>
-                                        <div style="margin-left: auto; margin-right: 10px; display: flex; flex-direction: row; align-items: center; gap: 10px;">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 55px;">
+                                        <img src="/user2.Dp3ZRFZz.png" style="height: 30px; width: 30px; margin:5px;"/>
+                                    </td>
+                                    <td class="lenCut_container" style="width: 100px;">
+                                        <span class="lenCut">닉네임</span>
+                                        <div class="tooltip1" id="tooltip"></div>
+                                    </td>
+                                    <td style="width: 100px; font-size: small; color: rgba(0, 0, 0, 0.5);">identification</td>
+                                    <td style="width: 60px; color: #3a6b5b;">#0000</td>
+                                    <td style="width: 150px;">
+                                        <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; gap: 10px;">
                                             <div class="lenCut_container">
                                                 <span class="lenCut">그룹명</span>
-                                                <div class="tooltip1" id="tooltip"></div>                                        
+                                                <div class="tooltip1" id="tooltip"></div>
                                             </div>
                                             <div style="background-color: black; height: 20px; width: 20px; border-radius: 50%;"></div>
-                                        </div>                                       
-                                </td></tr>
+                                        </div>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                         <table class="table table-hover" id="group_table_3">
                             <tbody>
-                                <tr><td class="user_list">
-                                    <div style="margin-right: 10px; display: flex; flex-direction: row; align-items: center; gap: 10px;">
-                                        <div class="lenCut_container">
-                                            <span class="lenCut">그룹명</span>
-                                            <div class="tooltip1" id="tooltip"></div>                                        
+                                <tr>
+                                    <td style="width: 150px;">
+                                        <div style="margin-right: 10px; display: flex; flex-direction: row; align-items: center; gap: 10px;">
+                                            <div class="lenCut_container">
+                                                <span class="lenCut">그룹명</span>
+                                                <div class="tooltip1" id="tooltip"></div>
+                                            </div>
+                                            <div style="background-color: black; height: 20px; width: 20px; border-radius: 50%;"></div>
                                         </div>
-                                        <div style="background-color: black; height: 20px; width: 20px; border-radius: 50%;"></div>
-                                    </div>
-                                    <div style="margin-left: auto;">
+                                    </td>
+                                    <td>
                                         <img src="/user2.Dp3ZRFZz.png" style="height: 30px; width: 30px; margin:5px;"/>
-                                        <img src="/user2.Dp3ZRFZz.png" style="height: 30px; width: 30px; margin:5px;"/>                                         
                                         <img src="/user2.Dp3ZRFZz.png" style="height: 30px; width: 30px; margin:5px;"/>
-                                    </div>                                  
-                                </td></tr>
+                                        <img src="/user2.Dp3ZRFZz.png" style="height: 30px; width: 30px; margin:5px;"/>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -776,8 +812,9 @@
         const ugSelect2 = document.getElementById("ug_select_2");
         const authoritySelect2 = document.getElementById("authority_select_2");
 
-        document.querySelectorAll('.group_list_2').forEach(item => {
-            item.addEventListener('click', () => {
+        document.querySelectorAll('#group_table_2 tbody tr button').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const item = e.target.closest('tr');
 
                 if(item.classList.contains('active')) {
                     item.classList.remove('active');
@@ -798,7 +835,7 @@
                     
                 }
                 else {
-                    document.querySelectorAll('.group_list_2').forEach(el => el.classList.remove('active'));                    
+                    document.querySelectorAll('#group_table_2 tbody tr').forEach(el => el.classList.remove('active'));
                     item.classList.add('active');
                     groupSelected = true;
 
@@ -818,9 +855,9 @@
             });
         });
 
-        document.querySelectorAll('#user_table_2 td').forEach(item => {
+        document.querySelectorAll('#user_table_2 tbody tr').forEach(item => {
             item.addEventListener('click', () => {
-                if (!groupSelected && item.getElementById) {
+                if (!groupSelected) {
                     alert("먼저 그룹을 선택해야 합니다.");
                     return;
                 }
@@ -828,9 +865,9 @@
             });
         });
 
-        document.querySelectorAll('#authority_table_2 td').forEach(item => {
+        document.querySelectorAll('#authority_table_2 tbody tr').forEach(item => {
             item.addEventListener('click', () => {
-                if (!groupSelected && item.getElementById) {
+                if (!groupSelected) {
                     alert("먼저 그룹을 선택해야 합니다.");
                     return;
                 }
@@ -849,27 +886,34 @@
 
             const id =`groupcolor_${(groupcolorid = groupcolorid + 1)}`;
             const tr = document.createElement("tr");
-            const td = document.createElement("td");
-            td.className = "group_list_2";
-            td.innerHTML = `
-                <td class="group_list_2">
-                    <div style="display: flex; flex-direction: row; gap: 10px;">
-                        <span>${groupName}</span>   
-                        <img src="public/icon/edit.png" style="height:20px; width:20px;"  class="edit_gn drag1" />
-                    </div>
-                    <div style="margin-left: auto; display: flex; flex-direction: row; gap: 10px;">
-                        <span>그룹 색상 수정</span>
-                        <input type="color" id="${id}" class="groupcolor"/>                            
+            tr.innerHTML = `
+                <td style="width: 100px;">
+                    <div class="lenCut_container">
+                        <span class="lenCut" id="groupname">${groupName}</span>
+                        <div class="tooltip1" id="tooltip"></div>
                     </div>
                 </td>
+                <td style="width: 50px;">
+                    <img src="public/icon/edit.png" style="height:20px; width:20px;" class="edit_gn drag1"/>
+                </td>
+                <td style="width: 150px;">
+                    <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; gap: 10px;">
+                        <span>그룹 색상 수정</span>
+                        <input type="color" id="${id}" class="groupcolor"/>
+                    </div>
+                </td>
+                <td style="width: 150px; align-items: end;">
+                    <button class="button_return">유저 및 권한 관리</button>
+                </td>
             `;
-            tr.appendChild(td);
+
             container.appendChild(tr);
             attachEditListeners();
 
-            td.addEventListener('click',function() {
-                if(td.classList.contains('active')) {
-                    td.classList.remove('active');
+            const button = tr.querySelector('button.button_return');
+            button.addEventListener('click', (e) => {
+                if(tr.classList.contains('active')) {
+                    tr.classList.remove('active');
                     groupSelected = false;
 
                     if (ugSelect2.classList.contains("show")) {
@@ -883,8 +927,8 @@
                     }
                 }
                 else {
-                    document.querySelectorAll('.group_list_2').forEach(el => el.classList.remove('active'));                    
-                    td.classList.add('active');
+                    document.querySelectorAll('#group_table_2 tbody tr').forEach(el => el.classList.remove('active'));
+                    tr.classList.add('active');
                     groupSelected = true;
 
                     if (!ugSelect2.classList.contains("show")) {
@@ -905,29 +949,43 @@
         // 업무할당
         let taskSelected = false;
         const ugSelect3 = document.getElementById("ug_select_3");
-        const workTable = document.querySelectorAll("#work_table_3 td");
-        const userTable = document.querySelectorAll("#user_table_3 td");
-        const groupTable = document.querySelectorAll("#group_table_3 td");    
     
-        workTable.forEach(item => {
+        document.querySelectorAll('.work_table_3 tbody tr').forEach(item => {
             item.addEventListener("click", () => {
-                workTable.forEach(r => r.classList.remove("active"));
-                item.classList.add("active");
-                taskSelected = true;
-                userTable.forEach(u => u.classList.remove("active"));
 
-                // 유저,그룹 선택 보이는 애니메이션
-                if (!ugSelect3.classList.contains("show")) {
-                    ugSelect3.style.display = "block";
-                    setTimeout(() => {
-                        ugSelect3.classList.add("show");
-                    }, 10);
-                }                
+                if(item.classList.contains('active')) {
+                    item.classList.remove('active');
+                    taskSelected = false;
+
+                    // 사라지는 애니메이션
+                    if (ugSelect3.classList.contains("show")) {
+                        ugSelect3.classList.remove("show");
+                        setTimeout(() => {
+                            ugSelect3.style.display = "none";
+                        }, 300)
+                    }
+
+                } else {
+                    document.querySelectorAll('.work_table_3 tbody tr').forEach(r => r.classList.remove("active"));
+                    item.classList.add("active");
+                    taskSelected = true;
+                    userTable.forEach(u => u.classList.remove("active"));
+
+                    // 보이는 애니메이션
+                    if (!ugSelect3.classList.contains("show")) {
+                        ugSelect3.style.display = "block";
+                        setTimeout(() => {
+                            ugSelect3.classList.add("show");
+                        }, 10);
+                    }
+
+                }
+
             });
 
         });
 
-        userTable.forEach(item => {
+        document.querySelectorALL('#user_table_3 tbody tr').forEach(item => {
             item.addEventListener("click", () => {
                 if (!taskSelected) {
                     alert("먼저 업무를 선택해야 합니다.");
@@ -938,7 +996,7 @@
             });
         });
 
-        groupTable.forEach(item => {
+        document.querySelectorALL('#group_table_3 tbody tr').forEach(item => {
             item.addEventListener("click", () => {
                 if (!taskSelected) {
                     alert("먼저 업무를 선택해야 합니다.");
