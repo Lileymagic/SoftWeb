@@ -271,19 +271,22 @@
             align-items: center;
             gap: 5px;
         }
-        .modal_wl {
+        .modal_wl { 
             position: fixed;
             top: 20%;
             left: 50%;
             margin: 0;
             transform: translateX(-50%);
             border: none;
-            background-color: transparent;
-            overflow: hidden;
+            background-color: transparent; 
+            overflow: visible;
             z-index: 50;
+            padding:0;
+            max-width: 90vw;
+            max-height: 90vh;
         }
-        dialog.modal_wl::backdrop {
-            background: rgba(0,0,0,0.2);
+        dialog.modal_wl::backdrop { /* 업무 상세 모달 바깥 배경 (반투명 어둡게) */
+            background: rgba(0,0,0,0.2); 
         }
 
         .modal_hs {
@@ -330,7 +333,7 @@
     </dialog>
 
     <dialog class="modal_wl" id="modalWork">
-        <button onclick="document.getElementById('modalWork').close()" style="position:absolute; top:0; right:0; z-index:10; border: none;">✕</button>
+        <button onclick="document.getElementById('modalWork').close()" style="position:absolute; top:10px; right:10px; z-index:10; background:none; border:none; font-size:1.5em; color:black; cursor:pointer;">&times;</button>
         <div id="modalContent" style="top: 0;"></div>
     </dialog>
 
@@ -423,58 +426,34 @@
                 e.preventDefault();
                 nameElement.blur();
             }
-        });
-        /*이름 수정부터 알림창 띄우려면 위 코드 삭제, 밑부분 주석 둔 걸로 변경, 이름수정은 화면에서, 확인만 알림창이라면 그대로두기*/
-        /*let oldName = nameElement.textContent;
-        editButton.addEventListener("click", async () => { // async 추가
-            const newName = prompt("새 프로젝트 이름을 입력하세요.");
-            oldName = nameElement.textContent;
-        */
-        nameElement.addEventListener("blur", async () => { // async 추가
+        });   
+        nameElement.addEventListener("blur", async () => { 
             nameElement.contentEditable = "false";
             nameElement.style.outline = "none";
             const newName = nameElement.textContent.trim();
 
-            if (newName === oldName) { // 변경 사항이 없으면 아무것도 안 함
+            if (newName === oldName) { 
                 return;
             }
             
-            if (!newName) { // 이름이 비어있으면 원래대로 복원
+            if (!newName) { 
                 alert("프로젝트 이름은 비워둘 수 없습니다.");
                 nameElement.textContent = oldName;
                 return;
             }
 
-            // (선택적) 클라이언트 측에서 간단한 유효성 검사 (예: 길이)
             if (newName.length > 255) {
                 alert("프로젝트 이름은 255자를 넘을 수 없습니다.");
                 nameElement.textContent = oldName;
-                nameElement.focus(); // 다시 수정하도록 포커스
+                nameElement.focus(); 
                 return;
             }
 
             const result = confirm(`프로젝트 이름을 "${newName}" (으)로 변경하시겠습니까?`);
             if (result) {
                 try {
-                    // 현재 프로젝트 설명은 가져올 방법이 없으므로, null 또는 기존 설명을 보내야 함
-                    // 설명을 수정하는 UI가 없다면, title만 보내거나, description은 기존값을 보내는 로직이 필요
-                    // 여기서는 title만 변경하는 것으로 가정하고, description은 변경하지 않음 (또는 빈 값으로)
-                    // ProjectUpdateRequestDto는 title과 description을 받으므로, 
-                    // 현재 페이지에서 description을 관리하지 않는다면, 기존 description을 함께 보내거나,
-                    // 백엔드에서 title만 업데이트하도록 API/서비스 수정 필요.
-                    // 가장 간단하게는, 현재 description을 알 수 없으므로 title만 보내는 DTO를 만들거나,
-                    // ProjectUpdateRequestDto에서 description을 nullable하게 처리하고,
-                    // title만 있는 요청을 백엔드가 title만 업데이트하도록 해야함.
-                    // 여기서는 현재 description을 알 수 없으므로, title만 있는 객체를 보내도록 가정합니다.
-                    // (실제로는 ProjectUpdateRequestDto가 title, description을 모두 가지므로,
-                    //  description을 가져올 방법이 없다면 빈 문자열이나 null로 보내야 함.
-                    //  혹은 ProjectService.updateProjectDetails에서 description이 null이면 기존 값 유지하도록 구현)
-
                     const projectDataToUpdate = {
                         title: newName
-                        // description: 현재 페이지에서 관리하지 않으므로 보내지 않거나, 
-                        //              기존 description 값을 어딘가에서 가져와야 함.
-                        //              null로 보내면 백엔드에서 기존 값 유지하도록 처리 필요.
                     };
 
                     const response = await fetch(`/api/projects/${CURRENT_PROJECT_ID}`, {
@@ -493,9 +472,8 @@
 
                     if (apiResult.status === 200 && apiResult.data) {
                         alert("프로젝트 이름이 성공적으로 변경되었습니다.");
-                        oldName = apiResult.data.title; // 성공 시 oldName 업데이트
-                        nameElement.textContent = apiResult.data.title; // 서버 응답으로 다시 설정 (정합성)
-                        // 왼쪽 사이드바의 프로젝트 목록도 업데이트 필요
+                        oldName = apiResult.data.title; 
+                        nameElement.textContent = apiResult.data.title; 
                         loadProjectListForAside(); 
                     } else {
                         throw new Error(apiResult.message || "프로젝트 이름 변경은 성공했으나 응답이 올바르지 않습니다.");
@@ -504,10 +482,10 @@
                 } catch (error) {
                     console.error("Error updating project name:", error);
                     alert(`오류: ${error.message}`);
-                    nameElement.textContent = oldName; // 실패 시 원래 이름으로 복원
+                    nameElement.textContent = oldName; 
                 }
             } else {
-                nameElement.textContent = oldName; // 사용자가 취소한 경우
+                nameElement.textContent = oldName; 
             }
         });
     }
@@ -523,7 +501,7 @@
     function closeModal(dialog){
         if (!dialog) return;
         dialog.addEventListener('click', function(e){
-            if(e.target === dialog){
+            if (e.target === dialog) { 
                 dialog.close();
             }
         });
@@ -537,13 +515,21 @@
         window.location.href = `projectmanage.html?projectId=${CURRENT_PROJECT_ID}`;
     }
 
+    function refreshTasksOnBoard(projectId) {
+        console.log("Refreshing tasks for project (from projectboard):", projectId);
+        if(projectId) loadTasks(projectId);
+    }
+    window.refreshTasksOnBoard = refreshTasksOnBoard;
+
     document.addEventListener('DOMContentLoaded', () => {
         const newWorkBtn = document.getElementById('newwork');
-        const modal = document.querySelector('.modal_pb');
+        const modalPbInstance = document.querySelector('.modal_pb');
+        const modalWorkInstance = document.getElementById('modalWork'); 
 
-        if (modal) closeModal(modal); 
+        if (modalPbInstance) closeModal(modalPbInstance); 
+        if (modalWorkInstance) closeModal(modalWorkInstance); 
         
-        if (newWorkBtn && modal) {
+        if (newWorkBtn && modalPbInstance) {
             newWorkBtn.addEventListener('click', () => {
                 if (!CURRENT_PROJECT_ID) {
                     alert("업무를 생성할 프로젝트를 먼저 선택해주세요.");
@@ -552,7 +538,7 @@
                 document.getElementById("worktitle").value = "";
                 document.getElementById("workcontent").value = ""; 
                 document.getElementById("deadline_pb").value = "";
-                modal.showModal();
+                modalPbInstance.showModal();
             });
         }
 
@@ -687,14 +673,25 @@
                 inprogressContainer.innerHTML = '';
                 doneContainer.innerHTML = '';
 
-                if (result.data.length === 0) {
-                    const noTaskMsg = '<div style="text-align:center; color:grey; margin-top:20px;">업무가 없습니다.</div>';
-                    todoContainer.innerHTML = noTaskMsg;
-                } else {
-                    result.data.forEach(task => {
-                        appendTaskToBoard(task);
-                    });
-                }
+                let todoCount = 0, inprogressCount = 0, doneCount = 0;
+
+                result.data.forEach(task => {
+                    appendTaskToBoard(task);
+                    if (task.status === "ToDo") todoCount++;
+                    else if (task.status === "InProgress") inprogressCount++;
+                    else if (task.status === "Done") doneCount++;
+                });
+
+                 if (todoCount === 0) {
+                    todoContainer.innerHTML = '<div style="text-align:center; color:grey; margin-top:20px;">업무가 없습니다.</div>';
+                 }
+                 if (inprogressCount === 0) {
+                     inprogressContainer.innerHTML = '<div style="text-align:center; color:grey; margin-top:20px;">업무가 없습니다.</div>';
+                 }
+                 if (doneCount === 0) {
+                    doneContainer.innerHTML = '<div style="text-align:center; color:grey; margin-top:20px;">업무가 없습니다.</div>';
+                 }
+
             } else {
                 throw new Error(result.message || "업무 목록을 가져오는데 실패했습니다.");
             }
@@ -715,81 +712,97 @@
         const workBox = document.createElement("div");
         workBox.className = "workbox";
         workBox.setAttribute('data-task-id', taskData.idx); 
-        /*
-        workBox.onclick = () => { 
-            window.location.href = `worklist.html?taskId=${taskData.idx}&projectId=${CURRENT_PROJECT_ID}`; 
-        };
-        */
+
         const modal = document.getElementById('modalWork');
         const modalContent = document.getElementById('modalContent');
 
         workBox.onclick = async () => {
-        const url = `worklist.html?taskId=${taskData.idx}&projectId=${CURRENT_PROJECT_ID}`;
-
-        try {
-            const response = await fetch(url);
-            if (!response.ok) throw new Error('페이지를 불러오는데 실패했습니다.');
-
-            const text = await response.text();
-
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(text, 'text/html');
-
-            const stylesheets = doc.querySelectorAll('link[rel="stylesheet"]');
-            stylesheets.forEach(link => {
-            if (!document.head.querySelector(`link[href="${link.href}"]`)) {
-                const newLink = document.createElement('link');
-                newLink.rel = 'stylesheet';
-                newLink.href = link.href;
-                document.head.appendChild(newLink);
+            if (!modal || !modalContent) {
+                console.error("Worklist modal (#modalWork) or content area (#modalContent) not found in projectboard.html AT CLICK TIME.");
+                alert("업무 상세 정보를 표시할 수 없습니다. (모달 설정 오류)");
+                return;
             }
-            });
+            const url = `worklist.html`; 
 
-            // 스타일 가져옴
-            const styles = doc.querySelectorAll('style');
-                styles.forEach(styleTag => {
-                const newStyle = document.createElement('style');
-                newStyle.textContent = styleTag.textContent;
-                document.head.appendChild(newStyle);
-            });
-
-            // worklist의 main 내용 가져옴
-            const content = doc.querySelector('div.mainW');
-            if (content) {
-            modalContent.innerHTML = content.innerHTML;
-
-            // 스크립트 가져옴
-            const scripts = doc.querySelectorAll('script');
-            scripts.forEach(oldScript => {
-                const newScript = document.createElement('script');
-                if (oldScript.src) {
-                newScript.src = oldScript.src;
-                newScript.async = false;
-                } else {
-                newScript.textContent = oldScript.textContent;
-                }
-                document.body.appendChild(newScript);
-            });
-
-            // 실험용
-            modalContent.querySelectorAll('.worklist_box2 table tr').forEach(row => {
-                row.addEventListener('click', () => {
-                const workboxMain = modalContent.querySelector('#workbox_main');
-                const workbox = modalContent.querySelector('#workbox');
-                if (workboxMain) workboxMain.style.display = 'none';
-                if (workbox) workbox.style.display = 'block';
-                });
-            });
-
-            } else {
-            modalContent.innerHTML = '내용을 불러올 수 없습니다.';
-            }
-
+            modalContent.innerHTML = '<p style="text-align:center; padding:20px;">업무 상세 정보 로딩 중...</p>';
             modal.showModal();
 
-        } catch (error) {
-            alert(error.message);
-        }
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('페이지를 불러오는데 실패했습니다.');
+
+                const text = await response.text();
+
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(text, 'text/html');
+
+                const stylesheets = doc.querySelectorAll('link[rel="stylesheet"]');
+                stylesheets.forEach(link => {
+                if (!document.head.querySelector(`link[href="${link.getAttribute('href')}"]`)) {
+                    const newLink = document.createElement('link');
+                    newLink.rel = 'stylesheet';
+                    newLink.href = link.getAttribute('href');
+                    document.head.appendChild(newLink);
+                }
+                });
+
+                const styles = doc.querySelectorAll('style');
+                    styles.forEach(styleTag => {
+                    const newStyle = document.createElement('style');
+                    newStyle.textContent = styleTag.textContent;
+                    document.head.appendChild(newStyle);
+                });
+                
+                const content = doc.querySelector('div.mainW');
+                if (content) {
+                    modalContent.innerHTML = content.innerHTML;
+
+                    const scripts = doc.querySelectorAll('script');
+                    scripts.forEach(oldScript => {
+                        const newScript = document.createElement('script');
+                        Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+                        newScript.textContent = oldScript.textContent; 
+                         if(oldScript.src){
+                            newScript.src = oldScript.src; 
+                            newScript.onload = () => { 
+                                if (typeof window.initializeWorklistDetails === 'function') {
+                                    window.initializeWorklistDetails(taskData.idx, CURRENT_PROJECT_ID);
+                                }
+                            };
+                            document.body.appendChild(newScript);
+                         } else {
+                            document.body.appendChild(newScript); 
+                            if (typeof window.initializeWorklistDetails === 'function' && oldScript.textContent.includes('initializeWorklistDetails')) {
+                                setTimeout(() => { 
+                                    window.initializeWorklistDetails(taskData.idx, CURRENT_PROJECT_ID);
+                                }, 0);
+                            }
+                         }
+                    });
+                    if (typeof window.initializeWorklistDetails === 'function') {
+                        setTimeout(() => {
+                           window.initializeWorklistDetails(taskData.idx, CURRENT_PROJECT_ID);
+                        }, 100); 
+                    } else {
+                        console.warn("initializeWorklistDetails not found immediately after appending scripts, check if it's in an external script or timing issues.");
+                        setTimeout(() => {
+                            if (typeof window.initializeWorklistDetails === 'function') {
+                                window.initializeWorklistDetails(taskData.idx, CURRENT_PROJECT_ID);
+                            } else {
+                                console.error("initializeWorklistDetails is still not defined. Check worklist.html script loading.");
+                                modalContent.innerHTML = '<p style="color:red; text-align:center;">업무 상세 초기화에 실패했습니다. (함수 누락)</p>';
+                            }
+                        }, 500); 
+                    }
+
+                } else {
+                    modalContent.innerHTML = '내용을 불러올 수 없습니다.';
+                }
+
+            } catch (error) {
+                alert(error.message);
+                modalContent.innerHTML = `<p style="color:red; text-align:center;">오류: ${error.message}</p>`;
+            }
         };
         // 배경 클릭 시 모달 닫기
         modal.addEventListener('click', (event) => {
@@ -817,15 +830,22 @@
             <div style="margin-top: auto; min-height: 5px;"></div>
         `;
 
+        let targetContainer = null;
         if (taskData.status === "ToDo") {
-            if(todoContainer.textContent === '업무가 없습니다.' || todoContainer.textContent === '업무 로딩 중...' || todoContainer.textContent.includes('업무 로드 오류')) todoContainer.innerHTML = '';
-            todoContainer.appendChild(workBox);
+            targetContainer = todoContainer;
         } else if (taskData.status === "InProgress") {
-            if(inprogressContainer.textContent === '업무가 없습니다.' || inprogressContainer.textContent === '업무 로딩 중...' || inprogressContainer.textContent.includes('업무 로드 오류')) inprogressContainer.innerHTML = '';
-            inprogressContainer.appendChild(workBox);
+            targetContainer = inprogressContainer;
         } else if (taskData.status === "Done") {
-            if(doneContainer.textContent === '업무가 없습니다.' || doneContainer.textContent === '업무 로딩 중...' || doneContainer.textContent.includes('업무 로드 오류')) doneContainer.innerHTML = '';
-            doneContainer.appendChild(workBox);
+            targetContainer = doneContainer;
+        }
+
+        if (targetContainer) {
+            if(targetContainer.innerHTML.includes('업무가 없습니다.') || 
+            targetContainer.innerHTML.includes('업무 로딩 중...') || 
+            targetContainer.innerHTML.includes('업무 로드 오류')) {
+                targetContainer.innerHTML = '';
+            }
+            targetContainer.appendChild(workBox);
         }
     }
 

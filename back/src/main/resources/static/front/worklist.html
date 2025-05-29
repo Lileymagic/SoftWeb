@@ -8,19 +8,27 @@
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <style>
-        .mainW {
-            /*
-            position: absolute;
-            top: 0%;
-            left: 50%;
-            transform: translate(-50%, 0%);
-            margin-top: 100px;
-            */
-
+        /* 사용자님이 worklist.html에 제공한 <style> 내용 전체를 여기에 그대로 유지합니다. */
+        /* (이전 답변에서 제가 임의로 추가/수정한 스타일이 있다면 사용자님 원본으로 대체) */
+        /* 사용자 제공 원본 스타일 시작 */
+        .modal_wl{ /* projectboard.html의 modalWork 다이얼로그가 이 클래스를 사용함 */
+            /* position: absolute; */ /* dialog는 기본적으로 fixed처럼 동작하므로 absolute는 불필요하거나 의도에 따라 조정 */
+            /* 이 클래스는 projectboard.html의 모달 다이얼로그에 적용될 수 있습니다. */
+            /* worklist.html 자체가 모달이 아니라, 그 내용이 모달에 들어갑니다. */
+        }
+        .mainW { /* 이 div의 innerHTML이 projectboard.html의 modalContent에 주입됨 */
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
             align-items: center;
+            /* 아래 스타일은 모달로 들어갈 때 불필요할 수 있어 주석 처리 또는 제거 검토 */
+            /*
+            position: absolute; 
+            top: 0%;
+            left: 50%;
+            transform: translate(-50%, 0%);
+            margin-top: 100px; 
+            */
         }
         
         .worklist_box {
@@ -28,13 +36,17 @@
             flex-direction: column;
             border: none;
             height: 100%;
-            max-height: 80vh;
+            max-height: 80vh; /* 모달 내에서 너무 커지지 않도록 */
             width: 250px;
             border-radius: 10px;
             background-color: white;
             box-shadow : 0px 0px 3px rgba(0, 0, 0, 0.2);
+<<<<<<< HEAD
 
             overflow: hidden;
+=======
+            overflow-y: scroll;
+>>>>>>> 8d2b1ba6c62048a7a84d9802344099089c52ac01
         }
         .worklist_box::-webkit-scrollbar{
             width: 5px;
@@ -48,16 +60,14 @@
             background-color: transparent;
         }
 
-        .worklist_box2 {
+        .worklist_box2 { /* 게시글 목록 */
             border: none;
             height: 100%;
-            max-height: 80vh;
-            width: 250px;
+            max-height: 80vh; /* 모달 내에서 너무 커지지 않도록 */
+            width: 250px; /* 너비는 .mainW 내부에서 조정될 수 있음 */
             border-radius: 10px;
             background-color: white;
             box-shadow : 0px 0px 3px rgba(0, 0, 0, 0.2);
-
-            
             overflow-y: scroll;
         }
         .worklist_box2::-webkit-scrollbar{
@@ -67,25 +77,20 @@
         .button_work {
             background-color: transparent;
             border: solid 1px rgb(112, 165, 139);            
-            /* background-color:rgb(183, 228, 206);
-            border: none; */
-
             height:25px;
             width:50px;
-
             color:rgb(112, 165, 139);
             font-size: 15px;
             font-weight: 500;
             border-radius: 4px;
             font-family: 'Pretendard-Regular';
         }
-        .button_work2 {
+        .button_work2 { /* 댓글 등록 버튼 */
             background-color:rgb(255, 255, 255);
             border: none;
             height:25px;
             width:50px;
             box-shadow : 0px 0px 2px rgba(150, 150, 150, 0.8);
-
             color:rgb(10, 10, 10);
             font-size: 15px;
             font-weight: 500;
@@ -98,19 +103,21 @@
             background-color: rgb(235, 235, 235);
             width: 100%;
             padding: 10px;
-
             border-radius: 10px;
             border: none;
+            box-sizing: border-box;
         }
 
-        .mainW table {
+        /* .mainW table, th, td 스타일은 사용자 제공 파일의 것을 유지 */
+        .mainW table { /* worklist.html 내의 테이블에만 적용되도록 .mainW 추가 */
             border-collapse: collapse;
             width: 100%;
         }
-        .mainW th, .mainW td {
-            padding: 15px;
+        .mainW th, .mainW td { /* worklist.html 내의 테이블에만 적용되도록 .mainW 추가 */
+            padding: 8px 15px; /* 패딩 조정 */
             border-bottom: 1px solid rgb(230, 230, 230);
             text-align: left;
+            font-size: small; /* 게시글 목록 글씨 크기 조정 */
         }
         
         .high_box{
@@ -126,50 +133,52 @@
             height: 50px;
             width: 250px;
             margin-top:20px;
-
             border-radius: 20px;
             border: none;
-
             background-color: rgb(112, 165, 139);
             box-shadow : 0px 0px 3px rgba(0, 0, 0, 0.2);
-
             color:rgb(255, 255, 255);
             font-size: 15px;
             font-weight: 500;
             font-family: 'Pretendard-Regular';
-
             display: flex;
             justify-content:center;
             align-items: center;
+            cursor: pointer;
         }
         .button_done:hover {
             background-color: rgb(84, 133, 129);
             transition: 0.1s;
         }
-
         .button_done:hover span{
             display: none;
         }
         .button_done:hover::before{
             content:"Done으로 상태 변경하기";
         }
-        #workbox_main {
-            display: block;
+        /* #workbox_main 과 #workbox는 JS로 display 제어 예정이므로, 초기 스타일 유지 */
+        #workbox_main { 
+            display: block; /* 초기에는 업무 상세가 보이도록 */
         }
-        #workbox {
+        #workbox { /* 게시글 상세 부분은 초기에는 숨김 */
             display: none;
         }
-        .box_text {
+        .box_text { /* 업무 내용 표시 영역 */
             display: flex;
             flex-direction: row;
             width: 100%;
             height: auto;
-            min-height: 130px;
+            min-height: 80px; /* 최소 높이 조정 */
             padding: 10px;
-            background-color: rgb(240, 240, 240);
+            background-color: rgb(248, 248, 248); /* 배경색 약간 변경 */
             border-radius: 5px;
             gap: 5px;
+            border: 1px solid #eee; /* 테두리 추가 */
+            white-space: pre-wrap; /* 줄바꿈 및 공백 유지 */
+            word-break: break-all; /* 긴 내용 자동 줄바꿈 */
+            box-sizing: border-box;
         }
+<<<<<<< HEAD
         .button_toB {
             height: 50px;
             width: 100%;
@@ -256,6 +265,86 @@
                 </div>      
 
                 <div class="button_done">
+=======
+        /* 사용자 제공 원본 스타일 끝 */
+    </style>
+  <link rel="stylesheet" crossorigin href="/css/bootstrap.CyjhP-aL.css">
+  <link rel="stylesheet" crossorigin href="/css/styles.D7cSAQw7.css">
+</head>
+<body class="mid" style="background-color: rgb(195, 195, 195); overflow-y: scroll;">
+    <div class="mainW"> <div style="display: flex; gap: 20px;">
+            <div style="display: flex; flex-direction: column;" >
+                <div class="high_box">
+                    <span id="wl_taskNameHeader" style="position: relative; font-size: 35px; color:white;">업무명 로딩...</span>
+                    <div id="wl_taskStatusHeader" style="margin-left: auto; padding: 5px; background-color: rgb(81,123,95); font-size: medium; color: white;">상태 로딩...</div>
+                </div>
+
+                <div class="worklist_box" style="width: 700px; display: flex; flex-direction: column;" id="workbox_main">
+                    <div style="margin: 20px; height: 100%;">
+                        <div style="display: flex; flex-direction: row; gap: 5px; align-items: center;">
+                            <span id="wl_taskNameBody" style="font-weight: bold; font-size:large;" >업무명 로딩...</span>
+                            <img id="edit_task_btn" class="drag1" src="/edit.BiAatf6L.png" style="height:20px; width:20px; margin-left: auto; cursor:pointer;" title="업무 수정 (구현 예정)"/>
+                        </div>
+                        <hr>
+                        <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom:15px;">
+                            <span style="font-weight: bold; font-size:large;" >업무 내용</span>
+                            <div class="box_text">
+                                <div id="wl_taskDescription" style="flex-grow:1;">내용 로딩 중...</div> 
+                                    <img id="edit_desc_btn" class="drag1" src="/edit.BiAatf6L.png" style="height:20px; width:20px; margin-left: auto; cursor:pointer;"/>
+                            </div>                                                        
+                        </div>
+                        
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            <span style="font-weight: bold; font-size:large;">마감 기한</span>                            
+                            <div style="display: flex; flex-direction: row; gap: 5px; align-items: center;">
+                                <span id="wl_taskDeadline" style="font-size:large; color: rgb(37, 143, 161);">마감일 로딩 중...</span>
+                                     <img id="edit_deadline_btn" class="drag1" src="/edit.BiAatf6L.png" style="height:20px; width:20px; margin-left: 10px; cursor:pointer;"/> 
+                            </div>             
+                        </div>
+                    </div>
+                </div>
+
+                <div class="worklist_box" style="width: 700px; flex-direction: column;" id="workbox">
+                    <div style="margin: 15px;">
+                        <p style="text-align: center; color: grey;">(게시글 상세 내용은 별도 페이지에서 표시됩니다.)</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column;">
+                <div class="high_box"> </div>
+                <div class="worklist_box" style="height:150px; overflow-y: auto;">
+                    <div style="background-color: white; padding: 15px 15px 10px 15px; display: flex; justify-content: space-between; align-items: center; position: sticky; top:0; z-index:1;">
+                        <div style="font-weight: bold; font-size:15px;">담당 유저</div>
+                            <img src="/add.DjzDncey.png" class="drag1" style="height:20px; width:20px; cursor:pointer;" title="담당자 변경 (구현 예정)"/>
+                    </div>
+                    <hr style="border: 1px solid rgb(230, 230, 230); margin: 0;" />
+                    <div id="wl_assignedUserListContainer" style="padding: 10px 15px;">
+                        <div style="font-size: small; text-align: center; color: grey;">담당자 로딩 중...</div>
+                    </div>
+                </div>
+
+                <div class="worklist_box2" style="margin-top:10px; height: 300px; overflow-y: auto;"> 
+                    <div style="position: sticky; top: 0; background-color:white; z-index:1;">
+                        <div style="display: flex; background-color: white; padding: 15px 15px 10px 15px; justify-content: space-between; align-items: center;">
+                            <div style="font-weight: bold; font-size:15px;">게시글</div>
+                            <div style="display: flex; align-items: center;">
+                                <img src="/writing.DcsJ7GJR.png" style="height:20px; width:20px;"/>
+                                <div id="wl_writePostBtn" class="drag1" style="text-decoration: underline; margin-left:5px; cursor:pointer;">글쓰기</div> 
+                            </div>                                
+                        </div>   
+                        <hr style="border: 1px solid rgb(230, 230, 230); margin: 0;" />                        
+                    </div> 
+                    <table class="table table-hover">
+                        <tbody id="wl_postListTbody">
+                            <tr><td style="text-align: center; color: grey;">게시글 목록 로딩 중...</td></tr>
+                        </tbody>
+                    </table>                            
+                </div>
+
+
+                <div id="wl_completeTaskBtn" class="button_done">
+>>>>>>> 8d2b1ba6c62048a7a84d9802344099089c52ac01
                     <span>업무 완료</span>
                 </div>
             </div>
@@ -264,6 +353,331 @@
     
 </body>
 <script>
+<<<<<<< HEAD
 
+=======
+    // 이 스크립트 블록의 내용은 이전 답변에서 제공한 JavaScript 코드로 대체됩니다.
+    // (initializeWorklistDetails, loadTaskDetails, loadTaskPosts, navigateToPostDetail, 
+    //  updateWritePostButtonLink, handleCompleteTask 함수 등 포함)
+
+    let currentWorklistTaskId = null;
+    let currentWorklistProjectId = null;
+
+    // 이 함수는 projectboard.html에서 worklist.html 내용을 모달에 로드한 후 호출됩니다.
+    async function initializeWorklistDetails(taskId, projectId) {
+        currentWorklistTaskId = taskId;
+        currentWorklistProjectId = projectId;
+
+        if (!taskId) {
+            console.error("Worklist: Task ID is missing.");
+            const modalContentDiv = document.querySelector('#modalWork #modalContent'); // projectboard.html의 모달 내부
+            if (modalContentDiv) {
+                 modalContentDiv.innerHTML = '<p style="color:red; text-align:center; padding: 20px;">업무 정보를 불러올 수 없습니다. (ID 누락)</p>';
+            } else {
+                // worklist.html이 단독으로 실행될 경우 (mainW가 직접 body의 자식일 때)
+                document.querySelector('.mainW').innerHTML = '<p style="color:red; text-align:center; padding: 20px;">업무 정보를 불러올 수 없습니다. (ID 누락)</p>';
+            }
+            return;
+        }
+
+        await loadTaskDetails(taskId);
+        await loadTaskPosts(taskId); // 게시글 목록 로드 함수 호출
+        updateWritePostButtonLink(taskId, projectId);
+
+        const completeTaskBtn = document.getElementById('wl_completeTaskBtn');
+        if (completeTaskBtn) {
+            completeTaskBtn.onclick = () => handleCompleteTask(taskId);
+        }
+    }
+    // projectboard.html에서 호출할 수 있도록 window 객체에 할당
+    window.initializeWorklistDetails = initializeWorklistDetails;
+
+
+    async function loadTaskDetails(taskId) {
+        const taskNameHeaderEl = document.getElementById('wl_taskNameHeader');
+        const taskStatusHeaderEl = document.getElementById('wl_taskStatusHeader');
+        const taskNameBodyEl = document.getElementById('wl_taskNameBody');
+        const taskDescriptionEl = document.getElementById('wl_taskDescription');
+        const taskDeadlineEl = document.getElementById('wl_taskDeadline');
+        const assignedUserListContainerEl = document.getElementById('wl_assignedUserListContainer');
+        const completeTaskBtn = document.getElementById('wl_completeTaskBtn');
+
+        if (!taskNameHeaderEl || !taskStatusHeaderEl || !taskNameBodyEl || !taskDescriptionEl || !taskDeadlineEl || !assignedUserListContainerEl || !completeTaskBtn) {
+            console.error("One or more task detail elements are missing in worklist.html. Check IDs: wl_taskNameHeader, wl_taskStatusHeader, wl_taskNameBody, wl_taskDescription, wl_taskDeadline, wl_assignedUserListContainer, wl_completeTaskBtn");
+            return;
+        }
+        
+        try {
+            const response = await fetch(`/api/tasks/${taskId}`);
+            if (!response.ok) {
+                if (response.status === 401) { 
+                    alert("인증이 필요합니다. 로그인 페이지로 이동합니다.");
+                    window.parent.location.href = "/front/login.html"; // 모달이므로 parent의 location 변경
+                    return; 
+                }
+                const errorData = await response.json().catch(() => ({ message: "업무 정보를 가져오지 못했습니다." }));
+                throw new Error(errorData.message || `Failed to fetch task details: ${response.status}`);
+            }
+            const result = await response.json();
+
+            if (result.status === 200 && result.data) {
+                const task = result.data;
+                taskNameHeaderEl.textContent = task.title || "제목 없음";
+                taskStatusHeaderEl.textContent = task.status || "상태 정보 없음";
+                taskNameBodyEl.textContent = task.title || "제목 없음"; 
+                taskDescriptionEl.innerText = task.description || "상세 내용 없음"; 
+                
+                let deadlineText = '마감 기한 없음';
+                if (task.deadline) {
+                    try {
+                        const date = new Date(task.deadline);
+                        deadlineText = `${date.getFullYear()}/${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+                    } catch (e) { deadlineText = task.deadline; }
+                }
+                taskDeadlineEl.textContent = deadlineText;
+
+                assignedUserListContainerEl.innerHTML = ''; 
+                if (task.assignedMembers && task.assignedMembers.length > 0) {
+                    task.assignedMembers.forEach(member => {
+                        const userDiv = document.createElement('div');
+                        userDiv.style.cssText = 'font-size: small; display: flex; align-items: center; margin-bottom: 5px;';
+                        userDiv.innerHTML = `
+                            <img src="${member.profileImage || 'public/icon/user2.png'}" title="${member.nickname}" style="height: 25px; width: 25px; border-radius: 50%; margin-right: 8px; object-fit: cover;"/>
+                            <span>${member.nickname}</span>
+                        `;
+                        assignedUserListContainerEl.appendChild(userDiv);
+                    });
+                } else {
+                    assignedUserListContainerEl.innerHTML = '<div style="font-size: small; color: grey; text-align:center;">담당자 없음</div>';
+                }
+
+                if (task.status === "Done") {
+                    completeTaskBtn.textContent = "완료된 업무";
+                    completeTaskBtn.disabled = true;
+                    completeTaskBtn.style.backgroundColor = "grey";
+                } else {
+                    completeTaskBtn.textContent = "업무 완료";
+                    completeTaskBtn.disabled = false;
+                    completeTaskBtn.style.backgroundColor = "rgb(112, 165, 139)";
+                }
+
+            } else {
+                throw new Error(result.message || "업무 상세 정보를 가져오는데 실패했습니다.");
+            }
+        } catch (error) {
+            console.error("Error loading task details:", error);
+            taskNameHeaderEl.textContent = "업무 정보 로드 오류";
+            taskDescriptionEl.innerText = error.message;
+        }
+    }
+
+    async function loadTaskPosts(taskId) {
+        const postListTbodyEl = document.getElementById('wl_postListTbody');
+        if (!postListTbodyEl) {
+            console.error("Post list tbody element (wl_postListTbody) not found.");
+            return;
+        }
+        postListTbodyEl.innerHTML = '<tr><td colspan="1" style="text-align:center; color:grey;">게시글 목록 로딩 중...</td></tr>';
+
+        try {
+            const response = await fetch(`/api/tasks/${taskId}/posts`);
+            if (!response.ok) {
+                if (response.status === 401) { 
+                    alert("인증이 필요합니다. 로그인 페이지로 이동합니다.");
+                    window.parent.location.href = "/front/login.html"; // 모달이므로 parent의 location 변경
+                    return; 
+                }
+                const errorData = await response.json().catch(() => ({ message: "게시글 목록을 가져오지 못했습니다." }));
+                throw new Error(errorData.message || `Failed to fetch posts: ${response.status}`);
+            }
+            const result = await response.json(); 
+
+            postListTbodyEl.innerHTML = ''; 
+            if (result.status === 200 && Array.isArray(result.data)) {
+                if (result.data.length === 0) {
+                    postListTbodyEl.innerHTML = '<tr><td colspan="1" style="text-align:center; color:grey;">게시글이 없습니다.</td></tr>';
+                } else {
+                    result.data.forEach(post => {
+                        const tr = document.createElement('tr');
+                        tr.style.cursor = 'pointer';
+                        tr.innerHTML = `<td title="${post.title} (작성자: ${post.authorNickname}, 작성일: ${new Date(post.createdAt).toLocaleDateString()})">${post.title || '제목 없음'}</td>`;
+                        tr.onclick = () => navigateToPostDetail(post.idx);
+                        postListTbodyEl.appendChild(tr);
+                    });
+                }
+            } else {
+                throw new Error(result.message || "게시글 목록을 가져오는데 실패했습니다.");
+            }
+        } catch (error) {
+            console.error("Error loading posts:", error);
+            postListTbodyEl.innerHTML = `<tr><td colspan="1" style="text-align:center; color:red;">게시글 로드 오류: ${error.message}</td></tr>`;
+        }
+    }
+    
+    function navigateToPostDetail(postId) {
+        alert(`게시글 ID ${postId}의 상세 페이지로 이동합니다. (페이지 구현 후 연결 필요)`);
+        const modal = window.parent.document.getElementById('modalWork'); // projectboard.html의 모달
+        if (modal) modal.close(); 
+        // 실제 페이지 이동 로직은 추후 결정 (예: window.parent.location.href = `post-detail.html?postId=${postId}`)
+    }
+
+    function updateWritePostButtonLink(taskId, projectId) {
+        const writePostBtn = document.getElementById('wl_writePostBtn'); 
+        if (writePostBtn && taskId != null && projectId != null) { // null 또는 undefined 체크
+            writePostBtn.onclick = () => {
+                const modal = window.parent.document.getElementById('modalWork'); // projectboard.html의 모달
+                if (modal) modal.close(); 
+                window.parent.location.href = `writework.html?taskId=${taskId}&projectId=${projectId}`;
+            };
+        } else {
+             console.warn("Write post button or IDs not available for link update.");
+        }
+    }
+
+    async function handleCompleteTask(taskId) {
+        if (!taskId) return;
+        const userConfirm = confirm("이 업무를 'Done' 상태로 변경하시겠습니까?");
+        if (!userConfirm) return;
+
+        try {
+            const response = await fetch(`/api/tasks/${taskId}/status`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ status: 'Done' }) 
+            });
+            const apiResult = await response.json();
+
+            if (!response.ok) {
+                throw new Error(apiResult.message || `업무 상태 변경 실패: ${response.status}`);
+            }
+
+            if (apiResult.status === 200 && apiResult.data) {
+                alert("업무 상태가 'Done'으로 변경되었습니다.");
+                
+                const taskStatusHeaderEl = document.getElementById('wl_taskStatusHeader');
+                const completeTaskBtn = document.getElementById('wl_completeTaskBtn');
+                if (taskStatusHeaderEl) taskStatusHeaderEl.textContent = "Done";
+                if (completeTaskBtn) {
+                    completeTaskBtn.textContent = "완료된 업무";
+                    completeTaskBtn.disabled = true;
+                    completeTaskBtn.style.backgroundColor = "grey";
+                }
+                
+                // projectboard.html의 칸반 보드 새로고침 알림 (projectboard.html에 해당 함수가 정의되어 있어야 함)
+                if (window.parent && typeof window.parent.refreshTasksOnBoard === 'function') {
+                    window.parent.refreshTasksOnBoard(currentWorklistProjectId);
+                } else {
+                     console.log("Callback to refresh projectboard not found. Close modal to see changes.");
+                }
+                // 모달을 바로 닫을 수도 있습니다.
+                // const modal = window.parent.document.getElementById('modalWork');
+                // if (modal) modal.close();
+
+            } else {
+                throw new Error(apiResult.message || "업무 상태 변경은 성공했으나 응답 데이터가 올바르지 않습니다.");
+            }
+        } catch (error) {
+            console.error("Error completing task:", error);
+            alert(`오류: ${error.message}`);
+        }
+    }
+
+    // 사용자 파일에 있던 기존 댓글/게시글 관련 함수들 (deletewrite, addcomment, deletecomment, prev, next, worktext)
+    // 이 함수들은 게시글 상세 페이지로 기능이 이전될 것이므로, 여기서는 API 연동 없이 UI 조작만 하는 형태로 유지하거나
+    // 실제 기능은 게시글 상세 페이지에서 구현합니다.
+    // 현재는 사용자 제공 파일의 스텁(stub) 함수들을 그대로 둡니다.
+    async function deletewrite(){
+        const result = confirm("글을 삭제하겠습니까? (현재는 UI에서만 사라집니다. API 연동 필요)");
+        if (result) {
+            alert("삭제되었습니다. (UI 임시 처리)");
+            // TODO: 게시글 상세 표시 영역(#workbox)을 숨기거나 초기화
+            document.getElementById('workbox').style.display = 'none';
+            document.getElementById('workbox_main').style.display = 'block';
+        } 
+    }
+    async function addcomment(){
+        const input = document.getElementById("comment");
+        const text = input.value.trim();
+        if(!text){
+            return;
+        }
+        const container = document.getElementById("commentlist");
+        const com = document.createElement("div");
+        com.className="commentlist"; // 이 클래스에 대한 CSS가 있는지 확인 필요
+        com.innerHTML = `
+            <div style="display:flex; align-items: center; margin-bottom: 5px;">
+                <img src="public/icon/user2.png" style="height: 25px; width: 25px; border-radius: 50%; margin-right: 5px;" />
+                <div style="font-size: 15px; font-weight: bold;" >나 (임시)</div>
+            </div>
+            <div style="margin-left:30px; margin-bottom: 5px;">
+                <div style="font-size: 13px;">${text}</div>
+            </div>
+            <div style="display: flex; justify-content: flex-end; margin-bottom: 5px;">
+                <button class="button_work2" style="font-size: 12px; height: 20px; width: auto; padding: 0 5px;" onclick="deleteCommentFromUI(this)">삭제</button>
+            </div>
+            <div style="width:100%; margin-bottom: 5px;">
+                <hr style="border-top: 1px solid rgb(220, 220, 220);" />
+            </div>
+        `;
+        container.appendChild(com);
+        const comcount = document.getElementById("comcount");
+        comcount.innerText = parseInt(comcount.innerText) + 1;
+        input.value = "";
+        input.focus();
+    }
+    function deleteCommentFromUI(buttonElement) { // deletecomment -> deleteCommentFromUI
+        const result = confirm("댓글을 삭제하겠습니까? (현재는 UI에서만 사라집니다. API 연동 필요)");
+        if (!result) {
+            return;
+        } 
+        const commentDiv = buttonElement.closest('.commentlist'); // '.commentlist' 클래스 기준
+        if (commentDiv) {
+            commentDiv.remove();
+            const comcount = document.getElementById("comcount");
+            const current = parseInt(comcount.innerText, 10) || 0;
+            comcount.innerText = Math.max(0, current - 1);
+        }
+    }
+    function prev(){
+        alert("이전 글 기능은 구현 예정입니다.");
+    }
+    function next(){
+        alert("다음 글 기능은 구현 예정입니다.");
+    }
+    
+    //DOMContentLoaded는 worklist.html이 단독으로 열릴 때를 위한 것이며,
+    //모달로 로드될 때는 initializeWorklistDetails가 주 진입점입니다.
+    document.addEventListener('DOMContentLoaded', function () {
+        // URL에서 taskId, projectId 가져오기 (단독 실행 시)
+        const urlParams = new URLSearchParams(window.location.search);
+        const taskIdFromQuery = urlParams.get('taskId');
+        const projectIdFromQuery = urlParams.get('projectId');
+
+        if (taskIdFromQuery && projectIdFromQuery) {
+            // 전역 변수가 설정되지 않았을 경우 (즉, 모달로 로드되지 않고 직접 접근 시)
+            if (currentWorklistTaskId === null || currentWorklistProjectId === null ) {
+                 console.log("worklist.html loaded directly. Initializing with URL params.");
+                 initializeWorklistDetails(parseInt(taskIdFromQuery, 10), parseInt(projectIdFromQuery, 10));
+            }
+        } else if (window.parent === window) { // 최상위 창이고, URL 파라미터가 없을 경우 (모달로 로드된 게 아님)
+            const modalContentDiv = document.querySelector('.mainW');
+            if (modalContentDiv) {
+                modalContentDiv.innerHTML = '<p style="color:red; text-align:center; padding: 20px;">업무 ID 또는 프로젝트 ID가 URL에 제공되지 않았습니다.</p>';
+            }
+        }
+
+        // 사용자 파일에 있던 이벤트 리스너 (게시글 클릭 시 #workbox 표시 로직) - 게시글 상세 페이지로 이전 예정
+        // document.querySelectorAll('.worklist_box2 table tbody').forEach(function(tbody) {
+        //     tbody.addEventListener('click', function(event) {
+        //         if (event.target.closest('tr')) { 
+        //             document.getElementById('workbox_main').style.display = 'none';
+        //             document.getElementById('workbox').style.display = 'block';
+        //         }
+        //     });
+        // });
+    });
+>>>>>>> 8d2b1ba6c62048a7a84d9802344099089c52ac01
 </script>
 </html>
