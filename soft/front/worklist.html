@@ -10,27 +10,19 @@
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <style>
-        /* 사용자님이 worklist.html에 제공한 <style> 내용 전체를 여기에 그대로 유지합니다. */
-        /* (이전 답변에서 제가 임의로 추가/수정한 스타일이 있다면 사용자님 원본으로 대체) */
-        /* 사용자 제공 원본 스타일 시작 */
-        .modal_wl{ /* projectboard.html의 modalWork 다이얼로그가 이 클래스를 사용함 */
-            /* position: absolute; */ /* dialog는 기본적으로 fixed처럼 동작하므로 absolute는 불필요하거나 의도에 따라 조정 */
-            /* 이 클래스는 projectboard.html의 모달 다이얼로그에 적용될 수 있습니다. */
-            /* worklist.html 자체가 모달이 아니라, 그 내용이 모달에 들어갑니다. */
-        }
-        .mainW { /* 이 div의 innerHTML이 projectboard.html의 modalContent에 주입됨 */
+        .mainW {
+            /*
+            position: absolute;
+            top: 0%;
+            left: 50%;
+            transform: translate(-50%, 0%);
+            margin-top: 100px;
+            */
+
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
             align-items: center;
-            /* 아래 스타일은 모달로 들어갈 때 불필요할 수 있어 주석 처리 또는 제거 검토 */
-            /*
-            position: absolute; 
-            top: 0%;
-            left: 50%;
-            transform: translate(-50%, 0%);
-            margin-top: 100px; 
-            */
         }
         
         .worklist_box {
@@ -38,12 +30,13 @@
             flex-direction: column;
             border: none;
             height: 100%;
-            max-height: 80vh; /* 모달 내에서 너무 커지지 않도록 */
+            max-height: 80vh;
             width: 250px;
             border-radius: 10px;
             background-color: white;
             box-shadow : 0px 0px 3px rgba(0, 0, 0, 0.2);
-            overflow-y: scroll;
+
+            overflow: hidden;
         }
         .worklist_box::-webkit-scrollbar{
             width: 5px;
@@ -57,14 +50,16 @@
             background-color: transparent;
         }
 
-        .worklist_box2 { /* 게시글 목록 */
+        .worklist_box2 {
             border: none;
             height: 100%;
-            max-height: 80vh; /* 모달 내에서 너무 커지지 않도록 */
-            width: 250px; /* 너비는 .mainW 내부에서 조정될 수 있음 */
+            max-height: 80vh;
+            width: 250px;
             border-radius: 10px;
             background-color: white;
             box-shadow : 0px 0px 3px rgba(0, 0, 0, 0.2);
+
+            
             overflow-y: scroll;
         }
         .worklist_box2::-webkit-scrollbar{
@@ -74,20 +69,25 @@
         .button_work {
             background-color: transparent;
             border: solid 1px rgb(112, 165, 139);            
+            /* background-color:rgb(183, 228, 206);
+            border: none; */
+
             height:25px;
             width:50px;
+
             color:rgb(112, 165, 139);
             font-size: 15px;
             font-weight: 500;
             border-radius: 4px;
             font-family: 'Pretendard-Regular';
         }
-        .button_work2 { /* 댓글 등록 버튼 */
+        .button_work2 {
             background-color:rgb(255, 255, 255);
             border: none;
             height:25px;
             width:50px;
             box-shadow : 0px 0px 2px rgba(150, 150, 150, 0.8);
+
             color:rgb(10, 10, 10);
             font-size: 15px;
             font-weight: 500;
@@ -100,21 +100,19 @@
             background-color: rgb(235, 235, 235);
             width: 100%;
             padding: 10px;
+
             border-radius: 10px;
             border: none;
-            box-sizing: border-box;
         }
 
-        /* .mainW table, th, td 스타일은 사용자 제공 파일의 것을 유지 */
-        .mainW table { /* worklist.html 내의 테이블에만 적용되도록 .mainW 추가 */
+        .mainW table {
             border-collapse: collapse;
             width: 100%;
         }
-        .mainW th, .mainW td { /* worklist.html 내의 테이블에만 적용되도록 .mainW 추가 */
-            padding: 8px 15px; /* 패딩 조정 */
+        .mainW th, .mainW td {
+            padding: 15px;
             border-bottom: 1px solid rgb(230, 230, 230);
             text-align: left;
-            font-size: small; /* 게시글 목록 글씨 크기 조정 */
         }
         
         .high_box{
@@ -130,115 +128,136 @@
             height: 50px;
             width: 250px;
             margin-top:20px;
+
             border-radius: 20px;
             border: none;
+
             background-color: rgb(112, 165, 139);
             box-shadow : 0px 0px 3px rgba(0, 0, 0, 0.2);
+
             color:rgb(255, 255, 255);
             font-size: 15px;
             font-weight: 500;
             font-family: 'Pretendard-Regular';
+
             display: flex;
             justify-content:center;
             align-items: center;
-            cursor: pointer;
         }
         .button_done:hover {
             background-color: rgb(84, 133, 129);
             transition: 0.1s;
         }
+
         .button_done:hover span{
             display: none;
         }
         .button_done:hover::before{
             content:"Done으로 상태 변경하기";
         }
-        /* #workbox_main 과 #workbox는 JS로 display 제어 예정이므로, 초기 스타일 유지 */
-        #workbox_main { 
-            display: block; /* 초기에는 업무 상세가 보이도록 */
+        #workbox_main {
+            display: block;
         }
-        #workbox { /* 게시글 상세 부분은 초기에는 숨김 */
+        #workbox {
             display: none;
         }
-        .box_text { /* 업무 내용 표시 영역 */
+        .box_text {
             display: flex;
             flex-direction: row;
             width: 100%;
             height: auto;
-            min-height: 80px; /* 최소 높이 조정 */
+            min-height: 130px;
             padding: 10px;
-            background-color: rgb(248, 248, 248); /* 배경색 약간 변경 */
+            background-color: rgb(240, 240, 240);
             border-radius: 5px;
             gap: 5px;
-            border: 1px solid #eee; /* 테두리 추가 */
-            white-space: pre-wrap; /* 줄바꿈 및 공백 유지 */
-            word-break: break-all; /* 긴 내용 자동 줄바꿈 */
-            box-sizing: border-box;
         }
-        /* 사용자 제공 원본 스타일 끝 */
+        .button_toB {
+            height: 50px;
+            width: 100%;
+
+            border-radius: 10px;
+            background-color: transparent;
+            border: solid 1px rgb(112, 165, 139); 
+            color:rgb(25, 54, 52);
+
+            font-size: 15px;
+            font-weight: 500;
+            font-family: 'Pretendard-Regular';
+
+            display: flex;
+            justify-content:center;
+            align-items: center;
+        }
+        .button_toB:hover {
+            background-color: rgba(112, 165, 139, 0.05);
+        }
+
     </style>
 </head>
 <body class="mid" style="background-color: rgb(195, 195, 195); overflow-y: scroll;">
-    <div class="mainW"> <div style="display: flex; gap: 20px;">
-            <div style="display: flex; flex-direction: column;" >
-                <div class="high_box">
-                    <span id="wl_taskNameHeader" style="position: relative; font-size: 35px; color:white;">업무명 로딩...</span>
-                    <div id="wl_taskStatusHeader" style="margin-left: auto; padding: 5px; background-color: rgb(81,123,95); font-size: medium; color: white;">상태 로딩...</div>
-                </div>
+    <div id="root"></div>
+    <script type="module" src="approot.js"></script>
 
+    <div class="mainW">
+        <div style="display: flex; gap: 20px;">
+            <div style="display: flex; flex-direction: column;" >
                 <div class="worklist_box" style="width: 700px; display: flex; flex-direction: column;" id="workbox_main">
-                    <div style="margin: 20px; height: 100%;">
-                        <div style="display: flex; flex-direction: row; gap: 5px; align-items: center;">
-                            <span id="wl_taskNameBody" style="font-weight: bold; font-size:large;" >업무명 로딩...</span>
-                            <img id="edit_task_btn" class="drag1" src="public/icon/edit.png" style="height:20px; width:20px; margin-left: auto; cursor:pointer;" title="업무 수정 (구현 예정)"/>
-                        </div>
-                        <hr>
-                        <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom:15px;">
+                    <div class="high_box" style="margin: 15px;">
+                        <span id="wl_taskNameHeader" style="position: relative; font-size: 35px; color:rgb(0, 0, 0);">업무명 로딩...</span>
+                        <img  id="edit_task_btn" class="drag1" src="public/icon/edit.png" style="height:20px; width:20px; cursor:pointer;" title="업무 수정 (구현 예정)"/>
+                        <div id="wl_taskStatusHeader" style="margin-left: auto; padding: 5px; background-color: rgb(81,123,95); font-size: medium; color: white;">상태 로딩..</div>
+                    </div>
+                    <hr style="margin: 0; margin-left: 10px; margin-right: 10px;">
+                    <div class="box_scroll" style=" padding: 15px; display: flex; flex-direction: column;">
+
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
                             <span style="font-weight: bold; font-size:large;" >업무 내용</span>
                             <div class="box_text">
                                 <div id="wl_taskDescription" style="flex-grow:1;">내용 로딩 중...</div> 
-                                    <img id="edit_desc_btn" class="drag1" src="public/icon/edit.png" style="height:20px; width:20px; margin-left: auto; cursor:pointer;"/>
+                                <img id="edit_desc_btn" class="drag1" src="public/icon/edit.png" style="height:20px; width:20px; margin-left: auto; cursor:pointer;"/>
                             </div>                                                        
-                        </div>
-                        
+                        </div> 
+                        &nbsp;                        
                         <div style="display: flex; flex-direction: column; gap: 10px;">
                             <span style="font-weight: bold; font-size:large;">마감 기한</span>                            
-                            <div style="display: flex; flex-direction: row; gap: 5px; align-items: center;">
-                                <span id="wl_taskDeadline" style="font-size:large; color: rgb(37, 143, 161);">마감일 로딩 중...</span>
-                                     <img id="edit_deadline_btn" class="drag1" src="public/icon/edit.png" style="height:20px; width:20px; margin-left: 10px; cursor:pointer;"/> 
+                            <div style="display: flex; flex-direction: row; gap: 5px;">
+                                <span id="wl_taskDeadline" style="font-size:large; color: rgb(37, 143, 161);">마감일 로딩 중...</span>                                
+                                <img id="edit_deadline_btn" class="drag1" src="public/icon/edit.png" style="height:20px; width:20px; margin-left: 10px; cursor:pointer;"/> 
                             </div>             
                         </div>
+                        &nbsp;
+                        <div style="width: 100%; display: flex; align-items: center; justify-content: center; margin-top: auto;">
+                            <button class="button_toB" onclick="window.location.href='/front/worklist_board.html';"> 게시판으로</button> 
+                            <!-- 이 업무의 게시판으로 이동하게 -->
+                        </div>
+                        
                     </div>
-                </div>
 
-                <div class="worklist_box" style="width: 700px; flex-direction: column;" id="workbox">
-                    <div style="margin: 15px;">
-                        <p style="text-align: center; color: grey;">(게시글 상세 내용은 별도 페이지에서 표시됩니다.)</p>
-                    </div>
                 </div>
             </div>
 
-            <div style="display: flex; flex-direction: column;">
-                <div class="high_box"> </div>
-                <div class="worklist_box" style="height:150px; overflow-y: auto;">
-                    <div style="background-color: white; padding: 15px 15px 10px 15px; display: flex; justify-content: space-between; align-items: center; position: sticky; top:0; z-index:1;">
+            <div style="flex-direction: column;">
+                <div class="worklist_box" style="height:300px; overflow-y: scroll;">
+                    <div style="background-color: white; padding: 15px; display: flex;">
                         <div style="font-weight: bold; font-size:15px;">담당 유저</div>
-                            <img src="public/icon/add.png" class="drag1" style="height:20px; width:20px; cursor:pointer;" title="담당자 변경 (구현 예정)"/>
+		                <img src="public/icon/add.png" class="drag1" style="height:20px; width:20px; cursor:pointer; margin-left: auto;" title="담당자 변경 (구현 예정)"/>
                     </div>
-                    <hr style="border: 1px solid rgb(230, 230, 230); margin: 0;" />
+                    <hr style="border: 1px solid rgb(160, 160, 160); margin: 0;" />
                     <div id="wl_assignedUserListContainer" style="padding: 10px 15px;">
                         <div style="font-size: small; text-align: center; color: grey;">담당자 로딩 중...</div>
                     </div>
-                </div>
-
-                <div class="worklist_box2" style="margin-top:10px; height: 300px; overflow-y: auto;"> 
+                </div>      
+	   <div class="worklist_box2" style="margin-top:10px; height: 300px; overflow-y: auto;"> 
                     <div style="position: sticky; top: 0; background-color:white; z-index:1;">
                         <div style="display: flex; background-color: white; padding: 15px 15px 10px 15px; justify-content: space-between; align-items: center;">
                             <div style="font-weight: bold; font-size:15px;">게시글</div>
+                            <!--
                             <div style="display: flex; align-items: center;">
                                 <img src="public/icon/writing.png" style="height:20px; width:20px;"/>
                                 <div id="wl_writePostBtn" class="drag1" style="text-decoration: underline; margin-left:5px; cursor:pointer;">글쓰기</div> 
-                            </div>                                
+                            </div>
+                            -->                             
                         </div>   
                         <hr style="border: 1px solid rgb(230, 230, 230); margin: 0;" />                        
                     </div> 
@@ -249,8 +268,7 @@
                     </table>                            
                 </div>
 
-
-                <div id="wl_completeTaskBtn" class="button_done">
+                <div class="button_done">
                     <span>업무 완료</span>
                 </div>
             </div>
@@ -583,3 +601,6 @@
     });
 </script>
 </html>
+
+
+

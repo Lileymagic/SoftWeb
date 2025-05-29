@@ -21,6 +21,7 @@ export default defineConfig({
         projectmanage: resolve(__dirname, 'front/projectmanage.html'),
         projectlist: resolve(__dirname, 'front/projectlist.html'),
         worklist: resolve(__dirname, 'front/worklist.html'),
+        worklist_board: resolve(__dirname, 'front/worklist_board.html'),
         writework: resolve(__dirname, 'front/writework.html'),
       },
       output: {
