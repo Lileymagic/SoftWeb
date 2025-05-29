@@ -273,8 +273,9 @@
         }
         .modal_wl {
             position: fixed;
-            top: 20px;
+            top: 20%;
             left: 50%;
+            margin: 0;
             transform: translateX(-50%);
             border: none;
             background-color: transparent;
@@ -329,7 +330,7 @@
     </dialog>
 
     <dialog class="modal_wl" id="modalWork">
-        <button onclick="document.getElementById('modalWork').close()" style="position:absolute; top:10px; right:10px; z-index:10;">✕</button>
+        <button onclick="document.getElementById('modalWork').close()" style="position:absolute; top:0; right:0; z-index:10; border: none;">✕</button>
         <div id="modalContent" style="top: 0;"></div>
     </dialog>
 
@@ -790,6 +791,13 @@
             alert(error.message);
         }
         };
+        // 배경 클릭 시 모달 닫기
+        modal.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                modal.close();
+            }
+        })
+
         let deadlineText = '마감 기한 없음';
         if (taskData.deadline) {
             try {

@@ -530,6 +530,7 @@ textarea:focus {
     width: 100%;
     height: 100%;
     overflow-y: scroll;
+    flex-grow: 1;
 }
 .box_scroll::-webkit-scrollbar{
     width: 5px;      

@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>work board</title>
+    <script src="https://kit.fontawesome.com/289a62abf7.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <style>
+        .mainW {
+            position: absolute;
+            top: 0%;
+            left: 50%;
+            transform: translate(-50%, 0%);
+            margin-top: 100px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+        }
+        
+        .worklist_box {
+            display: flex;
+            flex-direction: column;
+            border: none;
+            height: 100%;
+            max-height: 80vh;
+            width: 250px;
+            border-radius: 10px;
+            background-color: white;
+            box-shadow : 0px 0px 3px rgba(0, 0, 0, 0.2);
+
+            overflow: hidden;
+        }
+
+        .worklist_box2 {
+            border: none;
+            height: 100%;
+            max-height: 80vh;
+            width: 250px;
+            border-radius: 10px;
+            background-color: white;
+            box-shadow : 0px 0px 3px rgba(0, 0, 0, 0.2);
+
+            
+            overflow-y: scroll;
+        }
+        .worklist_box2::-webkit-scrollbar{
+            display: none;
+        }
+
+        .button_work {
+            background-color: transparent;
+            border: solid 1px rgb(112, 165, 139);            
+            /* background-color:rgb(183, 228, 206);
+            border: none; */
+
+            height:25px;
+            width:50px;
+
+            color:rgb(112, 165, 139);
+            font-size: 15px;
+            font-weight: 500;
+            border-radius: 4px;
+            font-family: 'Pretendard-Regular';
+            
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .button_work:hover {
+            background-color: rgba(112, 165, 139, 0.05);
+        }
+        .button_work2 {
+            background-color:rgb(255, 255, 255);
+            border: none;
+            height:25px;
+            width:50px;
+            box-shadow : 0px 0px 2px rgba(150, 150, 150, 0.8);
+
+            color:rgb(10, 10, 10);
+            font-size: 15px;
+            font-weight: 500;
+            border-radius: 4px;
+            font-family: 'Pretendard-Regular';
+        }
+
+        .comment_box {
+            border: 1px solid gray;
+            background-color: rgb(235, 235, 235);
+            width: 100%;
+            padding: 10px;
+
+            border-radius: 10px;
+            border: none;
+        }
+
+        .mainW table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        .mainW th, .mainW td {
+            padding: 15px;
+            border-bottom: 1px solid rgb(230, 230, 230);
+            text-align: left;
+        }
+        
+        .high_box{
+            height: 50px;
+            padding: 10px;
+            display: flex;
+            flex-direction: row;
+            align-items:center;
+        }
+
+        .button_done{
+            height: 50px;
+            width: 250px;
+            margin-top:20px;
+
+            border-radius: 20px;
+            border: none;
+
+            background-color: rgb(112, 165, 139);
+            box-shadow : 0px 0px 3px rgba(0, 0, 0, 0.2);
+
+            color:rgb(255, 255, 255);
+            font-size: 15px;
+            font-weight: 500;
+            font-family: 'Pretendard-Regular';
+
+            display: flex;
+            justify-content:center;
+            align-items: center;
+        }
+        .button_done:hover {
+            background-color: rgb(84, 133, 129);
+            /* transition: 0.1s; */
+        }
+        #workbox_main {
+            display: block;
+        }
+        .box_text {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            height: auto;
+            min-height: 130px;
+            padding: 10px;
+            background-color: rgb(240, 240, 240);
+            border-radius: 5px;
+            gap: 5px;
+        }
+
+    </style>
+  <script type="module" crossorigin src="/assets/approot-DxVsvFJm.js"></script>
+  <link rel="stylesheet" crossorigin href="/css/approot.Ca4Dy-3I.css">
+  <link rel="stylesheet" crossorigin href="/css/bootstrap.CyjhP-aL.css">
+</head>
+<body style="background-color: rgb(245, 245, 245);">
+    <div id="root"></div>
+
+    <div class="mainW">
+        <div style="display: flex; gap: 20px;">
+            <div style="display: flex; flex-direction: column;" >
+                <div class="worklist_box" style="width: 700px; flex-direction: column;" id="workbox">
+                        <div class="high_box" style="margin: 15px;">
+                            <span style="position: relative; font-size: 35px; color:rgb(0, 0, 0);">업무명</span>
+                            <button class="button_work" style="width: 100px; height: 40px; margin-left: auto; font-size: medium;" onclick="window.location.href='writework.html';">게시글 작성</button>
+                        </div>
+                        <hr style="margin: 0;">
+                        <div class="box_scroll" style=" padding: 15px;"> 
+                            <!-- 스타일에 이거 넣으면 경계가 자연스럽게 흐려짐. (대신 스크롤바도 함께 흐려짐)
+                            -webkit-mask-image: linear-gradient(to top, transparent, black 30px);
+                            mask-image: linear-gradient(to top, transparent, black 30px); 
+                            -->
+                            <div style="font-weight: bold; font-size:25px; padding: 10px;">제목</div>
+                            <div style="display: flex; flex-direction: row; align-items: flex-end; padding: 10px;">
+                                <div style="display: flex; align-items: center; gap: 5px;">
+                                        <img src="/user2.Dp3ZRFZz.png" style="height: 25px; width: 25px;"/>
+                                        <div style="font-size: 15px;">작성자</div>
+                                </div>
+                                <div style="font-size: 12px; color:rgb(105, 105, 105); margin-left: auto;">2025/05/05 12:00</div>                                
+                            </div> 
+                            <hr style="border: none; border-bottom: 1px solid rgb(160, 160, 160); margin: 0;" />
+                            <div style="padding:10px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div></div>
+                                    <div>
+                                        <img src="/link.CZlXJVt1.png" style="height:20px; width:20px;"/>
+                                        <a style="font-size: small; color: rgb(105, 105, 105)">파일 다운로드</a>
+                                    </div>
+                                </div>
+                                <div style="height:300px;">
+                                    <div style="font-weight: 400;">내용</div>
+                                </div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top:5px;">
+                                <div style="margin-left:5px; display: flex;">
+                                    <img src = "/comment.DcOv8ESk.png" style="height:25px; width:25px;"/>
+                                    <div style="font-size: small; color: rgb(105, 105, 105); margin-top:2px;" id="comcount">0</div>
+                                </div>
+                                <div style="display: flex; justify-content: end;"> 
+                                    <button class="button_work" style="margin-right: 5px;" onclick="window.location.href='writework.html';">수정</button>
+                                    <button class="button_work" style="border: solid 1px rgb(173, 98, 98); color:rgb(173, 98, 98)" onclick="deletewrite()">삭제</button>
+                                </div>
+                            </div>
+                            <div style="width:100%;">
+                                <hr style="border: 1px solid rgb(160, 160, 160);" />
+                            </div>
+
+                            <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                                <div class="comment_box">
+                                    <div style="font-size: medium;">나</div>
+                                    <input style="font-size: small; border: none; background-color: transparent; outline: none; width:500px; " type="text" id="comment" placeholder="댓글 작성하기" />
+                                    <div style="width:100%;">
+                                        <hr style="border: 1px solid rgb(160, 160, 160);" />
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                            <img src="/link.CZlXJVt1.png" style="height:20px; width:20px;"/>
+                                            <button class="button_work2" style="width:70px;" onclick="addcomment()">등록</button>
+                                    </div>
+                                </div>
+                            </div>                            
+                            <div style="display: flex; width:100%;">
+                                <div style="flex-direction: column;  width:100%;" id="commentlist">
+
+                                </div>
+                            </div>
+                        </div>     
+                        <div style="display: flex; padding: 20px;">
+                            <button class="button_work" style="width:70px; margin-right: auto;" onclick="prev()">이전글</button>
+                            <button class="button_work" style="width:70px; margin-left: auto;" onclick="next()">다음글</button>
+                        </div>                       
+                </div>
+            </div>
+
+            <div style="flex-direction: column;">
+                <div class="worklist_box2" style="height: 500px;">
+                    <div style="top: 0;">
+                        <div style="display: flex; background-color: white; padding: 15px;">
+                            <div style="font-weight: bold; font-size:15px;">글 목록</div>                             
+                        </div>   
+                        <hr style="border: 1px solid rgb(160, 160, 160); margin: 0;" />                        
+                    </div> 
+                    <div class="box_scroll">
+                        <table class="table table-hover">
+                            <tbody>
+                                <tr>
+                                    <td>게시글1</td>
+                                </tr>
+                                <tr>
+                                    <td>게시글1</td>
+                                </tr>
+                                <tr>
+                                    <td>게시글1</td>
+                                </tr>
+                                <tr>
+                                    <td>게시글1</td>
+                                </tr>
+                                <tr>
+                                    <td>게시글1</td>
+                                </tr>
+                                <tr>
+                                    <td>게시글1</td>
+                                </tr>
+                                <tr>
+                                    <td>게시글1</td>
+                                </tr>
+                            </tbody>
+                        </table>                         
+                    </div>
+                           
+                </div>
+
+                <div class="button_done" onclick="window.location.href='projectboard.html';">
+                    <!-- 원래의 프로젝트 보드로 돌아가게 -->
+                    <span>돌아가기</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</body>
+<script>
+    async function deletewrite(){
+        const result = confirm("글을 삭제하겠습니까?");
+        if (result) {
+            alert("삭제되었습니다.");
+        } 
+    }
+    async function addcomment(){
+        const input = document.getElementById("comment");
+        const text = input.value.trim();
+        if(!text){
+            return;
+        }
+        const container = document.getElementById("commentlist");
+        const com = document.createElement("div");
+        com.className="commentlist";
+        com.innerHTML = `
+        <div style="width:100%; padding: 10px;">
+            <div style="display:flex;">
+                <img src="public/icon/user2.png" style="height: 25px; width: 25px;" id="userimage"/>
+                <div style="font-size: 15px; margin-left:5px;" id="usernickname">나</div>
+            </div>
+            <div style="margin-left:35px; margin-top:5px;">
+                <div style="font-size: 13px;" id="usercomment">${text}</div>
+            </div>
+            <div style="display: flex; justify-content: right;">
+                <div>
+                    <button class="button_work2" style="margin-left: 5px;" onclick="deletecomment()">삭제</button>
+                </div>    
+            </div>
+            <hr style="border: 1px solid rgb(160, 160, 160); margin: 0; margin-top: 10px;" />                                        
+        </div>
+        `;
+
+        // 이 알람은 없애는 게 좋아보임. 아님 확인 안눌러도 ㄱㅊ게 하거나
+        // alert("댓글이 등록되었습니다.");
+        container.appendChild(com);
+        const comcount = document.getElementById("comcount");
+        comcount.innerText = parseInt(comcount.innerText) + 1;
+        input.value = "";
+        input.focus();
+    }
+    function deletecomment() {
+        const result = confirm("댓글을 삭제하겠습니까?");
+        if (!result) {
+            return;
+        } 
+        const btn = event.target;
+        const com = btn.closest('.commentlist');
+        com.remove();
+        const comcount = document.getElementById("comcount");
+        const current = parseInt(comcount.innerText, 10) || 0;
+        comcount.innerText = Math.max(0, current - 1);
+    }
+    function prev(){
+        alert("이전 글이 없습니다.");
+    }
+    function next(){
+        alert("다음 글이 없습니다.");
+    }
+    //임시
+    async function worktext(){
+        const box = document.getElementById("workbox");
+        if(!text){
+            box.innerHTML = `
+                <div class="nowork" style="display: flex; justify-content: center; align-items: center; height: 100%;">
+                    <div>아직 작성된 글이 없습니다.</div>
+                </div>
+            `;
+        }
+    }
+</script>
+</html>
