@@ -192,12 +192,10 @@
         }
 
     </style>
-  <script type="module" crossorigin src="/assets/approot-DxVsvFJm.js"></script>
-  <link rel="stylesheet" crossorigin href="/css/approot.Ca4Dy-3I.css">
   <link rel="stylesheet" crossorigin href="/css/bootstrap.CyjhP-aL.css">
+  <link rel="stylesheet" crossorigin href="/css/styles.Ca4Dy-3I.css">
 </head>
 <body class="mid" style="background-color: rgb(195, 195, 195); overflow-y: scroll;">
-    <div id="root"></div>
 
     <div class="mainW">
         <div style="display: flex; gap: 20px;">
@@ -268,7 +266,7 @@
                     </table>                            
                 </div>
 
-                <div class="button_done">
+                <div id="wl_completeTaskBtn" class="button_done">
                     <span>업무 완료</span>
                 </div>
             </div>
@@ -317,14 +315,20 @@
     async function loadTaskDetails(taskId) {
         const taskNameHeaderEl = document.getElementById('wl_taskNameHeader');
         const taskStatusHeaderEl = document.getElementById('wl_taskStatusHeader');
-        const taskNameBodyEl = document.getElementById('wl_taskNameBody');
+        // const taskNameBodyEl = document.getElementById('wl_taskNameBody');
         const taskDescriptionEl = document.getElementById('wl_taskDescription');
         const taskDeadlineEl = document.getElementById('wl_taskDeadline');
         const assignedUserListContainerEl = document.getElementById('wl_assignedUserListContainer');
         const completeTaskBtn = document.getElementById('wl_completeTaskBtn');
 
+        /*
         if (!taskNameHeaderEl || !taskStatusHeaderEl || !taskNameBodyEl || !taskDescriptionEl || !taskDeadlineEl || !assignedUserListContainerEl || !completeTaskBtn) {
             console.error("One or more task detail elements are missing in worklist.html. Check IDs: wl_taskNameHeader, wl_taskStatusHeader, wl_taskNameBody, wl_taskDescription, wl_taskDeadline, wl_assignedUserListContainer, wl_completeTaskBtn");
+            return;
+        }
+        */
+        if (!taskNameHeaderEl || !taskStatusHeaderEl || !taskDescriptionEl || !taskDeadlineEl || !assignedUserListContainerEl || !completeTaskBtn) {
+            console.error("One or more task detail elements are missing in worklist.html. Check IDs: wl_taskNameHeader, wl_taskStatusHeader, wl_taskDescription, wl_taskDeadline, wl_assignedUserListContainer, wl_completeTaskBtn");
             return;
         }
         
@@ -345,7 +349,7 @@
                 const task = result.data;
                 taskNameHeaderEl.textContent = task.title || "제목 없음";
                 taskStatusHeaderEl.textContent = task.status || "상태 정보 없음";
-                taskNameBodyEl.textContent = task.title || "제목 없음"; 
+                // taskNameBodyEl.textContent = task.title || "제목 없음"; 
                 taskDescriptionEl.innerText = task.description || "상세 내용 없음"; 
                 
                 let deadlineText = '마감 기한 없음';
