@@ -272,6 +272,16 @@
             gap: 5px;
         }
 
+        .modal_hs {
+            width: 800px;
+            height: 800px;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        dialog.modal_hs::backdrop {
+            background: rgba(0,0,0,0.4);
+        }
     </style>
 </head>
 
@@ -395,7 +405,13 @@
                 e.preventDefault();
                 nameElement.blur();
             }
-        });   
+        });
+        /*이름 수정부터 알림창 띄우려면 위 코드 삭제, 밑부분 주석 둔 걸로 변경, 이름수정은 화면에서, 확인만 알림창이라면 그대로두기*/
+        /*let oldName = nameElement.textContent;
+        editButton.addEventListener("click", async () => { // async 추가
+            const newName = prompt("새 프로젝트 이름을 입력하세요.");
+            oldName = nameElement.textContent;
+        */
         nameElement.addEventListener("blur", async () => { // async 추가
             nameElement.contentEditable = "false";
             nameElement.style.outline = "none";

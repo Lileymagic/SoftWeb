@@ -182,8 +182,7 @@
           modal = document.querySelector('.modal1'); 
           if (modal) closeModal(modal); 
       }
-      
-      const modalBtn = document.querySelector("#alert"); 
+      const modalBtn = document.querySelector("#alertr"); 
 
       // 창 새로고침 후 3초 정도 후에 알림창 열면 위치 정보를 못받아 잘못된 위치에 알림창이 이동하는 문제가 발생. (해결 필요)
       // (즉시 열면 괜찮음)
@@ -191,21 +190,31 @@
             const rect = modalBtn.getBoundingClientRect();
             const modalRect = modal.getBoundingClientRect();
             modal.style.position = "fixed";
-            if (rect.right - modalRect.width > 0) {
-                modal.style.left = `${rect.right - modalRect.width}px`;            
-            }
+            modal.style.left = `${rect.right - modalRect.width}px`;            
             modal.style.top = `${rect.bottom}px`;
         };
 
-        if (modalBtn) { 
-            modalBtn.addEventListener("click", () => {
-                const currentModal = document.querySelector(".modal1"); 
-                if(currentModal) {
-                    currentModal.showModal();
-                    updateModalPosition();
-                }
-            });
-        }
+        // modalBtn.addEventListener("click", () => {
+        // modal.showModal();
+        // updateModalPosition();
+        // });
+
+        // window.addEventListener("resize", () => {
+        //     if (modal.open) {
+        //         updateModalPosition();
+        //     }
+        // });
+
+    
+         
+        modalBtn.addEventListener("click", () => {
+            const currentModal = document.querySelector(".modal1"); 
+            if(currentModal) {
+                currentModal.showModal();
+                requestAnimationFrame(updateModalPosition);
+                
+            }
+        });
 
         window.addEventListener("resize", () => {
             if (modal.open) {
@@ -670,7 +679,7 @@
               if (!alertModal) { openAlert(); alertModal = document.querySelector(".modal1"); }
               if (alertModal) alertModal.showModal();
             }, 
-            id:'alert' 
+            id:'alertr' 
           },
           createElement('i', { className: 'fa-solid fa-bell fa-2x', style: { fontSize: '25px'}})
         )
