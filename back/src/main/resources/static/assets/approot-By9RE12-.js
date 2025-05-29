@@ -159,7 +159,7 @@
                         <button style="background-color:transparent; border:none;" class="font1">닫기</button>
                     </form>  
                 </div>
-            </dialog>`,document.body.appendChild(i),t=document.querySelector(".modal1"),t&&r(t)}const e=document.querySelector("#alertr"),o=()=>{const i=e.getBoundingClientRect(),d=t.getBoundingClientRect();t.style.position="fixed",t.style.left=`${i.right-d.width}px`,t.style.top=`${i.bottom}px`};e.addEventListener("click",()=>{const i=document.querySelector(".modal1");i&&(i.showModal(),requestAnimationFrame(o))}),window.addEventListener("resize",()=>{t.open&&o()})}function n(){let t=document.querySelector(".modal2");if(!t){const o=document.createElement("div");o.innerHTML=`
+            </dialog>`,document.body.appendChild(i),t=document.querySelector(".modal1"),t&&r(t)}const e=document.querySelector("#alertr"),o=()=>{const i=e.getBoundingClientRect(),d=t.getBoundingClientRect();t.style.position="fixed",t.style.left=`${i.right-d.width}px`,t.style.top=`${i.bottom}px`};e.addEventListener("click",()=>{currentModal.showModal(),requestAnimationFrame(()=>requestAnimationFrame(o))}),window.addEventListener("resize",()=>{t.open&&o()})}function n(){let t=document.querySelector(".modal2");if(!t){const o=document.createElement("div");o.innerHTML=`
           <dialog class="modal2" style="border: none; background-color: transparent;">
             <div class="position_modal2">
               <div>

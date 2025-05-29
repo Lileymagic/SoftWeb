@@ -204,16 +204,15 @@
         //         updateModalPosition();
         //     }
         // });
-
-    
-         
         modalBtn.addEventListener("click", () => {
-            const currentModal = document.querySelector(".modal1"); 
-            if(currentModal) {
-                currentModal.showModal();
-                requestAnimationFrame(updateModalPosition);
+            //const currentModal = document.querySelector(".modal1"); 
+            // if(currentModal) {
                 
-            }
+            // }
+            currentModal.showModal();
+            requestAnimationFrame(() =>
+                requestAnimationFrame(updateModalPosition)
+            );
         });
 
         window.addEventListener("resize", () => {

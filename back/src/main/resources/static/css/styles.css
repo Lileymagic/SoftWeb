@@ -226,9 +226,7 @@ dialog.modal1 {
     border: none;
     border-radius: 8px;
     box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
-
-    padding: 0px;
-    margin: 0px;
+    
  }
 
 dialog.modal1::backdrop {
