@@ -70,14 +70,14 @@ public class SecurityConfig {
                         .loginProcessingUrl("/api/auth/perform_login")
                         .usernameParameter("loginId")
                         .passwordParameter("password")
-                        .defaultSuccessUrl("/front/projectlist.html")
+                        .defaultSuccessUrl("/front/projectlist.html", true)
                         .failureUrl("/front/login.html?error=true")
                         .permitAll()
                 )
 
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/front/login.html")
-                        .defaultSuccessUrl("/front/projectlist.html")
+                        .defaultSuccessUrl("/front/projectlist.html", true)
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(customOAuth2UserService)
                         )
