@@ -8,6 +8,18 @@
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <style>
+        .timer{
+            position: absolute;
+            margin-left: 5px;
+            margin-top:13px;
+            color:red;
+            font-size: 12px;
+
+        }
+
+        .hidden{
+            display:none;
+        }
         .button_join1 {
             background-color:rgba(255, 255, 255, 0);
             height:40px;
@@ -31,6 +43,7 @@
             margin-top:13px;
             cursor: pointer; /* 클릭 가능하게 보이도록 추가 */
         }
+
         .font1 {
             color:rgb(127,127,127);
             font-size: 12px;
@@ -81,7 +94,7 @@
             background-color: rgb(159, 211, 189);
         }
     </style>
-  <script type="module" crossorigin src="/assets/approot-S7Hhl76v.js"></script>
+  <script type="module" crossorigin src="/assets/approot-241ebcJu.js"></script>
   <link rel="stylesheet" crossorigin href="/css/approot.D7cSAQw7.css">
 </head>
 <body style="background-color: rgb(248, 248, 248);">
@@ -102,14 +115,17 @@
             <input class="button_join1" type="password" id="password" placeholder="비밀번호 (8-20자, 영/숫자/특수문자 조합)"/> 
             <input class="button_join1" type="password" id="pwcheck" placeholder="비밀번호 확인"/> 
             <div id="pwMessage" class="message-feedback"></div>
-            
+
             <div>
                 <input class="button_join1" type="text" id="email" placeholder="이메일"/> 
                 <label class="font1 drag1 margin2" style="text-decoration: underline;" id="emailVerificationLabel" onclick="emailalert()">인증 번호 전송</label>
             </div>
             <div id="emailMessage" class="message-feedback"></div>
             
-            <input class="button_join1" type="text" id="number" placeholder="인증번호 (4자리 숫자)"/>
+            <div>
+                <input class="button_join1" type="text" id="number" placeholder="인증번호 (4자리 숫자)"/>
+                <label class="timer hidden" id="timer">3:00</label>
+            </div>
             <input class="button_join1" type="text" id="nickname" placeholder="닉네임 (4-20자)"/> 
             <div id="nicknameMessage" class="message-feedback"></div>
 
@@ -118,6 +134,35 @@
     </div>
 </body>
 <script>
+    const sendBtn    = document.getElementById('emailVerificationLabel');
+    const timerLabel = document.getElementById('timer');
+    let timerId = null ;   
+    let remaining = 0;   
+
+    sendBtn.addEventListener('click', () => {
+        clearInterval(timerId);
+        timerLabel.classList.remove('hidden');
+        remaining = 180;
+        updateLabel(remaining);
+        timerLabel.style.display = '';
+
+        timerId = setInterval(() => {
+        remaining--;
+        if (remaining <= 0) {
+            clearInterval(timerId);
+            timerLabel.textContent = '시간 초과';
+            return;
+        }
+        updateLabel(remaining);
+        }, 1000);
+    });
+
+    function updateLabel(sec) {
+      const m = String(Math.floor(sec / 60)).padStart(2, '0');
+      const s = String(sec % 60).padStart(2, '0');
+      timerLabel.textContent = `${m}:${s}`;
+    }
+
     // JavaScript 로직은 이전 답변 #37의 join.html 스크립트 내용과 동일하게 유지합니다.
     // (idCheckedAndAvailable, emailVerificationSent 플래그 사용 및 API 호출 로직 포함)
     let idCheckedAndAvailable = false;
@@ -205,6 +250,7 @@
             emailVerificationLabel.innerText = "전송 오류"; emailVerificationLabel.style.color = "red";
             alert("인증번호 발송 처리 중 오류가 발생했습니다.");
         }
+
     }
 
     async function join() {
