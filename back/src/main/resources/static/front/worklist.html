@@ -8,16 +8,14 @@
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <style>
-        .modal_wl{
-            position: absolute;
-
-        }
-        .main {
+        .mainW {
+            /*
             position: absolute;
             top: 0%;
             left: 50%;
             transform: translate(-50%, 0%);
             margin-top: 100px;
+            */
 
             display: flex;
             flex-direction: column;
@@ -103,11 +101,11 @@
             border: none;
         }
 
-        table {
+        .mainW table {
             border-collapse: collapse;
             width: 100%;
         }
-        th, td {
+        .mainW th, .mainW td {
             padding: 15px;
             border-bottom: 1px solid rgb(230, 230, 230);
             text-align: left;
@@ -158,6 +156,17 @@
         #workbox {
             display: none;
         }
+        .box_text {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            height: auto;
+            min-height: 130px;
+            padding: 10px;
+            background-color: rgb(240, 240, 240);
+            border-radius: 5px;
+            gap: 5px;
+        }
 
     </style>
   <script type="module" crossorigin src="/assets/approot-S7Hhl76v.js"></script>
@@ -167,27 +176,38 @@
 <body class="mid" style="background-color: rgb(195, 195, 195); overflow-y: scroll;">
     <div id="root"></div>
 
-    <div class="main">
+    <div class="mainW">
         <div style="display: flex; gap: 20px;">
-            <dialog class="modal_wl">
-
-            </dialog>
             <div style="display: flex; flex-direction: column;" >
                 <div class="high_box">
                     <span style="position: relative; font-size: 35px; color:white;">업무명</span>
                     <div style="margin-left: auto; padding: 5px; background-color: rgb(81,123,95); font-size: medium; color: white;">In Progress</div>
                 </div>
                 <div class="worklist_box" style="width: 700px; display: flex; flex-direction: column;" id="workbox_main">
-                    <div style="margin: 15px; height: 100%;">
-                        <div style="display: flex; flex-direction: column;">
-                            <span>업무 내용</span>
-                            <textarea placeholder="업무 내용"></textarea>                            
+                    <div style="margin: 20px; height: 100%;">
+                        <div style="display: flex; flex-direction: row; gap: 5px;">
+                            <span style="font-weight: bold; font-size:large;" >업무명</span>
+                            <img id="edit" class="drag1" src="/edit.BiAatf6L.png" style="height:20px; width:20px; margin-left: auto; cursor:pointer;"/>
                         </div>
+                        <hr>
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            <span style="font-weight: bold; font-size:large;" >업무 내용</span>
+                            <div class="box_text">
+                                <div>
+                                    업무내용 들어갈 칸
+                                </div> 
+                                <img id="edit" class="drag1" src="/edit.BiAatf6L.png" style="height:20px; width:20px; margin-left: auto; cursor:pointer;"/>
+                            </div>                                                        
+                        </div>
+
                         &nbsp;                        
-                        <div style="display: flex; flex-direction: column;">
-                            <span>마감 기한</span>
-                            <span>2025-00-00</span>
-                            <span>(n일 남음)</span>                           
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            <span style="font-weight: bold; font-size:large;">마감 기한</span>                            
+                            <div style="display: flex; flex-direction: row; gap: 5px;">
+                                <span style="font-size:large; color: rgb(37, 143, 161);">2025-00-00</span>
+                                <span>(n일 남음)</span>                                 
+                                <img id="edit" class="drag1" src="/edit.BiAatf6L.png" style="height:20px; width:20px; margin-left: 10px; cursor:pointer;"/> 
+                            </div>             
                         </div>
                     </div>
                 </div>
@@ -294,7 +314,7 @@
                         <hr style="border: 1px solid rgb(160, 160, 160); margin: 0;" />                        
                     </div> 
   
-                    <table>
+                    <table class="table table-hover">
                         <tbody>
                             <tr>
                                 <td>게시글1</td>

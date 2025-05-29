@@ -269,6 +269,19 @@
             align-items: center;
             gap: 5px;
         }
+        .modal_wl {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            border: none;
+            background-color: transparent;
+            overflow: hidden;
+            z-index: 50;
+        }
+        dialog.modal_wl::backdrop {
+            background: rgba(0,0,0,0.2);
+        }
 
     </style>
   <script type="module" crossorigin src="/assets/approot-S7Hhl76v.js"></script>
@@ -303,6 +316,11 @@
                  <button class="button_pb2" style="width:80px; background-color: #ccc; margin-left: 10px;" onclick="document.querySelector('.modal_pb').close();">취소</button>
             </div>
         </div>
+    </dialog>
+
+    <dialog class="modal_wl" id="modalWork">
+        <button onclick="document.getElementById('modalWork').close()" style="position:absolute; top:10px; right:10px; z-index:10;">✕</button>
+        <div id="modalContent" style="top: 0;"></div>
     </dialog>
 
     <div class="main">
@@ -375,7 +393,6 @@
 
         </div>
     </div>
-
 </body>
 <script>
     let CURRENT_PROJECT_ID = null; 
@@ -681,10 +698,82 @@
         const workBox = document.createElement("div");
         workBox.className = "workbox";
         workBox.setAttribute('data-task-id', taskData.idx); 
+        /*
         workBox.onclick = () => { 
             window.location.href = `worklist.html?taskId=${taskData.idx}&projectId=${CURRENT_PROJECT_ID}`; 
         };
-        
+        */
+        const modal = document.getElementById('modalWork');
+        const modalContent = document.getElementById('modalContent');
+
+        workBox.onclick = async () => {
+        const url = `worklist.html?taskId=${taskData.idx}&projectId=${CURRENT_PROJECT_ID}`;
+
+        try {
+            const response = await fetch(url);
+            if (!response.ok) throw new Error('페이지를 불러오는데 실패했습니다.');
+
+            const text = await response.text();
+
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(text, 'text/html');
+
+            const stylesheets = doc.querySelectorAll('link[rel="stylesheet"]');
+            stylesheets.forEach(link => {
+            if (!document.head.querySelector(`link[href="${link.href}"]`)) {
+                const newLink = document.createElement('link');
+                newLink.rel = 'stylesheet';
+                newLink.href = link.href;
+                document.head.appendChild(newLink);
+            }
+            });
+
+            // 스타일 가져옴
+            const styles = doc.querySelectorAll('style');
+                styles.forEach(styleTag => {
+                const newStyle = document.createElement('style');
+                newStyle.textContent = styleTag.textContent;
+                document.head.appendChild(newStyle);
+            });
+
+            // worklist의 main 내용 가져옴
+            const content = doc.querySelector('div.mainW');
+            if (content) {
+            modalContent.innerHTML = content.innerHTML;
+
+            // 스크립트 가져옴
+            const scripts = doc.querySelectorAll('script');
+            scripts.forEach(oldScript => {
+                const newScript = document.createElement('script');
+                if (oldScript.src) {
+                newScript.src = oldScript.src;
+                newScript.async = false;
+                } else {
+                newScript.textContent = oldScript.textContent;
+                }
+                document.body.appendChild(newScript);
+            });
+
+            // 실험용
+            modalContent.querySelectorAll('.worklist_box2 table tr').forEach(row => {
+                row.addEventListener('click', () => {
+                const workboxMain = modalContent.querySelector('#workbox_main');
+                const workbox = modalContent.querySelector('#workbox');
+                if (workboxMain) workboxMain.style.display = 'none';
+                if (workbox) workbox.style.display = 'block';
+                });
+            });
+
+            } else {
+            modalContent.innerHTML = '내용을 불러올 수 없습니다.';
+            }
+
+            modal.showModal();
+
+        } catch (error) {
+            alert(error.message);
+        }
+        };
         let deadlineText = '마감 기한 없음';
         if (taskData.deadline) {
             try {
