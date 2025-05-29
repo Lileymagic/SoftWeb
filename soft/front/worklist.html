@@ -36,7 +36,6 @@
             background-color: white;
             box-shadow : 0px 0px 3px rgba(0, 0, 0, 0.2);
 
-            
             overflow-y: scroll;
         }
         .worklist_box::-webkit-scrollbar{
@@ -155,6 +154,12 @@
         .button_done:hover::before{
             content:"Done으로 상태 변경하기";
         }
+        #workbox_main {
+            display: block;
+        }
+        #workbox {
+            display: none;
+        }
 
     </style>
 </head>
@@ -171,6 +176,31 @@
                 <div class="high_box">
                     <span style="position: relative; font-size: 35px; color:white;">업무명</span>
                     <div style="margin-left: auto; padding: 5px; background-color: rgb(81,123,95); font-size: medium; color: white;">In Progress</div>
+                </div>
+                <div class="worklist_box" style="width: 700px; display: flex; flex-direction: column;" id="workbox_main">
+                    <div style="margin: 20px; height: 100%;">
+                        <div style="display: flex; flex-direction: row; gap: 5px;">
+                            <span style="font-weight: bold; font-size:large;" >업무명</span>
+                            <img id="edit" class="drag1" src="public/icon/edit.png" style="height:20px; width:20px; margin-left: 10px; cursor:pointer;"/>
+                        </div>
+                        <hr>
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            <div style="display: flex; flex-direction: row; gap: 5px;">
+                                <span style="font-weight: bold; font-size:large;" >업무 내용</span>
+                                <img id="edit" class="drag1" src="public/icon/edit.png" style="height:20px; width:20px; margin-left: 10px; cursor:pointer;"/>
+                            </div>
+                            <div style="width: 100%; height: 150px; background-color: rgb(240, 240, 240);">업무내용 들어갈 칸</div>                            
+                        </div>
+                        &nbsp;                        
+                        <div style="display: flex; flex-direction: column;">
+                            <span style="font-weight: bold; font-size:large;">마감 기한</span>                            
+                            <div style="display: flex; flex-direction: row; gap: 5px;">
+                                <span style="font-size:large; color: rgb(37, 143, 161);">2025-00-00</span>
+                                <span>(n일 남음)</span>                                 
+                                <img id="edit" class="drag1" src="public/icon/edit.png" style="height:20px; width:20px; margin-left: 10px; cursor:pointer;"/> 
+                            </div>             
+                        </div>
+                    </div>
                 </div>
                 <div class="worklist_box" style="width: 700px; flex-direction: column;" id="workbox">
                     <div style="margin: 15px;">
@@ -244,14 +274,15 @@
                         </div>
                     </div>
     
-                </div>                
+                </div>
             </div>
 
             <div style="flex-direction: column;">
                 <div class="high_box"> </div>
                 <div class="worklist_box" style="height:150px; overflow-y: scroll;">
-                    <div style="background-color: white; padding: 15px;">
+                    <div style="background-color: white; padding: 15px; display: flex;">
                         <div style="font-weight: bold; font-size:15px;">담당 유저</div>
+                        <img src="public/icon/add.png" class="drag1" style="height:20px; width:20px; margin-right: 10px; margin-left: auto; cursor:pointer;">
                     </div>
                     <hr style="border: 1px solid rgb(160, 160, 160); margin: 0;" />
                     <div style="padding: 15px;">
@@ -261,28 +292,6 @@
                     </div>
 
                 </div>
-                <!-- <div class="worklist_box" style="height:150px; margin-top:10px;">
-                    <div style="margin:5px;">
-                        <div style="font-weight: bold; font-size:15px;">업무 상태</div>
-                        <div style="width:100%">
-                            <hr style="border: 1px solid rgb(160, 160, 160);" />
-                        </div>
-                        <div style="flex-direction: column;">
-                            <div style="font-size: small;">
-                                <input type="radio" name="status" /> 
-                                <a>To do</a>
-                            </div>
-                            <div style="font-size: small;">
-                                <input type="radio" name="status" />
-                                <a>In Progress</a> 
-                            </div>
-                            <div style="font-size: small;">
-                                <input type="radio" name="status" /> 
-                                <a>Done</a>
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
 
                 <div class="worklist_box2" style="margin-top:10px; height: 300px; overflow-y: scroll;">
                     <div style="position: sticky; top: 0;">
@@ -403,11 +412,15 @@
         }
     }
 
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // 일단 대충 게시글 테이블 누르면 보이게 해놓았어요
+        document.querySelectorAll('.worklist_box2 table tr').forEach(function(row) {
+        row.addEventListener('click', function() {
+            document.getElementById('workbox_main').style.display = 'none';
+            document.getElementById('workbox').style.display = 'block';
+        });
+        });
+    });
 </script>
 </html>
-
-
-<!-- 
-    게시글이 아예 존재하지 않는 경우의 화면도 만들어야 함.
-    예) 게시글 내용 보이는 화면에 아직 (게시글이 없습니다)회색 네모박스 보이게 하기.
--->
