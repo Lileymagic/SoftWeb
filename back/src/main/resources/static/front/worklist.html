@@ -41,12 +41,7 @@
             border-radius: 10px;
             background-color: white;
             box-shadow : 0px 0px 3px rgba(0, 0, 0, 0.2);
-<<<<<<< HEAD
-
-            overflow: hidden;
-=======
             overflow-y: scroll;
->>>>>>> 8d2b1ba6c62048a7a84d9802344099089c52ac01
         }
         .worklist_box::-webkit-scrollbar{
             width: 5px;
@@ -178,98 +173,10 @@
             word-break: break-all; /* 긴 내용 자동 줄바꿈 */
             box-sizing: border-box;
         }
-<<<<<<< HEAD
-        .button_toB {
-            height: 50px;
-            width: 100%;
-
-            border-radius: 10px;
-            background-color: transparent;
-            border: solid 1px rgb(112, 165, 139); 
-            color:rgb(25, 54, 52);
-
-            font-size: 15px;
-            font-weight: 500;
-            font-family: 'Pretendard-Regular';
-
-            display: flex;
-            justify-content:center;
-            align-items: center;
-        }
-        .button_toB:hover {
-            background-color: rgba(112, 165, 139, 0.05);
-        }
-
-    </style>
-  <script type="module" crossorigin src="/assets/approot-DxVsvFJm.js"></script>
-  <link rel="stylesheet" crossorigin href="/css/approot.Ca4Dy-3I.css">
-  <link rel="stylesheet" crossorigin href="/css/bootstrap.CyjhP-aL.css">
-</head>
-<body class="mid" style="background-color: rgb(195, 195, 195); overflow-y: scroll;">
-    <div id="root"></div>
-
-    <div class="mainW">
-        <div style="display: flex; gap: 20px;">
-            <div style="display: flex; flex-direction: column;" >
-                <div class="worklist_box" style="width: 700px; display: flex; flex-direction: column;" id="workbox_main">
-                    <div class="high_box" style="margin: 15px;">
-                        <span style="position: relative; font-size: 35px; color:rgb(0, 0, 0);">업무명</span>
-                        <img id="edit" class="drag1" src="/edit.BiAatf6L.png" style="height:20px; width:20px; cursor:pointer;"/>
-                        <div style="margin-left: auto; padding: 5px; background-color: rgb(81,123,95); font-size: medium; color: white;">In Progress</div>
-                    </div>
-                    <hr style="margin: 0; margin-left: 10px; margin-right: 10px;">
-                    <div class="box_scroll" style=" padding: 15px;">
-
-                        <div style="display: flex; flex-direction: column; gap: 10px;">
-                            <span style="font-weight: bold; font-size:large;" >업무 내용</span>
-                            <div class="box_text">
-                                <div>
-                                    업무내용 들어갈 칸
-                                </div> 
-                                <img id="edit" class="drag1" src="/edit.BiAatf6L.png" style="height:20px; width:20px; margin-left: auto; cursor:pointer;"/>
-                            </div>                                                        
-                        </div> 
-                        &nbsp;                        
-                        <div style="display: flex; flex-direction: column; gap: 10px;">
-                            <span style="font-weight: bold; font-size:large;">마감 기한</span>                            
-                            <div style="display: flex; flex-direction: row; gap: 5px;">
-                                <span style="font-size:large; color: rgb(37, 143, 161);">2025-00-00</span>
-                                <span>(n일 남음)</span>                                 
-                                <img id="edit" class="drag1" src="/edit.BiAatf6L.png" style="height:20px; width:20px; margin-left: 10px; cursor:pointer;"/> 
-                            </div>             
-                        </div>
-                        &nbsp;
-                        <div style="width: 100%; display: flex; align-items: center; justify-content: center;">
-                            <button class="button_toB" onclick="window.location.href='/front/worklist_board.html';"> 게시판으로</button> 
-                            <!-- 이 업무의 게시판으로 이동하게 -->
-                        </div>
-                        
-                    </div>
-
-                </div>
-            </div>
-
-            <div style="flex-direction: column;">
-                <div class="worklist_box" style="height:300px; overflow-y: scroll;">
-                    <div style="background-color: white; padding: 15px; display: flex;">
-                        <div style="font-weight: bold; font-size:15px;">담당 유저</div>
-                        <img src="/add.DjzDncey.png" class="drag1" style="height:20px; width:20px; margin-right: 10px; margin-left: auto; cursor:pointer;">
-                    </div>
-                    <hr style="border: 1px solid rgb(160, 160, 160); margin: 0;" />
-                    <div style="padding: 15px;">
-                        <div style="font-size: small;">qwer1 (그룹 1)</div>
-                        <div style="font-size: small;">asdf2 (그룹 2)</div>
-                        <div style="font-size: small;">abcd3 (그룹 2)</div>                        
-                    </div>
-
-                </div>      
-
-                <div class="button_done">
-=======
         /* 사용자 제공 원본 스타일 끝 */
     </style>
   <link rel="stylesheet" crossorigin href="/css/bootstrap.CyjhP-aL.css">
-  <link rel="stylesheet" crossorigin href="/css/styles.D7cSAQw7.css">
+  <link rel="stylesheet" crossorigin href="/css/styles.Ca4Dy-3I.css">
 </head>
 <body class="mid" style="background-color: rgb(195, 195, 195); overflow-y: scroll;">
     <div class="mainW"> <div style="display: flex; gap: 20px;">
@@ -344,7 +251,6 @@
 
 
                 <div id="wl_completeTaskBtn" class="button_done">
->>>>>>> 8d2b1ba6c62048a7a84d9802344099089c52ac01
                     <span>업무 완료</span>
                 </div>
             </div>
@@ -353,9 +259,6 @@
     
 </body>
 <script>
-<<<<<<< HEAD
-
-=======
     // 이 스크립트 블록의 내용은 이전 답변에서 제공한 JavaScript 코드로 대체됩니다.
     // (initializeWorklistDetails, loadTaskDetails, loadTaskPosts, navigateToPostDetail, 
     //  updateWritePostButtonLink, handleCompleteTask 함수 등 포함)
@@ -678,6 +581,5 @@
         //     });
         // });
     });
->>>>>>> 8d2b1ba6c62048a7a84d9802344099089c52ac01
 </script>
 </html>
