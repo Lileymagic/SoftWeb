@@ -12,13 +12,13 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <style>
         .box15{
-            margin-top: 50px;
             height: 600px;
             width: 650px;
             display: flex;  
             flex-direction: column;
-            border: 1px solid gray;  
-            border-radius: 4px;
+            border: 1px solid rgb(200, 200, 200);  
+            border-radius: 10px;
+            background-color: white;
         }
         .editor-wrapper {
             width: 100%;
@@ -33,39 +33,61 @@
             min-height: 0;
             max-height: 100%;
             box-sizing: border-box;
+            border: none;
         }
         .ql-toolbar.ql-snow {
-             display: flex;
+            display: flex;
             flex-wrap: wrap;
+            border-right: none;
+            border-left: none;
         }
-        .mid{
-           margin: 0; 
-           padding: 0; 
-           height: 100vh; 
-           display: flex; 
-           
+        .mid2 {
+            position: absolute;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            flex-direction: column;
+        }
+        #title {
+            width:100%;
+            height: 50px;
+            padding: 10px;
+            border: none;
+            outline: none;
+            background-color: transparent;
+        }
+        #title:focus{
+            outline: none;
+            background-color: rgb(250, 250, 250);
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        /* 크기조절용 (빼도 됨) */
+        @media (min-width: 1300px) or (min-height: 1200px) {
+            .box15 {
+                height: 60vh;
+                width: 50vw;
+            }
         }
     </style>
 
 </head>
-<body class="mid" style="background-color: rgb(245, 245, 245);">
+<body style="background-color: rgb(245, 245, 245);">
     <div id="root"></div>
     <script type="module" src="approot.js"></script>
     
-    <div style="flex-direction: column;">
+    <div class="mid2">
+        <div style="font-weight: bold; font-size: large; margin-bottom: 10px;">게시글 작성</div>
         <div class="box15">
-            <div style="width:100%"><hr /></div>
-            <div style="margin-left:10px;">
-                <input type="text" id="title" style="width:600px; background-color: rgb(245, 245, 245); border: none; outline: none;"  placeholder="제목" autofocus/>
-            </div>
-            <div style="width:100%"><hr /></div>
+            <input type="text" id="title" placeholder="제목" autofocus/>
             <div class="editor-wrapper">
                 <div id="editor"></div>
             </div>
         </div>
-        <div style="display: flex; justify-content: center; margin-top:5px;">
-            <button class="button_final" style="width:60px; margin-right:10px;">발행</button>
-            <button class="button_final" style="width:60px;" onclick="cancelwrite()">취소</button>
+        <div style="display: flex; justify-content: flex-end; margin-top:20px; gap: 10px;">
+            <button class="button_final" style="width:60px;">발행</button>
+            <button class="button_final_n" style="width:60px;" onclick="cancelwrite()">취소</button>
         </div>
     </div>
 

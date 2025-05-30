@@ -54,7 +54,7 @@ body {
     padding-top: 50px;
     position: relative; 
     font-family: 'Pretendard-Regular';
-    overflow:hidden;
+    overflow: auto;
 
     background-color: rgb(254, 254, 254);
 }
@@ -170,7 +170,30 @@ body {
     border: solid 1px rgb(183, 228, 206);
 }
 .button_final:hover {
-    background-color: rgb(159, 211, 189);
+    background-color: rgb(159, 211, 189) !important;
+}
+.button_final_n {
+    background-color: rgb(230, 230, 230);
+    height:45px;
+    width:205px;
+    color:rgb(25, 54, 52);
+    border: none;
+    font-size: medium;
+    font-weight: 700;   
+    border-radius: 4px;
+    font-family: 'Pretendard-Regular';
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.button_final_n.active {
+    background-color: rgb(255, 255, 255);
+    border: solid 1px rgb(228, 183, 183);
+}
+.button_final_n:hover {
+    background-color: rgb(200, 200, 200) !important;
 }
 .content_w{
     display: flex;
