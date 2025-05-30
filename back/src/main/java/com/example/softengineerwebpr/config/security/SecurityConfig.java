@@ -4,7 +4,6 @@ import com.example.softengineerwebpr.domain.auth.service.CustomOAuth2UserService
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-// import org.springframework.security.config.Customizer; // 현재 코드에서 Customizer.withDefaults()를 사용하지 않으므로 주석 처리 가능
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -13,7 +12,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-// import org.springframework.security.web.csrf.CookieCsrfTokenRepository; // 현재 CSRF disable 상태이므로 주석 처리 가능
 
 @Configuration
 @EnableWebSecurity
@@ -52,13 +50,21 @@ public class SecurityConfig {
                         ).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/front/login"), new AntPathRequestMatcher("/oauth2/**")).permitAll()
 
-                        // --- 게시글(Post) 관련 API 경로 추가 ---
-                        // 특정 업무에 속한 게시글 목록 조회 (인증된 사용자만)
-                        .requestMatchers(new AntPathRequestMatcher("/api/tasks/*/posts")).authenticated() // 와일드카드 * 사용
-                        // ------------------------------------
+                        // --- 게시글(Post) 및 댓글(Comment) 관련 API 경로 ---
+                        .requestMatchers(new AntPathRequestMatcher("/api/tasks/*/posts", "GET")).authenticated()  // 특정 업무의 게시글 목록 조회
+                        .requestMatchers(new AntPathRequestMatcher("/api/posts/*", "GET")).authenticated()       // 특정 게시글 상세 조회 (수정된 부분)
+                        .requestMatchers(new AntPathRequestMatcher("/api/tasks/*/posts", "POST")).authenticated() // 특정 업무에 게시글 작성
+                        // .requestMatchers(new AntPathRequestMatcher("/api/posts/*", "PUT")).authenticated()    // 게시글 수정 (추후)
+                        // .requestMatchers(new AntPathRequestMatcher("/api/posts/*", "DELETE")).authenticated() // 게시글 삭제 (추후)
 
-                        .requestMatchers(new AntPathRequestMatcher("/api/projects/*/tasks/**")).authenticated() // 기존 업무 관련 경로
-                        .requestMatchers(new AntPathRequestMatcher("/api/tasks/**")).authenticated() // 기존 업무 관련 경로
+                        .requestMatchers(new AntPathRequestMatcher("/api/posts/*/comments", "GET")).authenticated()
+                        .requestMatchers(new AntPathRequestMatcher("/api/posts/*/comments", "POST")).authenticated()
+                        .requestMatchers(new AntPathRequestMatcher("/api/comments/*", "PUT")).authenticated()
+                        .requestMatchers(new AntPathRequestMatcher("/api/comments/*", "DELETE")).authenticated()
+                        // ----------------------------------------------------
+
+                        .requestMatchers(new AntPathRequestMatcher("/api/projects/*/tasks/**")).authenticated()
+                        .requestMatchers(new AntPathRequestMatcher("/api/tasks/**")).authenticated()
 
                         .requestMatchers(new AntPathRequestMatcher("/api/projects/**")).authenticated()
                         .requestMatchers(new AntPathRequestMatcher("/api/users/me")).authenticated()
@@ -70,14 +76,14 @@ public class SecurityConfig {
                         .loginProcessingUrl("/api/auth/perform_login")
                         .usernameParameter("loginId")
                         .passwordParameter("password")
-                        .defaultSuccessUrl("/front/projectlist.html", true)
+                        .defaultSuccessUrl("/front/projectlist.html")
                         .failureUrl("/front/login.html?error=true")
                         .permitAll()
                 )
 
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/front/login.html")
-                        .defaultSuccessUrl("/front/projectlist.html", true)
+                        .defaultSuccessUrl("/front/projectlist.html")
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(customOAuth2UserService)
                         )

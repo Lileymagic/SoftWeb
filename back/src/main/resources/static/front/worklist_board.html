@@ -25,27 +25,24 @@
             display: flex;
             flex-direction: column;
             border: none;
-            height: 100%;
+            height: 100%; /* 원본 스타일 유지 */
             max-height: 80vh;
-            width: 250px;
+            width: 250px; /* 원본 스타일 유지 - 실제 상세 영역은 인라인으로 700px 적용 */
             border-radius: 10px;
             background-color: white;
-            box-shadow : 0px 0px 3px rgba(0, 0, 0, 0.1);
-
+            box-shadow : 0px 0px 3px rgba(0, 0, 0, 0.1); /* 원본 스타일 유지 */
             overflow: hidden;
         }
 
         .worklist_box2 {
             border: none;
-            height: 100%;
-            max-height: 80vh;
-            width: 250px;
+            height: 100%; /* 원본 스타일 유지 */
+            max-height: 80vh; /* 원본 스타일 유지 */
+            width: 250px; /* 원본 스타일 유지 */
             border-radius: 10px;
             background-color: white;
-            box-shadow : 0px 0px 3px rgba(0, 0, 0, 0.1);
-
-            
-            overflow-y: scroll;
+            box-shadow : 0px 0px 3px rgba(0, 0, 0, 0.1); /* 원본 스타일 유지 */
+            overflow-y: scroll; /* 원본 스타일 유지 */
         }
         .worklist_box2::-webkit-scrollbar{
             display: none;
@@ -54,106 +51,134 @@
         .button_work {
             background-color: transparent;
             border: solid 1px rgb(112, 165, 139);            
-            /* background-color:rgb(183, 228, 206);
-            border: none; */
-
             height:25px;
             width:50px;
-
             color:rgb(112, 165, 139);
             font-size: 15px;
             font-weight: 500;
             border-radius: 4px;
             font-family: 'Pretendard-Regular';
-            
             display: flex;
             justify-content: center;
             align-items: center;
+            cursor: pointer;
         }
         .button_work:hover {
             background-color: rgba(112, 165, 139, 0.05);
         }
-        .button_work2 {
+        .button_work2 { /* 댓글 등록 버튼 */
             background-color:rgb(255, 255, 255);
             border: none;
             height:25px;
-            width:50px;
+            width:50px; /* '등록' 글씨에 맞게 조정 또는 auto */
+            min-width: 50px;
+            padding: 0 10px;
             box-shadow : 0px 0px 2px rgba(150, 150, 150, 0.8);
-
             color:rgb(10, 10, 10);
-            font-size: 15px;
+            font-size: 14px; 
             font-weight: 500;
             border-radius: 4px;
             font-family: 'Pretendard-Regular';
+            cursor: pointer;
         }
 
-        .comment_box {
-            border: 1px solid gray;
-            background-color: rgb(235, 235, 235);
+        .comment_box { 
+            border: 1px solid gray; /* 원본 스타일 유지 */
+            background-color: rgb(235, 235, 235); 
             width: 100%;
             padding: 10px;
-
             border-radius: 10px;
-            border: none;
+            border: none; /* 원본 스타일 유지 */
+            box-sizing: border-box;
         }
+        .comment_box input[type="text"] { /* 원본 스타일 유지 */
+            font-size: small; 
+            border: none; 
+            background-color: transparent; 
+            outline: none; 
+            width:500px; /* 원본 스타일 유지 */
+        }
+        .comment_box textarea { /* 댓글 입력 textarea */
+            font-size: 13px; 
+            border: 1px solid #ddd; 
+            background-color: white; 
+            outline: none; 
+            width:100%; 
+            min-height:60px;
+            padding:8px;
+            border-radius:4px;
+            box-sizing:border-box; 
+            resize:vertical;
+        }
+
 
         .mainW table {
             border-collapse: collapse;
             width: 100%;
         }
-        .mainW th, .mainW td {
-            padding: 15px;
+        .mainW th, .mainW td { 
+            padding: 15px; /* 원본 스타일 유지 */
             border-bottom: 1px solid rgb(230, 230, 230);
             text-align: left;
         }
+         .mainW table tbody tr:hover td { 
+            background-color: #f0f0f0; 
+        }
         
-        .high_box{
-            height: 50px;
-            padding: 10px;
+        .high_box{ 
+            height: 50px; /* 원본 스타일 유지 */
+            padding: 10px; /* 원본 스타일 유지 */
             display: flex;
             flex-direction: row;
             align-items:center;
         }
 
-        .button_done{
+        .button_done{ /* "돌아가기" 버튼 */
             height: 50px;
-            width: 250px;
+            width: 250px; /* 원본 스타일 유지 */
             margin-top:20px;
-
             border-radius: 20px;
             border: none;
-
             background-color: rgb(112, 165, 139);
             box-shadow : 0px 0px 3px rgba(0, 0, 0, 0.2);
-
             color:rgb(255, 255, 255);
             font-size: 15px;
             font-weight: 500;
             font-family: 'Pretendard-Regular';
-
             display: flex;
             justify-content:center;
             align-items: center;
+            cursor: pointer;
         }
         .button_done:hover {
             background-color: rgb(84, 133, 129);
-            /* transition: 0.1s; */
         }
-        #workbox_main {
-            display: block;
-        }
-        .box_text {
+        
+        .box_text { 
             display: flex;
             flex-direction: row;
             width: 100%;
-            height: auto;
-            min-height: 130px;
+            height: auto; 
+            min-height: 130px; /* 원본 스타일 유지 */
             padding: 10px;
-            background-color: rgb(240, 240, 240);
+            background-color: rgb(240, 240, 240); 
             border-radius: 5px;
-            gap: 5px;
+            gap: 5px; /* 원본 스타일 유지 */
+            white-space: pre-wrap; 
+            word-break: break-all; 
+            box-sizing: border-box;
+            overflow-y: auto; 
+            max-height: 300px; 
         }
-
+        .commentlist-item { 
+            padding-bottom: 8px;
+            margin-bottom: 8px;
+            border-bottom: 1px solid rgb(235, 235, 235);
+        }
+        .commentlist-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
     </style>
   <script type="module" crossorigin src="/assets/approot-CfG49E9B.js"></script>
   <link rel="stylesheet" crossorigin href="/css/bootstrap.CyjhP-aL.css">
@@ -164,196 +189,567 @@
 
     <div class="mainW">
         <div style="display: flex; gap: 20px;">
-            <div style="display: flex; flex-direction: column;" >
-                <div class="worklist_box" style="width: 700px; flex-direction: column;" id="workbox">
-                        <div class="high_box" style="margin: 15px;">
-                            <span style="position: relative; font-size: 35px; color:rgb(0, 0, 0);">업무명</span>
-                            <button class="button_work" style="width: 100px; height: 40px; margin-left: auto; font-size: medium;" onclick="window.location.href='writework.html';">게시글 작성</button>
-                        </div>
-                        <hr style="margin: 0;">
-                        <div class="box_scroll" style=" padding: 15px;"> 
-                            <!-- 스타일에 이거 넣으면 경계가 자연스럽게 흐려짐. (대신 스크롤바도 함께 흐려짐)
-                            -webkit-mask-image: linear-gradient(to top, transparent, black 30px);
-                            mask-image: linear-gradient(to top, transparent, black 30px); 
-                            -->
-                            <div style="font-weight: bold; font-size:25px; padding: 10px;">제목</div>
-                            <div style="display: flex; flex-direction: row; align-items: flex-end; padding: 10px;">
-                                <div style="display: flex; align-items: center; gap: 5px;">
-                                        <img src="/user2.Dp3ZRFZz.png" style="height: 25px; width: 25px;"/>
-                                        <div style="font-size: 15px;">작성자</div>
-                                </div>
-                                <div style="font-size: 12px; color:rgb(105, 105, 105); margin-left: auto;">2025/05/05 12:00</div>                                
-                            </div> 
-                            <hr style="border: none; border-bottom: 1px solid rgb(160, 160, 160); margin: 0;" />
-                            <div style="padding:10px;">
-                                <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <div></div>
-                                    <div>
-                                        <img src="/link.CZlXJVt1.png" style="height:20px; width:20px;"/>
-                                        <a style="font-size: small; color: rgb(105, 105, 105)">파일 다운로드</a>
-                                    </div>
-                                </div>
-                                <div style="height:300px;">
-                                    <div style="font-weight: 400;">내용</div>
-                                </div>
-                            </div>
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top:5px;">
-                                <div style="margin-left:5px; display: flex;">
-                                    <img src = "/comment.DcOv8ESk.png" style="height:25px; width:25px;"/>
-                                    <div style="font-size: small; color: rgb(105, 105, 105); margin-top:2px;" id="comcount">0</div>
-                                </div>
-                                <div style="display: flex; justify-content: end;"> 
-                                    <button class="button_work" style="margin-right: 5px;" onclick="window.location.href='writework.html';">수정</button>
-                                    <button class="button_work" style="border: solid 1px rgb(173, 98, 98); color:rgb(173, 98, 98)" onclick="deletewrite()">삭제</button>
-                                </div>
-                            </div>
-                            <div style="width:100%;">
-                                <hr style="border: 1px solid rgb(160, 160, 160);" />
-                            </div>
-
-                            <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                                <div class="comment_box">
-                                    <div style="font-size: medium;">나</div>
-                                    <input style="font-size: small; border: none; background-color: transparent; outline: none; width:500px; " type="text" id="comment" placeholder="댓글 작성하기" />
-                                    <div style="width:100%;">
-                                        <hr style="border: 1px solid rgb(160, 160, 160);" />
-                                    </div>
-                                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                                            <img src="/link.CZlXJVt1.png" style="height:20px; width:20px;"/>
-                                            <button class="button_work2" style="width:70px;" onclick="addcomment()">등록</button>
-                                    </div>
-                                </div>
-                            </div>                            
-                            <div style="display: flex; width:100%;">
-                                <div style="flex-direction: column;  width:100%;" id="commentlist">
-
-                                </div>
-                            </div>
-                        </div>     
-                        <div style="display: flex; padding: 20px;">
-                            <button class="button_work" style="width:70px; margin-right: auto;" onclick="prev()">이전글</button>
-                            <button class="button_work" style="width:70px; margin-left: auto;" onclick="next()">다음글</button>
-                        </div>                       
+            
+           
+            <div class="worklist_box" style="width: 700px; flex-direction: column;" id="workbox">
+                <div class="high_box" style="margin: 15px;">
+                    
+                    <span id="wlb_taskName" style="position: relative; font-size: 35px; color:rgb(0, 0, 0);">업무명</span>
+                    
+                    <button id="wlb_writePostBtn" class="button_work" style="width: 100px; height: 40px; margin-left: auto; font-size: medium;">게시글 작성</button>
                 </div>
-            </div>
+                <hr style="margin: 0;">
+                <div class="box_scroll" style="padding: 15px;"> 
+                   
+                    <div id="wlb_postTitle" style="font-weight: bold; font-size:25px; padding: 10px;">게시글을 선택해주세요.</div>
+                    
+                    <div id="wlb_postMeta" style="display: flex; flex-direction: row; align-items: flex-end; padding: 0 10px 10px 10px;">
+                       
+                    </div> 
+                    <hr style="border: none; border-bottom: 1px solid rgb(160, 160, 160); margin: 0;" />
+                    <div style="padding:10px;">
+                        
+                        <div id="wlb_postFiles" style="display: flex; justify-content: space-between; align-items: center; min-height:20px;">
+                            
+                        </div>
+                        
+                        <div style="height:300px;"> 
+                            <div id="wlb_postContent" style="font-weight: 400; height:100%; overflow-y:auto; white-space:pre-wrap; word-break:break-all;">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="wlb_postActionButtons" style="display: none; justify-content: flex-end; align-items: center; margin-top:5px; padding: 0 10px; gap:5px;"> 
+                        <button id="wlb_editPostBtn" class="button_work">수정</button>
+                        <button id="wlb_deletePostBtn" class="button_work" style="border-color:rgb(173, 98, 98); color:rgb(173, 98, 98)">삭제</button>
+                    </div>
+                    <div style="width:100%; margin-top:10px;"> 
+                        <hr style="border-top: 1px solid rgb(160, 160, 160);" /> 
+                    </div>
 
-            <div style="flex-direction: column;">
+                    <div style="margin: 0 10px 10px 10px;">
+                        <div style="font-weight:bold; font-size:16px; margin-bottom:10px; margin-top:10px;">댓글 <span id="comcount">0</span>개</div>
+                        
+                        <div id="commentlist" style="margin-bottom:15px;">
+                            
+                        </div>
+                        <div class="comment_box"> 
+                            <div style="font-size: medium;">나</div> 
+                            <textarea id="comment" placeholder="댓글 작성하기"></textarea> 
+                            <div style="width:100%;">
+                                <hr style="border-top: 1px solid rgb(220, 220, 220); margin: 8px 0;" /> 
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <img src="/link.CZlXJVt1.png" style="height:20px; width:20px; cursor:pointer;" title="파일 첨부 (구현 예정)"/>
+                                <button class="button_work2" style="width:70px;" onclick="addCommentHandler()">등록</button>
+                            </div>
+                        </div>
+                    </div>                            
+                </div>     
+                
+                </div>
+
+            
+            <div style="display: flex; flex-direction: column;">
                 <div class="worklist_box2" style="height: 500px;">
-                    <div style="top: 0;">
+                    <div style="position: sticky; top: 0; background-color:white; z-index:1;">
                         <div style="display: flex; background-color: white; padding: 15px;">
                             <div style="font-weight: bold; font-size:15px;">글 목록</div>                             
                         </div>   
-                        <hr style="border: 1px solid rgb(160, 160, 160); margin: 0;" />                        
+                        <hr style="border-top: 1px solid rgb(220, 220, 220); margin: 0;" />                  
                     </div> 
-                    <div class="box_scroll">
+                    <div class="box_scroll" style="height: calc(100% - 51px);">
                         <table class="table table-hover">
-                            <tbody>
-                                <tr>
-                                    <td>게시글1</td>
-                                </tr>
-                                <tr>
-                                    <td>게시글1</td>
-                                </tr>
-                                <tr>
-                                    <td>게시글1</td>
-                                </tr>
-                                <tr>
-                                    <td>게시글1</td>
-                                </tr>
-                                <tr>
-                                    <td>게시글1</td>
-                                </tr>
-                                <tr>
-                                    <td>게시글1</td>
-                                </tr>
-                                <tr>
-                                    <td>게시글1</td>
-                                </tr>
+                            
+                            <tbody id="wlb_postListTbody">
+                                
                             </tbody>
                         </table>                         
                     </div>
-                           
                 </div>
-
-                <div class="button_done" onclick="window.location.href='projectboard.html';">
-                    <!-- 원래의 프로젝트 보드로 돌아가게 -->
+                
+                <div id="wlb_goBackBtn" class="button_done">
                     <span>돌아가기</span>
                 </div>
             </div>
         </div>
     </div>
-    
 </body>
 <script>
-    async function deletewrite(){
-        const result = confirm("글을 삭제하겠습니까?");
-        if (result) {
-            alert("삭제되었습니다.");
-        } 
-    }
-    async function addcomment(){
-        const input = document.getElementById("comment");
-        const text = input.value.trim();
-        if(!text){
-            return;
-        }
-        const container = document.getElementById("commentlist");
-        const com = document.createElement("div");
-        com.className="commentlist";
-        com.innerHTML = `
-        <div style="width:100%; padding: 10px;">
-            <div style="display:flex;">
-                <img src="public/icon/user2.png" style="height: 25px; width: 25px;" id="userimage"/>
-                <div style="font-size: 15px; margin-left:5px;" id="usernickname">나</div>
-            </div>
-            <div style="margin-left:35px; margin-top:5px;">
-                <div style="font-size: 13px;" id="usercomment">${text}</div>
-            </div>
-            <div style="display: flex; justify-content: right;">
-                <div>
-                    <button class="button_work2" style="margin-left: 5px;" onclick="deletecomment()">삭제</button>
-                </div>    
-            </div>
-            <hr style="border: 1px solid rgb(160, 160, 160); margin: 0; margin-top: 10px;" />                                        
-        </div>
-        `;
+    let currentWlbTaskId = null;
+    let currentWlbProjectId = null;
+    let currentSelectedPostId = null;
+    let currentSelectedPostData = null; 
 
-        // 이 알람은 없애는 게 좋아보임. 아님 확인 안눌러도 ㄱㅊ게 하거나
-        // alert("댓글이 등록되었습니다.");
-        container.appendChild(com);
-        const comcount = document.getElementById("comcount");
-        comcount.innerText = parseInt(comcount.innerText) + 1;
-        input.value = "";
-        input.focus();
-    }
-    function deletecomment() {
-        const result = confirm("댓글을 삭제하겠습니까?");
-        if (!result) {
+    document.addEventListener('DOMContentLoaded', function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        currentWlbTaskId = parseInt(urlParams.get('taskId'), 10);
+        currentWlbProjectId = parseInt(urlParams.get('projectId'), 10);
+        const postIdFromUrl = urlParams.get('postId') ? parseInt(urlParams.get('postId'), 10) : null;
+
+        console.log("WorklistBoard Loaded. TaskID:", currentWlbTaskId, "ProjectID:", currentWlbProjectId, "PostID from URL:", postIdFromUrl);
+
+        if (!isNaN(currentWlbTaskId) && !isNaN(currentWlbProjectId)) {
+            loadTaskDetailsForBoard(currentWlbTaskId);
+            // postIdFromUrl이 있으면 해당 게시글을, 없으면 목록의 첫 글을 기본으로 표시하도록 loadPostsForBoard에 전달
+            loadPostsForBoard(currentWlbTaskId, postIdFromUrl); 
+            updateWorklistBoardButtonLinks(currentWlbTaskId, currentWlbProjectId);
+        } else {
+            console.error("Task ID or Project ID not found in URL or is invalid.");
+            const mainWDiv = document.querySelector('.mainW'); // 이 페이지의 주 표시 영역
+            if(mainWDiv) mainWDiv.innerHTML = '<p style="color:red; text-align:center; padding: 20px;">업무 또는 프로젝트 정보를 불러올 수 없습니다. (URL 파라미터 누락)</p>';
+        }
+    });
+
+    async function loadTaskDetailsForBoard(taskId) {
+        const taskNameEl = document.getElementById('wlb_taskName');
+        if (!taskNameEl) {
+            console.error("Element with ID 'wlb_taskName' not found in original_worklist_board.html.");
             return;
-        } 
-        const btn = event.target;
-        const com = btn.closest('.commentlist');
-        com.remove();
-        const comcount = document.getElementById("comcount");
-        const current = parseInt(comcount.innerText, 10) || 0;
-        comcount.innerText = Math.max(0, current - 1);
-    }
-    function prev(){
-        alert("이전 글이 없습니다.");
-    }
-    function next(){
-        alert("다음 글이 없습니다.");
-    }
-    //임시
-    async function worktext(){
-        const box = document.getElementById("workbox");
-        if(!text){
-            box.innerHTML = `
-                <div class="nowork" style="display: flex; justify-content: center; align-items: center; height: 100%;">
-                    <div>아직 작성된 글이 없습니다.</div>
-                </div>
-            `;
+        }
+        taskNameEl.textContent = '업무명 로딩 중...';
+        try {
+            const response = await fetch(`/api/tasks/${taskId}`);
+            if (!response.ok) {
+                if (response.status === 401) { window.location.href = "/front/login.html"; return; }
+                const errorData = await response.json().catch(() => ({ message: "업무 이름을 가져오지 못했습니다."}));
+                throw new Error(errorData.message || `Failed to fetch task name: ${response.status}`);
+            }
+            const result = await response.json();
+            if (result.status === 200 && result.data) {
+                taskNameEl.textContent = result.data.title || '업무명 없음';
+            } else {
+                taskNameEl.textContent = '업무명 로드 실패';
+            }
+        } catch (error) {
+            console.error("Error loading task name:", error);
+            taskNameEl.textContent = '업무명 로드 오류';
         }
     }
+
+    async function loadPostsForBoard(taskId, postIdToSelect = null) {
+        const postListTbodyEl = document.getElementById('wlb_postListTbody');
+        const initialPostTitleEl = document.getElementById('wlb_postTitle'); 
+
+        if (!postListTbodyEl) { // initialPostTitleEl은 없을 수도 있으므로 일단 제외
+            console.error("Element with ID 'wlb_postListTbody' for post list not found.");
+            return;
+        }
+        
+        postListTbodyEl.innerHTML = '<tr><td colspan="1" style="text-align:center; color:grey; padding:15px;">게시글 목록 로딩 중...</td></tr>';
+        if (!postIdToSelect) { // URL에 postId가 없을 때만 상세 영역 초기화
+            clearPostDetailArea(true); 
+        }
+
+
+        try {
+            const response = await fetch(`/api/tasks/${taskId}/posts`);
+            if (!response.ok) {
+                if (response.status === 401) { window.location.href = "/front/login.html"; return; }
+                let errorData = { message: `서버 응답 오류: ${response.status}` };
+                try { errorData = await response.json(); } catch (e) { /* ignore */ }
+                throw new Error(errorData.message || `Failed to fetch posts: ${response.status}`);
+            }
+            const result = await response.json(); 
+
+            postListTbodyEl.innerHTML = ''; 
+            if (result.status === 200 && Array.isArray(result.data)) {
+                if (result.data.length === 0) {
+                    postListTbodyEl.innerHTML = '<tr><td colspan="1" style="text-align:center; color:grey; padding:15px;">이 업무에는 게시글이 없습니다.</td></tr>';
+                    if(initialPostTitleEl) initialPostTitleEl.textContent = '표시할 게시글이 없습니다.';
+                    clearPostDetailArea(true);
+                } else {
+                    let postToDisplayAutomatically = postIdToSelect;
+                    if (!postIdToSelect) { // URL에 postId가 없으면 첫 번째 게시글 ID를 사용
+                        postToDisplayAutomatically = result.data[0].idx;
+                    }
+                    
+                    let foundPostIdInList = false;
+                    result.data.forEach((post) => {
+                        const tr = document.createElement('tr');
+                        tr.style.cursor = 'pointer';
+                        const postDate = new Date(post.createdAt).toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit'});
+                        tr.innerHTML = `<td title="${post.title}\n작성자: ${post.authorNickname}\n작성일: ${postDate}">
+                                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                                <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px;">${post.title || '제목 없음'}</span>
+                                                <span style="font-size: 0.8em; color: #777; white-space: nowrap;">${post.authorNickname || ''}</span>
+                                            </div>
+                                        </td>`;
+                        tr.onclick = () => displayFullPostDetails(post.idx); 
+                        postListTbodyEl.appendChild(tr);
+                        if (post.idx === postToDisplayAutomatically) {
+                            foundPostIdInList = true;
+                        }
+                    });
+
+                    if (postToDisplayAutomatically && foundPostIdInList) {
+                        displayFullPostDetails(postToDisplayAutomatically);
+                    } else if (result.data.length > 0 && !postIdToSelect) { // URL에 없었고, 목록에 첫번째가 있다면
+                        displayFullPostDetails(result.data[0].idx);
+                    } else if (postIdToSelect && !foundPostIdInList) { // URL에 postId가 있었으나 목록에 없는 경우
+                        console.warn(`Post with ID ${postIdToSelect} from URL not found in the fetched list. Displaying placeholder.`);
+                        clearPostDetailArea(true);
+                         if(initialPostTitleEl) initialPostTitleEl.textContent = `요청하신 게시글(ID:${postIdToSelect})을 찾을 수 없습니다.`;
+                    }
+                }
+            } else {
+                throw new Error(result.message || "게시글 목록을 가져오는데 실패했습니다 (데이터 형식).");
+            }
+        } catch (error) {
+            console.error("Error loading posts:", error);
+            postListTbodyEl.innerHTML = `<tr><td colspan="1" style="text-align:center; color:red; padding:15px;">게시글 로드 오류: ${error.message}</td></tr>`;
+            if(initialPostTitleEl) initialPostTitleEl.textContent = '게시글 로드 오류';
+            clearPostDetailArea(true);
+        }
+    }
+    
+    function clearPostDetailArea(showPlaceholder = false) {
+        const postTitleEl = document.getElementById('wlb_postTitle');
+        const postMetaEl = document.getElementById('wlb_postMeta');
+        const postContentEl = document.getElementById('wlb_postContent');
+        const postFilesEl = document.getElementById('wlb_postFiles');
+        const commentListEl = document.getElementById('commentlist');
+        const comcountEl = document.getElementById("comcount");
+        const postActionButtonsEl = document.getElementById('wlb_postActionButtons');
+
+        if (postTitleEl) postTitleEl.textContent = showPlaceholder ? '게시글을 선택해주세요.' : '로딩 중...';
+        if (postMetaEl) postMetaEl.innerHTML = '';
+        if (postContentEl) postContentEl.innerHTML = ''; 
+        if (postFilesEl) postFilesEl.innerHTML = '';
+        if (commentListEl) commentListEl.innerHTML = '';
+        if (comcountEl) comcountEl.textContent = '0';
+        if (postActionButtonsEl) postActionButtonsEl.style.display = 'none';
+        
+        if (showPlaceholder) { // "선택해주세요" 메시지일 때만 초기화
+            currentSelectedPostId = null;
+            currentSelectedPostData = null;
+        }
+    }
+
+    async function displayFullPostDetails(postId) {
+        console.log(`Displaying full post details for postId: ${postId}`);
+        currentSelectedPostId = postId; // 이 줄에서 currentSelectedPostId가 올바르게 설정됩니다!
+        
+        const postTitleEl = document.getElementById('wlb_postTitle');
+        const postMetaEl = document.getElementById('wlb_postMeta');
+        const postContentEl = document.getElementById('wlb_postContent');
+        const postFilesEl = document.getElementById('wlb_postFiles');
+        const postActionButtonsEl = document.getElementById('wlb_postActionButtons');
+        const editPostBtn = document.getElementById('wlb_editPostBtn'); // 원본 HTML의 수정 버튼 ID로 가정
+        const deletePostBtn = document.getElementById('wlb_deletePostBtn'); // 원본 HTML의 삭제 버튼 ID로 가정
+
+        // 필수 요소들이 HTML에 있는지 확인
+        if (!postTitleEl || !postMetaEl || !postContentEl || !postFilesEl || !postActionButtonsEl || !editPostBtn || !deletePostBtn) {
+            console.error("HTML elements for displaying post details are missing. Ensure IDs (wlb_postTitle, wlb_postMeta, wlb_postContent, wlb_postFiles, wlb_postActionButtons, wlb_editPostBtn, wlb_deletePostBtn) are correctly set in your original_worklist_board.html.");
+            return;
+        }
+        
+        postTitleEl.textContent = '게시글 상세 로딩 중...';
+        postMetaEl.innerHTML = '';
+        postContentEl.innerHTML = '';
+        postFilesEl.innerHTML = '';
+        postActionButtonsEl.style.display = 'none';
+
+
+        try {
+            const response = await fetch(`/api/posts/${postId}`); 
+            if (!response.ok) {
+                if (response.status === 401) { window.location.href = "/front/login.html"; return; }
+                const errorData = await response.json().catch(() => ({message: "게시글 상세 정보를 가져오지 못했습니다."}));
+                throw new Error(errorData.message || `Failed to fetch post details: ${response.status}`);
+            }
+            const result = await response.json();
+
+            if (result.status === 200 && result.data) {
+                const postDetail = result.data;
+                currentSelectedPostData = postDetail; 
+
+                postTitleEl.textContent = postDetail.title || "제목 없음";
+                const postDate = new Date(postDetail.createdAt).toLocaleString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute:'2-digit', hour12: false});
+                // 원본 HTML의 메타 정보 구조에 맞게 author와 date를 한 div 안에 넣습니다.
+                postMetaEl.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 5px;">
+                        <img src="${postDetail.author && postDetail.author.profileImage ? postDetail.author.profileImage : 'public/icon/user2.png'}" style="height: 25px; width: 25px; border-radius:50%; object-fit:cover;"/>
+                        <div style="font-size: 15px;">${postDetail.author ? postDetail.author.nickname : '작성자 정보 없음'}</div>
+                    </div>
+                    <div style="font-size: 12px; color:rgb(105, 105, 105); margin-left: auto;">${postDate}</div>`;
+                
+                postContentEl.innerHTML = postDetail.content || "<p>내용 없음</p>"; 
+
+                postFilesEl.innerHTML = '';
+                if (postDetail.files && postDetail.files.length > 0) {
+                    postDetail.files.forEach(file => {
+                        const fileContainer = document.createElement('div');
+                        // 원본 HTML의 파일 링크는 하나만 표시되고 오른쪽에 있었음. 여기서는 여러 개일 수 있으므로 div로 감쌈.
+                        fileContainer.style.textAlign = 'right'; 
+                        const fileLink = document.createElement('a');
+                        fileLink.href = `/api/files/download/${file.idx}`; // 실제 파일 다운로드 API 경로
+                        fileLink.textContent = file.fileName + (file.fileSize ? ` (${(file.fileSize / 1024).toFixed(1)} KB)` : '');
+                        fileLink.style.fontSize = 'small';
+                        fileLink.style.color = 'rgb(105, 105, 105)';
+                        fileLink.style.textDecoration = 'underline';
+                        fileLink.style.cursor = 'pointer';
+                        fileLink.setAttribute('download', file.fileName); 
+                        fileLink.setAttribute('target', '_blank'); 
+                        
+                        const fileIcon = document.createElement('img');
+                        fileIcon.src = "public/icon/link.png"; // 원본 HTML의 아이콘 경로
+                        fileIcon.style.height = '20px';
+                        fileIcon.style.width = '20px';
+                        fileIcon.style.marginRight = '5px';
+                        fileIcon.style.verticalAlign = 'middle';
+                        
+                        fileContainer.appendChild(fileIcon);
+                        fileContainer.appendChild(fileLink);
+                        postFilesEl.appendChild(fileContainer);
+                    });
+                }
+                
+                // TODO: 현재 로그인한 사용자 ID와 postDetail.author.userIdx 비교하여 버튼 표시/숨김 처리
+                postActionButtonsEl.style.display = 'flex'; 
+                editPostBtn.onclick = () => editCurrentPost();
+                deletePostBtn.onclick = () => deleteCurrentPost();
+
+
+                await loadCommentsForPost(postId);
+            } else {
+                throw new Error(result.message || "게시글 상세 정보를 가져오는데 실패했습니다.");
+            }
+
+        } catch (error) {
+            console.error(`Error loading post details for postId ${postId}:`, error);
+            postTitleEl.textContent = "게시글 상세 로드 오류";
+            postContentEl.innerHTML = `<p style="color:red;">오류: ${error.message}</p>`;
+        }
+    }
+
+    async function loadCommentsForPost(postId) {
+        const commentListEl = document.getElementById('commentlist');
+        const comcountEl = document.getElementById("comcount");
+
+        if (!commentListEl || !comcountEl) {
+            console.error("Comment list or count element not found.");
+            return;
+        }
+        commentListEl.innerHTML = '<div style="text-align:center; color:grey; padding:10px;">댓글 로딩 중...</div>';
+        comcountEl.textContent = '0';
+
+        try {
+            const response = await fetch(`/api/posts/${postId}/comments`);
+            if (!response.ok) {
+                if (response.status === 401) { window.location.href = "/front/login.html"; return; }
+                const errorData = await response.json().catch(() => ({message: "댓글을 가져오지 못했습니다."}));
+                throw new Error(errorData.message || `Failed to fetch comments: ${response.status}`);
+            }
+            const result = await response.json(); 
+
+            commentListEl.innerHTML = '';
+            if (result.status === 200 && Array.isArray(result.data)) {
+                let totalComments = 0;
+                const countCommentsRecursively = (comments) => {
+                    comments.forEach(c => {
+                        totalComments++;
+                        if (c.childComments) countCommentsRecursively(c.childComments);
+                    });
+                };
+                countCommentsRecursively(result.data);
+                comcountEl.textContent = totalComments;
+
+                if (result.data.length === 0) {
+                    commentListEl.innerHTML = '<div style="padding:10px; text-align:center; color:grey;">댓글이 없습니다. 첫 댓글을 작성해보세요.</div>';
+                } else {
+                    result.data.forEach(comment => renderComment(comment, commentListEl, 0));
+                }
+            } else {
+                throw new Error(result.message || "댓글 목록을 가져오는데 실패했습니다.");
+            }
+        } catch (error) {
+            console.error(`Error loading comments for post ${postId}:`, error);
+            commentListEl.innerHTML = `<div style="text-align:center; color:red; padding:10px;">댓글 로드 오류: ${error.message}</div>`;
+        }
+    }
+
+    function renderComment(commentData, parentElement, depth) {
+        const commentDiv = document.createElement('div');
+        // 사용자 원본 HTML의 댓글 구조를 따르도록 className과 내부 구조 수정
+        commentDiv.className = 'commentlist-item'; // 각 댓글 구분 및 하단 hr 스타일 위해
+        commentDiv.style.marginLeft = `${depth * 20}px`; 
+        // 원본 HTML은 <div style="width:660px;"> <hr/> </div> 로 각 댓글을 구분했으나,
+        // JS 동적 생성 시에는 각 commentDiv에 border-bottom을 주고 마지막 요소만 제거하는 것이 용이.
+        // 또는, commentDiv의 className을 .commentlist (원본과 동일)로 하고, CSS에서 .commentlist + .commentlist { margin-top, border-top } 등으로 처리
+        // 여기서는 .commentlist-item에 border-bottom을 주고, 마지막 요소는 JS에서 제거하는 방식으로 함.
+
+        const authorInfo = commentData.author;
+        const commentDate = new Date(commentData.createdAt).toLocaleString('ko-KR', {hour12: false, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute:'2-digit' });
+
+        // TODO: 현재 로그인한 사용자와 댓글 작성자가 같을 경우에만 삭제 버튼 활성화/표시
+        commentDiv.innerHTML = `
+            <div style="display:flex; align-items: center; margin-bottom: 5px; padding-top: 10px;">
+                <img src="${authorInfo && authorInfo.profileImage ? authorInfo.profileImage : 'public/icon/user2.png'}" style="height: 25px; width: 25px; border-radius: 50%; margin-right: 5px; object-fit:cover;" />
+                <div style="font-size: 15px; font-weight: bold;">${authorInfo ? authorInfo.nickname : '익명'}</div>
+            </div>
+            <div style="margin-left:30px; margin-top:5px; margin-bottom: 8px;">
+                <div style="font-size: 13px; white-space:pre-wrap; word-break:break-all;">${commentData.content.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</div>
+            </div>
+            <div style="display: flex; justify-content: flex-end; align-items:center;">
+                <div style="font-size: 12px; color:rgb(105, 105, 105); margin-right:10px;">${commentDate}</div>
+                <button class="button_work2" style="font-size:11px; height:20px; width:auto; padding:0 5px;" onclick="deleteCommentHandler(${commentData.commentIdx})">삭제</button>
+            </div>
+        `;
+        parentElement.appendChild(commentDiv);
+        // 맨 마지막 댓글의 하단 구분선 제거
+        if(parentElement.lastChild && parentElement.lastChild.style) parentElement.lastChild.style.borderBottom="none";
+        // 그 이전 댓글의 하단 구분선은 유지
+        if(parentElement.lastChild && parentElement.lastChild.previousSibling && parentElement.lastChild.previousSibling.style) parentElement.lastChild.previousSibling.style.borderBottom="1px solid rgb(235, 235, 235)";
+
+
+        if (commentData.childComments && commentData.childComments.length > 0) {
+            commentData.childComments.forEach(child => renderComment(child, parentElement, depth + 1));
+        }
+    }
+    
+    function updateWorklistBoardButtonLinks(taskId, projectId) {
+        const writePostBtn = document.getElementById('wlb_writePostBtn'); 
+        if (writePostBtn && taskId != null && projectId != null) {
+            writePostBtn.onclick = () => {
+                window.location.href = `writework.html?taskId=${taskId}&projectId=${projectId}`;
+            };
+        }
+
+        const goBackBtn = document.getElementById('wlb_goBackBtn');
+        if (goBackBtn && projectId != null) {
+            goBackBtn.onclick = () => {
+                window.location.href = `projectboard.html?projectId=${projectId}`;
+            };
+        }
+    }
+
+    async function addCommentHandler(){
+        if (!currentSelectedPostId) {
+            alert("댓글을 작성할 게시글을 먼저 선택해주세요.");
+            console.log("addCommentHandler: currentSelectedPostId is null or undefined.");
+            return;
+        }
+        const commentInputElement = document.getElementById("comment");
+        if (!commentInputElement) {
+            console.error("Comment input element (id='comment') not found");
+            return;
+        }
+        const content = commentInputElement.value.trim();
+        if (!content) {
+            alert("댓글 내용을 입력해주세요.");
+            commentInputElement.focus();
+            return;
+        }
+
+        const commentData = {
+            content: content,
+            parentCommentId: null 
+        };
+
+        try {
+            const response = await fetch(`/api/posts/${currentSelectedPostId}/comments`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(commentData)
+            });
+            const result = await response.json();
+
+            if (!response.ok) {
+                 throw new Error(result.message || `댓글 작성 실패 (상태: ${response.status})`);
+            }
+
+            if (response.status === 201 && result.status === 201 && result.data) {
+                commentInputElement.value = ""; 
+                await loadCommentsForPost(currentSelectedPostId); 
+            } else {
+                throw new Error(result.message || "댓글 작성은 성공했으나 응답 데이터가 올바르지 않습니다.");
+            }
+        } catch (error) {
+            console.error("Error creating comment:", error);
+            alert(`댓글 작성 중 오류 발생: ${error.message}`);
+        }
+    }
+    // 원래 HTML의 onclick="addcomment()" 와 연결하기 위해 전역 함수로 유지
+    window.addcomment = addCommentHandler; 
+    
+    async function deleteCommentHandler(commentId) { 
+        if (!commentId) return;
+        const userConfirm = confirm("이 댓글을 삭제하시겠습니까?");
+        if (!userConfirm) return;
+
+        try {
+            const response = await fetch(`/api/comments/${commentId}`, {
+                method: 'DELETE'
+            });
+            
+            if (response.status === 204 ) { 
+                alert("댓글이 삭제되었습니다.");
+                await loadCommentsForPost(currentSelectedPostId); 
+                return;
+            }
+            
+            const result = await response.json(); 
+
+            if (!response.ok) {
+                throw new Error(result.message || `댓글 삭제 실패 (상태: ${response.status})`);
+            }
+            if (result.status === 200 ) { 
+                alert(result.message || "댓글이 삭제되었습니다.");
+                await loadCommentsForPost(currentSelectedPostId); 
+            } else {
+                 throw new Error(result.message || "댓글 삭제는 성공했으나 서버 응답이 올바르지 않습니다.");
+            }
+        } catch (error) {
+            console.error("Error deleting comment:", error);
+            alert(`댓글 삭제 중 오류 발생: ${error.message}`);
+        }
+    }
+    // 원본 HTML의 onclick="deletecomment()"는 동적으로 생성되는 버튼에 의해 deleteCommentHandler(id)로 대체됨.
+    // 전역 deletecomment 함수는 필요 없을 수 있으나, 혹시 다른 곳에서 사용한다면 아래처럼 유지.
+    // function deletecomment() { /* 스텁 또는 삭제 */ }
+
+
+    async function editCurrentPost() { 
+        if (currentSelectedPostId && currentSelectedPostData && currentWlbTaskId != null && currentWlbProjectId != null) {
+            const taskIdForEdit = currentSelectedPostData.taskId || currentWlbTaskId;
+            window.location.href = `writework.html?postId=${currentSelectedPostId}&taskId=${taskIdForEdit}&projectId=${currentWlbProjectId}`;
+        } else {
+            alert("수정할 게시글 정보가 충분하지 않습니다.");
+        }
+    }
+    
+    async function deleteCurrentPost() { 
+        if (!currentSelectedPostId) {
+            alert("삭제할 게시글이 선택되지 않았습니다.");
+            return;
+        }
+        const postTitleForConfirm = currentSelectedPostData ? currentSelectedPostData.title : "이";
+        const userConfirm = confirm(`'${postTitleForConfirm}' 게시글을 삭제하시겠습니까?`);
+        if (!userConfirm) return;
+
+        try {
+            const response = await fetch(`/api/posts/${currentSelectedPostId}`, { method: 'DELETE' });
+            if (response.status === 204 || (response.ok && (await response.text()) === "")) { // DELETE 성공 시 204 또는 내용 없는 200
+               alert("게시글이 삭제되었습니다.");
+               clearPostDetailArea(true); 
+               loadPostsForBoard(currentWlbTaskId); 
+            } else {
+               const result = await response.json().catch(()=>({message:"알 수 없는 오류로 삭제에 실패했습니다."}));
+               throw new Error(result.message || `게시글 삭제 실패 (상태: ${response.status})`);
+            }
+        } catch (error) {
+            console.error("Error deleting post:", error);
+            alert(`게시글 삭제 중 오류 발생: ${error.message}`);
+        }
+    }
+    window.deletewrite = deleteCurrentPost; // 원본 HTML의 onclick="deletewrite()"와 연결
+
+    function prev(){ alert("이전 글 기능은 구현 예정입니다."); }
+    function next(){ alert("다음 글 기능은 구현 예정입니다."); }
+    window.prev = prev; 
+    window.next = next; 
+
 </script>
 </html>
