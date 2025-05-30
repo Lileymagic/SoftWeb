@@ -2,10 +2,11 @@
         <dialog class="modal1">
         <div class="wh100" style="display:flex; flex-direction: column;">
             <div style="padding: 10px; font-size: large; font-weight: bold;">알림</div>
+            
             <hr style="margin: 0;">            
             <div class="box_scroll">
             <table class="table table-hover" style="overflow-y:auto;">
-                <tbody>
+                <tbody id="tbody_alert">
                     <tr><td>
                         <div style="display: flex; flex-direction: column; padding: 5px;">
                             <span>알림 내용</span>

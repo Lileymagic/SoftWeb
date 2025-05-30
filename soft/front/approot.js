@@ -11,6 +11,7 @@
     }
     window.closeModal = closeModal;
   
+    
     function openAlert() {
       let modal = document.querySelector(".modal1"); 
       
@@ -20,10 +21,11 @@
         <dialog class="modal1">
         <div class="wh100" style="display:flex; flex-direction: column;">
             <div style="padding: 10px; font-size: large; font-weight: bold;">알림</div>
+            
             <hr style="margin: 0;">            
             <div class="box_scroll">
             <table class="table table-hover" style="overflow-y:auto;">
-                <tbody>
+                <tbody id="tbody_alert">
                     <tr><td>
                         <div style="display: flex; flex-direction: column; padding: 5px;">
                             <span>알림 내용</span>
@@ -134,6 +136,124 @@
         });
     }
   
+    //알람 추가 함수 
+    
+    //친구추가
+    function alAddFriend(){
+        const container = document.getElementById("tbody_alert");
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td>
+                <div style="display: flex; flex-direction: column; padding: 5px;">
+                    <div style="display: flex; flex-direction: row;">
+                        <span>님께서 친구 요청을 보냈습니다.</span>
+                        <div style="margin-left: auto; margin-right: 20px;">
+                            <button class="button_yes">수락</button>
+                            <button class="button_no">거부</button>                                      
+                        </div>        
+                    </div>
+                    <br/>
+                    <div style="display: flex; flex-direction: row;">
+                        <span style="font-size: small;"></span>
+                        <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-left: auto;"/>                                    
+                    </div>
+                </div>
+            </td>
+        `;
+        container.appendChild(tr);
+    }
+
+    //프로젝트 초대 / 수락했을시 프로젝트 바로가기 (필요없으면 삭제제)
+    function alAddProject(){
+        const container = document.getElementById("tbody_alert");
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td>
+                <div style="display: flex; flex-direction: column; padding: 5px;">
+                    <div style="display: flex; flex-direction: row;">
+                        <span>${pjname} 프로젝트에 초대되었습니다. (초대자: ${nickname})</span>
+                        <div style="margin-left: auto; margin-right: 20px;">
+                            <button class="button_yes" onclick="window.location.href='projectboard.html';">수락</button>
+                            <button class="button_no">거부</button>                                      
+                        </div>        
+                    </div>
+                    <br/>
+                    <div style="display: flex; flex-direction: row;">
+                        <span style="font-size: small;">${time}</span>
+                        <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-left: auto;"/>                                    
+                    </div>
+                </div>
+            </td>
+        `;
+        container.appendChild(tr);
+    }
+
+    //업무 할당
+    function alAddWork(){
+        const container = document.getElementById("tbody_alert");
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td>
+                <div style="display: flex; flex-direction: column; padding: 5px;">
+                    <div style="display: flex; flex-direction: row;">
+                        <span>${pjname}에서 사용자에게 업무가 할당되었습니다.</span>
+                        <div style="margin-left: auto; margin-right: 20px;">
+                            <button class="button">바로가기</button>
+                        </div>        
+                    </div>
+                    <br/>
+                    <div style="display: flex; flex-direction: row;">
+                        <span style="font-size: small;">${time}</span>
+                        <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-left: auto;"/>                                    
+                    </div>
+                </div>
+            </td>
+        `;
+        container.appendChild(tr);
+    }
+    //댓글
+    function alAddWork(){
+        const container = document.getElementById("tbody_alert");
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td>
+                <div style="display: flex; flex-direction: column; padding: 5px;">
+                    <div style="display: flex; flex-direction: row;">
+                        <span>${worktitle} 게시글에 댓글이 되었습니다.</span>
+                        <div style="margin-left: auto; margin-right: 20px;">
+                            <button class="button">바로가기</button>
+                        </div>        
+                    </div>
+                    <br/>
+                    <div style="display: flex; flex-direction: row;">
+                        <span style="font-size: small;">${time}</span>
+                        <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-left: auto;"/>                                    
+                    </div>
+                </div>
+            </td>
+        `;
+        container.appendChild(tr);
+    }
+
+    //단순 통보 알람(친추 거절, 초대 거절, 프로젝트 추방?)
+    function alNotice(){
+        const container = document.getElementById("tbody_alert");
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td>
+                <div style="display: flex; flex-direction: column; padding: 5px;">
+                    <span>${alerttext}</span>
+                    <br/>
+                    <div style="display: flex; flex-direction: row;">
+                        <span style="font-size: small;">${time}</span>
+                        <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-left: auto;"/>                                    
+                    </div>
+                </div>
+            </td>
+        `;
+        container.appendChild(tr);
+    }
+
     function openFriend() {
       let modal = document.querySelector(".modal2"); 
       if(!modal){
