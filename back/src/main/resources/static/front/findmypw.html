@@ -26,8 +26,17 @@
         }
         #findPwMessage {
             margin-top: 15px;
+            margin-bottom: 15px;
             font-size: 0.9em;
             min-height: 1.2em;
+        }
+        .login_link{
+            margin: 15px;
+            color:rgb(127,127,127);
+            font-size: 12px;
+        }
+        .login_link:hover{
+            color: rgb(55,158,144);
         }
     </style>
   <script type="module" crossorigin src="/assets/approot-BKkMt0Bv.js"></script>
@@ -44,17 +53,16 @@
                 <div style="font-weight: bold; margin-top: 15px;">비밀번호를 찾고자하는 아이디를 입력해주세요.</div>
                 <div class="font1" style="margin-top: 8px;">※ SNS 로그인을 통해 가입한 아이디는 찾기가 불가능합니다.</div>
             </div>
-            &nbsp;
-            <input class="button_find" type="text" id="loginIdInput" placeholder=" 아이디"/> 
+            <input class="button_find" type="text" id="loginIdInput" placeholder=" 아이디" style="margin-top: 10px;"/> 
             &nbsp;
             <div style="display: flex; flex-direction: column; justify-content: flex-start; width: 300px;">
                 <div style="font-weight: bold; margin-top: 15px;">해당 아이디의 이메일 정보를 입력해주세요.</div>                
             </div>
-            &nbsp;
-            <input class="button_find" type="text" id="emailInput" placeholder=" 이메일"/> 
+            <input class="button_find" type="text" id="emailInput" placeholder=" 이메일" style="margin-top: 10px;"/> 
 
-            <button class="button_final" style="width:180px; margin-top: 30px;" onclick="findingpw()">임시 비밀번호 전송</button>
+            <button class="button_final" style="width:180px; margin-top: 20px;" onclick="findingpw()">임시 비밀번호 전송</button>
             <div id="findPwMessage"></div>
+            <span class="login_link" onclick="window.location.href = '/front/login.html'">로그인화면으로 돌아가기</span>
         </div>
     </div>
 </body>
