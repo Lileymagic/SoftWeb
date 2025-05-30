@@ -122,7 +122,7 @@
                             <tbody>
                                 <tr>
                                     <td>
-                                        <img src="icon/user2.png" style="height: 30px; width: 30px; margin:5px;"/>
+                                        <img src="/icon/user2.png" style="height: 30px; width: 30px; margin:5px;"/>
                                     </td>
                                     <td class="lenCut_container">
                                         <span class="lenCut">닉네임</span>
@@ -143,7 +143,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <img src="icon/user2.png" style="height: 30px; width: 30px; margin:5px;"/>
+                                        <img src="/icon/user2.png" style="height: 30px; width: 30px; margin:5px;"/>
                                     </td>
                                     <td class="lenCut_container">
                                         <span class="lenCut">고구마</span>
@@ -198,7 +198,7 @@
                             <tbody>
                                 <tr>
                                     <td>
-                                        <img src="icon/user2.png" style="height: 30px; width: 30px; margin:5px;"/>
+                                        <img src="/icon/user2.png" style="height: 30px; width: 30px; margin:5px;"/>
                                     </td>
                                     <td class="lenCut_container">
                                         <span class="lenCut">닉네임이아주아주아주길어요</span>
@@ -219,7 +219,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <img src="icon/user2.png" style="height: 30px; width: 30px; margin:5px;"/>
+                                        <img src="/icon/user2.png" style="height: 30px; width: 30px; margin:5px;"/>
                                     </td>
                                     <td class="lenCut_container">
                                         <span class="lenCut">정예은</span>
@@ -266,7 +266,7 @@
                           <tbody>
                               <tr>
                                   <td>
-                                      <img src="icon/user2.png" style="height: 30px; width: 30px; margin:5px;"/>
+                                      <img src="/icon/user2.png" style="height: 30px; width: 30px; margin:5px;"/>
                                   </td>
                                   <td class="lenCut_container">
                                       <span class="lenCut">닉네임</span>
