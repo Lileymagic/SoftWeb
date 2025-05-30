@@ -920,7 +920,7 @@
         });
 
         // 그룹 추가
-        let groupcolorid = 0;
+        //let groupcolorid = 0; (그룹 색상에 별도 아이디 필요하면 타입 컬러에 id="${id}" 추가)
         document.getElementById("add3").addEventListener("click", function () {
             const groupName = prompt("그룹 이름을 작성하세요");
             if (!groupName) {
@@ -928,7 +928,7 @@
             }
             const container = document.getElementById("tbody_group");
 
-            const id = `groupcolor_${(groupcolorid = groupcolorid + 1)}`;
+            //const id = `groupcolor_${(groupcolorid = groupcolorid + 1)}`;
             const tr = document.createElement("tr");
             tr.innerHTML = `
                 <td style="width: 100px;">
@@ -938,12 +938,12 @@
                     </div>
                 </td>
                 <td style="width: 50px;">
-                    <img src="public/icon/edit.png" style="height:20px; width:20px;" class="edit_gn drag1"/>
+                    <img src="/icon/edit.png" style="height:20px; width:20px;" class="edit_gn drag1"/>
                 </td>
                 <td style="width: 150px;">
                     <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; gap: 10px;">
                         <span>그룹 색상 수정</span>
-                        <input type="color" id="${id}" class="groupcolor"/>
+                        <input type="color" class="groupcolor"/>
                     </div>
                 </td>
                 <td style="width: 150px; align-items: end;">
@@ -952,6 +952,7 @@
             `;
 
             container.appendChild(tr);
+            attachEditListeners();
         });
     });
 
@@ -983,19 +984,21 @@
   
 </body>
 <script>
-    let num = 0;
-    const name = document.getElementById("groupname");
-    const edit = document.getElementById("edit");
-    let oldname = name.textContent.trim();
+    
     function editName(e){
         e.stopPropagation();
+        const tr = e.target.closest('tr');
+        const name = tr.querySelector('#groupname');
+        const oldname = name.textContent.trim();
+        
+        //const newname = prompt("새 그룹 이름을 입력하세요.", oldname); //이름이 길면 보이는 글자만 가져옴 
         const newname = prompt("새 그룹 이름을 입력하세요.");
-        if(!newname){
+        if(!newname || newname === oldname){
             return;
         }
         else{
             if(newname !== oldname){
-                const result = confirm("그룹명을 변경하셌습니까?");
+                const result = confirm(`그룹명을 ${newname}으로 변경하겠습니까?`);
                 if(result){
                     name.textContent = newname;
                 }
@@ -1062,13 +1065,13 @@
     toggleTables();
 
 
-     function openFindid() {
-        window.open(
-            'findid_pop.html',       
-            'Findid',     
-            'width=600,height=600,left=100,top=100' 
-        );
-    }
+    //  function openFindid() {
+    //     window.open(
+    //         'findid_pop.html',       
+    //         'Findid',     
+    //         'width=600,height=600,left=100,top=100' 
+    //     );
+    // }
     
 
     function Deleteuser() {
