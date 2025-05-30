@@ -2,9 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <script src="https://kit.fontawesome.com/289a62abf7.js" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
@@ -465,15 +463,14 @@
         }
 
     </style>    
-  <script type="module" crossorigin src="/assets/approot-DK0RR9DG.js"></script>
+  <script type="module" crossorigin src="/assets/approot-CIREq6QC.js"></script>
   <link rel="stylesheet" crossorigin href="/css/bootstrap.CyjhP-aL.css">
-  <link rel="stylesheet" crossorigin href="/css/styles.Ca4Dy-3I.css">
+  <link rel="stylesheet" crossorigin href="/css/styles.BL7EoAjv.css">
 </head>
 
 
 <body style="white-space: nowrap;">
-    <div id="root"></div>
-
+    <div id="root"></div>
 
     <aside class="aside_left">
         <div class="box_option">
@@ -815,70 +812,120 @@
         const ugSelect2 = document.getElementById("ug_select_2");
         const authoritySelect2 = document.getElementById("authority_select_2");
 
-        document.querySelectorAll('#group_table_2 tbody tr button').forEach(button => {
-            button.addEventListener('click', (e) => {
-                const item = e.target.closest('tr');
+        document.querySelector('#group_table_2 tbody').addEventListener('click', (e) => {
+            const button = e.target.closest('button');
+            if (!button) return; 
+            
+            const item = button.closest('tr');
 
-                if(item.classList.contains('active')) {
-                    item.classList.remove('active');
-                    groupSelected = false;
-                    
-                    
-                    //불편해서 뺌 (제가 다시 넣었어용)
-                    // 유저,권한 선택 사라지게
-                    if (ugSelect2.classList.contains("show")) {
-                        ugSelect2.classList.remove("show");
-                        authoritySelect2.classList.remove("show");    
+            if (item.classList.contains('active')) {
+                item.classList.remove('active');
+                groupSelected = false;
 
-                        setTimeout(() => {
-                            ugSelect2.style.display = "none";
-                            authoritySelect2.style.display = "none";
-                        }, 300)
-                    }
-                    
+                // 유저, 권한 선택 사라지게
+                if (ugSelect2.classList.contains("show")) {
+                    ugSelect2.classList.remove("show");
+                    authoritySelect2.classList.remove("show");
+
+                    setTimeout(() => {
+                        ugSelect2.style.display = "none";
+                        authoritySelect2.style.display = "none";
+                    }, 300);
                 }
-                else {
-                    document.querySelectorAll('#group_table_2 tbody tr').forEach(el => el.classList.remove('active'));
-                    item.classList.add('active');
-                    groupSelected = true;
 
-                    // 유저,권한 선택 보이게
-                    if (!ugSelect2.classList.contains("show")) {
-                        ugSelect2.style.display = "block";
-                        setTimeout(() => {
-                            ugSelect2.classList.add("show");
-                        }, 10);
-                        authoritySelect2.style.display = "block";
-                        setTimeout(() => {
-                            authoritySelect2.classList.add("show");
-                        }, 10);
-                    }
-                }
-                
-            });
-        });
+            } else {
+                document.querySelectorAll('#group_table_2 tbody tr').forEach(el => el.classList.remove('active'));
+                item.classList.add('active');
+                groupSelected = true;
 
-        document.querySelectorAll('#user_table_2 tbody tr').forEach(item => {
-            item.addEventListener('click', () => {
-                if (!groupSelected) {
-                    alert("먼저 그룹을 선택해야 합니다.");
-                    return;
+                // 유저, 권한 선택 보이게
+                if (!ugSelect2.classList.contains("show")) {
+                    ugSelect2.style.display = "block";
+                    setTimeout(() => {
+                        ugSelect2.classList.add("show");
+                    }, 10);
+                    authoritySelect2.style.display = "block";
+                    setTimeout(() => {
+                        authoritySelect2.classList.add("show");
+                    }, 10);
                 }
-                item.classList.toggle('active');
-            });
-        });
-
-        document.querySelectorAll('#authority_table_2 tbody tr').forEach(item => {
-            item.addEventListener('click', () => {
-                if (!groupSelected) {
-                    alert("먼저 그룹을 선택해야 합니다.");
-                    return;
-                }
-                item.classList.toggle('active');
-            });
+            }
         });
 
 
+        document.querySelector('#user_table_2 tbody').addEventListener('click', (e) => {
+            const item = e.target.closest('tr');
+            if (!groupSelected) {
+                alert("먼저 그룹을 선택해야 합니다.");
+                return;
+            }
+            item.classList.toggle('active');
+        });
+
+        document.querySelector('#authority_table_2 tbody').addEventListener('click', (e) => {
+            const item = e.target.closest('tr');
+            if (!groupSelected) {
+                alert("먼저 그룹을 선택해야 합니다.");
+                return;
+            }
+            item.classList.toggle('active');
+        });
+
+        // 업무할당
+        let taskSelected = false;
+        const ugSelect3 = document.getElementById("ug_select_3");
+
+        document.querySelector('.work_table_3 tbody').addEventListener("click", (e) => {
+            const item = e.target.closest('tr');
+            if (!item) return;
+
+            if (item.classList.contains('active')) {
+                item.classList.remove('active');
+                taskSelected = false;
+
+                // 사라지는 애니메이션
+                if (ugSelect3.classList.contains("show")) {
+                    ugSelect3.classList.remove("show");
+                    setTimeout(() => {
+                        ugSelect3.style.display = "none";
+                    }, 300);
+                }
+
+            } else {
+                document.querySelectorAll('.work_table_3 tbody tr').forEach(r => r.classList.remove("active"));
+                item.classList.add("active");
+                taskSelected = true;
+
+                // 보이는 애니메이션
+                if (!ugSelect3.classList.contains("show")) {
+                    ugSelect3.style.display = "block";
+                    setTimeout(() => {
+                        ugSelect3.classList.add("show");
+                    }, 10);
+                }
+
+            }
+        });
+
+        document.querySelector('#user_table_3 tbody').addEventListener('click', (e) => {
+            const item = e.target.closest('tr');
+            if (!taskSelected) {
+                alert("먼저 업무를 선택해야 합니다.");
+                return;
+            }
+            item.classList.toggle('active');
+        });
+
+        document.querySelector('#group_table_3 tbody').addEventListener('click', (e) => {
+            const item = e.target.closest('tr');
+            if (!taskSelected) {
+                alert("먼저 업무를 선택해야 합니다.");
+                return;
+            }
+            item.classList.toggle('active');
+        });
+
+        // 그룹 추가
         let groupcolorid = 0;
         document.getElementById("add3").addEventListener("click", function () {
             const groupName = prompt("그룹 이름을 작성하세요");
@@ -887,7 +934,7 @@
             }
             const container = document.getElementById("tbody_group");
 
-            const id =`groupcolor_${(groupcolorid = groupcolorid + 1)}`;
+            const id = `groupcolor_${(groupcolorid = groupcolorid + 1)}`;
             const tr = document.createElement("tr");
             tr.innerHTML = `
                 <td style="width: 100px;">
@@ -911,108 +958,10 @@
             `;
 
             container.appendChild(tr);
-            attachEditListeners();
-
-            const button = tr.querySelector('button.button_return');
-            button.addEventListener('click', (e) => {
-                if(tr.classList.contains('active')) {
-                    tr.classList.remove('active');
-                    groupSelected = false;
-
-                    if (ugSelect2.classList.contains("show")) {
-                        ugSelect2.classList.remove("show");
-                        authoritySelect2.classList.remove("show");    
-
-                        setTimeout(() => {
-                            ugSelect2.style.display = "none";
-                            authoritySelect2.style.display = "none";
-                        }, 300)
-                    }
-                }
-                else {
-                    document.querySelectorAll('#group_table_2 tbody tr').forEach(el => el.classList.remove('active'));
-                    tr.classList.add('active');
-                    groupSelected = true;
-
-                    if (!ugSelect2.classList.contains("show")) {
-                        ugSelect2.style.display = "block";
-                        authoritySelect2.style.display = "block";
-                        setTimeout(() => {
-                            ugSelect2.classList.add("show");
-                        }, 10);
-                        setTimeout(() => {
-                            authoritySelect2.classList.add("show");
-                        }, 10);
-                    }
-                }
-
-            });
         });
-
-        // 업무할당
-        let taskSelected = false;
-        const ugSelect3 = document.getElementById("ug_select_3");
-    
-        document.querySelectorAll('.work_table_3 tbody tr').forEach(item => {
-            item.addEventListener("click", () => {
-
-                if(item.classList.contains('active')) {
-                    item.classList.remove('active');
-                    taskSelected = false;
-
-                    // 사라지는 애니메이션
-                    if (ugSelect3.classList.contains("show")) {
-                        ugSelect3.classList.remove("show");
-                        setTimeout(() => {
-                            ugSelect3.style.display = "none";
-                        }, 300)
-                    }
-
-                } else {
-                    document.querySelectorAll('.work_table_3 tbody tr').forEach(r => r.classList.remove("active"));
-                    item.classList.add("active");
-                    taskSelected = true;
-                    userTable.forEach(u => u.classList.remove("active"));
-
-                    // 보이는 애니메이션
-                    if (!ugSelect3.classList.contains("show")) {
-                        ugSelect3.style.display = "block";
-                        setTimeout(() => {
-                            ugSelect3.classList.add("show");
-                        }, 10);
-                    }
-
-                }
-
-            });
-
-        });
-
-        document.querySelectorALL('#user_table_3 tbody tr').forEach(item => {
-            item.addEventListener("click", () => {
-                if (!taskSelected) {
-                    alert("먼저 업무를 선택해야 합니다.");
-                    return;
-                }
-
-                item.classList.toggle("active");
-            });
-        });
-
-        document.querySelectorALL('#group_table_3 tbody tr').forEach(item => {
-            item.addEventListener("click", () => {
-                if (!taskSelected) {
-                    alert("먼저 업무를 선택해야 합니다.");
-                    return;
-                }
-
-                item.classList.toggle("active");
-            });
-        });
-
     });
 
-    
+
     //말줄임표, 전문 툴팁
     document.querySelectorAll('.lenCut_container').forEach(container => {
         const spanText = container.querySelector(".lenCut");
@@ -1155,8 +1104,7 @@
         alert("변경 사항이 초기화되었습니다.");
     }
 
-    // 그냥 스타일, html, 스크립트 죄다 긁어오고 newwor ID 붙였는데 안되네 (머슥) 
-    //샘 이게 뭐 하다 만거죠?? 업무 추가 모달인가요?? 아니라면 ㅈㅅ 일단 제가 그렇게 바꾸는중
+    // 업무 추가 모달
     document.addEventListener('DOMContentLoaded', () => {
         const newWorkBtn = document.getElementById('newwork');
         const modal = document.querySelector('.modal_pb');

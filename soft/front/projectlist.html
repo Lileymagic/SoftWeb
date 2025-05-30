@@ -524,11 +524,12 @@
                 if (projects && projects.length > 0) {
                     projects.forEach(project => {
                         const tr = document.createElement("tr");
+                        tr.onclick = () => goToProjectBoard(project.idx);
                         tr.innerHTML = `
-                            <td>
+                            <td style="width:30px;">
                                 <img src="/icon/folder.png" style="height:20px; width:20px;"/>
                             </td>
-                            <td style="font-size: medium; font-weight: 100; cursor:pointer;" onclick="goToProjectBoard(${project.idx})">${project.title}</td>
+                            <td style="font-size: medium; font-weight: 100; cursor:pointer;">${project.title}</td>
                         `;
                         tbodyPj.appendChild(tr);
                     });
