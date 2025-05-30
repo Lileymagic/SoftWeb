@@ -9,49 +9,6 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <title>Project board</title>
     <style>
-        .middle_pb {
-            position: relative;
-            width: 100%;
-        }
-         .button_pb {
-            background-color:rgba(255, 255, 255, 0);
-            height:40px;
-            width:250px;
-            color:rgb(25, 25, 52);
-            border: 1px solid rgba(0, 0, 0, 0.25);
-            font-size: small;
-            font-weight: 300;   
-            margin-bottom: 10px;
-            border-radius: 4px;
-            font-family: 'Pretendard-Regular';
-        }
-        .button_pb2 {
-            background-color:rgb(183, 228, 206);
-            height:45px;
-            width:205px;
-            color:rgb(25, 54, 52);
-            border: none;
-            font-size: medium;
-            font-weight: 700;   
-            border-radius: 4px;
-            font-family: 'Pretendard-Regular';
-
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-        .modal_pb {
-            width: 500px;               
-            height: 400px;          
-            padding: 20px;   
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        }
-        dialog.modal_pb::backdrop {
-            background: rgba(0,0,0,0.4);
-        }
-
         .box7 {
             position: absolute;
             background-color: rgb(245, 245, 245);
@@ -206,6 +163,7 @@
             border-left: solid 4px green; 
             font-weight: bold;
             padding-left: 21px; 
+            pointer-events: none;
         }
         .box_option {
             display: flex;
@@ -286,48 +244,39 @@
         dialog.modal_wl::backdrop { /* 업무 상세 모달 바깥 배경 (반투명 어둡게) */
             background: rgba(0,0,0,0.2); 
         }
-
-        .modal_hs {
-            width: 800px;
-            height: 800px;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        }
-        dialog.modal_hs::backdrop {
-            background: rgba(0,0,0,0.4);
-        }
     </style>
   <script type="module" crossorigin src="/assets/approot-BKkMt0Bv.js"></script>
   <link rel="stylesheet" crossorigin href="/css/bootstrap.CyjhP-aL.css">
-  <link rel="stylesheet" crossorigin href="/css/styles.WGc2rbjV.css">
+  <link rel="stylesheet" crossorigin href="/css/styles.B5l9rU4X.css">
 </head>
 
 <body>
     <div id="root"></div>
 
     <dialog class="modal_pb">
-        <div class="middle_pb" style="text-align: center;">
+        <div class="middle_pb">
             <div class="green">업무 생성</div>
             <div style="width: 100%;">
-                <hr style="border: 1px solid rgb(0, 0, 0); "/>
+                <hr style="border: 1px solid rgb(0, 0, 0);"/>
             </div>
-        
-            <div style="margin-top:20px;">
-                <label for="worktitle" style="display:inline-block; width:90px; text-align:right; margin-right:5px;">업무 제목</label>
-                <input class="button_pb" type="text" id="worktitle" placeholder="업무 제목"/>
-            </div>
-            <div style="margin-top:10px;">
-                <label for="workcontent" style="display:inline-block; width:90px; text-align:right; margin-right:5px;">업무 내용</label>
-                <textarea class="button_pb" id="workcontent" placeholder="업무 내용" style="height: 80px; resize: vertical; padding: 5px; box-sizing: border-box;"></textarea>
-            </div>
-            <div style="margin-top:10px;">
-                <label for="deadline_pb" style="display:inline-block; width:90px; text-align:right; margin-right:5px;">마감 기한</label>
-                <input class="button_pb" type="datetime-local" id="deadline_pb"/>
-            </div>
-            <div style="margin-top:20px; display: flex; justify-content: center;">
-                <button class="button_pb2" style="width:80px;" onclick="addwork()">생성</button>
-                 <button class="button_pb2" style="width:80px; background-color: #ccc; margin-left: 10px;" onclick="document.querySelector('.modal_pb').close();">취소</button>
+            
+            <div class="box_scroll" style="max-height: calc(50vh - 100px);">
+                <div class="form-row" style="margin-top:20px;">
+                    <label for="worktitle" style="display:inline-block; width:90px; text-align:right; margin-right:5px;">업무 제목</label>
+                    <input class="button_pb" type="text" id="worktitle" placeholder="업무 제목"/>
+                </div>
+                <div class="form-row" style="margin-top:10px; height: auto;">
+                    <label for="workcontent" style="display:inline-block; width:90px; text-align:right; margin-right:5px;">업무 내용</label>
+                    <textarea class="button_pb" id="workcontent" placeholder="업무 내용" style="height: 80px; resize: none; padding: 5px; overflow: hidden;"></textarea>
+                </div>
+                <div class="form-row" style="margin-top:10px;">
+                    <label for="deadline_pb" style="display:inline-block; width:90px; text-align:right; margin-right:5px;">마감 기한</label>
+                    <input class="button_pb" type="datetime-local" id="deadline_pb"/>
+                </div>
+                <div style="margin-top: 20px; margin-bottom: 20px; display: flex; flex-direction: row; justify-content: center; gap: 10px;">
+                    <button class="button_pb2" style="width:80px;" onclick="addwork()">생성</button>
+                    <button class="button_pb2" style="width:80px; background-color: #ccc;" onclick="document.querySelector('.modal_pb').close();">취소</button>
+                </div>
             </div>
         </div>
     </dialog>
@@ -538,6 +487,7 @@
                 document.getElementById("worktitle").value = "";
                 document.getElementById("workcontent").value = ""; 
                 document.getElementById("deadline_pb").value = "";
+                $textarea.style.height = `${DEFAULT_HEIGHT}px`;
                 modalPbInstance.showModal();
             });
         }
@@ -560,6 +510,16 @@
         loadProjectListForAside();
     });
 
+    // textarea 높이 조절
+    const $textarea = document.getElementById('workcontent');
+    const DEFAULT_HEIGHT = 80;
+    $textarea.oninput = (event) => {
+        const $target = event.target;
+        $target.style.height = 'auto';
+        const newHeight = Math.max(DEFAULT_HEIGHT, $target.scrollHeight);
+        $target.style.height = `${newHeight}px`;
+    };
+
     async function addwork() {
         if (!CURRENT_PROJECT_ID) {
             alert("업무를 생성할 프로젝트 ID가 없습니다. 페이지를 새로고침하거나 프로젝트를 다시 선택해주세요.");
@@ -574,7 +534,6 @@
         const description = workcontentInput.value.trim();   
         const deadlineValue = deadlineInput.value;
         const deadline = deadlineValue ? (deadlineValue.includes('T') ? deadlineValue + ":00" : deadlineValue + "T00:00:00") : null;
-
 
         if (!title) {
             alert("업무 제목을 입력하세요.");
