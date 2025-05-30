@@ -221,12 +221,14 @@ body {
  /* 박스 */
 dialog.modal1 {
     width: 500px;               
-    height: 800px; 
+    max-height: 800px;
+    min-height: 200px;
+    height: auto;
     overflow: hidden;
     border: none;
     border-radius: 8px;
     box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
-    
+    margin: 0;
  }
 
 dialog.modal1::backdrop {
@@ -236,7 +238,7 @@ dialog.modal1::backdrop {
 dialog.modal2 {
     width: 900px;               
     height: 900px;          
-    padding: 20px;   
+    padding: 20px; 
     border-radius: 8px;
     display: none;
     overflow: hidden;
@@ -249,7 +251,7 @@ dialog.modal2[open] {
 
 dialog.modal2::backdrop {
     background: rgba(0,0,0,0.1);
-    backdrop-filter: blur(3px);
+    /* backdrop-filter: blur(3px); */
 }
 .modal2 td, .modal2 th {
     height: 45px;

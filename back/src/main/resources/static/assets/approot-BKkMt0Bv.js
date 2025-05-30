@@ -1,165 +1,93 @@
-(function(){const u=document.createElement("link").relList;if(u&&u.supports&&u.supports("modulepreload"))return;for(const l of document.querySelectorAll('link[rel="modulepreload"]'))r(l);new MutationObserver(l=>{for(const n of l)if(n.type==="childList")for(const c of n.addedNodes)c.tagName==="LINK"&&c.rel==="modulepreload"&&r(c)}).observe(document,{childList:!0,subtree:!0});function y(l){const n={};return l.integrity&&(n.integrity=l.integrity),l.referrerPolicy&&(n.referrerPolicy=l.referrerPolicy),l.crossOrigin==="use-credentials"?n.credentials="include":l.crossOrigin==="anonymous"?n.credentials="omit":n.credentials="same-origin",n}function r(l){if(l.ep)return;l.ep=!0;const n=y(l);fetch(l.href,n)}})();(function(){const{createElement:s,Fragment:u}=React,{createRoot:y}=ReactDOM;function r(t){t.addEventListener("click",function(e){e.target===t&&t.close()})}window.closeModal=r;function l(){let t=document.querySelector(".modal1");if(!t){const i=document.createElement("div");i.innerHTML=`<dialog class="modal1">
-                <div class="box_scroll">
-                <table class="table table-hover" style="overflow-y:auto;">
-                    <tbody>
-                        <tr>
-                            <td>
-                                <div style="display: flex;">
-                                    <div>프로젝트 1에 업무가 추가되었습니다.</div>
-                                </div>
-                                <br/>
-                                <div style="display: flex;">
-                                    <div style="font-size: small;">2025/05/05 12:00</div>
-                                </div>
-                            </td>
-                            <td>
-                                <div>
-                                    <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div style="display: flex;">
-                                    <div>QWER님께서 친구를 요청합니다.</div>
-                                    <button style="margin-left:10px;" class="button_ale">수락</button>
-                                    <button style="margin-left:5px;" class="button_ale">거부</button>
-                                </div>
-                                <br/>
-                                <div style="display: flex;">
-                                    <div style="font-size: small;">2025/05/05 12:00</div>
-                                </div>
-                            </td>
-                            <td>
-                                <div>
-                                    <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
-                                </div>
-                            </td> 
-                        </tr>
-                        <tr>
-                            <td>
-                                <div style="display: flex;">
-                                    <div>프로젝트 2에 초대되었습니다.</div>
-                                    <div style="margin-left:10px;">(초대 유저: asdf12)</div>
-                                    <button style="margin-left:10px;" class="button_ale">수락</button>
-                                    <button style="margin-left:5px;" class="button_ale">거부</button>
-                                </div>
-                                <br/>
-                                <div style="display: flex;">
-                                    <div style="font-size: small;">2025/05/05 12:00</div>
-                                </div>
-                            </td>
-                            <td>
-                                <div>
-                                    <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
-                                </div>
-                            </td> 
-                        </tr>
-                        <tr>
-                            <td>
-                                <div style="display: flex;">
-                                    <div>프로젝트 1에 업무가 추가되었습니다.</div>
-                                </div>
-                                <br/>
-                                <div style="display: flex;">
-                                    <div style="font-size: small;">2025/05/05 12:00</div>
-                                </div>
-                            </td>
-                            <td>
-                                <div>
-                                    <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div style="display: flex;">
-                                    <div>프로젝트 2에 업무가 추가되었습니다.</div>
-                                </div>
-                                <br/>
-                                <div style="display: flex;">
-                                    <div style="font-size: small;">2025/05/05 12:00</div>
-                                </div>
-                            </td>
-                            <td>
-                                <div>
-                                    <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div style="display: flex;">
-                                    <div>스크롤 확인용1</div>
-                                </div>
-                                <br/>
-                                <div style="display: flex;">
-                                    <div style="font-size: small;">2025/05/05 12:00</div>
-                                </div>
-                            </td>
-                            <td>
-                                <div>
-                                    <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div style="display: flex;">
-                                    <div>스크롤 확인용1</div>
-                                </div>
-                                <br/>
-                                <div style="display: flex;">
-                                    <div style="font-size: small;">2025/05/05 12:00</div>
-                                </div>
-                            </td>
-                            <td>
-                                <div>
-                                    <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div style="display: flex;">
-                                    <div>스크롤 확인용1</div>
-                                </div>
-                                <br/>
-                                <div style="display: flex;">
-                                    <div style="font-size: small;">2025/05/05 12:00</div>
-                                </div>
-                            </td>
-                            <td>
-                                <div>
-                                    <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div style="display: flex;">
-                                    <div>스크롤 확인용1</div>
-                                </div>
-                                <br/>
-                                <div style="display: flex;">
-                                    <div style="font-size: small;">2025/05/05 12:00</div>
-                                </div>
-                            </td>
-                            <td>
-                                <div>
-                                    <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                </div>
-                <div style="display: flex; justify-content: flex-end; ">
-                    <form method="dialog">
-                        <button style="background-color:transparent; border:none;" class="font1">닫기</button>
-                    </form>  
-                </div>
-            </dialog>`,document.body.appendChild(i),t=document.querySelector(".modal1"),t&&r(t)}const e=document.querySelector("#alertr"),o=()=>{const i=e.getBoundingClientRect(),d=t.getBoundingClientRect();t.style.position="fixed",t.style.left=`${i.right-d.width}px`,t.style.top=`${i.bottom}px`};e.addEventListener("click",()=>{currentModal.showModal(),requestAnimationFrame(()=>requestAnimationFrame(o))}),window.addEventListener("resize",()=>{t.open&&o()})}function n(){let t=document.querySelector(".modal2");if(!t){const o=document.createElement("div");o.innerHTML=`
+(function(){const u=document.createElement("link").relList;if(u&&u.supports&&u.supports("modulepreload"))return;for(const l of document.querySelectorAll('link[rel="modulepreload"]'))r(l);new MutationObserver(l=>{for(const s of l)if(s.type==="childList")for(const c of s.addedNodes)c.tagName==="LINK"&&c.rel==="modulepreload"&&r(c)}).observe(document,{childList:!0,subtree:!0});function f(l){const s={};return l.integrity&&(s.integrity=l.integrity),l.referrerPolicy&&(s.referrerPolicy=l.referrerPolicy),l.crossOrigin==="use-credentials"?s.credentials="include":l.crossOrigin==="anonymous"?s.credentials="omit":s.credentials="same-origin",s}function r(l){if(l.ep)return;l.ep=!0;const s=f(l);fetch(l.href,s)}})();(function(){const{createElement:d,Fragment:u}=React,{createRoot:f}=ReactDOM;function r(t){t.addEventListener("click",function(e){e.target===t&&t.close()})}window.closeModal=r;function l(){let t=document.querySelector(".modal1");if(!t){const i=document.createElement("div");i.innerHTML=`
+        <dialog class="modal1">
+        <div class="wh100" style="display:flex; flex-direction: column;">
+            <div style="padding: 10px; font-size: large; font-weight: bold;">알림</div>
+            <hr style="margin: 0;">            
+            <div class="box_scroll">
+            <table class="table table-hover" style="overflow-y:auto;">
+                <tbody>
+                    <tr><td>
+                        <div style="display: flex; flex-direction: column; padding: 5px;">
+                            <span>알림 내용</span>
+                            <br/>
+                            <div style="display: flex; flex-direction: row;">
+                                <span style="font-size: small;">2025/00/00 00:00</span>
+                                <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-left: auto;"/>                                    
+                            </div>
+                        </div>
+                    </td></tr>
+                    <tr><td>
+                        <div style="display: flex; flex-direction: column; padding: 5px;">
+                            <div style="display: flex; flex-direction: row;">
+                                <span>요청 알림 내용</span>
+                                <div style="margin-left: auto; margin-right: 20px;">
+                                    <button class="button_yes">수락</button>
+                                    <button class="button_no">거부</button>                                      
+                                </div>        
+                            </div>
+                            <br/>
+                            <div style="display: flex; flex-direction: row;">
+                                <span style="font-size: small;">2025/00/00 00:00</span>
+                                <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-left: auto;"/>                                    
+                            </div>
+                        </div>
+                    </td></tr>
+                    <tr><td>
+                        <div style="display: flex; flex-direction: column; padding: 5px;">
+                            <span>스크롤 확인용</span>
+                            <br/>
+                            <div style="display: flex; flex-direction: row;">
+                                <span style="font-size: small;">2025/00/00 00:00</span>
+                                <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-left: auto;"/>                                    
+                            </div>
+                        </div>
+                    </td></tr>
+                    <tr><td>
+                        <div style="display: flex; flex-direction: column; padding: 5px;">
+                            <span>스크롤 확인용</span>
+                            <br/>
+                            <div style="display: flex; flex-direction: row;">
+                                <span style="font-size: small;">2025/00/00 00:00</span>
+                                <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-left: auto;"/>                                    
+                            </div>
+                        </div>
+                    </td></tr>
+                    <tr><td>
+                        <div style="display: flex; flex-direction: column; padding: 5px;">
+                            <span>스크롤 확인용</span>
+                            <br/>
+                            <div style="display: flex; flex-direction: row;">
+                                <span style="font-size: small;">2025/00/00 00:00</span>
+                                <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-left: auto;"/>                                    
+                            </div>
+                        </div>
+                    </td></tr>
+                    <tr><td>
+                        <div style="display: flex; flex-direction: column; padding: 5px;">
+                            <span>스크롤 확인용</span>
+                            <br/>
+                            <div style="display: flex; flex-direction: row;">
+                                <span style="font-size: small;">2025/00/00 00:00</span>
+                                <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-left: auto;"/>                                    
+                            </div>
+                        </div>
+                    </td></tr>
+                    <tr><td>
+                        <div style="display: flex; flex-direction: column; padding: 5px;">
+                            <span>스크롤 확인용</span>
+                            <br/>
+                            <div style="display: flex; flex-direction: row;">
+                                <span style="font-size: small;">2025/00/00 00:00</span>
+                                <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-left: auto;"/>                                    
+                            </div>
+                        </div>
+                    </td></tr>
+
+                </tbody>
+            </table>
+            </div>
+        <div>
+        </dialog>`,document.body.appendChild(i),t=document.querySelector(".modal1"),t&&r(t)}const e=document.querySelector("#alertr"),o=()=>{const i=e.getBoundingClientRect(),n=t.getBoundingClientRect();t.style.position="fixed",t.style.left=`${i.right-n.width}px`,t.style.top=`${i.bottom}px`};e.addEventListener("click",()=>{t.showModal(),o()}),window.addEventListener("resize",()=>{t.open&&o()})}function s(){let t=document.querySelector(".modal2");if(!t){const o=document.createElement("div");o.innerHTML=`
           <dialog class="modal2" style="border: none; background-color: transparent;">
             <div class="position_modal2">
               <div>
@@ -249,7 +177,7 @@
                         <hr style="border: 1px solid rgb(0, 0, 0); "/>
                     </div>
                 
-                    <div class="find3" style="width: 500px">
+                    <div class="find3">
                         <input class="button_find3" type="text" id="find" placeholder="아이디 / 태그로 유저 검색" style="font-size: small; width: 400px;"/> 
                         <img src="icon/finding.png" style="width: 25px; height: 25px; margin: 5px; margin-left: auto;"/>                    
                     </div>        
@@ -372,7 +300,7 @@
                   </form>  
               </div>
             </div>
-          </dialog>`,document.body.appendChild(o),t=document.querySelector(".modal2"),setTimeout(()=>{c("friend1")},0),t&&r(t)}const e=document.querySelector("#friend");e&&e.addEventListener("click",()=>{const o=document.querySelector(".modal2");o&&(o.showModal(),setTimeout(()=>{c("friend1")},0))})}function c(t){["friend1","friend2","friend3"].forEach(i=>{const d=document.getElementById(i);d&&(d.style.display=i===t?"block":"none")}),document.querySelectorAll(".button_friend").forEach((i,d)=>{"friend"+(d+1).toString()===t?i.classList.add("active"):i.classList.remove("active")})}window.Watchdiv=c;function h(){confirm("로그아웃 하겠습니까?")&&fetch("/api/auth/logout",{method:"POST"}).then(e=>{e.ok?window.location.href="/front/login.html?logout":alert("로그아웃에 실패했습니다. 다시 시도해주세요.")}).catch(e=>{console.error("Logout error:",e),alert("로그아웃 중 오류가 발생했습니다.")})}window.logout=h;function v(){let t=document.querySelector(".modal3");if(!t){const i=document.createElement("div");i.innerHTML=`
+          </dialog>`,document.body.appendChild(o),t=document.querySelector(".modal2"),setTimeout(()=>{c("friend1")},0),t&&r(t)}const e=document.querySelector("#friend");e&&e.addEventListener("click",()=>{const o=document.querySelector(".modal2");o&&(o.showModal(),setTimeout(()=>{c("friend1")},0))})}function c(t){["friend1","friend2","friend3"].forEach(i=>{const n=document.getElementById(i);n&&(n.style.display=i===t?"block":"none")}),document.querySelectorAll(".button_friend").forEach((i,n)=>{"friend"+(n+1).toString()===t?i.classList.add("active"):i.classList.remove("active")})}window.Watchdiv=c;function x(){confirm("로그아웃 하겠습니까?")&&fetch("/api/auth/logout",{method:"POST"}).then(e=>{e.ok?window.location.href="/front/login.html?logout":alert("로그아웃에 실패했습니다. 다시 시도해주세요.")}).catch(e=>{console.error("Logout error:",e),alert("로그아웃 중 오류가 발생했습니다.")})}window.logout=x;function m(){let t=document.querySelector(".modal3");if(!t){const i=document.createElement("div");i.innerHTML=`
         <dialog class="modal3">
         <div class="middle3">
                 
@@ -403,4 +331,4 @@
             </div> 
 
         </div>  
-      </dialog>`,document.body.appendChild(i),t=document.querySelector(".modal3"),t?r(t):console.error("Failed to create or find .modal3 for mypage.")}const e=document.querySelector("#mypage"),o=()=>{const i=e.getBoundingClientRect(),d=t.getBoundingClientRect();t.style.position="fixed",t.style.left=`${i.right-d.width}px`,t.style.top=`${i.bottom}px`};return e.addEventListener("click",()=>{t.showModal(),o()}),window.addEventListener("resize",()=>{t.open&&o()}),t}async function x(){const t=document.getElementById("myPageDisplayId"),e=document.getElementById("myPageNickname"),o=document.getElementById("myPageTag"),i=document.getElementById("myPageBio"),d=document.getElementById("myPageProfileImage");if(!t||!e||!o||!i||!d){console.error("MyPage modal elements not found. Ensure createMyPageModalIfNeeded ran successfully.");return}try{const p=await fetch("/api/users/me");if(!p.ok){if(p.status===401){t.textContent="로그인 필요",e.textContent="",o.textContent="",i.textContent="로그인 후 이용해주세요.";return}throw new Error(`Failed to fetch user info: ${p.status}`)}const f=await p.json(),a=f.data||f;a?(a.loginId&&a.loginId.trim()!==""?t.textContent=a.loginId:t.textContent="소셜 로그인",e.textContent=a.nickname||"닉네임 정보 없음",o.textContent=a.identificationCode?`#${a.identificationCode}`:"",i.textContent=a.bio||"자기소개가 없습니다.",d.src=a.profileImage||"/icon/user2.png"):(console.error("User info data is not in expected format:",f),t.textContent="정보 형식 오류",e.textContent="",o.textContent="")}catch(p){console.error("Error fetching user info:",p),t.textContent="정보 로드 오류",e.textContent="",o.textContent="",i.textContent="정보를 불러오는 데 실패했습니다."}}async function b(){let t=v();t?(await x(),t.showModal()):console.error("Mypage modal (.modal3) could not be initialized for showing.")}function w(){window.location.href="/front/projectlist.html"}function C(){return s("div",{className:"root"},s("button",{className:"left1 drag1 clear",onClick:w},s("img",{src:"/icon/logo.png",className:"logo",style:{height:"50px"}})),s("button",{className:"right3 drag1 clear",onClick:b,id:"mypage"},s("i",{className:"fa-solid fa-user fa-2x",style:{fontSize:"25px"}})),s("button",{className:"right2 drag1 clear",onClick:()=>{let t=document.querySelector(".modal2");t||(n(),t=document.querySelector(".modal2")),t&&t.showModal()},id:"friend"},s("i",{className:"fa-solid fa-user-group fa-2x",style:{fontSize:"25px"}})),s("button",{className:"right1 drag1 clear",onClick:()=>{let t=document.querySelector(".modal1");t||(l(),t=document.querySelector(".modal1")),t&&t.showModal()},id:"alertr"},s("i",{className:"fa-solid fa-bell fa-2x",style:{fontSize:"25px"}})))}y(document.getElementById("root")).render(s(C));function m(){document.querySelector(".modal1")||l(),document.querySelector(".modal2")||n(),v()}window.addEventListener("load",m);let g=document.querySelector("#root");if(g){let t=new MutationObserver(m),e={attributes:!0,childList:!0,characterData:!0};t.observe(g,e)}document.querySelectorAll(".lenCut_container").forEach(t=>{const e=t.querySelector(".lenCut"),o=t.querySelector(".lenCutE"),i=t.querySelector(".tooltip1");if(e){const d=e.textContent;d.length>6&&(e.textContent=d.slice(0,6)+"...",i&&(e.addEventListener("mouseenter",function(){i.style.display="block",i.textContent=d}),e.addEventListener("mouseleave",function(){i.style.display="none"})))}if(o){const d=o.textContent;d.length>15&&(o.textContent=d.slice(0,15)+"...",i&&(o.addEventListener("mouseenter",function(){i.style.display="block",i.textContent=d}),o.addEventListener("mouseleave",function(){i.style.display="none"})))}}),document.querySelectorAll(".button_select").forEach(t=>{let e=!1;t.addEventListener("click",()=>{e=!e,t.classList.toggle("active"),e?t.textContent="취소":t.textContent="선택"}),t.addEventListener("mouseenter",()=>{e&&(t.textContent="취소")}),t.addEventListener("mouseleave",()=>{e&&(t.textContent="선택")})})})();
+      </dialog>`,document.body.appendChild(i),t=document.querySelector(".modal3"),t?r(t):console.error("Failed to create or find .modal3 for mypage.")}const e=document.querySelector("#mypage"),o=()=>{const i=e.getBoundingClientRect(),n=t.getBoundingClientRect();t.style.position="fixed",t.style.left=`${i.right-n.width}px`,t.style.top=`${i.bottom}px`};return e.addEventListener("click",()=>{t.showModal(),o()}),window.addEventListener("resize",()=>{t.open&&o()}),t}async function v(){const t=document.getElementById("myPageDisplayId"),e=document.getElementById("myPageNickname"),o=document.getElementById("myPageTag"),i=document.getElementById("myPageBio"),n=document.getElementById("myPageProfileImage");if(!t||!e||!o||!i||!n){console.error("MyPage modal elements not found. Ensure createMyPageModalIfNeeded ran successfully.");return}try{const p=await fetch("/api/users/me");if(!p.ok){if(p.status===401){t.textContent="로그인 필요",e.textContent="",o.textContent="",i.textContent="로그인 후 이용해주세요.";return}throw new Error(`Failed to fetch user info: ${p.status}`)}const y=await p.json(),a=y.data||y;a?(a.loginId&&a.loginId.trim()!==""?t.textContent=a.loginId:t.textContent="소셜 로그인",e.textContent=a.nickname||"닉네임 정보 없음",o.textContent=a.identificationCode?`#${a.identificationCode}`:"",i.textContent=a.bio||"자기소개가 없습니다.",n.src=a.profileImage||"/icon/user2.png"):(console.error("User info data is not in expected format:",y),t.textContent="정보 형식 오류",e.textContent="",o.textContent="")}catch(p){console.error("Error fetching user info:",p),t.textContent="정보 로드 오류",e.textContent="",o.textContent="",i.textContent="정보를 불러오는 데 실패했습니다."}}async function b(){let t=m();t?(await v(),t.showModal()):console.error("Mypage modal (.modal3) could not be initialized for showing.")}function w(){window.location.href="/front/projectlist.html"}function C(){return d("div",{className:"root"},d("button",{className:"left1 drag1 clear",onClick:w},d("img",{src:"/icon/logo.png",className:"logo",style:{height:"50px"}})),d("button",{className:"right3 drag1 clear",onClick:b,id:"mypage"},d("i",{className:"fa-solid fa-user fa-2x",style:{fontSize:"25px"}})),d("button",{className:"right2 drag1 clear",onClick:()=>{let t=document.querySelector(".modal2");t||(s(),t=document.querySelector(".modal2")),t&&t.showModal()},id:"friend"},d("i",{className:"fa-solid fa-user-group fa-2x",style:{fontSize:"25px"}})),d("button",{className:"right1 drag1 clear",onClick:l,id:"alertr"},d("i",{className:"fa-solid fa-bell fa-2x",style:{fontSize:"25px"}})))}f(document.getElementById("root")).render(d(C));function g(){document.querySelector(".modal1")||l(),document.querySelector(".modal2")||s(),m()}window.addEventListener("load",g);let h=document.querySelector("#root");if(h){let t=new MutationObserver(g),e={attributes:!0,childList:!0,characterData:!0};t.observe(h,e)}document.querySelectorAll(".lenCut_container").forEach(t=>{const e=t.querySelector(".lenCut"),o=t.querySelector(".lenCutE"),i=t.querySelector(".tooltip1");if(e){const n=e.textContent;n.length>6&&(e.textContent=n.slice(0,6)+"...",i&&(e.addEventListener("mouseenter",function(){i.style.display="block",i.textContent=n}),e.addEventListener("mouseleave",function(){i.style.display="none"})))}if(o){const n=o.textContent;n.length>15&&(o.textContent=n.slice(0,15)+"...",i&&(o.addEventListener("mouseenter",function(){i.style.display="block",i.textContent=n}),o.addEventListener("mouseleave",function(){i.style.display="none"})))}}),document.querySelectorAll(".button_select").forEach(t=>{let e=!1;t.addEventListener("click",()=>{e=!e,t.classList.toggle("active"),e?t.textContent="취소":t.textContent="선택"}),t.addEventListener("mouseenter",()=>{e&&(t.textContent="취소")}),t.addEventListener("mouseleave",()=>{e&&(t.textContent="선택")})})})();

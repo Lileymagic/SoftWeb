@@ -16,176 +16,104 @@
       
       if (!modal) {
         const div = document.createElement("div");
-        div.innerHTML =  `<dialog class="modal1">
-                <div class="box_scroll">
-                <table class="table table-hover" style="overflow-y:auto;">
-                    <tbody>
-                        <tr>
-                            <td>
-                                <div style="display: flex;">
-                                    <div>프로젝트 1에 업무가 추가되었습니다.</div>
-                                </div>
-                                <br/>
-                                <div style="display: flex;">
-                                    <div style="font-size: small;">2025/05/05 12:00</div>
-                                </div>
-                            </td>
-                            <td>
-                                <div>
-                                    <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div style="display: flex;">
-                                    <div>QWER님께서 친구를 요청합니다.</div>
-                                    <button style="margin-left:10px;" class="button_ale">수락</button>
-                                    <button style="margin-left:5px;" class="button_ale">거부</button>
-                                </div>
-                                <br/>
-                                <div style="display: flex;">
-                                    <div style="font-size: small;">2025/05/05 12:00</div>
-                                </div>
-                            </td>
-                            <td>
-                                <div>
-                                    <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
-                                </div>
-                            </td> 
-                        </tr>
-                        <tr>
-                            <td>
-                                <div style="display: flex;">
-                                    <div>프로젝트 2에 초대되었습니다.</div>
-                                    <div style="margin-left:10px;">(초대 유저: asdf12)</div>
-                                    <button style="margin-left:10px;" class="button_ale">수락</button>
-                                    <button style="margin-left:5px;" class="button_ale">거부</button>
-                                </div>
-                                <br/>
-                                <div style="display: flex;">
-                                    <div style="font-size: small;">2025/05/05 12:00</div>
-                                </div>
-                            </td>
-                            <td>
-                                <div>
-                                    <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
-                                </div>
-                            </td> 
-                        </tr>
-                        <tr>
-                            <td>
-                                <div style="display: flex;">
-                                    <div>프로젝트 1에 업무가 추가되었습니다.</div>
-                                </div>
-                                <br/>
-                                <div style="display: flex;">
-                                    <div style="font-size: small;">2025/05/05 12:00</div>
-                                </div>
-                            </td>
-                            <td>
-                                <div>
-                                    <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div style="display: flex;">
-                                    <div>프로젝트 2에 업무가 추가되었습니다.</div>
-                                </div>
-                                <br/>
-                                <div style="display: flex;">
-                                    <div style="font-size: small;">2025/05/05 12:00</div>
-                                </div>
-                            </td>
-                            <td>
-                                <div>
-                                    <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div style="display: flex;">
-                                    <div>스크롤 확인용1</div>
-                                </div>
-                                <br/>
-                                <div style="display: flex;">
-                                    <div style="font-size: small;">2025/05/05 12:00</div>
-                                </div>
-                            </td>
-                            <td>
-                                <div>
-                                    <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div style="display: flex;">
-                                    <div>스크롤 확인용1</div>
-                                </div>
-                                <br/>
-                                <div style="display: flex;">
-                                    <div style="font-size: small;">2025/05/05 12:00</div>
-                                </div>
-                            </td>
-                            <td>
-                                <div>
-                                    <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div style="display: flex;">
-                                    <div>스크롤 확인용1</div>
-                                </div>
-                                <br/>
-                                <div style="display: flex;">
-                                    <div style="font-size: small;">2025/05/05 12:00</div>
-                                </div>
-                            </td>
-                            <td>
-                                <div>
-                                    <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div style="display: flex;">
-                                    <div>스크롤 확인용1</div>
-                                </div>
-                                <br/>
-                                <div style="display: flex;">
-                                    <div style="font-size: small;">2025/05/05 12:00</div>
-                                </div>
-                            </td>
-                            <td>
-                                <div>
-                                    <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-top:55px;"/>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                </div>
-                <div style="display: flex; justify-content: flex-end; ">
-                    <form method="dialog">
-                        <button style="background-color:transparent; border:none;" class="font1">닫기</button>
-                    </form>  
-                </div>
-            </dialog>`;
+        div.innerHTML =  `
+        <dialog class="modal1">
+        <div class="wh100" style="display:flex; flex-direction: column;">
+            <div style="padding: 10px; font-size: large; font-weight: bold;">알림</div>
+            <hr style="margin: 0;">            
+            <div class="box_scroll">
+            <table class="table table-hover" style="overflow-y:auto;">
+                <tbody>
+                    <tr><td>
+                        <div style="display: flex; flex-direction: column; padding: 5px;">
+                            <span>알림 내용</span>
+                            <br/>
+                            <div style="display: flex; flex-direction: row;">
+                                <span style="font-size: small;">2025/00/00 00:00</span>
+                                <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-left: auto;"/>                                    
+                            </div>
+                        </div>
+                    </td></tr>
+                    <tr><td>
+                        <div style="display: flex; flex-direction: column; padding: 5px;">
+                            <div style="display: flex; flex-direction: row;">
+                                <span>요청 알림 내용</span>
+                                <div style="margin-left: auto; margin-right: 20px;">
+                                    <button class="button_yes">수락</button>
+                                    <button class="button_no">거부</button>                                      
+                                </div>        
+                            </div>
+                            <br/>
+                            <div style="display: flex; flex-direction: row;">
+                                <span style="font-size: small;">2025/00/00 00:00</span>
+                                <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-left: auto;"/>                                    
+                            </div>
+                        </div>
+                    </td></tr>
+                    <tr><td>
+                        <div style="display: flex; flex-direction: column; padding: 5px;">
+                            <span>스크롤 확인용</span>
+                            <br/>
+                            <div style="display: flex; flex-direction: row;">
+                                <span style="font-size: small;">2025/00/00 00:00</span>
+                                <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-left: auto;"/>                                    
+                            </div>
+                        </div>
+                    </td></tr>
+                    <tr><td>
+                        <div style="display: flex; flex-direction: column; padding: 5px;">
+                            <span>스크롤 확인용</span>
+                            <br/>
+                            <div style="display: flex; flex-direction: row;">
+                                <span style="font-size: small;">2025/00/00 00:00</span>
+                                <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-left: auto;"/>                                    
+                            </div>
+                        </div>
+                    </td></tr>
+                    <tr><td>
+                        <div style="display: flex; flex-direction: column; padding: 5px;">
+                            <span>스크롤 확인용</span>
+                            <br/>
+                            <div style="display: flex; flex-direction: row;">
+                                <span style="font-size: small;">2025/00/00 00:00</span>
+                                <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-left: auto;"/>                                    
+                            </div>
+                        </div>
+                    </td></tr>
+                    <tr><td>
+                        <div style="display: flex; flex-direction: column; padding: 5px;">
+                            <span>스크롤 확인용</span>
+                            <br/>
+                            <div style="display: flex; flex-direction: row;">
+                                <span style="font-size: small;">2025/00/00 00:00</span>
+                                <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-left: auto;"/>                                    
+                            </div>
+                        </div>
+                    </td></tr>
+                    <tr><td>
+                        <div style="display: flex; flex-direction: column; padding: 5px;">
+                            <span>스크롤 확인용</span>
+                            <br/>
+                            <div style="display: flex; flex-direction: row;">
+                                <span style="font-size: small;">2025/00/00 00:00</span>
+                                <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-left: auto;"/>                                    
+                            </div>
+                        </div>
+                    </td></tr>
+
+                </tbody>
+            </table>
+            </div>
+        <div>
+        </dialog>`;
           document.body.appendChild(div);
           modal = document.querySelector('.modal1'); 
-          if (modal) closeModal(modal); 
+          if (modal) {
+            closeModal(modal);
+          }
       }
       const modalBtn = document.querySelector("#alertr"); 
 
-      // 창 새로고침 후 3초 정도 후에 알림창 열면 위치 정보를 못받아 잘못된 위치에 알림창이 이동하는 문제가 발생. (해결 필요)
-      // (즉시 열면 괜찮음)
         const updateModalPosition = () => {
             const rect = modalBtn.getBoundingClientRect();
             const modalRect = modal.getBoundingClientRect();
@@ -194,25 +122,9 @@
             modal.style.top = `${rect.bottom}px`;
         };
 
-        // modalBtn.addEventListener("click", () => {
-        // modal.showModal();
-        // updateModalPosition();
-        // });
-
-        // window.addEventListener("resize", () => {
-        //     if (modal.open) {
-        //         updateModalPosition();
-        //     }
-        // });
         modalBtn.addEventListener("click", () => {
-            //const currentModal = document.querySelector(".modal1"); 
-            // if(currentModal) {
-                
-            // }
-            currentModal.showModal();
-            requestAnimationFrame(() =>
-                requestAnimationFrame(updateModalPosition)
-            );
+        modal.showModal();
+        updateModalPosition();
         });
 
         window.addEventListener("resize", () => {
@@ -316,7 +228,7 @@
                         <hr style="border: 1px solid rgb(0, 0, 0); "/>
                     </div>
                 
-                    <div class="find3" style="width: 500px">
+                    <div class="find3">
                         <input class="button_find3" type="text" id="find" placeholder="아이디 / 태그로 유저 검색" style="font-size: small; width: 400px;"/> 
                         <img src="icon/finding.png" style="width: 25px; height: 25px; margin: 5px; margin-left: auto;"/>                    
                     </div>        
@@ -672,13 +584,7 @@
         ),
         createElement(
           'button',
-          { className: 'right1 drag1 clear', 
-            onClick: () => { 
-              let alertModal = document.querySelector(".modal1"); 
-              if (!alertModal) { openAlert(); alertModal = document.querySelector(".modal1"); }
-              if (alertModal) alertModal.showModal();
-            }, 
-            id:'alertr' 
+          { className: 'right1 drag1 clear', onClick: openAlert , id:'alertr' 
           },
           createElement('i', { className: 'fa-solid fa-bell fa-2x', style: { fontSize: '25px'}})
         )
