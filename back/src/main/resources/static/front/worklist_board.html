@@ -219,7 +219,6 @@
                             </div>
                         </div>
                     </div>
-                    
                     <div id="wlb_postActionButtons" style="display: none; justify-content: flex-end; align-items: center; margin-top:5px; padding: 0 10px; gap:5px;"> 
                         <button id="wlb_editPostBtn" class="button_work">수정</button>
                         <button id="wlb_deletePostBtn" class="button_work" style="border-color:rgb(173, 98, 98); color:rgb(173, 98, 98)">삭제</button>
@@ -247,7 +246,6 @@
                         </div>
                     </div>                            
                 </div>     
-                
                 </div>
 
             
@@ -585,20 +583,47 @@
 
         // TODO: 현재 로그인한 사용자와 댓글 작성자가 같을 경우에만 삭제 버튼 활성화/표시
         commentDiv.innerHTML = `
-            <div style="display:flex; align-items: center; margin-bottom: 5px; padding-top: 10px;">
-                <img src="${authorInfo && authorInfo.profileImage ? authorInfo.profileImage : '/icon/user2.png'}" style="height: 25px; width: 25px; border-radius: 50%; margin-right: 5px; object-fit:cover;" />
-                <div style="font-size: 15px; font-weight: bold;">${authorInfo ? authorInfo.nickname : '익명'}</div>
+            <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 5px; padding-top: 10px;">
+                <div style="display:flex;">
+                    <img src="${authorInfo && authorInfo.profileImage ? authorInfo.profileImage : '/icon/user2.png'}" style="height: 25px; width: 25px; border-radius: 50%; margin-right: 5px; object-fit:cover;" />
+                    <div style="font-size: 15px; font-weight: bold;">${authorInfo ? authorInfo.nickname : '익명'}</div>
+                </div>
+                <div></div>
+                <div>
+                    <div style="font-size: 12px; color:rgb(105, 105, 105); margin-right:10px;">${commentDate}</div>
+                </div>
             </div>
             <div style="margin-left:30px; margin-top:5px; margin-bottom: 8px;">
                 <div style="font-size: 13px; white-space:pre-wrap; word-break:break-all;">${commentData.content.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</div>
             </div>
-            <div style="display: flex; justify-content: flex-end; align-items:center;">
-                <div style="font-size: 12px; color:rgb(105, 105, 105); margin-right:10px;">${commentDate}</div>
-                <button class="button_work2" style="font-size:11px; height:20px; width:auto; padding:0 5px; margin-right:5px;" onclick="addReply(${commentData.commentIdx},this,commentContainer,${depth + 1},{ childComments: [] })">답글쓰기</button>
-                <button class="button_work2" style="font-size:11px; height:20px; width:auto; padding:0 5px;" onclick="deleteCommentHandler(${commentData.commentIdx})">삭제</button>
+            <div style="display: flex; justify-content: space-between; align-items:center;">
+                <div class="comment-actions"></div>
+                <div></div>
+                <button class="button_work2" style="font-size:11px; height:20px; width:auto; padding:0 5px;" onclick="deleteCommentHandler(${commentData.commentIdx})">삭제</button>   
             </div>
         `;
+
+        if (depth === 0) {
+            const actionsDiv = commentDiv.querySelector('.comment-actions');
+            const replyBtn = document.createElement('button');
+            replyBtn.className = 'button_work2';
+            replyBtn.style.cssText = "font-size:11px; height:20px; padding:0 5px; margin-right:5px; cursor:pointer;";
+            replyBtn.textContent = '답글쓰기';
+
+            replyBtn.onclick = () => {
+                addReply(
+                commentData.commentIdx,    
+                replyBtn,                   
+                commentlist,                
+                depth + 1,                  
+                { childComments: [] }      
+                );
+            };
+            actionsDiv.appendChild(replyBtn);
+        }
+
         parentElement.appendChild(commentDiv);
+        
         // 맨 마지막 댓글의 하단 구분선 제거
         if(parentElement.lastChild && parentElement.lastChild.style) parentElement.lastChild.style.borderBottom="none";
         // 그 이전 댓글의 하단 구분선은 유지
@@ -719,7 +744,7 @@
             return;
         } 
         commentDiv.className = 'commentlist-item'; 
-        commentDiv.style.marginLeft = `${depth * 20}px`; 
+        commentDiv.style.marginLeft = `${depth * 30}px`; 
 
         commentDiv.innerHTML = `
             <div style="display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px;">
