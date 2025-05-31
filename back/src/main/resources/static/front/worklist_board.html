@@ -241,7 +241,7 @@
                                 <hr style="border-top: 1px solid rgb(220, 220, 220); margin: 8px 0;" /> 
                             </div>
                             <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <img src="/link.CZlXJVt1.png" style="height:20px; width:20px; cursor:pointer;" title="파일 첨부 (구현 예정)"/>
+                                <img src="/icon/link.png" style="height:20px; width:20px; cursor:pointer;" title="파일 첨부 (구현 예정)"/>
                                 <button class="button_work2" style="width:70px;" onclick="addCommentHandler()">등록</button>
                             </div>
                         </div>
@@ -470,7 +470,7 @@
                 // 원본 HTML의 메타 정보 구조에 맞게 author와 date를 한 div 안에 넣습니다.
                 postMetaEl.innerHTML = `
                     <div style="display: flex; align-items: center; gap: 5px;">
-                        <img src="${postDetail.author && postDetail.author.profileImage ? postDetail.author.profileImage : 'public/icon/user2.png'}" style="height: 25px; width: 25px; border-radius:50%; object-fit:cover;"/>
+                        <img src="${postDetail.author && postDetail.author.profileImage ? postDetail.author.profileImage : '/icon/user2.png'}" style="height: 25px; width: 25px; border-radius:50%; object-fit:cover;"/>
                         <div style="font-size: 15px;">${postDetail.author ? postDetail.author.nickname : '작성자 정보 없음'}</div>
                     </div>
                     <div style="font-size: 12px; color:rgb(105, 105, 105); margin-left: auto;">${postDate}</div>`;
@@ -586,7 +586,7 @@
         // TODO: 현재 로그인한 사용자와 댓글 작성자가 같을 경우에만 삭제 버튼 활성화/표시
         commentDiv.innerHTML = `
             <div style="display:flex; align-items: center; margin-bottom: 5px; padding-top: 10px;">
-                <img src="${authorInfo && authorInfo.profileImage ? authorInfo.profileImage : 'public/icon/user2.png'}" style="height: 25px; width: 25px; border-radius: 50%; margin-right: 5px; object-fit:cover;" />
+                <img src="${authorInfo && authorInfo.profileImage ? authorInfo.profileImage : '/icon/user2.png'}" style="height: 25px; width: 25px; border-radius: 50%; margin-right: 5px; object-fit:cover;" />
                 <div style="font-size: 15px; font-weight: bold;">${authorInfo ? authorInfo.nickname : '익명'}</div>
             </div>
             <div style="margin-left:30px; margin-top:5px; margin-bottom: 8px;">
@@ -594,6 +594,7 @@
             </div>
             <div style="display: flex; justify-content: flex-end; align-items:center;">
                 <div style="font-size: 12px; color:rgb(105, 105, 105); margin-right:10px;">${commentDate}</div>
+                <button class="button_work2" style="font-size:11px; height:20px; width:auto; padding:0 5px; margin-right:5px;" onclick="addReply(${commentData.commentIdx},this,commentContainer,${depth + 1},{ childComments: [] })">답글쓰기</button>
                 <button class="button_work2" style="font-size:11px; height:20px; width:auto; padding:0 5px;" onclick="deleteCommentHandler(${commentData.commentIdx})">삭제</button>
             </div>
         `;
@@ -710,6 +711,74 @@
     // 전역 deletecomment 함수는 필요 없을 수 있으나, 혹시 다른 곳에서 사용한다면 아래처럼 유지.
     // function deletecomment() { /* 스텁 또는 삭제 */ }
 
+    //대댓글
+    const commentContainer = document.getElementById('commentlist');
+    function addReply(parentCommentId,btn,parentElement, depth, commentData){
+        const commentDiv = document.createElement('div');
+        if (!commentDiv){
+            return;
+        } 
+        commentDiv.className = 'commentlist-item'; 
+        commentDiv.style.marginLeft = `${depth * 20}px`; 
+
+        commentDiv.innerHTML = `
+            <div style="display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px;">
+                <textarea class="replycontent" placeholder="답글 쓰기" style="width: 100%; min-height: 60px; resize: vertical; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px;"></textarea>
+                <div style="display: flex; gap: 5px; justify-content: flex-end;">
+                    <button class="button_work2" id="addreply" style="font-size:13px; height:25px; width:auto; padding:0 8px;">등록</button>
+                </div>
+            </div>
+        `;
+
+        // 맨 마지막 댓글의 하단 구분선 제거
+        if(parentElement.lastChild && parentElement.lastChild.style) parentElement.lastChild.style.borderBottom="none";
+        // 그 이전 댓글의 하단 구분선은 유지
+        if(parentElement.lastChild && parentElement.lastChild.previousSibling && parentElement.lastChild.previousSibling.style) parentElement.lastChild.previousSibling.style.borderBottom="1px solid rgb(235, 235, 235)";
+
+        parentElement.appendChild(commentDiv);
+       
+        const addReply= commentDiv.querySelector('#addreply');
+        const replycontent= commentDiv.querySelector('.replycontent');
+        
+        addReply.onclick = async () => {
+            const content = replycontent.value.trim();
+            if (!content) {
+                alert('내용을 입력하세요.');
+                replycontent.focus();
+                return;
+            }
+            try {
+                const response = await fetch(`/api/posts/${currentSelectedPostId}/comments`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        content: content,
+                        parentCommentId: parentCommentId
+                    })
+                });
+                const result = await response.json();
+                if (!response.ok) {
+                    throw new Error(result.message || `답글 등록 실패 (상태: ${response.status})`);
+                }
+                if (response.status === 201 && result.status === 201) {
+                    // 답글 등록 성공: 폼 지우고, 댓글 목록 다시 로드
+                    commentDiv.remove();
+                    await loadCommentsForPost(currentSelectedPostId);
+                } else {
+                    throw new Error(result.message || '서버 응답이 올바르지 않습니다.');
+                }
+            } catch (err) {
+                console.error('Error creating reply:', err);
+                alert(`답글 등록 중 오류 발생: ${err.message}`);
+            }
+            
+        };
+    
+
+        if (commentData.childComments && commentData.childComments.length > 0) {
+            commentData.childComments.forEach(child => renderComment(child, parentElement, depth + 1));
+        }
+    }
 
     async function editCurrentPost() { 
         if (currentSelectedPostId && currentSelectedPostData && currentWlbTaskId != null && currentWlbProjectId != null) {
