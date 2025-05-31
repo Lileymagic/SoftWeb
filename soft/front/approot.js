@@ -478,8 +478,10 @@
         setTimeout(() => {
             Watchdiv('friend1');
         }, 0);
+        
+        document.body.style.overflow = "hidden";  // 모달 띄워지면 body 스크롤 없앰
 
-        if (modal) closeModal(modal); 
+        if (modal) closeModal(modal);
       }
       const modalBtnFriend = document.querySelector("#friend");
       
@@ -494,6 +496,10 @@
             }
           });
       }
+
+        modal.addEventListener("close", () => {
+            document.body.style.overflow = "auto";
+        });
     }
   
     function Watchdiv(i) {

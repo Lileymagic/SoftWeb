@@ -175,12 +175,17 @@
             margin-bottom: 8px;
             border-bottom: 1px solid rgb(235, 235, 235);
         }
-        .commentlist-item:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
+        .commentlist-item-re {
+            padding-bottom: 8px;
+            margin-bottom: 8px;;
+            border-bottom: 1px solid rgb(245, 245, 245);
+            background-color: rgb(250, 250, 250);
+        }
+        .replyArea{
+            margin-top: 10px;
         }
     </style>
-  <script type="module" crossorigin src="/assets/approot-DSL39ohD.js"></script>
+  <script type="module" crossorigin src="/assets/approot-DQncf-m2.js"></script>
   <link rel="stylesheet" crossorigin href="/css/bootstrap.CyjhP-aL.css">
   <link rel="stylesheet" crossorigin href="/css/styles.BGFj5A-g.css">
 </head>
@@ -228,11 +233,7 @@
                     </div>
 
                     <div style="margin: 0 10px 10px 10px;">
-                        <div style="font-weight:bold; font-size:16px; margin-bottom:10px; margin-top:10px;">댓글 <span id="comcount">0</span>개</div>
                         
-                        <div id="commentlist" style="margin-bottom:15px;">
-                            
-                        </div>
                         <div class="comment_box"> 
                             <div style="font-size: medium;">나</div> 
                             <textarea id="comment" placeholder="댓글 작성하기"></textarea> 
@@ -244,6 +245,12 @@
                                 <button class="button_work2" style="width:70px;" onclick="addCommentHandler()">등록</button>
                             </div>
                         </div>
+
+                        <div style="font-weight:bold; font-size:16px; margin-bottom:10px; margin-top:10px;">댓글 <span id="comcount">0</span>개</div>
+
+                        <div id="commentlist" style="margin-bottom:15px;">
+                        </div>
+
                     </div>                            
                 </div>     
                 </div>
@@ -599,22 +606,26 @@
             <div style="display: flex; justify-content: space-between; align-items:center;">
                 <div class="comment-actions"></div>
                 <div></div>
-                <button class="button_work2" style="font-size:11px; height:20px; width:auto; padding:0 5px;" onclick="deleteCommentHandler(${commentData.commentIdx})">삭제</button>   
+                <button class="button_work" style="border-color:rgb(173, 98, 98); color:rgb(173, 98, 98); font-size:11px; height:20px; width:auto; padding:0 5px;" onclick="deleteCommentHandler(${commentData.commentIdx})">삭제</button>   
             </div>
         `;
+
+        const replyArea = document.createElement('div');
+        replyArea.className = 'replyArea';
+        commentDiv.appendChild(replyArea);
 
         if (depth === 0) {
             const actionsDiv = commentDiv.querySelector('.comment-actions');
             const replyBtn = document.createElement('button');
-            replyBtn.className = 'button_work2';
-            replyBtn.style.cssText = "font-size:11px; height:20px; padding:0 5px; margin-right:5px; cursor:pointer;";
+            replyBtn.className = 'button_work';
+            replyBtn.style.cssText = "font-size:11px; height:20px; width:auto; padding:0 5px; margin-right:5px; cursor:pointer;";
             replyBtn.textContent = '답글쓰기';
 
             replyBtn.onclick = () => {
                 addReply(
                 commentData.commentIdx,    
                 replyBtn,                   
-                commentlist,                
+                replyArea,                
                 depth + 1,                  
                 { childComments: [] }      
                 );
@@ -631,7 +642,7 @@
 
 
         if (commentData.childComments && commentData.childComments.length > 0) {
-            commentData.childComments.forEach(child => renderComment(child, parentElement, depth + 1));
+            commentData.childComments.forEach(child => renderComment(child, replyArea, depth + 1));
         }
     }
     
@@ -739,15 +750,19 @@
     //대댓글
     const commentContainer = document.getElementById('commentlist');
     function addReply(parentCommentId,btn,parentElement, depth, commentData){
+
+        // 이미 열린 대댓칸 제거
+        const openReplyForms = parentElement.querySelectorAll('.commentlist-item-re');
+        openReplyForms.forEach(form => form.remove());  
+
         const commentDiv = document.createElement('div');
         if (!commentDiv){
             return;
         } 
-        commentDiv.className = 'commentlist-item'; 
-        commentDiv.style.marginLeft = `${depth * 30}px`; 
+        commentDiv.className = 'commentlist-item-re'; 
 
         commentDiv.innerHTML = `
-            <div style="display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px;">
+            <div style="display: flex; flex-direction: column; gap: 5px; padding: 5; marginleft: ${depth * 30}px">
                 <textarea class="replycontent" placeholder="답글 쓰기" style="width: 100%; min-height: 60px; resize: vertical; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px;"></textarea>
                 <div style="display: flex; gap: 5px; justify-content: flex-end;">
                     <button class="button_work2" id="addreply" style="font-size:13px; height:25px; width:auto; padding:0 8px;">등록</button>
@@ -758,10 +773,11 @@
         // 맨 마지막 댓글의 하단 구분선 제거
         if(parentElement.lastChild && parentElement.lastChild.style) parentElement.lastChild.style.borderBottom="none";
         // 그 이전 댓글의 하단 구분선은 유지
-        if(parentElement.lastChild && parentElement.lastChild.previousSibling && parentElement.lastChild.previousSibling.style) parentElement.lastChild.previousSibling.style.borderBottom="1px solid rgb(235, 235, 235)";
+        if(parentElement.lastChild && parentElement.lastChild.previousSibling && parentElement.lastChild.previousSibling.style) parentElement.lastChild.previousSibling.style.borderBottom="1px solid rgb(245, 245, 245)";
 
-        parentElement.appendChild(commentDiv);
-       
+        // parentElement.appendChild(commentDiv);
+        parentElement.prepend(commentDiv);
+        
         const addReply= commentDiv.querySelector('#addreply');
         const replycontent= commentDiv.querySelector('.replycontent');
         
