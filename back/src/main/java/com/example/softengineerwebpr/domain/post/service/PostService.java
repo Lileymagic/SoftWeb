@@ -3,6 +3,7 @@ package com.example.softengineerwebpr.domain.post.service;
 import com.example.softengineerwebpr.domain.post.dto.PostBasicResponseDto;
 import com.example.softengineerwebpr.domain.post.dto.PostCreateRequestDto;
 import com.example.softengineerwebpr.domain.post.dto.PostDetailResponseDto;
+import com.example.softengineerwebpr.domain.post.dto.PostUpdateRequestDto;
 import com.example.softengineerwebpr.domain.user.entity.User;
 
 import java.util.List;
@@ -40,4 +41,24 @@ public interface PostService {
      * @return 생성된 게시글의 상세 정보를 담은 PostDetailResponseDto
      */
     PostDetailResponseDto createPost(Long taskId, PostCreateRequestDto requestDto, User currentUser);
+
+    // PostService.java 에 추가
+    /**
+     * 특정 게시글을 삭제합니다.
+     * (게시글에 속한 댓글, 첨부파일 등도 함께 삭제 처리 필요 - DB cascade 또는 서비스 로직)
+     *
+     * @param postId      삭제할 게시글의 ID
+     * @param currentUser 현재 작업을 수행하는 사용자 (게시글 삭제 권한 검사)
+     */
+    void deletePost(Long postId, User currentUser);
+
+    /**
+     * 특정 게시글의 내용을 수정합니다.
+     *
+     * @param postId      수정할 게시글의 ID
+     * @param requestDto  수정할 게시글 정보 (제목, 내용 등)
+     * @param currentUser 현재 작업을 수행하는 사용자 (게시글 수정 권한 검사)
+     * @return 수정된 게시글의 상세 정보를 담은 PostDetailResponseDto
+     */
+    PostDetailResponseDto updatePost(Long postId, PostUpdateRequestDto requestDto, User currentUser);
 }

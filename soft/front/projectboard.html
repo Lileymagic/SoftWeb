@@ -11,6 +11,49 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <title>Project board</title>
     <style>
+        .middle_pb {
+            position: relative;
+            width: 100%;
+        }
+         .button_pb {
+            background-color:rgba(255, 255, 255, 0);
+            height:40px;
+            width:250px;
+            color:rgb(25, 25, 52);
+            border: 1px solid rgba(0, 0, 0, 0.25);
+            font-size: small;
+            font-weight: 300;   
+            margin-bottom: 10px;
+            border-radius: 4px;
+            font-family: 'Pretendard-Regular';
+        }
+        .button_pb2 {
+            background-color:rgb(183, 228, 206);
+            height:45px;
+            width:205px;
+            color:rgb(25, 54, 52);
+            border: none;
+            font-size: medium;
+            font-weight: 700;   
+            border-radius: 4px;
+            font-family: 'Pretendard-Regular';
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal_pb {
+            width: 500px;               
+            height: 400px;          
+            padding: 20px;   
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        dialog.modal_pb::backdrop {
+            background: rgba(0,0,0,0.4);
+        }
+
         .box7 {
             position: absolute;
             background-color: rgb(245, 245, 245);
@@ -83,11 +126,16 @@
 
             display: flex;
             flex-direction: column;
-            cursor: pointer;
+            cursor: grab; /* 드래그 가능 표시 */
         }
-        .workbox:hover {
-            background-color: rgb(240, 240, 240)
+        .workbox:active {
+            cursor: grabbing; /* 드래그 중 표시 */
         }
+        .workbox.dragging { /* 드래그 중인 요소에 대한 스타일 (선택적) */
+            opacity: 0.5;
+            border: 2px dashed #000;
+        }
+
         .worksection{
             flex-grow: 0;
             flex-shrink: 1;
@@ -111,6 +159,11 @@
         .tasks-container {
             width: 100%;
             padding: 0;
+            min-height: 100px; /* 드롭 영역 확보 */
+        }
+        .tasks-container.drag-over { /* 드롭 대상 위에 있을 때 스타일 (선택적) */
+            border: 2px dashed rgb(81,123,95);
+            background-color: rgba(81,123,95,0.1);
         }
 
 
@@ -165,7 +218,7 @@
             border-left: solid 4px green; 
             font-weight: bold;
             padding-left: 21px; 
-            pointer-events: none;
+            /* pointer-events: none; */ /* 드래그 앤 드롭을 위해 클릭 가능해야 할 수 있음 */
         }
         .box_option {
             display: flex;
@@ -243,7 +296,7 @@
             max-width: 90vw;
             max-height: 90vh;
         }
-        dialog.modal_wl::backdrop { /* 업무 상세 모달 바깥 배경 (반투명 어둡게) */
+        dialog.modal_wl::backdrop { 
             background: rgba(0,0,0,0.2); 
         }
     </style>
@@ -254,7 +307,7 @@
     <script type="module" src="approot.js"></script>
 
     <dialog class="modal_pb">
-        <div class="middle_pb">
+        <div class="middle_pb" style="text-align: center;">
             <div class="green">업무 생성</div>
             <div style="width: 100%;">
                 <hr style="border: 1px solid rgb(0, 0, 0);"/>
@@ -508,9 +561,83 @@
             document.getElementById("pjname").textContent = "프로젝트 ID가 URL에 없습니다. 프로젝트 목록에서 선택해주세요.";
         }
         loadProjectListForAside();
+
+        // --- 드래그 앤 드롭 로직 시작 ---
+        const dropZones = [
+            document.getElementById('todo_tasks_container'),
+            document.getElementById('inprogress_tasks_container'),
+            document.getElementById('done_tasks_container')
+        ];
+
+        dropZones.forEach(zone => {
+            zone.addEventListener('dragover', (event) => {
+                event.preventDefault(); 
+                zone.classList.add('drag-over');
+            });
+
+            zone.addEventListener('dragleave', (event) => {
+                zone.classList.remove('drag-over');
+            });
+
+            zone.addEventListener('drop', async (event) => {
+                event.preventDefault();
+                zone.classList.remove('drag-over');
+
+                const taskId = event.dataTransfer.getData('text/plain');
+                const draggedElement = document.querySelector(`.workbox[data-task-id="${taskId}"]`); 
+
+                if (!draggedElement) return;
+
+                const targetZone = event.currentTarget;
+                let newStatus = '';
+                if (targetZone.id === 'todo_tasks_container') newStatus = 'ToDo';
+                else if (targetZone.id === 'inprogress_tasks_container') newStatus = 'InProgress';
+                else if (targetZone.id === 'done_tasks_container') newStatus = 'Done';
+
+                const originalParentId = draggedElement.parentElement.id;
+                if (targetZone.id === originalParentId) {
+                    return; // 같은 컬럼에 드롭된 경우 변경 없음
+                }
+                
+                const taskTitle = draggedElement.querySelector('span[title]')?.title || `업무 ID ${taskId}`;
+
+                if (confirm(`"${taskTitle}" 업무의 상태를 "${newStatus}"(으)로 변경하시겠습니까?`)) {
+                    try {
+                        const response = await fetch(`/api/tasks/${taskId}/status`, {
+                            method: 'PATCH',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ status: newStatus })
+                        });
+                        const result = await response.json();
+
+                        if (!response.ok) {
+                            throw new Error(result.message || `Failed to update task status: ${response.status}`);
+                        }
+
+                        if (result.status === 200) { 
+                             // '업무가 없습니다' 메시지 제거
+                            if (targetZone.innerHTML.includes('업무가 없습니다.')) {
+                                targetZone.innerHTML = '';
+                            }
+                            targetZone.appendChild(draggedElement); 
+                            alert("업무 상태가 변경되었습니다.");
+                            // 선택적: 특정 업무의 데이터만 업데이트하거나, 전체를 다시 로드할 수 있음
+                            // loadTasks(CURRENT_PROJECT_ID); // 전체 다시 로드 (가장 확실하지만 깜빡임 발생 가능)
+                        } else {
+                            throw new Error(result.message || "Failed to update task status from server.");
+                        }
+                    } catch (error) {
+                        console.error("Error updating task status:", error);
+                        alert(`오류: ${error.message}`);
+                    }
+                }
+            });
+        });
+        // --- 드래그 앤 드롭 로직 끝 ---
     });
 
-    // textarea 높이 조절
     const $textarea = document.getElementById('workcontent');
     const DEFAULT_HEIGHT = 80;
     $textarea.oninput = (event) => {
@@ -632,7 +759,9 @@
                 inprogressContainer.innerHTML = '';
                 doneContainer.innerHTML = '';
 
-                let todoCount = 0, inprogressCount = 0, doneCount = 0;
+                let todoCount = 0;
+                let inprogressCount = 0;
+                let doneCount = 0;
 
                 result.data.forEach(task => {
                     appendTaskToBoard(task);
@@ -640,16 +769,17 @@
                     else if (task.status === "InProgress") inprogressCount++;
                     else if (task.status === "Done") doneCount++;
                 });
-
-                 if (todoCount === 0) {
+                
+                if (todoCount === 0) {
                     todoContainer.innerHTML = '<div style="text-align:center; color:grey; margin-top:20px;">업무가 없습니다.</div>';
-                 }
-                 if (inprogressCount === 0) {
-                     inprogressContainer.innerHTML = '<div style="text-align:center; color:grey; margin-top:20px;">업무가 없습니다.</div>';
-                 }
-                 if (doneCount === 0) {
+                }
+                if (inprogressCount === 0) {
+                    inprogressContainer.innerHTML = '<div style="text-align:center; color:grey; margin-top:20px;">업무가 없습니다.</div>';
+                }
+                if (doneCount === 0) {
                     doneContainer.innerHTML = '<div style="text-align:center; color:grey; margin-top:20px;">업무가 없습니다.</div>';
-                 }
+                }
+
 
             } else {
                 throw new Error(result.message || "업무 목록을 가져오는데 실패했습니다.");
@@ -671,6 +801,17 @@
         const workBox = document.createElement("div");
         workBox.className = "workbox";
         workBox.setAttribute('data-task-id', taskData.idx); 
+        workBox.setAttribute('draggable', 'true'); // 드래그 가능하도록 설정
+
+        workBox.addEventListener('dragstart', (event) => {
+            event.dataTransfer.setData('text/plain', taskData.idx);
+            event.target.classList.add('dragging'); // 드래그 중 스타일 (선택적)
+        });
+
+        workBox.addEventListener('dragend', (event) => {
+            event.target.classList.remove('dragging'); // 드래그 종료 시 스타일 제거 (선택적)
+        });
+
 
         const modal = document.getElementById('modalWork');
         const modalContent = document.getElementById('modalContent');
@@ -763,7 +904,6 @@
                 modalContent.innerHTML = `<p style="color:red; text-align:center;">오류: ${error.message}</p>`;
             }
         };
-        // 배경 클릭 시 모달 닫기
         modal.addEventListener('click', (event) => {
             if (event.target === modal) {
                 modal.close();
