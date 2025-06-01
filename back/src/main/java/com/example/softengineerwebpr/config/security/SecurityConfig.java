@@ -54,8 +54,8 @@ public class SecurityConfig {
                         .requestMatchers(new AntPathRequestMatcher("/api/tasks/*/posts", "GET")).authenticated()  // 특정 업무의 게시글 목록 조회
                         .requestMatchers(new AntPathRequestMatcher("/api/posts/*", "GET")).authenticated()       // 특정 게시글 상세 조회 (수정된 부분)
                         .requestMatchers(new AntPathRequestMatcher("/api/tasks/*/posts", "POST")).authenticated() // 특정 업무에 게시글 작성
-                        // .requestMatchers(new AntPathRequestMatcher("/api/posts/*", "PUT")).authenticated()    // 게시글 수정 (추후)
-                        // .requestMatchers(new AntPathRequestMatcher("/api/posts/*", "DELETE")).authenticated() // 게시글 삭제 (추후)
+                        .requestMatchers(new AntPathRequestMatcher("/api/posts/*", "DELETE")).authenticated() // 특정 게시글 삭제
+                        .requestMatchers(new AntPathRequestMatcher("/api/posts/*", "PUT")).authenticated() // 특정 게시글 수정
 
                         .requestMatchers(new AntPathRequestMatcher("/api/posts/*/comments", "GET")).authenticated()
                         .requestMatchers(new AntPathRequestMatcher("/api/posts/*/comments", "POST")).authenticated()

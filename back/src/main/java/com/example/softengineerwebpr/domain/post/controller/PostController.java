@@ -13,6 +13,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import com.example.softengineerwebpr.domain.post.dto.PostCreateRequestDto; // 추가
 import jakarta.validation.Valid; // 추가
+import org.springframework.web.bind.annotation.DeleteMapping;
+import com.example.softengineerwebpr.domain.post.dto.PostUpdateRequestDto; // 추가
+import org.springframework.web.bind.annotation.PutMapping; // 추가
 
 import java.util.List;
 
@@ -76,6 +79,49 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(HttpStatus.CREATED.value(), "게시글이 성공적으로 작성되었습니다.", createdPost));
     }
+
+    /**
+     * 특정 게시글을 삭제합니다.
+     *
+     * @param postId 삭제할 게시글의 ID
+     * @param authentication 현재 사용자의 인증 정보
+     * @return 성공 응답 (내용 없음)
+     */
+    @DeleteMapping("/posts/{postId}")
+    public ResponseEntity<ApiResponse<Void>> deletePost(
+            @PathVariable Long postId,
+            Authentication authentication) {
+
+        User currentUser = authenticationUtil.getCurrentUser(authentication);
+        postService.deletePost(postId, currentUser);
+
+        // HTTP 204 No Content는 본문 없이 성공을 나타내는 표준 응답입니다.
+        // ApiResponse를 사용한다면 메시지를 포함한 200 OK도 가능합니다.
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                .body(ApiResponse.success(HttpStatus.NO_CONTENT.value(), "게시글이 성공적으로 삭제되었습니다."));
+        // 또는 return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(), "게시글이 성공적으로 삭제되었습니다."));
+    }
+
+    /**
+     * 특정 게시글의 내용을 수정합니다.
+     *
+     * @param postId      수정할 게시글의 ID
+     * @param requestDto  수정할 게시글 정보 (제목, 내용)
+     * @param authentication 현재 사용자의 인증 정보
+     * @return 수정된 게시글의 상세 정보
+     */
+    @PutMapping("/posts/{postId}")
+    public ResponseEntity<ApiResponse<PostDetailResponseDto>> updatePost(
+            @PathVariable Long postId,
+            @Valid @RequestBody PostUpdateRequestDto requestDto,
+            Authentication authentication) {
+
+        User currentUser = authenticationUtil.getCurrentUser(authentication);
+        PostDetailResponseDto updatedPost = postService.updatePost(postId, requestDto, currentUser);
+
+        return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(), "게시글이 성공적으로 수정되었습니다.", updatedPost));
+    }
+
     // TODO: 여기에 추후 게시글 생성(POST /tasks/{taskId}/posts 또는 POST /api/posts),
     //       게시글 수정(PUT /api/posts/{postId}),
     //       게시글 삭제(DELETE /api/posts/{postId}) 등의 엔드포인트 추가 예정
