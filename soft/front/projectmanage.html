@@ -454,6 +454,22 @@
             width: 100%;
             height: 100%;
         }
+        .modal_nu {
+            position: fixed;
+            top: 15%;
+            left: 50%;
+            margin: 0;
+            transform: translateX(-50%);
+            width: 600px;           
+            height: 800px;         
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            border: none;
+        }
+        dialog.modal_nu::backdrop {
+            background: rgba(0,0,0,0.2);
+        }
 
     </style>    
 </head>
@@ -486,6 +502,90 @@
             <div class="button_cancel" onclick="Nosave()">취소</div>
         </div> 
         <div id = "1">
+            <dialog class="modal_nu">
+            <div class="middle_pb">
+                <div class="green">유저 초대</div>
+                <div style="width: 100%; margin-bottom: 20px;">
+                    <hr style="border: 1px solid rgb(0, 0, 0); "/>
+                </div>
+                    
+                <div style="display: flex; flex-direction: row;">
+                    <div class="find3">
+                        <input class="button_find3" type="text" id="find" placeholder="아이디 / 태그로 유저 검색" style="font-size: small; width: 400px;"/> 
+                        <img src="icon/finding.png" style="width: 25px; height: 25px; margin: 5px; margin-left: auto;"/>                    
+                    </div>
+                    <div class="container_radio">
+                        <input type="radio" name="option" style="height:15px; width:15px; margin: 5px;" checked="checked"><span>친구</span>
+                        <input type="radio" name="option" style="height:15px; width:15px; margin: 5px; margin-left: 15px;"><span>전체</span>
+                    </div>             
+                </div>
+        
+                <div class="box10" style="height: 500px;">
+                <div class="box_scroll">
+                    <table class="table table-hover" style="border-collapse: separate; border-spacing: 0;">
+                        <thead>
+                            <tr>
+                                <th style="width: 55px;"></th>
+                                <th style="width: 100px;">닉네임</th>
+                                <th style="width: 100px;">아이디</th>
+                                <th style="width: 60px;">#태그</th>
+                                <th style="width: 50px;"></th>
+                                <!-- <img src="icon/plus.png" style="height: 15px; width: 15px;"/> -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <img src="icon/user2.png" style="height: 30px; width: 30px; margin:5px;"/>
+                                </td>
+                                <td class="lenCut_container">
+                                    <span class="lenCut">닉네임이아주아주아주길어요</span>
+                                    <div class="tooltip1" id="tooltip"></div>                                                      
+                                </td>
+                                <td>
+                                    <div class="lenCut_container">
+                                        <span class="lenCutE" style="font-size: small; color: rgba(0, 0, 0, 0.5);">identification123</span>                            
+                                        <div class="tooltip1" id="tooltip"></div>                                        
+                                    </div>                            
+                                </td>
+                                <td>
+                                    <span style="color: #3a6b5b;">#0000</span>                               
+                                </td>  
+                                <td>
+                                    <button class="button_select2">초대</button>
+                                </td>                           
+                            </tr>
+                            <tr>
+                                <td>
+                                    <img src="icon/user2.png" style="height: 30px; width: 30px; margin:5px;"/>
+                                </td>
+                                <td class="lenCut_container">
+                                    <span class="lenCut">정예은</span>
+                                    <div class="tooltip1" id="tooltip"></div>                                                      
+                                </td>
+                                <td>
+                                    <div class="lenCut_container">
+                                        <span class="lenCutE" style="font-size: small; color: rgba(0, 0, 0, 0.5);">yeeun13</span>                            
+                                        <div class="tooltip1" id="tooltip"></div>                                        
+                                    </div>                            
+                                </td>
+                                <td>
+                                    <span style="color: #3a6b5b;">#3697</span>                               
+                                </td>  
+                                <td>
+                                    <button class="button_select2">초대</button>
+                                </td>                           
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <br/>
+
+                <div style="position: absolute; bottom: 20px; right: 20px; display: flex; flex-direction: row; justify-content: center; gap: 10px;">
+                    <button class="button_pb2" style="width:80px; background-color: #ccc;" onclick="document.querySelector('.modal_nu').close();">닫기</button>
+                </div>
+            </div>
+            </dialog>
             <div style="display: flex; flex-direction: row; height: 100%; width: 100%;">
                 <div class="work_select_user">
                     <div class="work_select_user_head">
@@ -494,7 +594,7 @@
                             <input class="button_find" type="text" id="find" placeholder="아이디 / 태그로 유저 검색" style="font-size: small; width: 400px;"/> 
                             <img src="public/icon/finding.png" style="width: 25px; height: 25px; margin: 5px"/>                    
                         </div>
-                        <button class="button_add" onclick="openFindid()">유저 추가</button>
+                        <button class="button_add" id="newuser">유저 추가</button>
                     </div>
     
                     <div class="work_select_user_content">
@@ -1063,15 +1163,6 @@
     userRadio.addEventListener('change', toggleTables);
     groupRadio.addEventListener('change', toggleTables);
     toggleTables();
-
-
-    //  function openFindid() {
-    //     window.open(
-    //         'findid_pop.html',       
-    //         'Findid',     
-    //         'width=600,height=600,left=100,top=100' 
-    //     );
-    // }
     
 
     function Deleteuser() {
@@ -1111,8 +1202,9 @@
         $target.style.height = `${newHeight}px`;
     };
 
-    // 업무 추가 모달
+    
     document.addEventListener('DOMContentLoaded', () => {
+        // 업무 추가 모달
         const newWorkBtn = document.getElementById('newwork');
         const modal = document.querySelector('.modal_pb');
 
@@ -1128,6 +1220,21 @@
         modal.addEventListener('click', (event) => {
             if (event.target === modal) {
                 modal.close();
+            }
+        })
+
+        // 유저 초대 모달
+        const newUSerBtn = document.getElementById('newuser');
+        const modal2 = document.querySelector('.modal_nu');
+
+        newUSerBtn.addEventListener('click', () => {
+            modal2.showModal();
+        });
+
+        // 배경 클릭 시 모달 닫기
+        modal2.addEventListener('click', (event) => {
+            if (event.target === modal2) {
+                modal2.close();
             }
         })
     });

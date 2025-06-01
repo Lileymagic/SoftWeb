@@ -497,6 +497,23 @@ textarea:focus {
     border: solid 1px rgb(112, 165, 139);
     color:rgb(112, 165, 139); 
 }
+.button_select2 {
+    background-color: transparent;
+    border: solid 1px rgb(112, 165, 139);
+
+    height: 35px;
+    width: 50px;
+
+    color:rgb(112, 165, 139); 
+    font-size: 15px;
+    font-weight: 500;
+    border-radius: 4px;
+    font-family: 'Pretendard-Regular';
+}
+.button_select2:hover{
+    background-color: rgb(112, 165, 139);
+    color:rgb(255, 255, 255); 
+}
 .button_sent {
     background-color: rgb(220, 220, 220);
     border: none;
