@@ -417,22 +417,26 @@
     const editButton = document.getElementById("edit");
     if (nameElement && editButton) {
         let oldName = nameElement.textContent;
-        editButton.addEventListener("click", () => {
-            nameElement.contentEditable = "true";
-            nameElement.style.outline = "1px solid #aaa";
-            nameElement.focus();
+        // editButton.addEventListener("click", () => {
+        //     nameElement.contentEditable = "true";
+        //     nameElement.style.outline = "1px solid #aaa";
+        //     nameElement.focus();
+        //     oldName = nameElement.textContent;
+        // });
+        // nameElement.addEventListener("keydown", e => {
+        //     if (e.key === "Enter") {
+        //         e.preventDefault();
+        //         nameElement.blur();
+        //     }
+        // });   
+        editButton.addEventListener("click",async() =>{
+
+        //nameElement.addEventListener("blur", async () => { 
+            // nameElement.contentEditable = "false";
+            // nameElement.style.outline = "none";
+            // const newName = nameElement.textContent.trim();
+            const newName = prompt("새 프로젝트 이름을 입력하세요.");
             oldName = nameElement.textContent;
-        });
-        nameElement.addEventListener("keydown", e => {
-            if (e.key === "Enter") {
-                e.preventDefault();
-                nameElement.blur();
-            }
-        });   
-        nameElement.addEventListener("blur", async () => { 
-            nameElement.contentEditable = "false";
-            nameElement.style.outline = "none";
-            const newName = nameElement.textContent.trim();
 
             if (newName === oldName) { 
                 return;
