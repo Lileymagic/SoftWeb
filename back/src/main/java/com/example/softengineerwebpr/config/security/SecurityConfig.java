@@ -63,6 +63,19 @@ public class SecurityConfig {
                         .requestMatchers(new AntPathRequestMatcher("/api/comments/*", "DELETE")).authenticated()
                         // ----------------------------------------------------
 
+                        // --- 그룹(Group) 관련 API 경로 추가 ---
+                        .requestMatchers(new AntPathRequestMatcher("/api/projects/*/groups", "GET")).authenticated()  // 특정 프로젝트의 그룹 목록 조회
+                        .requestMatchers(new AntPathRequestMatcher("/api/projects/*/groups", "POST")).authenticated() // 특정 프로젝트에 그룹 생성
+                        .requestMatchers(new AntPathRequestMatcher("/api/groups/*", "GET")).authenticated()        // 특정 그룹 상세 조회
+                        .requestMatchers(new AntPathRequestMatcher("/api/groups/*", "PUT")).authenticated()        // 특정 그룹 정보 수정
+                        .requestMatchers(new AntPathRequestMatcher("/api/groups/*", "DELETE")).authenticated()     // 특정 그룹 삭제
+                        .requestMatchers(new AntPathRequestMatcher("/api/groups/*/members", "GET")).authenticated()  // 그룹 멤버 목록 조회
+                        //.requestMatchers(new AntPathRequestMatcher("/api/groups/*/members", "POST")).authenticated() // 그룹에 멤버 추가
+                        //.requestMatchers(new AntPathRequestMatcher("/api/groups/*/members", "DELETE")).authenticated()// 그룹에서 멤버 제외
+                        .requestMatchers(new AntPathRequestMatcher("/api/groups/*/members", "PUT")).authenticated() // 그룹 멤버 동기화
+                        .requestMatchers(new AntPathRequestMatcher("/api/groups/*/permissions", "PUT")).authenticated() // 그룹 권한 수정
+                        // -----------------------------------------------------
+
                         .requestMatchers(new AntPathRequestMatcher("/api/projects/*/tasks/**")).authenticated()
                         .requestMatchers(new AntPathRequestMatcher("/api/tasks/**")).authenticated()
 

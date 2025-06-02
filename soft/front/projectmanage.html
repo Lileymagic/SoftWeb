@@ -19,10 +19,9 @@
             border-right: solid 1px;
             border-color: gray;
             float: left;
-
             background-color: rgb(220, 220, 220);
         }
-
+    
         .aside_left ul {
             width: 100%;
             margin: 0;
@@ -34,9 +33,7 @@
             color: rgb(10, 10, 10);
             font-size: medium;
             text-decoration-line: none;
-
             padding: 25px;
-
             border-bottom: solid 1px gray;
         }
         .aside_left li:hover {
@@ -48,45 +45,41 @@
             font-weight: bold;
             pointer-events: none;
         }      
-
+    
         .box_option {
             display: flex;
             justify-content: flex-start;
             align-items: center;
             background-color: white;
-
             height: 80px;
             padding: 20px;
-
             font-size: larger;
             font-weight: bold;
-
             border-bottom: solid 2px gray;
         }
-
+    
         .main {
             position: relative;
             flex-grow: 1;
-            overflow:hidden;
+            /* overflow:hidden; /* Tab 내부에서 스크롤을 관리할 것이므로, main은 스크롤을 직접 처리하지 않아도 될 수 있습니다. */
+                              /* 만약 Tab(#1,#2,#3)들의 총 너비가 .main을 넘을 경우 가로 스크롤이 필요하면 auto로 변경 */
             height: 100vh;
-            width: 10px;
+            /* width: 10px; /* 이 값은 실제 레이아웃에 맞게 수정되어야 합니다. (예: calc(100% - 300px) 또는 부모가 flex면 flex-grow:1) */
+                           /* 여기서는 JS가 #1,#2,#3을 직접 제어하므로 일단 그대로 둡니다. */
         }
         .memu_name {
-            position: sticky;
+            position: sticky; 
+            top: 0;
+            z-index: 100; 
             height: 80px;
             width: 100%;
-            padding: 15px;
-            padding-left: 50px;
-            padding-right: 50px;          
-
-            border-bottom: solid 1px;
-            border-color: rgb(150, 150, 150);
-
+            padding: 15px 50px;       
+            border-bottom: solid 1px rgb(150, 150, 150);
             font-weight: bold;
             font-size: larger;
-
             display: flex;
             align-items: center;
+            background-color: white; 
         }
         .button_return {
             background-color: transparent;
@@ -94,158 +87,160 @@
             border-radius: 3px;
             margin-left: auto;
             padding: 5px;
-            
             font-weight: 300;
             font-size: medium;
         }
         .button_return:hover {
             background-color: rgba(0, 0, 0, 0.1);
         }
+    
+        /* Tab 1의 유저 리스트 패널 스타일 */
         .work_select_user {
-            height: 100vh;
-            width: 800px;
-
+            height: 100%; /* 부모(#1 > div)의 높이를 따름 */
+            width: 800px; 
+            min-width: 0; /* 고정너비 이므로 초기화 */
             border-right: solid 1px rgb(200, 200, 200);
+            background-color: white;
+            display: flex;
+            flex-direction: column;
         }
         .work_select_user_head {
             display: flex;
             flex-direction: row;
             justify-content: flex-start;
             align-items: center;
-
             padding: 10px;
             gap: 15px;
             border-bottom: solid 1px rgb(200, 200, 200);
             background-color: white;
             font-weight: bold;
+            flex-shrink: 0; 
         }
         .work_select_user_content {
             width: 100%;
-
             display: flex;
             flex-direction: column;
-
             padding: 20px;
             overflow-y: scroll;
+            flex-grow: 1; 
         }
-        .work_select_user_content::-webkit-scrollbar{
-            width: 5px;
-        }
-        .work_select_user_content::-webkit-scrollbar-thumb {
-            background-color: rgba(230, 230, 230);
-            border-radius: 10px;
-        }
-        .work_select_user_content::-webkit-scrollbar-thumb:active {
-            background-color: rgba(200, 200, 200);
-            border-radius: 10px;   
-        }
-        .work_select_user_content::-webkit-scrollbar-track {
-            background-color: transparent;
-        }
-
+        .work_select_user_content::-webkit-scrollbar{ width: 5px; }
+        .work_select_user_content::-webkit-scrollbar-thumb { background-color: rgba(230, 230, 230); border-radius: 10px; }
+        .work_select_user_content::-webkit-scrollbar-thumb:active { background-color: rgba(200, 200, 200); border-radius: 10px; }
+        .work_select_user_content::-webkit-scrollbar-track { background-color: transparent; }
+    
+        /* 모든 .work_select 패널(그룹 목록, 유저 선택, 권한 선택 등)에 적용되는 스타일 */
         .work_select {
-            height: 100vh;
-            width: calc(100% /3);
-            min-width: 500px;
-
+            width: calc(100% / 3); /* 기본 가로 3분할 유지 */
+            min-width: 400px;  /* 최소 너비 조정 (500px은 너무 클 수 있음) */
+            
+            height: 100%; /* !중요! 부모 요소의 높이를 100% 사용 (100vh가 아님) */
+                          /* 부모는 div#2 > div[style*="flex-direction: row"] 이며, 이 div는 height:100%를 가짐 */
+                          /* div#2는 JS에 의해 display:flex 이고, 부모인 div.main의 높이(100vh - memu_name높이)를 기준으로 함 */
+            
             border-right: solid 1px rgb(200, 200, 200);
             background-color: white;
+            display: flex;          /* 내부 요소(.work_select_head, .work_select_content)를 세로로 배치 */
+            flex-direction: column;
+            box-sizing: border-box; /* padding, border가 width, height에 포함되도록 */
         }
+        /* Tab2와 Tab3의 마지막 work_select는 오른쪽 테두리 제거 */
+        #2 > div > .work_select:last-child,
+        #3 > div > .work_select:last-child {
+            border-right: none;
+        }
+    
         .work_select_head {
+            height: 56px; /* 기존 값 유지 */
             display: flex;
             flex-direction: row;
             justify-content: flex-start;
             align-items: center;
-
-            height: 56px;
             padding: 10px;
             gap: 15px;
             border-bottom: solid 1px rgb(200, 200, 200);
             background-color: white;
             font-weight: bold;
+            flex-shrink: 0; /* 헤더 영역은 높이가 줄어들지 않도록 함 */
         }
         .work_select_content {
             width: 100%;
-
-            display: flex;
-            flex-direction: column;
-
-            padding: 20px;
-            overflow-y: scroll;
+            padding: 20px;      /* 패딩 적용 */
+            box-sizing: border-box; /* 패딩이 너비/높이에 포함되도록 */
+            overflow-y: auto;   /* !중요! 내부 콘텐츠가 많을 경우 여기서 스크롤 */
+            flex-grow: 1;       /* 패널 내에서 헤더를 제외한 나머지 공간을 모두 차지 */
+            display: flex;      /* 내부 요소(예: table) 정렬을 위해 추가할 수 있지만, 보통 block 요소들이 잘 쌓임 */
+            flex-direction: column; 
         }
-        .work_select_content::-webkit-scrollbar{
-            width: 3px;
-        }
-        .work_select_content::-webkit-scrollbar-thumb {
-            background-color: rgba(230, 230, 230);
-            border-radius: 10px;;
-        }
-        .work_select_content::-webkit-scrollbar-track {
-            background-color: transparent;
-        }
+        .work_select_content::-webkit-scrollbar{ width: 3px; }
+        .work_select_content::-webkit-scrollbar-thumb { background-color: rgba(230, 230, 230); border-radius: 10px; }
+        .work_select_content::-webkit-scrollbar-track { background-color: transparent; }
+    
+        /* Tab 3의 업무 헤더 스타일 */
         .workhead {
-            position: sticky;
+            position: sticky; 
+            top: -20px; /* .work_select_content의 padding 값(20px) 만큼 올려서 경계에 붙임 */
             flex-shrink: 0;
             background-color: rgb(81,123,95);
             height:30px;
-            width:200px;
+            /* width:200px; /* 고정 너비 대신 아래처럼 변경 */
+            width: calc(100% + 40px); /* .work_select_content의 좌우 padding(각 20px) 고려 */
+            margin: -20px -20px 10px -20px; /* .work_select_content의 padding 상쇄 및 하단 여백 */
             color:white;
-            margin: 10px;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
+            align-items: center; 
+            justify-content: center; 
             text-align: center;
             font-size: medium;
             z-index: 5;
         }
-
-        tr {
-            text-align: left;
-            align-content: flex-start;
-        }
-        td{
+    
+        /* 테이블 관련 기본 스타일 */
+        tr { text-align: left; }
+        td {
             height: 50px;
-            max-width: 150px;
+            /* max-width: 150px; /* 모든 td에 일괄 적용하는 것은 위험, 필요한 곳에만 적용 */
             text-align: left;
-            align-items: start;
             vertical-align: middle;
         }
-        tbody tr.active, tbody tr.active td{
+        tbody tr.active, tbody tr.active td {
             background-color: rgb(214, 238, 182) !important;
         }
-
+    
+        /* 검색창 관련 스타일 */
         .button_find {
             border: none;
             font-size: small;
             font-weight: 300;
             font-family: 'Pretendard-Regular';
+            background-color: transparent; 
+            flex-grow: 1; 
         }
-        input:focus {
-            outline: none;
-            background-color: rgb(245, 245, 245);
-        }
+        input:focus { outline: none; } /* 전역 input focus outline 제거 */
+        .find input.button_find:focus { background-color: transparent; } /* 검색창 내부 input은 focus 시 배경 변경 없음 */
         .find{
             background-color:rgba(255, 255, 255, 0);
             height:35px;
-            width:250px;
+            /* width:250px; /* 고정 너비 대신 flex-grow 사용 */
+            min-width: 150px; /* 최소 너비 조정 */
+            flex-grow: 1; /* 헤더 내에서 가능한 공간 차지 */
+            max-width: 300px; /* 최대 너비 조정 */
             color:rgb(25, 25, 52);
             border: 1px solid rgba(0, 0, 0, 0.25); 
-
-            padding: 10px;
+            padding: 0 10px; 
             border-radius: 4px; 
+            display: flex; 
+            align-items: center;
         }
-        .find:focus-within{
+        .find:focus-within{ /* 검색창 컨테이너 포커스 시 */
             outline: none;
             background-color: rgb(245, 245, 245);
+            border-color: #3a6b5b; 
         }
-
-        .select {
-            display: flex;
-            flex-direction: row;
-        }
-        .select input[type=radio]{
-            display: none;
-        }
+    
+        /* 라디오 버튼 스타일 (Tab 3) */
+        .select { display: flex; flex-direction: row; }
+        .select input[type=radio]{ display: none; }
         .select input[type=radio]+label{
             display: inline-block;
             cursor: pointer;
@@ -253,7 +248,20 @@
             line-height: 24px;
             text-align: center;
         }
-
+        .select input[type=radio]+label{
+            color: rgb(150, 150, 150);
+            font-size: medium;
+            font-weight: 500;
+            transition: 0.1s;
+        }
+        .select input[type=radio]:checked+label{
+            color: rgb(0, 0, 0);
+            font-size: large;
+            font-weight: bold;
+            transition: 0.1s;
+        }
+    
+        /* 그룹 목록 행 스타일 (Tab 2) */
         .group_list_2{
             display: flex;
             flex-direction: row;
@@ -262,197 +270,223 @@
             padding: 10px;
             gap: 10px;
             border-bottom: solid 1px rgb(200, 200, 200);
+            cursor: pointer;
         }
-        .group_list_2.active{
-            background-color: rgb(214, 238, 182);
+        .group_list_2.active{ /* tbody tr.active 규칙이 더 우선시 될 수 있음 */
+            background-color: rgb(214, 238, 182); 
         }
-        /* 유저,그룹 선택 안보이게 */
+        /* 그룹 목록의 'active'가 아닌 행에 마우스 오버 시 */
+        #tbody_group > tr.group_list_2:not(.active):hover { /* 기존 파일의 #group_table_2 선택자 대신 #tbody_group 사용 */
+            background-color: rgb(235, 235, 235); 
+        }
+        /* 위 hover 시, 내부 td 요소들의 배경을 투명하게 */
+        #tbody_group > tr.group_list_2:not(.active):hover td {
+            background-color: transparent !important; 
+        }
+    
+        /* 유저,그룹,권한 선택 패널 초기 숨김 및 애니메이션 (Tab 2, Tab 3) */
         #ug_select_2, #ug_select_3, #authority_select_2 {
             opacity: 0;
-            transform: translateX(-30px);
-            transition: opacity 0.3s ease, transform 0.3s ease;
-            display: none;
+            transform: translateX(-20px); 
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+            display: none; 
         }
         #ug_select_2.show, #ug_select_3.show, #authority_select_2.show {
-            display: block;
+            display: flex; /* !중요! .work_select가 display:flex; flex-direction:column; 이므로 자식들도 flex로 표시 */
             opacity: 1;
             transform: translateX(0);
         }
-
+    
         /* 컬러 인풋 */
-        .groupcolor {
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-            width: 28px;
-            height: 25px;
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
+        .groupcolor, .groupcolor_input { /* .groupcolor_input 클래스도 동일하게 적용 */
+            -webkit-appearance: none; -moz-appearance: none; appearance: none;
+            width: 28px; height: 25px;
+            background-color: transparent; border: none; cursor: pointer;
         }
-        .groupcolor::-webkit-color-swatch {
-            border-radius: 50%;
-            border: none;
-        }
-        .groupcolor::-moz-color-swatch {
-            border-radius: 50%;
-            border: none;
-        }
-        /* 미선택 (유저/그룹) */
-        .select input[type=radio]+label{
-            color: rgb(150, 150, 150);
-            font-size: medium;
-            font-weight: 500;
-            transition: 0.1s;
-        }
-
-        /* 선택 (유저/그룹) */
-        .select input[type=radio]:checked+label{
-            color: rgb(0, 0, 0);
-            font-size: large;
-            font-weight: bold;
-            transition: 0.1s;
-        }
-
+        .groupcolor::-webkit-color-swatch, .groupcolor_input::-webkit-color-swatch { border-radius: 50%; border: none; }
+        .groupcolor::-moz-color-swatch, .groupcolor_input::-moz-color-swatch { border-radius: 50%; border: none; }
+    
+        /* 하단 '변경사항 저장', '취소' 버튼 컨테이너 */
         .complete{
-            position: absolute;
-            right: 0;
-            bottom: 50px;
-            z-index: 10;
-            display: flex;
-            flex-direction: row;
-            padding: 20px;
-            gap: 10px;
-
-            background-color: white;
-            border: solid 1px rgb(180, 180, 180);
-            border-top-left-radius: 10px;
-            border-bottom: none;
-            border-right: none;
+            position: absolute; right: 0; bottom: 50px; z-index: 10;
+            display: flex; flex-direction: row; padding: 20px; gap: 10px;
+            background-color: white; border: solid 1px rgb(180, 180, 180);
+            border-top-left-radius: 10px; border-bottom: none; border-right: none;
         }
+        /* 버튼 공통 스타일들 ... (기존과 거의 동일) */
         .button_yes_m{
-            background-color:rgb(183, 228, 206);
-            height:45px;
-            width:205px;
-            color:rgb(25, 54, 52);
-            border: none;
-            font-size: medium;
-            font-weight: 700;   
-            border-radius: 4px;
-            font-family: 'Pretendard-Regular';
-
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            background-color:rgb(183, 228, 206); height:45px; width:205px; color:rgb(25, 54, 52);
+            border: none; font-size: medium; font-weight: 700; border-radius: 4px; font-family: 'Pretendard-Regular';
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
         }
-        .button_yes_m:hover {
-            background-color: rgb(138, 196, 183);
-        }
-        .button_yes_m:active {
-            background-color: rgb(183, 228, 206);
-        }
+        .button_yes_m:hover { background-color: rgb(138, 196, 183); }
+        .button_yes_m:active { background-color: rgb(183, 228, 206); }
+    
         .button_cancel{
-            background-color: rgb(200, 200, 200);
-            height:45px;
-            width:205px;
-            color:rgb(25, 54, 52);
-            border: none;
-            font-size: medium;
-            font-weight: 700;   
-            border-radius: 4px;
-            font-family: 'Pretendard-Regular';
-
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            background-color: rgb(200, 200, 200); height:45px; width:205px; color:rgb(25, 54, 52);
+            border: none; font-size: medium; font-weight: 700; border-radius: 4px; font-family: 'Pretendard-Regular';
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
         }
-        .button_cancel:hover {
-            background-color: rgb(211, 159, 159);
-        }
-        .button_cancel:active {
-            background-color: rgb(200, 200, 200);
-        }
-
-        .user_list{
-            display: flex;
-            flex-direction: row;
-            justify-content: flex-start;
-            align-items: center;
-            gap: 10px;
-        }
-
+        .button_cancel:hover { background-color: rgb(211, 159, 159); }
+        .button_cancel:active { background-color: rgb(200, 200, 200); }
+    
+        .user_list{ display: flex; flex-direction: row; justify-content: flex-start; align-items: center; gap: 10px; }
+    
         .button_expel {
-            background-color: transparent;
-            border: solid 1px rgb(173, 98, 98);
-
-            height:25px;
-            width:50px;
-
-            color:rgb(173, 98, 98); 
-            font-size: 15px;
-            font-weight: 500;
-            border-radius: 4px;
-            font-family: 'Pretendard-Regular';
+            background-color: transparent; border: solid 1px rgb(173, 98, 98);
+            height:25px; width:auto; padding: 0 8px; color:rgb(173, 98, 98); 
+            font-size: 13px; font-weight: 500; border-radius: 4px; font-family: 'Pretendard-Regular';
         }
-        .button_expel:hover{
-            background-color: rgb(173, 98, 98);
-            color:rgb(255, 255, 255); 
-        }
-
+        .button_expel:hover{ background-color: rgb(173, 98, 98); color:rgb(255, 255, 255); }
+    
         .button_add{
-            background-color: transparent;
-            border: solid 1px rgb(112, 165, 139);
-
-            height: 35px;
-            width: 80px;
-
-            color:rgb(112, 165, 139); 
-            font-size: 15px;
-            font-weight: 500;
-            border-radius: 4px;
-            font-family: 'Pretendard-Regular';
+            background-color: transparent; border: solid 1px rgb(112, 165, 139);
+            height: 35px; width: auto; padding: 0 10px; color:rgb(112, 165, 139); 
+            font-size: 15px; font-weight: 500; border-radius: 4px; font-family: 'Pretendard-Regular';
         }
-        .button_add:hover{
-            background-color: rgb(112, 165, 139);
-            color:rgb(255, 255, 255); 
-        }
-
+        .button_add:hover{ background-color: rgb(112, 165, 139); color:rgb(255, 255, 255); }
+    
+        /* 업무 생성 모달 내 버튼 스타일 */
         .button_pb {
-            background-color:rgba(255, 255, 255, 0);
-            height:40px;
-            width:250px;
-            color:rgb(25, 25, 52);
-            border: 1px solid rgba(0, 0, 0, 0.25);
-            font-size: small;
-            font-weight: 300;   
-            margin-bottom: 10px;
-            border-radius: 4px;
-            font-family: 'Pretendard-Regular';
+            background-color:rgba(255, 255, 255, 0); height:40px; width:250px; color:rgb(25, 25, 52);
+            border: 1px solid rgba(0, 0, 0, 0.25); font-size: small; font-weight: 300;   
+            margin-bottom: 10px; border-radius: 4px; font-family: 'Pretendard-Regular';
         }
         .button_pb2 {
-            background-color:rgb(183, 228, 206);
-            height:45px;
-            width:205px;
-            color:rgb(25, 54, 52);
+            background-color:rgb(183, 228, 206); height:45px; width:205px; color:rgb(25, 54, 52);
+            border: none; font-size: medium; font-weight: 700; border-radius: 4px; font-family: 'Pretendard-Regular';
+            display: flex; justify-content: center; align-items: center;
+        }
+        .hidden { display: none !important; }
+        .work_table_3{ width: 100%; }
+    
+        /* 이전에 파일 끝에 있던 #group_table_2 > tbody > tr.group_list_2:hover 규칙은 
+           위에서 #tbody_group > tr.group_list_2:not(.active):hover 로 수정하여 통합되었습니다. */
+
+        /* 새로 추가된 유저 초대 모달 관련 스타일 */
+        .modal_nu {
+            position: fixed;
+            top: 15%;
+            left: 50%;
+            margin: 0;
+            transform: translateX(-50%);
+            width: 600px;         
+            height: 800px;         
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
             border: none;
-            font-size: medium;
-            font-weight: 700;   
+        }
+        dialog.modal_nu::backdrop {
+            background: rgba(0,0,0,0.2);
+        }
+
+        .button_select2 {
+            background-color: transparent;
+            border: solid 1px rgb(112, 165, 139);
+            height: 25px;
+            width: auto;
+            padding: 0 8px;
+            color: rgb(112, 165, 139);
+            font-size: 13px;
+            font-weight: 500;
             border-radius: 4px;
             font-family: 'Pretendard-Regular';
+        }
+        .button_select2:hover {
+            background-color: rgb(112, 165, 139);
+            color: rgb(255, 255, 255);
+        }
 
+        .find3 {
+            background-color: rgba(255, 255, 255, 0);
+            height: 35px;
+            width: 250px;
+            color: rgb(25, 25, 52);
+            border: 1px solid rgba(0, 0, 0, 0.25);
+            padding: 0 10px; /* 좌우 패딩을 0 10px로 조정 */
+            border-radius: 4px;
+            display: flex; /* 내부 요소 정렬을 위해 추가 */
+            align-items: center; /* 수직 중앙 정렬 */
+            flex-grow: 1; /* 가용 공간을 차지하도록 flex-grow 추가 */
+            max-width: 300px; /* 최대 너비 설정 (원하는대로 조절) */
+            margin-right: 15px; /* 라디오 버튼과의 간격 조절 */
+        }
+
+        .find3 input.button_find3 {
+            border: none;
+            background-color: transparent;
+            font-size: small;
+            font-weight: 300;
+            font-family: 'Pretendard-Regular';
+            flex-grow: 1; /* 검색 input이 가능한 공간을 차지하도록 */
+        }
+        .find3 input.button_find3:focus {
+            background-color: transparent; /* 포커스 시 배경색 변경 없도록 */
+        }
+        .find3:focus-within {
+            outline: none;
+            background-color: rgb(245, 245, 245);
+            border-color: #3a6b5b; /* 포커스 시 테두리 색상 변경 */
+        }
+
+        .container_radio {
             display: flex;
-            flex-direction: column;
-            justify-content: center;
             align-items: center;
+            gap: 5px; /* 라디오 버튼과 텍스트 간격 */
         }
-        .hidden {
-            display: none;
+        .container_radio span {
+            font-size: small;
+            color: #555;
         }
-        .work_table_3{
+
+        .box10 {
+            height: 500px;
+            border: 1px solid rgb(200, 200, 200);
+            border-radius: 5px;
+            margin-top: 20px;
+            overflow-y: auto; /* 스크롤바 추가 */
+        }
+        .box10::-webkit-scrollbar {
+            width: 5px;
+        }
+        .box10::-webkit-scrollbar-thumb {
+            background-color: rgba(230, 230, 230);
+            border-radius: 10px;
+        }
+        .box10::-webkit-scrollbar-track {
+            background-color: transparent;
+        }
+
+        .box10 table {
             width: 100%;
-            height: 100%;
+            border-collapse: collapse; /* 테이블 셀 간격 없이 */
+        }
+        .box10 th, .box10 td {
+            padding: 8px 15px;
+            border-bottom: 1px solid rgb(230, 230, 230);
+            vertical-align: middle;
+        }
+        .box10 th {
+            background-color: #f8f8f8;
+            font-weight: bold;
+            font-size: small;
+            color: #666;
+            text-align: left;
+            position: sticky; /* 헤더 고정 */
+            top: 0;
+            z-index: 1;
+        }
+        .box10 tbody tr:hover {
+            background-color: #f2f2f2;
+        }
+
+        .lenCutE { /* identificationCode용 */
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%; /* 부모 td의 너비에 맞춤 */
+            display: inline-block; /* 툴팁이 잘 작동하도록 */
         }
         .modal_nu {
             position: fixed;
@@ -503,88 +537,88 @@
         </div> 
         <div id = "1">
             <dialog class="modal_nu">
-            <div class="middle_pb">
-                <div class="green">유저 초대</div>
-                <div style="width: 100%; margin-bottom: 20px;">
-                    <hr style="border: 1px solid rgb(0, 0, 0); "/>
-                </div>
-                    
-                <div style="display: flex; flex-direction: row;">
-                    <div class="find3">
-                        <input class="button_find3" type="text" id="find" placeholder="아이디 / 태그로 유저 검색" style="font-size: small; width: 400px;"/> 
-                        <img src="icon/finding.png" style="width: 25px; height: 25px; margin: 5px; margin-left: auto;"/>                    
+                <div class="middle_pb">
+                    <div class="green">유저 초대</div>
+                    <div style="width: 100%; margin-bottom: 20px;">
+                        <hr style="border: 1px solid rgb(0, 0, 0); "/>
                     </div>
-                    <div class="container_radio">
-                        <input type="radio" name="option" style="height:15px; width:15px; margin: 5px;" checked="checked"><span>친구</span>
-                        <input type="radio" name="option" style="height:15px; width:15px; margin: 5px; margin-left: 15px;"><span>전체</span>
-                    </div>             
-                </div>
-        
-                <div class="box10" style="height: 500px;">
-                <div class="box_scroll">
-                    <table class="table table-hover" style="border-collapse: separate; border-spacing: 0;">
-                        <thead>
-                            <tr>
-                                <th style="width: 55px;"></th>
-                                <th style="width: 100px;">닉네임</th>
-                                <th style="width: 100px;">아이디</th>
-                                <th style="width: 60px;">#태그</th>
-                                <th style="width: 50px;"></th>
-                                <!-- <img src="icon/plus.png" style="height: 15px; width: 15px;"/> -->
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <img src="icon/user2.png" style="height: 30px; width: 30px; margin:5px;"/>
-                                </td>
-                                <td class="lenCut_container">
-                                    <span class="lenCut">닉네임이아주아주아주길어요</span>
-                                    <div class="tooltip1" id="tooltip"></div>                                                      
-                                </td>
-                                <td>
-                                    <div class="lenCut_container">
-                                        <span class="lenCutE" style="font-size: small; color: rgba(0, 0, 0, 0.5);">identification123</span>                            
-                                        <div class="tooltip1" id="tooltip"></div>                                        
-                                    </div>                            
-                                </td>
-                                <td>
-                                    <span style="color: #3a6b5b;">#0000</span>                               
-                                </td>  
-                                <td>
-                                    <button class="button_select2">초대</button>
-                                </td>                           
-                            </tr>
-                            <tr>
-                                <td>
-                                    <img src="icon/user2.png" style="height: 30px; width: 30px; margin:5px;"/>
-                                </td>
-                                <td class="lenCut_container">
-                                    <span class="lenCut">정예은</span>
-                                    <div class="tooltip1" id="tooltip"></div>                                                      
-                                </td>
-                                <td>
-                                    <div class="lenCut_container">
-                                        <span class="lenCutE" style="font-size: small; color: rgba(0, 0, 0, 0.5);">yeeun13</span>                            
-                                        <div class="tooltip1" id="tooltip"></div>                                        
-                                    </div>                            
-                                </td>
-                                <td>
-                                    <span style="color: #3a6b5b;">#3697</span>                               
-                                </td>  
-                                <td>
-                                    <button class="button_select2">초대</button>
-                                </td>                           
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <br/>
+                    
+                    <div style="display: flex; flex-direction: row; align-items: center; justify-content: space-between;">
+                        <div class="find3">
+                            <input class="button_find3" type="text" id="find_user_modal" placeholder="아이디 / 태그로 유저 검색"/> 
+                            <img src="public/icon/finding.png" style="width: 25px; height: 25px; margin-left: auto;"/>                    
+                        </div>
+                        <div class="container_radio">
+                            <input type="radio" name="user_search_option" id="friend_radio" style="height:15px; width:15px; margin: 5px;" checked="checked"><label for="friend_radio">친구</label>
+                            <input type="radio" name="user_search_option" id="all_radio" style="height:15px; width:15px; margin: 5px; margin-left: 15px;"><label for="all_radio">전체</label>
+                        </div>              
+                    </div>
+            
+                    <div class="box10" style="height: 500px;">
+                        <div class="box_scroll">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 55px;"></th>
+                                        <th style="width: 100px;">닉네임</th>
+                                        <th style="width: 100px;">아이디</th>
+                                        <th style="width: 60px;">#태그</th>
+                                        <th style="width: 50px;"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <img src="public/icon/user2.png" style="height: 30px; width: 30px; margin:5px;"/>
+                                        </td>
+                                        <td class="lenCut_container">
+                                            <span class="lenCut">닉네임이아주아주아주길어요</span>
+                                            <div class="tooltip1"></div>                                      
+                                        </td>
+                                        <td>
+                                            <div class="lenCut_container">
+                                                <span class="lenCutE" style="font-size: small; color: rgba(0, 0, 0, 0.5);">identification123</span>                    
+                                                <div class="tooltip1"></div>                                    
+                                            </div>                    
+                                        </td>
+                                        <td>
+                                            <span style="color: #3a6b5b;">#0000</span>                                      
+                                        </td>    
+                                        <td>
+                                            <button class="button_select2">초대</button>
+                                        </td>                          
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <img src="public/icon/user2.png" style="height: 30px; width: 30px; margin:5px;"/>
+                                        </td>
+                                        <td class="lenCut_container">
+                                            <span class="lenCut">정예은</span>
+                                            <div class="tooltip1"></div>                                      
+                                        </td>
+                                        <td>
+                                            <div class="lenCut_container">
+                                                <span class="lenCutE" style="font-size: small; color: rgba(0, 0, 0, 0.5);">yeeun13</span>                    
+                                                <div class="tooltip1"></div>                                    
+                                            </div>                    
+                                        </td>
+                                        <td>
+                                            <span style="color: #3a6b5b;">#3697</span>                                      
+                                        </td>    
+                                        <td>
+                                            <button class="button_select2">초대</button>
+                                        </td>                          
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <br/>
 
-                <div style="position: absolute; bottom: 20px; right: 20px; display: flex; flex-direction: row; justify-content: center; gap: 10px;">
-                    <button class="button_pb2" style="width:80px; background-color: #ccc;" onclick="document.querySelector('.modal_nu').close();">닫기</button>
+                        <div style="position: absolute; bottom: 20px; right: 20px; display: flex; flex-direction: row; justify-content: center; gap: 10px;">
+                            <button class="button_pb2" style="width:80px; background-color: #ccc;" onclick="document.querySelector('.modal_nu').close();">닫기</button>
+                        </div>
+                    </div>
                 </div>
-            </div>
             </dialog>
             <div style="display: flex; flex-direction: row; height: 100%; width: 100%;">
                 <div class="work_select_user">
@@ -655,7 +689,7 @@
                                         </div>
                                     </td>
                                     <td style="width: 50px;">
-                                        <img src="public/icon/edit.png" style="height:20px; width:20px;"  class="edit_gn drag1"/>
+                                        <img src="/icon/edit.png" style="height:20px; width:20px;"  class="edit_gn drag1"/>
                                     </td>
                                     <td style="width: 150px;">
                                         <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; gap: 10px;">
@@ -676,7 +710,7 @@
                                         </div>
                                     </td>
                                     <td style="width: 50px;">
-                                        <img src="public/icon/edit.png" style="height:20px; width:20px;"  class="edit_gn drag1"/>
+                                        <img src="/icon/edit.png" style="height:20px; width:20px;"  class="edit_gn drag1"/>
                                     </td>
                                     <td style="width: 150px;">
                                         <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; gap: 10px;">
@@ -707,18 +741,10 @@
 
                     <div class="work_select_content">
                         <table class="table table-hover" id="user_table_2">
+                            <thead>
+                                </thead>
                             <tbody>
-                                <tr>
-                                    <td style="width: 55px;">
-                                        <img src="public/icon/user2.png" style="height: 30px; width: 30px; margin:5px;"/>
-                                    </td>
-                                    <td class="lenCut_container" style="width: 100px;">
-                                        <span class="lenCut">닉네임</span>
-                                        <div class="tooltip1" id="tooltip"></div>
-                                    </td>
-                                    <td style="width: 100px; font-size: small; color: rgba(0, 0, 0, 0.5);">identification</td>
-                                    <td style="width: 60px; color: #3a6b5b;">#0000</td>
-                                </tr>
+                                <tr><td colspan="3" style="text-align: center;">그룹을 선택하면 유저 목록이 표시됩니다.</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -727,17 +753,17 @@
 
                 <div class="work_select" id="authority_select_2">
                     <div class="work_select_head">
-                        <span style="margin-left: 5px;">권한</span>                 
+                        <span style="margin-left: 5px;">권한</span>
                     </div>
                     <div class="work_select_content">
                         <table class="table table-hover" id="authority_table_2">
                             <tbody>
-                                <tr><td>유저 초대 및 제외</td></tr>
-                                <tr><td>업무 생성 및 삭제, 마감기한 설정</td></tr>
-                                <tr><td>그룹 생성 및 초대</td></tr>
-                                <tr><td>프로젝트 삭제</td></tr>
-                                <tr><td>권한 위임 및 양도</td></tr>
-                                <tr><td>게시글, 댓글 삭제</td></tr>
+                                <tr data-permission-value="1"><td>유저 초대 및 제외</td></tr>
+                                <tr data-permission-value="2"><td>업무 생성 및 삭제, 마감기한 설정</td></tr>
+                                <tr data-permission-value="4"><td>그룹 생성 및 초대</td></tr>
+                                <tr data-permission-value="8"><td>프로젝트 삭제</td></tr>
+                                <tr data-permission-value="16"><td>권한 위임 및 양도</td></tr>
+                                <tr data-permission-value="32"><td>게시글, 댓글 삭제</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -898,383 +924,747 @@
 
         </div>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-
-        // 그룹관리
-        let groupSelected = false;
-        const ugSelect2 = document.getElementById("ug_select_2");
-        const authoritySelect2 = document.getElementById("authority_select_2");
-
-        document.querySelector('#group_table_2 tbody').addEventListener('click', (e) => {
-            const button = e.target.closest('button');
-            if (!button) return; 
-            
-            const item = button.closest('tr');
-
-            if (item.classList.contains('active')) {
-                item.classList.remove('active');
-                groupSelected = false;
-
-                // 유저, 권한 선택 사라지게
-                if (ugSelect2.classList.contains("show")) {
-                    ugSelect2.classList.remove("show");
-                    authoritySelect2.classList.remove("show");
-
-                    setTimeout(() => {
-                        ugSelect2.style.display = "none";
-                        authoritySelect2.style.display = "none";
-                    }, 300);
+        <script>
+            // --- 전역 변수 및 설정 ---
+            const API_BASE_URL = '/api';
+            let CURRENT_PROJECT_ID = null;
+            let SELECTED_GROUP_ID = null; 
+            let availableProjectUsers = []; 
+            let originalSelectedGroupData = {
+                name: '',
+                color: '',
+                members: [], 
+                permissions: 0 
+            };
+            let stagedGroupDetailChanges = {}; 
+        
+            const PERMISSIONS_MAP = {
+                MANAGE_PROJECT_MEMBERS: { bit: 1, text: "멤버 초대 및 제외" },
+                MANAGE_TASKS: { bit: 2, text: "업무 생성/삭제, 마감일 설정" },
+                MANAGE_GROUPS: { bit: 4, text: "그룹 생성 및 멤버 관리" },
+                DELETE_PROJECT: { bit: 8, text: "프로젝트 삭제" },
+                DELEGATE_PROJECT_PERMISSIONS: { bit: 16, text: "프로젝트 관리 권한 위임" },
+                DELETE_POSTS_COMMENTS: { bit: 32, text: "게시글, 댓글 삭제" }
+            };
+            const PERMISSION_TEXT_TO_KEY = {};
+            for (const key in PERMISSIONS_MAP) {
+                PERMISSION_TEXT_TO_KEY[PERMISSIONS_MAP[key].text] = PERMISSIONS_MAP[key].bit; // 텍스트로 비트값 찾기 위함
+            }
+        
+            // --- 초기화 및 기본 이벤트 리스너 ---
+            document.addEventListener("DOMContentLoaded", async function () {
+                const urlParams = new URLSearchParams(window.location.search);
+                CURRENT_PROJECT_ID = parseInt(urlParams.get('projectId'), 10);
+        
+                if (isNaN(CURRENT_PROJECT_ID)) {
+                    alert("프로젝트 ID가 유효하지 않습니다. 프로젝트 목록으로 돌아갑니다.");
+                    document.body.innerHTML = '<p style="color:red; text-align:center; padding: 20px;">잘못된 접근입니다. 프로젝트 ID가 필요합니다.</p>';
+                    setTimeout(() => { window.location.href = 'projectlist.html'; }, 2000);
+                    return;
                 }
-
-            } else {
-                document.querySelectorAll('#group_table_2 tbody tr').forEach(el => el.classList.remove('active'));
-                item.classList.add('active');
-                groupSelected = true;
-
-                // 유저, 권한 선택 보이게
-                if (!ugSelect2.classList.contains("show")) {
-                    ugSelect2.style.display = "block";
-                    setTimeout(() => {
-                        ugSelect2.classList.add("show");
-                    }, 10);
-                    authoritySelect2.style.display = "block";
-                    setTimeout(() => {
-                        authoritySelect2.classList.add("show");
-                    }, 10);
+        
+                Watchdiv2('1'); // 기본 탭 설정
+        
+                const addGroupBtn = document.getElementById('add3'); // 그룹 추가 버튼 (HTML ID와 일치)
+                if (addGroupBtn) addGroupBtn.onclick = () => promptAndCreateGroup();
+                
+                const addNewTaskBtnTab3 = document.getElementById('newwork');
+                const createTaskModalInstance = document.querySelector('dialog.modal_pb'); 
+        
+                if (addNewTaskBtnTab3 && createTaskModalInstance) {
+                    addNewTaskBtnTab3.onclick = () => {
+                        if (!CURRENT_PROJECT_ID) {
+                            alert("업무를 생성할 프로젝트 ID가 없습니다."); return;
+                        }
+                        document.getElementById("worktitle").value = ""; 
+                        document.getElementById("workcontent").value = ""; 
+                        document.getElementById("deadline_pb").value = ""; 
+                        const workContentTextarea = document.getElementById("workcontent");
+                        if (workContentTextarea) workContentTextarea.style.height = '80px';
+                        createTaskModalInstance.showModal();
+                    };
                 }
-            }
-        });
-
-
-        document.querySelector('#user_table_2 tbody').addEventListener('click', (e) => {
-            const item = e.target.closest('tr');
-            if (!groupSelected) {
-                alert("먼저 그룹을 선택해야 합니다.");
-                return;
-            }
-            item.classList.toggle('active');
-        });
-
-        document.querySelector('#authority_table_2 tbody').addEventListener('click', (e) => {
-            const item = e.target.closest('tr');
-            if (!groupSelected) {
-                alert("먼저 그룹을 선택해야 합니다.");
-                return;
-            }
-            item.classList.toggle('active');
-        });
-
-        // 업무할당
-        let taskSelected = false;
-        const ugSelect3 = document.getElementById("ug_select_3");
-
-        document.querySelector('.work_table_3 tbody').addEventListener("click", (e) => {
-            const item = e.target.closest('tr');
-            if (!item) return;
-
-            if (item.classList.contains('active')) {
-                item.classList.remove('active');
-                taskSelected = false;
-
-                // 사라지는 애니메이션
-                if (ugSelect3.classList.contains("show")) {
-                    ugSelect3.classList.remove("show");
-                    setTimeout(() => {
-                        ugSelect3.style.display = "none";
-                    }, 300);
+                if (createTaskModalInstance) closeModal(createTaskModalInstance); 
+                
+                const workContentTextarea = document.getElementById('workcontent');
+                if (workContentTextarea) {
+                    const DEFAULT_TEXTAREA_HEIGHT = 80;
+                    workContentTextarea.style.height = `${DEFAULT_TEXTAREA_HEIGHT}px`;
+                    workContentTextarea.oninput = (event) => {
+                        const $target = event.target;
+                        $target.style.height = 'auto';
+                        const newHeight = Math.max(DEFAULT_TEXTAREA_HEIGHT, $target.scrollHeight);
+                        $target.style.height = `${newHeight}px`;
+                    };
                 }
-
-            } else {
-                document.querySelectorAll('.work_table_3 tbody tr').forEach(r => r.classList.remove("active"));
-                item.classList.add("active");
-                taskSelected = true;
-
-                // 보이는 애니메이션
-                if (!ugSelect3.classList.contains("show")) {
-                    ugSelect3.style.display = "block";
-                    setTimeout(() => {
-                        ugSelect3.classList.add("show");
-                    }, 10);
+                
+                const userRadioTaskAssign = document.getElementById('userS'); 
+                const groupRadioTaskAssign = document.getElementById('groupS'); 
+                const userTableTaskAssign = document.getElementById('user_table_3');
+                const groupTableTaskAssign = document.getElementById('group_table_3');
+        
+                function toggleTaskAssignTables() {
+                    if (!userRadioTaskAssign || !groupRadioTaskAssign || !userTableTaskAssign || !groupTableTaskAssign) return;
+                    if (userRadioTaskAssign.checked) {
+                        userTableTaskAssign.classList.remove('hidden');
+                        groupTableTaskAssign.classList.add('hidden');
+                    } else {
+                        userTableTaskAssign.classList.add('hidden');
+                        groupTableTaskAssign.classList.remove('hidden');
+                    }
                 }
+                if (userRadioTaskAssign && groupRadioTaskAssign) {
+                    userRadioTaskAssign.addEventListener('change', toggleTaskAssignTables);
+                    groupRadioTaskAssign.addEventListener('change', toggleTaskAssignTables);
+                    toggleTaskAssignTables(); 
+                }
+                initializeTooltips(); 
 
-            }
-        });
+                // 유저 초대 모달 관련 스크립트 추가
+                const newUserBtn = document.getElementById('newuser');
+                const userInviteModal = document.querySelector('dialog.modal_nu');
 
-        document.querySelector('#user_table_3 tbody').addEventListener('click', (e) => {
-            const item = e.target.closest('tr');
-            if (!taskSelected) {
-                alert("먼저 업무를 선택해야 합니다.");
-                return;
-            }
-            item.classList.toggle('active');
-        });
-
-        document.querySelector('#group_table_3 tbody').addEventListener('click', (e) => {
-            const item = e.target.closest('tr');
-            if (!taskSelected) {
-                alert("먼저 업무를 선택해야 합니다.");
-                return;
-            }
-            item.classList.toggle('active');
-        });
-
-        // 그룹 추가
-        //let groupcolorid = 0; (그룹 색상에 별도 아이디 필요하면 타입 컬러에 id="${id}" 추가)
-        document.getElementById("add3").addEventListener("click", function () {
-            const groupName = prompt("그룹 이름을 작성하세요");
-            if (!groupName) {
-                return;
-            }
-            const container = document.getElementById("tbody_group");
-
-            //const id = `groupcolor_${(groupcolorid = groupcolorid + 1)}`;
-            const tr = document.createElement("tr");
-            tr.innerHTML = `
-                <td style="width: 100px;">
-                    <div class="lenCut_container">
-                        <span class="lenCut" id="groupname">${groupName}</span>
-                        <div class="tooltip1" id="tooltip"></div>
-                    </div>
-                </td>
-                <td style="width: 50px;">
-                    <img src="/icon/edit.png" style="height:20px; width:20px;" class="edit_gn drag1"/>
-                </td>
-                <td style="width: 150px;">
-                    <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; gap: 10px;">
-                        <span>그룹 색상 수정</span>
-                        <input type="color" class="groupcolor"/>
-                    </div>
-                </td>
-                <td style="width: 150px; align-items: end;">
-                    <button class="button_return">유저 및 권한 관리</button>
-                </td>
-            `;
-
-            container.appendChild(tr);
-            attachEditListeners();
-        });
-    });
-
-
-    //말줄임표, 전문 툴팁
-    document.querySelectorAll('.lenCut_container').forEach(container => {
-        const spanText = container.querySelector(".lenCut");
-        const tooltip = container.querySelector('.tooltip1');
-        const spanTextOriginal = spanText.textContent;
-
-        if (spanTextOriginal.length > 8 ) {
-            spanText.textContent = spanTextOriginal.substr(0, 8) + "...";
-            
-            spanText.addEventListener('mouseenter', function () {
-                tooltip.style.display = 'block';
-                tooltip.textContent = spanTextOriginal;
+                if (newUserBtn && userInviteModal) {
+                    newUserBtn.addEventListener('click', () => {
+                        userInviteModal.showModal();
+                    });
+                }
+                if (userInviteModal) {
+                    closeModal(userInviteModal); // 배경 클릭 시 모달 닫기
+                }
             });
-            spanText.addEventListener('mouseleave', function () {
-                tooltip.style.display = 'none';
-            });            
-        }
         
-
-    });
-
-    
-
- </script>
-  
-</body>
-<script>
-    
-    function editName(e){
-        e.stopPropagation();
-        const tr = e.target.closest('tr');
-        const name = tr.querySelector('#groupname');
-        const oldname = name.textContent.trim();
+            function closeModal(dialog){ 
+                if (!dialog) return;
+                dialog.addEventListener('click', function(e){
+                    if (e.target === dialog) { 
+                        dialog.close();
+                    }
+                });
+            }
         
-        //const newname = prompt("새 그룹 이름을 입력하세요.", oldname); //이름이 길면 보이는 글자만 가져옴 
-        const newname = prompt("새 그룹 이름을 입력하세요.");
-        if(!newname || newname === oldname){
-            return;
-        }
-        else{
-            if(newname !== oldname){
-                const result = confirm(`그룹명을 ${newname}으로 변경하겠습니까?`);
-                if(result){
-                    name.textContent = newname;
+            function initializeTooltips() { 
+                document.querySelectorAll('.lenCut_container').forEach(container => {
+                    const spanText = container.querySelector(".lenCut");
+                    const spanTextE = container.querySelector(".lenCutE"); // lenCutE 추가
+                    
+                    const targetSpan = spanText || spanTextE; // 둘 중 하나를 선택
+                    if (!targetSpan) return;
+
+                    const tooltip = container.querySelector('.tooltip1');
+                    if (!tooltip) return;
+        
+                    const spanTextOriginal = targetSpan.dataset.originalText || targetSpan.textContent;
+                    targetSpan.dataset.originalText = spanTextOriginal;
+                    
+                    const handleMouseEnter = () => {
+                        if (targetSpan.offsetWidth < targetSpan.scrollWidth || targetSpan.textContent.endsWith("...")) { 
+                            tooltip.textContent = spanTextOriginal; 
+                            tooltip.style.display = 'block'; 
+                        }
+                    };
+                    const handleMouseLeave = () => { tooltip.style.display = 'none'; };
+        
+                    targetSpan.removeEventListener('mouseenter', handleMouseEnter);
+                    targetSpan.removeEventListener('mouseleave', handleMouseLeave);
+                    targetSpan.addEventListener('mouseenter', handleMouseEnter);
+                    targetSpan.addEventListener('mouseleave', handleMouseLeave);
+                    
+                    // 초기 렌더링 시 말줄임표 처리
+                    const maxLength = targetSpan.classList.contains('lenCutE') ? 12 : 8; // lenCutE는 좀 더 길게 표시 (예시)
+                    if (spanTextOriginal.length > maxLength ) { 
+                         if(!targetSpan.textContent.endsWith("...")) {
+                            targetSpan.textContent = spanTextOriginal.substring(0, maxLength) + "...";
+                         }
+                    } else {
+                         targetSpan.textContent = spanTextOriginal;
+                    }
+                });
+            }
+        
+            async function fetchApi(url, options = {}) {
+                try {
+                    const defaultHeaders = { 'Content-Type': 'application/json' };
+                    const response = await fetch(url, { ...options, headers: { ...defaultHeaders, ...options.headers }});
+                    if (response.status === 204) return { status: 204, data: null, message: "요청 성공 (내용 없음)" };
+                    
+                    const resultText = await response.text();
+                    let resultJson;
+                    try { resultJson = JSON.parse(resultText); } 
+                    catch (e) {
+                        if (!response.ok) throw new Error(`서버 오류: ${response.status}. 응답: ${resultText.substring(0,100)}`);
+                        return { status: response.status, data: resultText, message: "응답이 JSON이 아님 (성공)" };
+                    }
+        
+                    if (!response.ok) {
+                        const errMsg = resultJson.message || (resultJson.errors && resultJson.errors[0] ? `${resultJson.errors[0].field}: ${resultJson.errors[0].reason}` : `HTTP ${response.status}`);
+                        throw new Error(errMsg);
+                    }
+                    return { status: resultJson.status !== undefined ? resultJson.status : response.status, data: resultJson.data, message: resultJson.message || "요청 성공" };
+                } catch (error) {
+                    console.error(`API Error (${url}):`, error);
+                    alert(`오류: ${error.message}`);
+                    throw error;
                 }
             }
-        }
-    }
-
-    /*모든 class = edit_gn에 적용되는함수*/
-    function attachEditListeners() {
-        document.querySelectorAll('.edit_gn').forEach(img => {
-            img.removeEventListener('click', editName);
-            img.addEventListener('click', editName);
-        });
-    }
-    document.addEventListener('DOMContentLoaded', () => {
-        attachEditListeners();
-    });
-
-    function Watchdiv2(i){
-        const sections = ['1', '2', '3'];
-        sections.forEach(id => {
-            const el = document.getElementById(id);
-            if (el) {
-                el.style.display = (id === i) ? 'block' : 'none';
-            }
-        });
-        const div = document.querySelectorAll('.aside_left ul li');
-        div.forEach((li,index)=>{
-            const watch = ((index + 1).toString() === i);
-            li.classList.toggle('on', watch);
-        });
-
-        const spanText = document.getElementById('spanText');
-        if(i=="1"){
-            spanText.innerText = "멤버(유저) 관리";
-        }
-        if(i==="2"){
-            spanText.innerText="그룹 관리";
-        }
-        if(i==="3"){
-            spanText.innerText="업무 할당";
-        }
-    }
-
-    window.addEventListener('load', () => Watchdiv2('1'));
-    window.Watchdiv2 = Watchdiv2;
-
-    // 그룹할당에서 유저, 그룹 선택
-    const userRadio = document.getElementById('userS');
-    const groupRadio = document.getElementById('groupS');
-    const userTable = document.getElementById('user_table_3');
-    const groupTable = document.getElementById('group_table_3');
-    function toggleTables() {
-      if (userRadio.checked) {
-        userTable.classList.remove('hidden');
-        groupTable.classList.add('hidden');
-      } else {
-        userTable.classList.add('hidden');
-        groupTable.classList.remove('hidden');
-      }
-    }
-    userRadio.addEventListener('change', toggleTables);
-    groupRadio.addEventListener('change', toggleTables);
-    toggleTables();
-    
-
-    function Deleteuser() {
-        alert("해당 유저를 삭제하시겠습니까?");
-    }
-    
-    function Saveproject(){
-        alert("변경 사항이 저장되었습니다.");
-    }
-
-    // 이거는 프로젝트로 돌아가기에.
-    // 물어보고 확인 하면 프로젝트로 돌아가고, 취소하면 그대로 설정창
-    // (취소버튼은 변경사항 되돌리기 용도)
-    //넹
-    function Returnpj(){
-        const result = confirm("변경 사항이 저장되지 않을 수 있습니다.");
-        if (result) {
-            window.location.href="projectboard.html";
-        } 
-    }
-    
-    function Nosave(){
-        const result = confirm("변경 사항을 되돌리겠습니까?");
-        if(!result){
-            return;
-        }
-        alert("변경 사항이 초기화되었습니다.");
-    }
-
-    // textarea 높이 조절
-    const $textarea = document.getElementById('workcontent');
-    const DEFAULT_HEIGHT = 80;
-    $textarea.oninput = (event) => {
-        const $target = event.target;
-        $target.style.height = 'auto';
-        const newHeight = Math.max(DEFAULT_HEIGHT, $target.scrollHeight);
-        $target.style.height = `${newHeight}px`;
-    };
-
-    
-    document.addEventListener('DOMContentLoaded', () => {
-        // 업무 추가 모달
-        const newWorkBtn = document.getElementById('newwork');
-        const modal = document.querySelector('.modal_pb');
-
-        newWorkBtn.addEventListener('click', () => {
-            document.getElementById("worktitle").value = "";
-            document.getElementById("workcontent").value = ""; 
-            document.getElementById("deadline_pb").value = "";
-            $textarea.style.height = `${DEFAULT_HEIGHT}px`;
-            modal.showModal();
-        });
-
-        // 배경 클릭 시 모달 닫기
-        modal.addEventListener('click', (event) => {
-            if (event.target === modal) {
-                modal.close();
-            }
-        })
-
-        // 유저 초대 모달
-        const newUSerBtn = document.getElementById('newuser');
-        const modal2 = document.querySelector('.modal_nu');
-
-        newUSerBtn.addEventListener('click', () => {
-            modal2.showModal();
-        });
-
-        // 배경 클릭 시 모달 닫기
-        modal2.addEventListener('click', (event) => {
-            if (event.target === modal2) {
-                modal2.close();
-            }
-        })
-    });
-    
-
-    function addwork() {
-        const worktitle = document.getElementById("worktitle");
-        const workcontent = document.getElementById("workcontent");
-        const deadline = document.getElementById("deadline_pb");
-
-        const title = worktitle.value.trim();
-        const content = workcontent.value.trim();   
-        const dl = deadline.value;
-
-        if (!title) {
-            alert("업무 제목을 입력하세요.");
-            title.focus();
-        }
-        else if (!dl) {
-            alert("업무 마감 기한을 설정하세요.");
-            return;
-        }
-
-        const todosection = document.getElementById("todowork");
-        const box = document.createElement("tr");
-        box.innerHTML = `
-                <td>${title}</td>
-
-        `;
-        todosection.appendChild(box);
         
-        worktitle.value = "";
-        workcontent.value = "";
-        deadline.value = "";
+            function Watchdiv2(tabIndexStr) {
+                const sections = ['1', '2', '3'];
+                sections.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.style.display = (id === tabIndexStr) ? 'flex' : 'none';
+                    if (id === tabIndexStr) { // 활성화된 탭에 대해 flex-direction 설정
+                         el.style.flexDirection = (id === '1') ? 'column' : 'row';
+                    }
+                });
+        
+                const navLinks = document.querySelectorAll('.aside_left ul li');
+                let activeTabText = "";
+                navLinks.forEach((li, index) => {
+                    const isActive = ((index + 1).toString() === tabIndexStr);
+                    li.classList.toggle('on', isActive);
+                    if (isActive) activeTabText = li.querySelector('a').textContent;
+                });
+                document.getElementById('spanText').innerText = activeTabText || "관리";
+        
+                SELECTED_GROUP_ID = null; 
+                stagedGroupDetailChanges = {}; 
+                const ugSelect2 = document.getElementById("ug_select_2");
+                const authoritySelect2 = document.getElementById("authority_select_2");
+                const ugSelect3 = document.getElementById("ug_select_3");
+        
+                [ugSelect2, authoritySelect2, ugSelect3].forEach(panel => {
+                    if(panel) {
+                        panel.classList.remove("show");
+                        panel.style.display = "none"; // 확실히 숨김
+                    }
+                });
+                document.querySelectorAll('#group_table_2 tbody tr.active').forEach(row => row.classList.remove('active'));
+                document.querySelectorAll('#work_list_tab3 .table tbody tr.active').forEach(row => row.classList.remove('active'));
+        
+        
+                if (CURRENT_PROJECT_ID) {
+                    if (tabIndexStr === '1') { /* loadProjectMembersForTab1(); */ }
+                    else if (tabIndexStr === '2') { initializeGroupManagementTab(); }
+                    else if (tabIndexStr === '3') { initializeTaskAssignmentTab(); }
+                }
+            }
+            window.Watchdiv2 = Watchdiv2;
+        
+            async function initializeGroupManagementTab() {
+                await fetchAndStoreProjectMembers(); // 프로젝트 전체 멤버 로드 (availableProjectUsers 업데이트)
+                await loadAndDisplayGroups();        // 그룹 목록 로드 및 표시
+            }
+        
+            async function fetchAndStoreProjectMembers() {
+                try {
+                    // ProjectMemberResponseDto[] (userId, nickname, identificationCode, email, role) 반환 가정
+                    const result = await fetchApi(`/api/projects/${CURRENT_PROJECT_ID}/members`);
+                    if (result.status === 200 && Array.isArray(result.data)) {
+                        availableProjectUsers = result.data.map(member => ({
+                            userIdx: member.userId, // ProjectMemberResponseDto의 userId를 userIdx로 매핑
+                            nickname: member.nickname,
+                            identificationCode: member.identificationCode,
+                            profileImage: member.profileImage || 'public/icon/user2.png', // profileImage 필드가 ProjectMemberResponseDto에 있다고 가정
+                            // '아이디' 필드는 제외하기로 했으므로 email/loginId는 가져오지 않음
+                        }));
+                    } else {
+                        availableProjectUsers = [];
+                        console.warn("프로젝트 멤버 목록을 가져오지 못했거나 데이터 형식이 올바르지 않습니다.", result);
+                    }
+                } catch (error) { availableProjectUsers = []; }
+            }
+        
+            async function loadAndDisplayGroups() {
+                const tbody = document.getElementById("tbody_group");
+                if (!tbody) { console.error("그룹 테이블 tbody (tbody_group)를 찾을 수 없습니다."); return; }
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">그룹 목록 로딩 중...</td></tr>';
+                try {
+                    const result = await fetchApi(`/api/projects/${CURRENT_PROJECT_ID}/groups`);
+                    tbody.innerHTML = '';
+                    if (result.status === 200 && Array.isArray(result.data)) {
+                        if (result.data.length === 0) {
+                            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">생성된 그룹이 없습니다.</td></tr>'; return;
+                        }
+                        result.data.forEach(group => {
+                            const tr = document.createElement("tr");
+                            tr.classList.add('group_list_2');
+                            tr.dataset.groupId = group.idx;
+                            tr.dataset.groupName = group.name;
+                            tr.dataset.groupColor = group.color || '#000000';
+                            tr.dataset.groupPermissions = group.permissionBitmask || 0;
+        
+                            tr.innerHTML = `
+                                <td style="width: 150px;">
+                                    <div class="lenCut_container">
+                                        <span class="lenCut group-name-display">${group.name}</span>
+                                        <div class="tooltip1"></div>
+                                    </div>
+                                </td>
+                                <td style="width: 50px;"><img src="/icon/edit.png" style="height:20px; width:20px; cursor:pointer;" class="edit_group_name_btn drag1" title="그룹 이름 수정"/></td>
+                                <td style="width: 150px;"><div style="display: flex; align-items: center; justify-content: center; gap: 10px;"><span>그룹 색상</span><input type="color" class="groupcolor_input" value="${group.color || '#000000'}"/></div></td>
+                                <td style="width: 150px; text-align: right;"><button class="button_expel delete_group_btn" data-group-id="${group.idx}" style="font-size:13px; width:auto; padding: 0 8px;">그룹 삭제</button></td>
+                            `;
+                            // 중요: "유저 및 권한 관리" 버튼 대신 행 전체를 클릭 가능하게 하고, 내부 버튼 클릭은 전파 중단
+                            tr.onclick = (e) => {
+                                if (e.target.closest('.edit_group_name_btn, .groupcolor_input, .delete_group_btn')) return;
+                                handleGroupSelection(group.idx, tr);
+                            };
+                            tbody.appendChild(tr);
+        
+                            tr.querySelector('.edit_group_name_btn').addEventListener('click', (e) => {
+                                e.stopPropagation(); promptAndStageGroupNameChange(group.idx, tr.dataset.groupName, tr.querySelector('.group-name-display'));
+                            });
+                            tr.querySelector('.groupcolor_input').addEventListener('change', (e) => {
+                                e.stopPropagation(); stageGroupColorChange(group.idx, e.target.value);
+                            });
+                            tr.querySelector('.delete_group_btn').addEventListener('click', (e) => {
+                                e.stopPropagation(); handleDeleteGroup(group.idx, group.name);
+                            });
+                        });
+                        initializeTooltips();
+                    } else { throw new Error(result.message || "그룹 목록 로드 실패"); }
+                } catch (error) { tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:red;">그룹 목록 로드 오류.</td></tr>`; }
+            }
+            
+            // 그룹 선택 시 호출되는 함수
+            async function handleGroupSelection(groupId, selectedRowElement) {
+                const ugSelect2 = document.getElementById("ug_select_2");
+                const authoritySelect2 = document.getElementById("authority_select_2");
+        
+                // 다른 그룹 활성화 해제 및 현재 그룹 활성화
+                document.querySelectorAll('#group_table_2 tbody tr.active').forEach(row => row.classList.remove('active'));
+                if(selectedRowElement) selectedRowElement.classList.add('active');
+                
+                SELECTED_GROUP_ID = groupId.toString(); 
+        
+                // 패널 표시
+                ugSelect2.style.display = "flex"; // CSS에서 .work_select는 flex container임
+                authoritySelect2.style.display = "flex";
+                setTimeout(() => {
+                    ugSelect2.classList.add("show");
+                    authoritySelect2.classList.add("show");
+                }, 10);
+        
+                // 원본 데이터 저장을 위해 그룹 상세 정보 로드
+                try {
+                    const groupDetailsResult = await fetchApi(`/api/groups/${SELECTED_GROUP_ID}`);
+                    if (groupDetailsResult.status === 200 && groupDetailsResult.data) {
+                        const groupDetails = groupDetailsResult.data;
+                        originalSelectedGroupData.name = groupDetails.name;
+                        originalSelectedGroupData.color = groupDetails.color || '#000000';
+                        originalSelectedGroupData.permissions = groupDetails.permissionBitmask || 0;
+                        
+                        // 멤버 정보 로드
+                        const membersResult = await fetchApi(`/api/groups/${SELECTED_GROUP_ID}/members`);
+                        // GroupMemberDisplayDto는 {userIdx, nickname, identificationCode, profileImage}
+                        originalSelectedGroupData.members = membersResult.data ? membersResult.data.map(m => m.userIdx) : [];
+        
+                        populateUserSelectionPanel(originalSelectedGroupData.members);
+                        populatePermissionSelectionPanel(originalSelectedGroupData.permissions);
+                    } else {
+                         throw new Error("그룹 상세 정보를 가져오는데 실패했습니다.");
+                    }
+                } catch(error) {
+                    // 패널 숨기기 및 선택 해제
+                    if(selectedRowElement) selectedRowElement.classList.remove('active');
+                    SELECTED_GROUP_ID = null;
+                    ugSelect2.classList.remove("show"); authoritySelect2.classList.remove("show");
+                    setTimeout(() => {
+                        if(!ugSelect2.classList.contains("show")) ugSelect2.style.display = "none";
+                        if(!authoritySelect2.classList.contains("show")) authoritySelect2.style.display = "none";
+                    }, 300);
+                }
+            }
+            
+            // 새 그룹 생성 및 프롬프트 함수
+            async function promptAndCreateGroup() {
+                if (!CURRENT_PROJECT_ID) {
+                    alert("그룹을 추가할 프로젝트가 선택되지 않았습니다.");
+                    return;
+                }
 
-        const modal = document.querySelector(".modal_pb");
-        modal.close();
-    
-    }
+                const groupName = prompt("새 그룹의 이름을 입력하세요:");
+                if (groupName === null) { // 사용자가 '취소'를 누른 경우
+                    return;
+                }
+
+                const trimmedGroupName = groupName.trim();
+                if (!trimmedGroupName) {
+                    alert("그룹 이름은 비워둘 수 없습니다.");
+                    return;
+                }
+                if (trimmedGroupName.length > 255) {
+                    alert("그룹 이름은 255자를 넘을 수 없습니다.");
+                    return;
+                }
+
+                // GroupCreateRequestDto에 맞게 요청 데이터 구성
+                // color와 permissionBitmask는 일단 기본값으로 설정하거나 null로 보낼 수 있습니다.
+                // 서버에서 기본값을 처리하거나, 추후 그룹 수정 기능을 통해 변경할 수 있습니다.
+                const groupData = {
+                    name: trimmedGroupName,
+                    color: null, // 기본 색상 (예: '#CCCCCC') 또는 null (서버에서 처리)
+                    permissionBitmask: 0 // 기본 권한 없음
+                };
+
+                try {
+                    const result = await fetchApi(`/api/projects/${CURRENT_PROJECT_ID}/groups`, {
+                        method: 'POST',
+                        body: JSON.stringify(groupData)
+                    });
+
+                    // GroupController의 createGroup 메소드는 성공 시 HTTP 201 Created 상태와 생성된 그룹 정보를 반환합니다.
+                    if (result.status === 201 && result.data) {
+                        alert(`그룹 '${result.data.name}'이(가) 성공적으로 생성되었습니다.`);
+                        // 그룹 목록을 새로고침하여 새 그룹을 표시합니다.
+                        await loadAndDisplayGroups(); 
+                        
+                        // (선택 사항) 새로 생성된 그룹을 자동으로 선택하고 싶다면,
+                        // loadAndDisplayGroups 후 반환된 result.data.idx를 사용하여 해당 그룹을 찾아
+                        // handleGroupSelection 함수를 호출할 수 있습니다.
+                        // 예: const newGroupRow = document.querySelector(`#tbody_group tr[data-group-id="${result.data.idx}"]`);
+                        //     if (newGroupRow) handleGroupSelection(result.data.idx, newGroupRow);
+
+                    } else if (result.message) { 
+                        // fetchApi에서 response.ok가 false인 경우 이미 에러를 throw하지만,
+                        // status는 201이 아니지만 에러가 throw되지 않은 경우를 대비한 방어 코드
+                        alert(`그룹 생성에 실패했습니다: ${result.message}`);
+                    }
+                } catch (error) {
+                    // fetchApi 함수 내부에서 이미 console.error 및 alert로 오류를 처리합니다.
+                    // 여기서는 추가적인 오류 처리가 필요하다면 작성합니다.
+                    console.error("그룹 생성 중 오류 발생 상세:", error);
+                }
+            }
+        
+            // 유저 선택 패널 채우기 ('그룹 관리' 탭)
+            function populateUserSelectionPanel(currentGroupMemberIds = []) {
+                const tbody = document.getElementById('user_table_2')?.querySelector('tbody'); // HTML의 ID 사용
+                if (!tbody) { console.error("#user_table_2 tbody 요소를 찾을 수 없습니다."); return; }
+                tbody.innerHTML = '';
+        
+                if (availableProjectUsers.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;">프로젝트에 유저가 없거나 로드에 실패했습니다.</td></tr>'; // 컬럼 수 3 (체크, 프로필+닉네임, 식별코드)
+                    return;
+                }
+        
+                availableProjectUsers.forEach(user => { // availableProjectUsers 요소는 {userIdx, nickname, identificationCode, profileImage} 형태
+                    const tr = document.createElement('tr');
+                    tr.dataset.userId = user.userIdx;
+                    const isMember = currentGroupMemberIds.includes(user.userIdx);
+                    if (isMember) tr.classList.add('active');
+        
+                    tr.innerHTML = `
+                        <td style="width: 40px; text-align: center; vertical-align: middle;">
+                            <input type="checkbox" class="group-member-candidate-checkbox" data-user-id="${user.userIdx}" ${isMember ? 'checked' : ''}>
+                        </td>
+                        <td style="width: auto; display: flex; align-items: center; padding: 5px 0; vertical-align: middle;">
+                            <img src="${user.profileImage || 'public/icon/user2.png'}" alt="${user.nickname} 프로필" style="height: 35px; width: 35px; border-radius:50%; object-fit:cover; margin-right: 8px;"/>
+                            <span style="font-size: 13px; color: #333;" class="lenCut_container"><span class="lenCut">${user.nickname}</span><div class="tooltip1"></div></span>
+                        </td>
+                        <td style="vertical-align: middle; font-size: 13px; color: #777;">#${user.identificationCode}</td>
+                    `;
+                    tr.onclick = function(e) {
+                        if (!SELECTED_GROUP_ID) { alert("먼저 그룹을 선택하세요."); return; }
+                        const cb = this.querySelector('.group-member-candidate-checkbox');
+                        if (cb && e.target !== cb) { // 체크박스 자체가 아닌 행의 다른 부분을 클릭했을 때
+                            cb.checked = !cb.checked;
+                        }
+                        // 체크박스 상태 변경 후 바로 active 클래스 업데이트 (이벤트 전파 문제 없을 시)
+                         if(cb) this.classList.toggle('active', cb.checked);
+                    };
+                    // 체크박스 직접 클릭 시에도 active 클래스 업데이트
+                    const checkbox = tr.querySelector('.group-member-candidate-checkbox');
+                    if (checkbox) {
+                        checkbox.onchange = function() {
+                            const parentRow = this.closest('tr');
+                            if(parentRow) parentRow.classList.toggle('active', this.checked);
+                        };
+                    }
+                    tbody.appendChild(tr);
+                });
+                initializeTooltips();
+            }
+        
+            // 권한 선택 패널 채우기 및 상태 업데이트 ('그룹 관리' 탭)
+            function populatePermissionSelectionPanel(currentPermissionsBitmask = 0) {
+                const tbody = document.getElementById('authority_table_2')?.querySelector('tbody');
+                if (!tbody) { console.error("#authority_table_2 tbody 요소를 찾을 수 없습니다."); return; }
+                tbody.innerHTML = ''; 
+                
+                originalSelectedGroupData.permissions = currentPermissionsBitmask; // 원본 권한 저장
+        
+                // HTML에 정의된 tr 구조를 사용하지 않고, PERMISSIONS_MAP 기준으로 동적 생성
+                for (const key in PERMISSIONS_MAP) {
+                    const permission = PERMISSIONS_MAP[key];
+                    const tr = document.createElement("tr");
+                    const isChecked = (currentPermissionsBitmask & permission.bit) === permission.bit;
+                    tr.dataset.permissionBit = permission.bit; // HTML data-* 속성으로 비트 값 저장
+                    
+                    tr.innerHTML = `
+                        <td>
+                            <label class="permission-label">
+                                <input type="checkbox" class="permission-checkbox" data-permission-key="${key}" ${isChecked ? 'checked' : ''}>
+                                ${permission.text}
+                            </label>
+                        </td>
+                    `;
+                     if (isChecked) tr.classList.add('active');
+        
+                    tr.onclick = function(e) {
+                        if (!SELECTED_GROUP_ID) { alert("먼저 그룹을 선택하세요."); return; }
+                        const cb = this.querySelector('.permission-checkbox');
+                         // 라벨 클릭 시 체크박스 상태가 자동으로 토글되므로, 여기서는 active 클래스만 동기화
+                        if(cb && e.target.tagName !== 'INPUT'){ // 라벨 부분 클릭시 체크박스 토글
+                            cb.checked = !cb.checked;
+                        }
+                        if(cb) this.classList.toggle('active', cb.checked);
+                    };
+                    tbody.appendChild(tr);
+                }
+            }
+
+            // 누락된 함수 정의 추가: 그룹 이름 변경 임시 저장
+            function promptAndStageGroupNameChange(groupId, currentName, nameDisplayElement) {
+                const newName = prompt(`그룹 '${currentName}'의 새 이름을 입력하세요:`, currentName);
+                if (newName === null) return; // 사용자가 취소한 경우
+
+                const trimmedNewName = newName.trim();
+
+                if (trimmedNewName === "") {
+                    alert("그룹 이름은 비워둘 수 없습니다.");
+                    return;
+                }
+
+                if (trimmedNewName === currentName) {
+                    return; // 변경 사항이 없는 경우
+                }
+
+                if (!stagedGroupDetailChanges[groupId]) {
+                    stagedGroupDetailChanges[groupId] = {};
+                }
+                stagedGroupDetailChanges[groupId].name = trimmedNewName;
+
+                // UI 즉시 업데이트 (실제 저장은 '변경사항 저장' 시)
+                if (nameDisplayElement) {
+                    nameDisplayElement.textContent = trimmedNewName;
+                    // 툴팁 및 말줄임표 업데이트 (필요 시 initializeTooltips 관련 로직 재적용)
+                    const container = nameDisplayElement.closest('.lenCut_container');
+                    if (container) {
+                        const spanText = container.querySelector(".lenCut");
+                        spanText.dataset.originalText = trimmedNewName; // 툴팁용 원본 텍스트 업데이트
+                        if (trimmedNewName.length > 8 ) { // 예시: 8자 초과 시 말줄임 (기존 initializeTooltips 로직과 일관성 유지)
+                            spanText.textContent = trimmedNewName.substring(0, 8) + "...";
+                        } else {
+                            spanText.textContent = trimmedNewName;
+                        }
+                    }
+                }
+                // console.log(`Staged name change for group ${groupId}: ${trimmedNewName}`);
+            }
+
+            // 누락된 함수 정의 추가: 그룹 색상 변경 임시 저장
+            function stageGroupColorChange(groupId, newColor) {
+                if (!stagedGroupDetailChanges[groupId]) {
+                    stagedGroupDetailChanges[groupId] = {};
+                }
+                stagedGroupDetailChanges[groupId].color = newColor;
+                // console.log(`Staged color change for group ${groupId}: ${newColor}`);
+            }
+        
+            function Returnpj() {
+                if (CURRENT_PROJECT_ID) {
+                    window.location.href = `projectboard.html?projectId=${CURRENT_PROJECT_ID}`;
+                } else {
+                    alert("현재 프로젝트 ID를 찾을 수 없어 프로젝트 보드로 돌아갈 수 없습니다. 페이지를 새로고침하거나 다시 시도해주세요.");
+                    // 또는 기본 프로젝트 목록 페이지로 이동하도록 설정할 수 있습니다.
+                    // window.location.href = 'projectlist.html'; // 예시
+                }
+            }
+
+            // 그룹 삭제 처리 함수
+            async function handleDeleteGroup(groupId, groupName) {
+                if (!confirm(`그룹 '${groupName}'을(를) 정말 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.`)) {
+                    return;
+                }
+
+                try {
+                    // fetchApi를 사용하여 DELETE 요청을 보냅니다.
+                    // GroupController의 deleteGroup 메소드는 성공 시 200 OK를 반환합니다.
+                    await fetchApi(`/api/groups/${groupId}`, {
+                        method: 'DELETE'
+                    });
+
+                    // fetchApi에서 오류가 발생하지 않았다면 성공적으로 처리된 것입니다.
+                    alert(`그룹 '${groupName}'이(가) 성공적으로 삭제되었습니다.`);
+                    
+                    // 만약 삭제된 그룹이 현재 선택되어 상세 정보가 표시되던 그룹이라면,
+                    // 선택 상태를 초기화하고 관련 패널(유저 목록, 권한 목록)을 숨깁니다.
+                    if (SELECTED_GROUP_ID === groupId.toString()) {
+                        SELECTED_GROUP_ID = null;
+                        
+                        // 삭제된 그룹에 대한 임시 변경사항이 있다면 제거합니다.
+                        if (stagedGroupDetailChanges[groupId.toString()]) {
+                            delete stagedGroupDetailChanges[groupId.toString()];
+                        }
+                        // 원본 데이터도 초기화 (필요시)
+                        originalSelectedGroupData = { name: '', color: '', members: [], permissions: 0 };
 
 
-</script>
-</html>
+                        const ugSelect2 = document.getElementById("ug_select_2");
+                        const authoritySelect2 = document.getElementById("authority_select_2");
+
+                        if (ugSelect2) {
+                            ugSelect2.classList.remove("show");
+                            // 패널이 완전히 사라진 후 display:none으로 변경 (애니메이션 고려)
+                            setTimeout(() => { 
+                                if(!ugSelect2.classList.contains("show")) ugSelect2.style.display = "none"; 
+                            }, 300);
+                            const userTbody = ugSelect2.querySelector('tbody');
+                            if(userTbody) userTbody.innerHTML = '<tr><td colspan="3" style="text-align: center;">그룹을 선택하면 유저 목록이 표시됩니다.</td></tr>';
+                        }
+                        if (authoritySelect2) {
+                            authoritySelect2.classList.remove("show");
+                            setTimeout(() => { 
+                                if(!authoritySelect2.classList.contains("show")) authoritySelect2.style.display = "none"; 
+                            }, 300);
+                            const authTbody = authoritySelect2.querySelector('tbody');
+                            if(authTbody) authTbody.innerHTML = ''; // 권한 목록도 비워줍니다.
+                        }
+                    }
+                    
+                    // 그룹 목록을 새로고침하여 삭제된 그룹이 반영되도록 합니다.
+                    await loadAndDisplayGroups(); 
+                } catch (error) {
+                    // fetchApi 함수 내에서 이미 오류 알림(alert)을 처리합니다.
+                    // 여기서는 콘솔에 추가적인 에러 로그를 남기거나, 다른 UI 피드백을 줄 수 있습니다.
+                    console.error(`그룹 '${groupName}' (ID: ${groupId}) 삭제 중 오류 발생:`, error.message);
+                }
+            }
+
+            // --- 기타 함수 (Save, Nosave, Returnpj 등은 이전 답변 내용 참조) ---
+            // 기존 HTML의 Saveproject, Nosave, Returnpj, add3, editName 함수들은
+            // 위에서 API 연동 방식으로 재구현되거나, 그 기능을 대체하는 새로운 함수들로 작성되었습니다.
+            // 전역 window 객체에 할당된 함수들이 있다면, 새로운 함수들로 대체하거나 호출 관계를 정리해야 합니다.
+        
+            // 전역 함수로 Saveproject, Nosave, Returnpj 정의 (HTML onclick에서 호출)
+            window.Saveproject = async function() {
+                // ... (이전 답변의 Saveproject 로직과 유사하게 구현, API 호출 부분은 fetchApi 사용) ...
+                // 주의: stagedGroupDetailChanges, originalSelectedGroupData, SELECTED_GROUP_ID 사용
+                if (!SELECTED_GROUP_ID) { alert("저장할 그룹을 선택해주세요."); return; }
+                
+                let changesMade = false;
+                const operations = [];
+        
+                // 1. 그룹 이름/색상 변경 사항
+                if (stagedGroupDetailChanges[SELECTED_GROUP_ID]) {
+                    const groupChanges = stagedGroupDetailChanges[SELECTED_GROUP_ID];
+                    const groupRow = document.querySelector(`#tbody_group tr[data-group-id="${SELECTED_GROUP_ID}"]`);
+                    // 페이로드 구성 시, staged된 이름이나 색상이 있으면 사용하고, 없으면 기존 값을 유지하려고 시도합니다.
+                    // 하지만, 위에서 추가한 함수들이 정상적으로 stagedGroupDetailChanges를 채우므로, 변경된 값이 여기에 반영됩니다.
+                    const payload = {
+                        name: groupChanges.name !== undefined ? groupChanges.name : (groupRow ? groupRow.dataset.groupName : ''),
+                        color: groupChanges.color !== undefined ? groupChanges.color : (groupRow ? groupRow.dataset.groupColor : '#000000')
+                    };
+
+                    if(groupChanges.name !== undefined || groupChanges.color !== undefined){ // 여기서 staged된 이름 또는 색상이 있으면 API 호출
+                        operations.push(
+                            fetchApi(`/api/groups/${SELECTED_GROUP_ID}`, { method: 'PUT', body: JSON.stringify(payload) })
+                            .then(res => { if (res.status === 200) changesMade = true; return res;})
+                        );
+                    }
+            }
+        
+                // 2. 멤버 변경 사항
+                const selectedUserIds = Array.from(document.querySelectorAll('#user_table_2 .group-member-candidate-checkbox:checked'))
+                                             .map(cb => parseInt(cb.dataset.userId));
+                if (JSON.stringify(originalSelectedGroupData.members.sort()) !== JSON.stringify(selectedUserIds.sort())) {
+                    operations.push(
+                        fetchApi(`/api/groups/${SELECTED_GROUP_ID}/members`, { method: 'PUT', body: JSON.stringify({ userIds: selectedUserIds }) })
+                        .then(res => { if(res.status === 200 || res.status === 204) changesMade = true; return res; })
+                    );
+                }
+        
+                // 3. 권한 변경 사항
+                let newPermissionsBitmask = 0;
+                document.querySelectorAll('#authority_table_2 .permission-checkbox:checked').forEach(cb => {
+                    const row = cb.closest('tr');
+                    if(row && row.dataset.permissionBit) newPermissionsBitmask |= parseInt(row.dataset.permissionBit);
+                });
+                if (originalSelectedGroupData.permissions !== newPermissionsBitmask) {
+                    operations.push(
+                        fetchApi(`/api/groups/${SELECTED_GROUP_ID}/permissions`, { method: 'PUT', body: JSON.stringify({ permissionBitmask: newPermissionsBitmask }) })
+                        .then(res => { if (res.status === 200) changesMade = true; return res;})
+                    );
+                }
+        
+                if (operations.length === 0) { alert("변경된 내용이 없습니다."); return; }
+        
+                try {
+                    await Promise.all(operations);
+                    if (changesMade) {
+                        alert("그룹 변경사항이 성공적으로 저장되었습니다.");
+                        stagedGroupDetailChanges = {}; // 임시 변경사항 초기화
+                        await loadAndDisplayGroups(); // 목록 새로고침
+                        if (SELECTED_GROUP_ID) {
+                            const selectedRow = document.querySelector(`#tbody_group tr[data-group-id="${SELECTED_GROUP_ID}"]`);
+                            if (selectedRow) handleGroupSelection(SELECTED_GROUP_ID, selectedRow); // 선택 유지 및 패널 최신화
+                        }
+                    } else {
+                        alert("변경된 내용이 없거나, 서버에서 변경이 감지되지 않았습니다.");
+                    }
+                } catch (error) { /* fetchApi에서 처리 */ }
+            }
+        
+            window.Nosave = function() { /* 이전 답변의 Nosave 로직 */ 
+                 if (!SELECTED_GROUP_ID) {
+                    alert("취소할 작업이 없습니다 (선택된 그룹 없음).");
+                    return;
+                }
+                if (!confirm("현재 그룹에 대한 변경 사항을 되돌리시겠습니까?")) return;
+        
+                stagedGroupDetailChanges = {}; // 임시 변경사항 초기화
+                
+                // 원본 데이터로 UI 복원
+                const groupRow = document.querySelector(`#tbody_group tr[data-group-id="${SELECTED_GROUP_ID}"]`);
+                if (groupRow) {
+                    groupRow.querySelector('.group-name-display').textContent = originalSelectedGroupData.name;
+                    groupRow.querySelector('.groupcolor_input').value = originalSelectedGroupData.color;
+                    initializeTooltips(); // 이름이 길 경우 말줄임표 재적용
+                }
+                populateUserSelectionPanel(originalSelectedGroupData.members);
+                populatePermissionSelectionPanel(originalSelectedGroupData.permissions);
+                alert("선택된 그룹의 변경사항이 원래대로 복원되었습니다.");
+            }
+            window.Returnpj = Returnpj; // Returnpj는 이전과 동일
+        
+            // window.openFindid = () => alert("멤버 관리(탭1): 유저 추가 기능은 현재 구현 보류 중입니다."); // 이 함수는 이제 모달로 대체
+            window.Deleteuser = () => alert("멤버 관리(탭1): 유저 제명 기능은 현재 구현 보류 중입니다.");
+            window.addwork = async function() { /* 이전 답변의 addwork 로직 (탭3 업무 생성) */ 
+                if (!CURRENT_PROJECT_ID) { alert("업무를 생성할 프로젝트 ID가 없습니다."); return; }
+                const title = document.getElementById("worktitle").value.trim(); // 모달 내 ID 사용
+                const description = document.getElementById("workcontent").value.trim();
+                const deadlineValue = document.getElementById("deadline_pb").value;
+                const deadline = deadlineValue ? (deadlineValue.includes(':00') ? deadlineValue : deadlineValue + ":00") : null;
+                const modalInstance = document.querySelector('dialog.modal_pb');
+        
+                if (!title) { alert("업무 제목을 입력하세요."); document.getElementById("worktitle").focus(); return; }
+                
+                const taskData = { title, description, deadline };
+                try {
+                    const result = await fetchApi(`/api/projects/${CURRENT_PROJECT_ID}/tasks`, { method: 'POST', body: JSON.stringify(taskData) });
+                    if (result.status === 201 && result.data) {
+                        alert("업무가 성공적으로 생성되었습니다.");
+                        if (modalInstance) modalInstance.close();
+                        // Tab 3의 업무 목록 새로고침 (필요시 함수 호출)
+                        // if (document.getElementById('3').style.display !== 'none') loadTasksForTab3();
+                        console.log("새 업무 생성됨:", result.data);
+                    } else { throw new Error(result.message || "업무 생성 실패"); }
+                } catch (error) { /* fetchApi에서 alert 처리 */ }
+            }
+        
+            // (이전 스크립트의 나머지 부분: editName, attachEditListeners 등은 새로운 방식으로 대체되거나 정리됨)
+        </script>
+        </body>
+        </html>
