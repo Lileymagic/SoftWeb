@@ -15,7 +15,7 @@
         .aside_left{
             position: sticky;
             height: 100vh;            
-            width: 300px;
+            width: 250px;
             border-right: solid 1px;
             border-color: gray;
             float: left;
@@ -66,6 +66,7 @@
             height: 100vh;
             /* width: 10px; /* 이 값은 실제 레이아웃에 맞게 수정되어야 합니다. (예: calc(100% - 300px) 또는 부모가 flex면 flex-grow:1) */
                            /* 여기서는 JS가 #1,#2,#3을 직접 제어하므로 일단 그대로 둡니다. */
+            width: calc(100vw - 250px);
         }
         .memu_name {
             position: sticky; 
@@ -906,6 +907,7 @@
             </div>
 
         </div>
+    </div>
 
         <script>
             // --- 전역 변수 및 설정 ---
@@ -1649,5 +1651,5 @@
         
             // (이전 스크립트의 나머지 부분: editName, attachEditListeners 등은 새로운 방식으로 대체되거나 정리됨)
         </script>
-        </body>
-        </html>
+    </body>
+</html>
