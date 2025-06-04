@@ -19,6 +19,12 @@ import com.example.softengineerwebpr.domain.user.entity.User;
 import com.example.softengineerwebpr.domain.file.entity.File; // File 엔티티 임포트
 import com.example.softengineerwebpr.domain.file.entity.FileReferenceType; // FileReferenceType Enum 임포트
 import com.example.softengineerwebpr.domain.file.repository.FileRepository; // FileRepository 임포트
+import com.example.softengineerwebpr.domain.file.dto.FileResponseDto; //
+import com.example.softengineerwebpr.domain.file.entity.FileReferenceType; //
+import com.example.softengineerwebpr.domain.file.service.FileService; // FileService 주입
+import com.example.softengineerwebpr.domain.user.dto.UserBasicInfoDto; //
+import java.util.Collections; // 필요시
+import java.util.List; // 필요시
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -38,13 +44,14 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final TaskRepository taskRepository; // Task 엔티티 조회를 위해 필요
     private final ProjectMemberRepository projectMemberRepository; // 프로젝트 멤버십 확인을 위해 필요
+    private final FileService fileService;       // 새로 주입
 
-    private Task findTaskOrThrow(Long taskId) {
+    private Task findTaskOrThrow(Long taskId) { //
         return taskRepository.findById(taskId)
                 .orElseThrow(() -> new BusinessLogicException(ErrorCode.TASK_NOT_FOUND));
     }
 
-    private void checkProjectMembership(Project project, User user) {
+    private void checkProjectMembership(Project project, User user) { //
         if (!projectMemberRepository.findByUserAndProject(user, project)
                 .filter(pm -> pm.getStatus() == ProjectMemberStatus.ACCEPTED)
                 .isPresent()) {
@@ -52,37 +59,19 @@ public class PostServiceImpl implements PostService {
         }
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<PostBasicResponseDto> getPostsByTaskId(Long taskId, User currentUser) {
-        Task task = findTaskOrThrow(taskId);
-        Project project = task.getProject(); // Task 엔티티에서 Project 정보를 가져옴
-
-        // 현재 사용자가 해당 업무가 속한 프로젝트의 멤버인지 확인
-        checkProjectMembership(project, currentUser);
-
-        List<Post> posts = postRepository.findByTaskOrderByCreatedAtDesc(task);
-
-        return posts.stream()
-                .map(PostBasicResponseDto::fromEntity)
-                .collect(Collectors.toList());
-    }
-
-    private Post findPostOrThrow(Long postId) { // 이 메소드가 이미 있다면 재사용, 없다면 추가
+    private Post findPostOrThrow(Long postId) { //
         return postRepository.findById(postId)
                 .orElseThrow(() -> new BusinessLogicException(ErrorCode.RESOURCE_NOT_FOUND, "게시글을 찾을 수 없습니다. ID: " + postId));
     }
 
-    // 게시글을 볼 수 있는 권한이 있는지 확인하는 메소드 (예: 프로젝트 멤버인지)
-    private void checkPostViewPermission(Post post, User user) {
-        Project project = post.getTask().getProject(); // 게시글 -> 업무 -> 프로젝트
+    private void checkPostViewPermission(Post post, User user) { //
+        Project project = post.getTask().getProject();
         if (!projectMemberRepository.findByUserAndProject(user, project)
-                .filter(pm -> pm.getStatus() == ProjectMemberStatus.ACCEPTED) // 정식 멤버인지 확인
+                .filter(pm -> pm.getStatus() == ProjectMemberStatus.ACCEPTED)
                 .isPresent()) {
             throw new BusinessLogicException(ErrorCode.NOT_PROJECT_MEMBER, "해당 프로젝트의 멤버가 아니므로 게시글을 조회할 수 없습니다.");
         }
     }
-
 
     @Override
     @Transactional(readOnly = true)
@@ -90,111 +79,126 @@ public class PostServiceImpl implements PostService {
         Post post = findPostOrThrow(postId);
         checkPostViewPermission(post, currentUser);
 
-        // 주입된 fileRepository 인스턴스를 통해 메소드 호출
-        List<File> postFiles = fileRepository.findByReferenceTypeAndReferenceIdxOrderByUploadedAtAsc(
-                FileReferenceType.POST,
-                postId
-        );
+        List<FileResponseDto> fileDtos = fileService.getFilesForReference(FileReferenceType.POST, postId); // 파일 목록 조회
 
-        log.info("게시글 상세 조회: postId={}, 첨부파일 {}개, 조회자: {}", postId, postFiles.size(), currentUser.getNickname());
+        log.info("게시글 상세 조회: postId={}, 첨부파일 {}개, 조회자: {}", postId, fileDtos.size(), currentUser.getNickname());
 
-        return PostDetailResponseDto.fromEntity(post, postFiles);
+        // PostDetailResponseDto 빌더 직접 사용
+        return PostDetailResponseDto.builder()
+                .idx(post.getIdx())
+                .title(post.getTitle())
+                .content(post.getContent())
+                .author(UserBasicInfoDto.fromEntity(post.getUser())) //
+                .taskId(post.getTask().getIdx())
+                .createdAt(post.getCreatedAt())
+                .updatedAt(post.getUpdatedAt())
+                .files(fileDtos) // 조회된 파일 DTO 목록 설정
+                .build(); //
     }
 
     @Override
     public PostDetailResponseDto createPost(Long taskId, PostCreateRequestDto requestDto, User currentUser) {
-        Task task = findTaskOrThrow(taskId); // 기존 헬퍼 메소드 사용
+        Task task = findTaskOrThrow(taskId);
         Project project = task.getProject();
-
-        // 권한 검사: 현재 사용자가 해당 업무가 속한 프로젝트의 멤버인지 확인
-        // 설계 문서에 "업무 담당 유저들만 쓰기 가능" 조건이 있으므로[cite: 126],
-        // 추가적으로 현재 유저가 해당 업무(task)의 담당자인지 확인하는 로직이 필요할 수 있습니다.
-        // 여기서는 일단 프로젝트 멤버십만 확인합니다.
-        checkProjectMembership(project, currentUser); // 기존 헬퍼 메소드 (post 조회 시 사용했던 것과 유사)
+        checkProjectMembership(project, currentUser);
 
         Post post = Post.builder()
                 .task(task)
                 .user(currentUser)
                 .title(requestDto.getTitle())
                 .content(requestDto.getContent())
-                .build();
+                .build(); //
 
         Post savedPost = postRepository.save(post);
         log.info("새 게시글 생성: postId={}, title='{}', taskId={}, byUser={}",
                 savedPost.getIdx(), savedPost.getTitle(), taskId, currentUser.getNickname());
 
-        // TODO: 첨부파일 처리 로직 (requestDto에 fileIds가 있다면)
-        // TODO: 히스토리 기록 (예: "게시글 생성")
-        // TODO: 알림 발생 (예: 업무 담당자들에게 새 게시글 알림)
-
-        // 생성된 게시글의 상세 정보를 반환 (첨부파일은 현재 빈 리스트로 반환됨)
-        return PostDetailResponseDto.fromEntity(savedPost , Collections.emptyList() );
-    }
-
-    @Override
-    public void deletePost(Long postId, User currentUser) {
-        Post post = findPostOrThrow(postId); // 기존 _헬퍼_메소드 사용
-        Project project = post.getTask().getProject();
-
-        // 게시글 삭제 권한 확인 (예: 게시글 작성자 본인 또는 프로젝트 관리자)
-        boolean isAuthor = post.getUser().getIdx().equals(currentUser.getIdx());
-        boolean isAdmin = projectMemberRepository.findByUserAndProject(currentUser, project)
-                .filter(pm -> pm.getStatus() == ProjectMemberStatus.ACCEPTED)
-                .map(pm -> pm.getRole() == ProjectMemberRole.관리자)
-                .orElse(false);
-
-        if (!isAuthor && !isAdmin) {
-            // ErrorCode.NO_AUTHORITY_TO_MANAGE_POST 와 같은 더 구체적인 에러 코드 정의 및 사용 권장
-            throw new BusinessLogicException(ErrorCode.ACCESS_DENIED, "게시글을 삭제할 권한이 없습니다.");
-        }
-
-        // Post 엔티티에 댓글(comments)과 파일(files)에 대한 연관관계가
-        // cascade = CascadeType.ALL, orphanRemoval = true 로 설정되어 있다면,
-        // postRepository.delete(post) 호출 시 관련 댓글과 파일도 함께 삭제됩니다.
-        //
-        // 그렇지 않다면, 여기서 commentRepository.deleteByPost(post) 와
-        // fileRepository.deleteByReferenceTypeAndReferenceIdx(FileReferenceType.POST, postId) 등을
-        // 명시적으로 호출해야 합니다.
-
-        postRepository.delete(post);
-        log.info("게시글 삭제 완료: postId={}, 삭제자: {}", postId, currentUser.getNickname());
-
-        // TODO: 히스토리 기록 (예: "게시글 삭제")
-        // TODO: 관련자에게 알림 (필요시)
+        // 파일은 별도 API(/api/files/upload)를 통해 이 savedPost.getIdx()를 referenceIdx로 하여 업로드됨.
+        // 따라서 이 메소드에서는 직접적인 파일 처리 로직은 없음 (흐름 가정에 따라).
+        // 생성 시점에는 첨부 파일이 없으므로 빈 리스트로 DTO 생성.
+        return PostDetailResponseDto.builder()
+                .idx(savedPost.getIdx())
+                .title(savedPost.getTitle())
+                .content(savedPost.getContent())
+                .author(UserBasicInfoDto.fromEntity(savedPost.getUser())) //
+                .taskId(savedPost.getTask().getIdx())
+                .createdAt(savedPost.getCreatedAt())
+                .updatedAt(savedPost.getUpdatedAt())
+                .files(Collections.emptyList()) // 생성 시점에는 파일 없음
+                .build(); //
     }
 
     @Override
     public PostDetailResponseDto updatePost(Long postId, PostUpdateRequestDto requestDto, User currentUser) {
-        Post post = findPostOrThrow(postId); // 기존 헬퍼 메소드 사용
-
-        // 게시글 수정 권한 확인 (예: 작성자 본인 또는 프로젝트 관리자)
-        checkPostViewPermission(post, currentUser); // 일단 게시글을 볼 수 있는 권한이 있는지 확인 (기본)
+        Post post = findPostOrThrow(postId);
+        checkPostViewPermission(post, currentUser);
 
         boolean isAuthor = post.getUser().getIdx().equals(currentUser.getIdx());
-        // boolean isAdmin = isUserProjectAdmin(currentUser, post.getTask().getProject()); // 필요시 프로젝트 관리자 권한 추가
-
-        if (!isAuthor /* && !isAdmin */) {
-            // ErrorCode.NO_AUTHORITY_TO_MANAGE_POST 와 같은 더 구체적인 에러 코드 사용 권장
+        if (!isAuthor) {
             throw new BusinessLogicException(ErrorCode.ACCESS_DENIED, "게시글을 수정할 권한이 없습니다.");
         }
 
-        // Post 엔티티의 update 메소드 활용
-        post.update(requestDto.getTitle(), requestDto.getContent());
-        Post updatedPost = postRepository.save(post); // 변경 감지로 저장될 수도 있지만 명시적 save
-
+        post.update(requestDto.getTitle(), requestDto.getContent()); //
+        Post updatedPost = postRepository.save(post);
         log.info("게시글 수정 완료: postId={}, newTitle='{}', byUser={}",
                 updatedPost.getIdx(), updatedPost.getTitle(), currentUser.getNickname());
 
-        // TODO: 첨부파일 변경 로직 (새 파일 추가, 기존 파일 삭제 등)
-        // TODO: 히스토리 기록 (예: "게시글 수정")
-        // TODO: 알림 발생 (예: 게시글 구독자에게 수정 알림)
-
-        // 수정된 게시글의 상세 정보를 반환 (첨부파일은 현재 DTO에서 로드하는 방식 그대로)
-        List<File> postFiles = fileRepository.findByReferenceTypeAndReferenceIdxOrderByUploadedAtAsc(
-                FileReferenceType.POST,
-                updatedPost.getIdx()
-        );
-        return PostDetailResponseDto.fromEntity(updatedPost, postFiles);
+        // 파일 수정은 보통 기존 파일 삭제 후 새 파일 업로드로 처리되거나, 파일 추가/삭제 API를 별도로 호출.
+        // 이 메소드에서는 게시글 내용만 수정하고, 파일 목록은 현재 상태 그대로 가져옴.
+        List<FileResponseDto> fileDtos = fileService.getFilesForReference(FileReferenceType.POST, updatedPost.getIdx());
+        return PostDetailResponseDto.builder()
+                .idx(updatedPost.getIdx())
+                .title(updatedPost.getTitle())
+                .content(updatedPost.getContent())
+                .author(UserBasicInfoDto.fromEntity(updatedPost.getUser())) //
+                .taskId(updatedPost.getTask().getIdx())
+                .createdAt(updatedPost.getCreatedAt())
+                .updatedAt(updatedPost.getUpdatedAt())
+                .files(fileDtos)
+                .build(); //
     }
-    // TODO: getPostById, updatePost 메소드 구현
+
+    @Override
+    public void deletePost(Long postId, User currentUser) {
+        Post post = findPostOrThrow(postId);
+        Project project = post.getTask().getProject();
+
+        boolean isAuthor = post.getUser().getIdx().equals(currentUser.getIdx());
+        boolean isAdmin = projectMemberRepository.findByUserAndProject(currentUser, project) //
+                .filter(pm -> pm.getStatus() == ProjectMemberStatus.ACCEPTED)
+                .map(pm -> pm.getRole() == ProjectMemberRole.관리자) //
+                .orElse(false);
+
+        if (!isAuthor && !isAdmin) {
+            throw new BusinessLogicException(ErrorCode.ACCESS_DENIED, "게시글을 삭제할 권한이 없습니다.");
+        }
+
+        // 1. 게시글에 연결된 댓글에 첨부된 파일들 삭제 (CommentService에서 처리하도록 위임하거나 직접 처리)
+        //    (CommentService의 deleteCommentsForPost와 같은 메소드가 있다면 그 안에서 파일삭제까지 담당할 수 있음)
+        //    여기서는 Post 삭제 시 Comment도 DB Cascade로 삭제된다고 가정하고,
+        //    Comment에 연결된 파일은 Comment 삭제 로직에서 처리한다고 가정합니다.
+        //    만약 Comment 삭제 시 파일 처리가 안된다면 여기서 Comment의 파일도 지워야 합니다.
+
+        // 2. 게시글에 직접 첨부된 파일들 삭제
+        fileService.deleteFilesForReference(FileReferenceType.POST, postId, currentUser);
+
+        // 3. 게시글 삭제 (게시글 삭제 시 DB 설정에 따라 관련 댓글도 Cascade 삭제될 수 있음)
+        //    Comment 테이블의 post_idx 외래키에 ON DELETE CASCADE가 설정되어 있다면 댓글은 자동 삭제.
+        //    (DB 생성 코드 확인 결과: comment 테이블의 fk_comment_post에 ON DELETE CASCADE 있음)
+        postRepository.delete(post);
+        log.info("게시글 삭제 완료: postId={}, 삭제자: {}", postId, currentUser.getNickname());
+    }
+
+    // getPostsByTaskId는 PostBasicResponseDto를 반환하므로 파일 정보 불필요
+    @Override
+    @Transactional(readOnly = true)
+    public List<PostBasicResponseDto> getPostsByTaskId(Long taskId, User currentUser) { //
+        Task task = findTaskOrThrow(taskId);
+        Project project = task.getProject();
+        checkProjectMembership(project, currentUser);
+        List<Post> posts = postRepository.findByTaskOrderByCreatedAtDesc(task); //
+        return posts.stream()
+                .map(PostBasicResponseDto::fromEntity) //
+                .collect(Collectors.toList());
+    }
 }

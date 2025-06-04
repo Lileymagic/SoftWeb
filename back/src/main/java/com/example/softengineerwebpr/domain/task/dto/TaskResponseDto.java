@@ -1,8 +1,9 @@
-package com.example.softengineerwebpr.domain.task.dto;
+package com.example.softengineerwebpr.domain.task.dto; //
 
-import com.example.softengineerwebpr.domain.task.entity.Task;
-import com.example.softengineerwebpr.domain.user.dto.UserBasicInfoDto;
-import com.example.softengineerwebpr.domain.user.entity.User;
+import com.example.softengineerwebpr.domain.file.dto.FileResponseDto; //
+import com.example.softengineerwebpr.domain.task.entity.Task; //
+import com.example.softengineerwebpr.domain.user.dto.UserBasicInfoDto; //
+import com.example.softengineerwebpr.domain.user.entity.User; //
 import lombok.Builder;
 import lombok.Getter;
 import java.time.LocalDateTime;
@@ -14,16 +15,17 @@ public class TaskResponseDto {
     private Long idx;
     private String title;
     private String description;
-    private String status; // Task.TaskStatus.name() 사용
+    private String status;
     private LocalDateTime deadline;
     private LocalDateTime createdAt;
-    private UserBasicInfoDto createdBy; // 작성자 정보
-    private List<UserBasicInfoDto> assignedMembers; // 담당자 목록
+    private UserBasicInfoDto createdBy;
+    private List<UserBasicInfoDto> assignedMembers;
+    private List<FileResponseDto> files; // 파일 목록 필드 추가
 
     @Builder
     public TaskResponseDto(Long idx, String title, String description, String status,
                            LocalDateTime deadline, LocalDateTime createdAt, UserBasicInfoDto createdBy,
-                           List<UserBasicInfoDto> assignedMembers) {
+                           List<UserBasicInfoDto> assignedMembers, List<FileResponseDto> files /* 빌더에 추가 */) {
         this.idx = idx;
         this.title = title;
         this.description = description;
@@ -32,22 +34,24 @@ public class TaskResponseDto {
         this.createdAt = createdAt;
         this.createdBy = createdBy;
         this.assignedMembers = assignedMembers;
+        this.files = files; // 필드 초기화
     }
 
-    // "TaskResponseDtofromEntity"에서 "TaskResponseDto fromEntity"로 수정
-    public static TaskResponseDto fromEntity(Task task, List<User> members) {
+    // fromEntity 메소드 수정
+    public static TaskResponseDto fromEntity(Task task, List<User> members, List<FileResponseDto> files) {
         if (task == null) return null;
         return TaskResponseDto.builder()
                 .idx(task.getIdx())
                 .title(task.getTitle())
                 .description(task.getDescription())
-                .status(task.getStatus().name()) // Enum의 이름을 문자열로
+                .status(task.getStatus().name())
                 .deadline(task.getDeadline())
                 .createdAt(task.getCreatedAt())
-                .createdBy(UserBasicInfoDto.fromEntity(task.getCreatedBy()))
+                .createdBy(UserBasicInfoDto.fromEntity(task.getCreatedBy())) //
                 .assignedMembers(members.stream()
-                        .map(UserBasicInfoDto::fromEntity)
+                        .map(UserBasicInfoDto::fromEntity) //
                         .collect(Collectors.toList()))
+                .files(files) // 전달받은 파일 DTO 목록 설정
                 .build();
     }
 }

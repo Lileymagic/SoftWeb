@@ -10,7 +10,8 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <style>
         .box15{
-            height: 600px;
+            /* min-height: 600px; */ /* 전체 최소 높이보다는 내용에 맞게 auto로 */
+            height: auto; /* 내용에 따라 높이 자동 조절 */
             width: 650px;
             display: flex;  
             flex-direction: column;
@@ -20,16 +21,14 @@
         }
         .editor-wrapper {
             width: 100%;
-            flex: 1;
-            min-height: 0;
+            /* flex: 1; 제거 또는 height 고정 */
+            height: 480px; /* 이전과 유사한 에디터 작업 공간 확보 (제목 영역 제외한 높이, 필요시 조절) */
             display: flex;
             flex-direction: column;
         }
         #editor {
-            flex: 1;
+            flex-grow: 1; /* editor-wrapper의 남은 공간을 채움 */
             width: 100%;
-            min-height: 0;
-            max-height: 100%;
             box-sizing: border-box;
             border: none;
         }
@@ -38,21 +37,26 @@
             flex-wrap: wrap;
             border-right: none;
             border-left: none;
+            border-top: 1px solid #eee; /* 제목 입력칸과 툴바 구분선 */
         }
         .mid2 {
             position: absolute;
-            top: 100px;
+            top: 80px; /* 상단 여백 조정 */
             left: 50%;
             transform: translateX(-50%);
             flex-direction: column;
+            width: 650px; 
+            margin-bottom: 50px; 
         }
         #title {
             width:100%;
             height: 50px;
-            padding: 10px;
+            padding: 10px 15px; /* 패딩 조정 */
             border: none;
             outline: none;
             background-color: transparent;
+            font-size: 1.3em; /* 제목 폰트 크기 */
+            box-sizing: border-box;
         }
         #title:focus{
             outline: none;
@@ -61,11 +65,77 @@
             border-top-right-radius: 10px;
         }
 
+        /* 파일 첨부 섹션 스타일 */
+        .file-attachment-section {
+            padding: 15px; /* 내부 여백 */
+            border-top: 1px solid #ddd; /* 에디터와 구분선 */
+            background-color: #f9f9f9; /* 약간의 배경색 구분 */
+        }
+        .file-attachment-section label { /* "파일 첨부" 레이블 */
+            font-weight: bold;
+            font-size: 0.95em; /* 살짝 키움 */
+            margin-bottom: 10px;
+            display: block;
+        }
+        #fileUploadInput {
+            font-size: 0.9em;
+            /* 파일 입력 컨트롤의 높이를 버튼과 유사하게 보이도록 스타일링 */
+            padding: 8px 10px; /* 내부 패딩으로 높이감 부여 */
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: white;
+            display: block; /* 너비 100% 사용 */
+            width: 100%;
+            box-sizing: border-box;
+            height: 40px; /* 버튼 높이와 유사하게 (button_final 기본 높이 가정) */
+        }
+        /* Chrome, Edge 등에서 파일 선택 버튼 텍스트 변경 (선택적) */
+        #fileUploadInput::file-selector-button {
+            height: 100%;
+            margin-right: 10px;
+            padding: 0 10px;
+            border: none;
+            background-color: #eee;
+            border-right: 1px solid #ccc;
+            cursor: pointer;
+        }
+        #fileUploadInput::file-selector-button:hover {
+            background-color: #ddd;
+        }
+
+        #selectedFilesList {
+            margin-top: 10px; /* 파일 입력칸과 목록 사이 간격 */
+            font-size: 0.85em;
+            color: #555;
+            max-height: 100px; /* 파일 목록이 너무 길어지는 것 방지 */
+            overflow-y: auto;
+        }
+        #selectedFilesList div, #selectedFilesList li { /* div 또는 li로 목록 표시 시 */
+            padding: 4px 0;
+        }
+        /* 발행/취소 버튼 컨테이너 */
+        .action-buttons-container {
+            display: flex; 
+            justify-content: flex-end; 
+            margin-top:20px; 
+            gap: 10px;
+            /* height: 40px; /* 버튼 높이와 동일하게 설정 (파일 첨부칸과의 시각적 높이 맞춤을 위함) */
+            /* align-items: center; /* 버튼들을 수직 중앙 정렬 */
+        }
+        /* button_final, button_final_n 에 height: 40px; 가 이미 있다고 가정 */
+
+
         /* 크기조절용 (빼도 됨) */
         @media (min-width: 1300px) or (min-height: 1200px) {
             .box15 {
-                height: 60vh;
                 width: 50vw;
+            }
+            .mid2 {
+                width: 50vw;
+                top: 50px; /* 반응형 시 상단 여백 조정 */
+            }
+            .editor-wrapper {
+                height: calc(55vh - 50px); /* 반응형 에디터 높이 (전체 높이의 % - 제목 높이) */
             }
         }
     </style>
@@ -75,35 +145,45 @@
   <link rel="stylesheet" crossorigin href="/css/styles.B9z1gQM8.css">
 </head>
 <body style="background-color: rgb(245, 245, 245);">
-    <div id="root"></div>
+    <div id="root"></div> 
     
     <div class="mid2">
         <div style="font-weight: bold; font-size: large; margin-bottom: 10px;">게시글 작성</div>
         <div class="box15">
             <input type="text" id="title" placeholder="제목" autofocus/>
-            <div class="editor-wrapper">
+
+            <div class="editor-wrapper"> 
                 <div id="editor"></div>
             </div>
+            <div class="file-attachment-section">
+                <label for="fileUploadInput">파일 첨부 (개당 10MB 이하):</label>
+                <input type="file" id="fileUploadInput" multiple accept="*/*"/>
+                <div id="selectedFilesList">
+   
+                </div>
+            </div>
         </div>
-        <div style="display: flex; justify-content: flex-end; margin-top:20px; gap: 10px;">
-            <button class="button_final" style="width:60px;">발행</button>
-            <button class="button_final_n" style="width:60px;" onclick="cancelwrite()">취소</button>
-        </div>
+        <div class="action-buttons-container"> 
+            <button class="button_final" style="width:60px; height: 40px;">발행</button> 
+            <button class="button_final_n" style="width:60px; height: 40px;" onclick="cancelwrite()">취소</button> 
     </div>
 
 </body>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script>
+    // JavaScript 로직은 이전과 동일하게 유지됩니다.
+    // (DOMContentLoaed, initializeQuill, loadPostForEditing, handlePublishPost, cancelwrite 등)
+    // ... (이전 답변의 writework.html <script> 내용 전체 복사) ...
     let currentTaskId = null;
-    let currentProjectId = null; // currentWlbProjectId 대신 currentProjectId 사용
+    let currentProjectId = null;
     let currentPostId = null; 
     let quill; 
 
     document.addEventListener('DOMContentLoaded', function() {
         const urlParams = new URLSearchParams(window.location.search);
         currentTaskId = parseInt(urlParams.get('taskId'), 10);
-        currentProjectId = parseInt(urlParams.get('projectId'), 10); // 여기서 currentProjectId로 설정
+        currentProjectId = parseInt(urlParams.get('projectId'), 10);
         currentPostId = urlParams.get('postId') ? parseInt(urlParams.get('postId'), 10) : null;
 
         initializeQuill();
@@ -113,6 +193,34 @@
             publishButton.onclick = handlePublishPost;
         }
 
+        const fileInput = document.getElementById('fileUploadInput');
+        const selectedFilesListDiv = document.getElementById('selectedFilesList');
+        if (fileInput && selectedFilesListDiv) {
+            fileInput.addEventListener('change', function() {
+                selectedFilesListDiv.innerHTML = ''; 
+                if (this.files.length > 0) {
+                    const ul = document.createElement('ul');
+                    ul.style.paddingLeft = '20px';
+                    ul.style.listStyleType = 'disc';
+                    for (const file of this.files) {
+                        const li = document.createElement('li');
+                        const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
+                        li.textContent = `${file.name} (${fileSizeMB} MB)`;
+                        if (file.size > 10 * 1024 * 1024) { // 10MB 초과 시
+                            li.style.color = 'red';
+                            li.textContent += ' - 크기 초과!';
+                        }
+                        ul.appendChild(li);
+                    }
+                    selectedFilesListDiv.appendChild(ul);
+                } else {
+                    // 파일 선택 안했을 때 메시지 제거 또는 "선택된 파일 없음" 유지
+                    // selectedFilesListDiv.innerHTML = '<p>선택된 파일이 없습니다.</p>';
+                }
+            });
+        }
+
+
         if (currentPostId) { 
             document.title = "게시글 수정";
             document.querySelector('.mid2 > div[style*="font-size: large"]').textContent = "게시글 수정";
@@ -121,9 +229,7 @@
             if (isNaN(currentTaskId) || isNaN(currentProjectId)) {
                 alert("업무 ID 또는 프로젝트 ID가 유효하지 않습니다. 이전 페이지로 돌아갑니다.");
                 console.error("Task ID or Project ID missing for new post.");
-                // 이전 페이지로 돌려보내는 로직 추가 가능
-                // 예: window.history.back(); 또는 projectlist.html로
-                // window.location.href = 'projectlist.html';
+                // window.location.href = 'projectlist.html'; 
                 return;
             }
         }
@@ -142,6 +248,12 @@
             modules: { toolbar: toolbarOptions },
             theme: 'snow'
         });
+         // .ql-editor 에 최소 높이 설정 (내용 없을 때도 공간 유지)
+        const editorElement = document.querySelector('#editor .ql-editor');
+        if (editorElement) {
+            editorElement.style.minHeight = 'calc(100% - 42px)'; // 툴바 높이(약 42px) 제외한 높이
+            editorElement.style.boxSizing = 'border-box';
+        }
     }
 
     async function loadPostForEditing(postId) {
@@ -160,17 +272,32 @@
                     quill.root.innerHTML = post.content; 
                 }
                 if(post.taskId) currentTaskId = post.taskId; 
-                // 수정 시 currentProjectId도 API 응답에서 가져오거나, URL에서 이미 받은 값을 사용
-                // 만약 post.projectId 같은 필드가 있다면:
-                // if(post.project && post.project.idx) currentProjectId = post.project.idx;
+                
+                const selectedFilesListDiv = document.getElementById('selectedFilesList');
+                selectedFilesListDiv.innerHTML = '<strong>기존 첨부파일:</strong>';
+                if (post.files && post.files.length > 0) { 
+                    const ul = document.createElement('ul');
+                    ul.style.paddingLeft = '20px';
+                    ul.style.listStyleType = 'disc';
+                    post.files.forEach(file => {
+                        const li = document.createElement('li');
+                        const fileSizeMB = file.fileSize ? (file.fileSize / (1024 * 1024)).toFixed(2) : 'N/A';
+                        li.innerHTML = `<a href="/api/files/download/${file.idx}" target="_blank">${file.fileName}</a> (${fileSizeMB} MB)`;
+                        ul.appendChild(li);
+                    });
+                    selectedFilesListDiv.appendChild(ul);
+                } else {
+                    selectedFilesListDiv.innerHTML += '<p style="font-size:0.9em; color:grey;">첨부된 파일이 없습니다.</p>';
+                }
+                selectedFilesListDiv.innerHTML += '<hr style="margin: 8px 0;" /><p style="font-size:0.8em; color:gray;">새 파일을 첨부하면 기존 파일은 유지됩니다. (기존 파일 삭제 기능은 현재 미구현)</p>';
+
             } else {
                 throw new Error(result.message || "게시글 정보를 가져오는데 실패했습니다.");
             }
         } catch (error) {
             console.error("Error loading post for editing:", error);
             alert(`게시글 정보를 불러오는 중 오류 발생: ${error.message}`);
-            // 이전 페이지로 돌려보내는 로직
-            if (currentTaskId && currentProjectId) { // 변수명 currentProjectId로 수정
+            if (currentTaskId && currentProjectId) {
                  window.location.href = `worklist_board.html?taskId=${currentTaskId}&projectId=${currentProjectId}`;
             } else if (currentProjectId) { 
                  window.location.href = `projectboard.html?projectId=${currentProjectId}`;
@@ -180,89 +307,91 @@
         }
     }
 
-
     async function handlePublishPost() {
         const titleInput = document.getElementById("title");
         const title = titleInput.value.trim();
         const content = quill.root.innerHTML; 
+        const fileInput = document.getElementById('fileUploadInput');
 
-        if (!title) {
-            alert("제목을 입력해주세요.");
-            titleInput.focus();
-            return;
-        }
-        if (quill.getLength() <= 1 && !quill.getText().trim()) { 
-            alert("내용을 입력해주세요.");
-            return;
-        }
+        if (!title) { alert("제목을 입력해주세요."); titleInput.focus(); return; }
+        if (quill.getLength() <= 1 && !quill.getText().trim()) { alert("내용을 입력해주세요."); return; }
 
-        const postData = {
-            title: title,
-            content: content
-        };
-
-        let url = '';
-        let method = '';
-
-        if (currentPostId) { 
-            url = `/api/posts/${currentPostId}`; 
-            method = 'PUT';
-        } else { 
-            if (isNaN(currentTaskId)) {
-                alert("게시글을 작성할 업무 정보가 올바르지 않습니다.");
-                return;
-            }
-            url = `/api/tasks/${currentTaskId}/posts`;
-            method = 'POST';
-        }
+        const postData = { title, content };
+        let method = currentPostId ? 'PUT' : 'POST';
+        let url = currentPostId ? `/api/posts/${currentPostId}` : `/api/tasks/${currentTaskId}/posts`;
 
         try {
-            const response = await fetch(url, {
+            const postResponse = await fetch(url, {
                 method: method,
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(postData)
             });
+            const postResult = await postResponse.json();
 
-            const result = await response.json();
-
-            if (!response.ok) {
-                throw new Error(result.message || `게시글 ${currentPostId ? '수정' : '발행'} 실패 (상태: ${response.status})`);
+            if (!postResponse.ok || !(postResult.status === 201 || postResult.status === 200) || !postResult.data) {
+                throw new Error(postResult.message || `게시글 ${currentPostId ? '수정' : '저장'} 실패`);
             }
+            
+            const savedPostId = currentPostId || postResult.data.idx; 
 
-            if ((method === 'POST' && response.status === 201 && result.status === 201) || 
-                (method === 'PUT' && response.status === 200 && result.status === 200)) {
-                alert(`게시글이 성공적으로 ${currentPostId ? '수정' : '발행'}되었습니다.`);
+            if (fileInput && fileInput.files.length > 0) {
+                const formData = new FormData();
+                let validFilesExist = false;
+                for (const file of fileInput.files) {
+                    if (file.size > 10 * 1024 * 1024) { // 10MB 초과 파일 검사
+                        alert(`파일 "${file.name}"의 크기가 10MB를 초과하여 업로드에서 제외됩니다.`);
+                        continue; 
+                    }
+                    formData.append('files', file);
+                    validFilesExist = true;
+                }
                 
-                // currentWlbProjectId -> currentProjectId 로 수정
-                if (currentTaskId && currentProjectId) {
-                    window.location.href = `worklist_board.html?taskId=${currentTaskId}&projectId=${currentProjectId}`;
-                } else if (result.data && result.data.taskId && currentProjectId) { 
-                     window.location.href = `worklist_board.html?taskId=${result.data.taskId}&projectId=${currentProjectId}`;
+                if (validFilesExist) { 
+                    const filesUploadResponse = await fetch(
+                        `/api/files/upload/multiple?referenceType=POST&referenceIdx=${savedPostId}`, {
+                        method: 'POST',
+                        body: formData, 
+                    });
+
+                    if (!filesUploadResponse.ok) {
+                        const filesErrorResult = await filesUploadResponse.json().catch(()=>({message: "파일 업로드 중 서버 오류 발생"}));
+                        alert(`게시글은 ${currentPostId ? '수정' : '저장'}되었으나, 새 파일 업로드에 실패했습니다: ${filesErrorResult.message}`);
+                    } else {
+                         alert(`게시글이 성공적으로 ${currentPostId ? '수정' : '발행'}되었고, 선택된 새 파일들이 업로드되었습니다.`);
+                    }
+                } else if (fileInput.files.length > 0) { // 모든 파일이 크기 초과 등으로 제외된 경우
+                     alert(`게시글은 ${currentPostId ? '수정' : '저장'}되었으나, 업로드할 유효한 새 파일이 없습니다.`);
+                } else { 
+                     alert(`게시글이 성공적으로 ${currentPostId ? '수정' : '발행'}되었습니다. (새 첨부파일 없음)`);
                 }
-                 else {
-                    window.location.href = 'projectlist.html'; 
-                }
-            } else {
-                throw new Error(result.message || `게시글 ${currentPostId ? '수정' : '발행'}은 성공했으나 응답이 올바르지 않습니다.`);
+            } else { 
+                 alert(`게시글이 성공적으로 ${currentPostId ? '수정' : '발행'}되었습니다. (새 첨부파일 없음)`);
             }
+            
+            if (currentTaskId && currentProjectId) {
+                window.location.href = `worklist_board.html?taskId=${currentTaskId}&projectId=${currentProjectId}&postId=${savedPostId}`;
+            } else if (currentProjectId && postResult.data && postResult.data.taskId) { 
+                 window.location.href = `worklist_board.html?taskId=${postResult.data.taskId}&projectId=${currentProjectId}&postId=${savedPostId}`;
+            } else {
+                console.warn("TaskId 또는 ProjectId가 없어 상세 페이지로 이동할 수 없습니다. 프로젝트 목록으로 이동합니다.");
+                window.location.href = 'projectlist.html'; 
+            }
+
         } catch (error) {
-            console.error(`Error ${currentPostId ? 'updating' : 'creating'} post:`, error);
-            alert(`게시글 ${currentPostId ? '수정' : '발행'} 중 오류 발생: ${error.message}`);
+            console.error(`Error ${currentPostId ? 'updating' : 'creating'} post with files:`, error);
+            alert(`오류: ${error.message}`);
         }
     }
 
     function cancelwrite(){
         const result = confirm("작성중인 내용이 저장되지 않을 수 있습니다. 정말 취소하시겠습니까?");
         if (result) {
-            // currentWlbProjectId -> currentProjectId 로 수정
             if (currentTaskId && currentProjectId) {
-                window.location.href = `worklist_board.html?taskId=${currentTaskId}&projectId=${currentProjectId}`;
+                const targetPostId = currentPostId || ''; 
+                window.location.href = `worklist_board.html?taskId=${currentTaskId}&projectId=${currentProjectId}${targetPostId ? '&postId=' + targetPostId : ''}`;
             } else if (currentProjectId) { 
                 window.location.href = `projectboard.html?projectId=${currentProjectId}`;
-            }
-             else { 
+            } else { 
                 window.location.href="projectlist.html";
             }
         } 
