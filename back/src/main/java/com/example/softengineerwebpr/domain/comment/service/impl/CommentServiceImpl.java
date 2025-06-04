@@ -12,6 +12,7 @@ import com.example.softengineerwebpr.domain.post.repository.PostRepository;
 import com.example.softengineerwebpr.domain.project.entity.Project;
 import com.example.softengineerwebpr.domain.project.entity.ProjectMemberStatus;
 import com.example.softengineerwebpr.domain.project.repository.ProjectMemberRepository;
+import com.example.softengineerwebpr.domain.user.dto.UserBasicInfoDto;
 import com.example.softengineerwebpr.domain.user.entity.User;
 // import com.example.softengineerwebpr.domain.notification.service.NotificationService; // 알림 기능 연동 시
 // import com.example.softengineerwebpr.domain.notification.common.NotificationType; // 알림 타입
@@ -62,6 +63,36 @@ public class CommentServiceImpl implements CommentService {
         }
     }
 
+    // 댓글 엔티티를 CommentResponseDto로 변환하는 재귀 함수 (파일 정보 포함)
+    private CommentResponseDto convertToDtoRecursive(Comment comment, User currentUser) {
+        if (comment == null) {
+            return null;
+        }
+
+        // 현재 댓글(comment)에 대한 파일 목록 조회
+        List<FileResponseDto> fileDtos = fileService.getFilesForReference(FileReferenceType.COMMENT, comment.getIdx()); //
+
+        // 자식 댓글(대댓글) 목록도 재귀적으로 DTO 변환 및 파일 정보 포함
+        List<CommentResponseDto> childCommentDtos = null;
+        if (comment.getChildComments() != null && !comment.getChildComments().isEmpty()) {
+            childCommentDtos = comment.getChildComments().stream()
+                    .map(child -> convertToDtoRecursive(child, currentUser)) // 자식 댓글도 재귀적으로 변환
+                    .collect(Collectors.toList());
+        }
+
+        return CommentResponseDto.builder()
+                .commentIdx(comment.getIdx())
+                .postId(comment.getPost() != null ? comment.getPost().getIdx() : null)
+                .author(comment.getUser() != null ? UserBasicInfoDto.fromEntity(comment.getUser()) : null) //
+                .content(comment.getContent())
+                .createdAt(comment.getCreatedAt())
+                .updatedAt(comment.getUpdatedAt())
+                .parentCommentIdx(comment.getParentComment() != null ? comment.getParentComment().getIdx() : null)
+                .childComments(childCommentDtos != null ? childCommentDtos : List.of()) // null 대신 빈 리스트
+                .files(fileDtos != null ? fileDtos : List.of()) // null 대신 빈 리스트
+                .build(); //
+    }
+
 
     @Override
     public CommentResponseDto createComment(Long postId, CommentCreateRequestDto requestDto, User currentUser) {
@@ -93,19 +124,13 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional(readOnly = true)
     public List<CommentResponseDto> getCommentsByPostId(Long postId, User currentUser) {
-        Post post = findPostOrThrow(postId);
-        checkProjectMembership(post, currentUser);
+        Post post = findPostOrThrow(postId); //
+        checkProjectMembership(post, currentUser); //
 
-        List<Comment> comments = commentRepository.findByPostAndParentCommentIsNullOrderByCreatedAtAsc(post); //
+        List<Comment> topLevelComments = commentRepository.findByPostAndParentCommentIsNullOrderByCreatedAtAsc(post); //
 
-        // 각 댓글에 대한 파일 목록을 조회하여 DTO에 포함
-        return comments.stream()
-                .map(comment -> {
-                    List<FileResponseDto> fileDtos = fileService.getFilesForReference(FileReferenceType.COMMENT, comment.getIdx());
-                    // 자식 댓글의 파일도 재귀적으로 가져오려면 CommentResponseDto.fromEntity 내부 로직 수정 또는 여기서 처리
-                    // 현재 CommentResponseDto.fromEntity는 자식 댓글의 파일은 빈 리스트로 처리.
-                    return CommentResponseDto.fromEntity(comment, fileDtos); //
-                })
+        return topLevelComments.stream()
+                .map(comment -> convertToDtoRecursive(comment, currentUser)) // 수정된 메소드 호출
                 .collect(Collectors.toList());
     }
 

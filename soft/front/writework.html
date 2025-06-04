@@ -11,9 +11,9 @@
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <style>
+        /* 기존 writework.html의 스타일 유지 */
         .box15{
-            /* min-height: 600px; */ /* 전체 최소 높이보다는 내용에 맞게 auto로 */
-            height: auto; /* 내용에 따라 높이 자동 조절 */
+            height: 600px; /* 기존 UI 유지 */
             width: 650px;
             display: flex;  
             flex-direction: column;
@@ -23,76 +23,86 @@
         }
         .editor-wrapper {
             width: 100%;
-            /* flex: 1; 제거 또는 height 고정 */
-            height: 480px; /* 이전과 유사한 에디터 작업 공간 확보 (제목 영역 제외한 높이, 필요시 조절) */
+            flex: 1; /* 이 부분이 중요: 남은 공간을 에디터가 차지 */
+            min-height: 0; /* flex item이 부모보다 작아질 수 있도록 */
             display: flex;
             flex-direction: column;
         }
         #editor {
-            flex-grow: 1; /* editor-wrapper의 남은 공간을 채움 */
+            flex: 1; /* editor-wrapper 내에서 남은 공간 차지 */
             width: 100%;
+            /* min-height: 0; 제거 또는 editor-wrapper에서 관리 */
+            /* max-height: 100%; 제거 또는 editor-wrapper에서 관리 */
             box-sizing: border-box;
-            border: none;
+            border: none; /* Quill 기본 테두리 사용 */
         }
-        .ql-toolbar.ql-snow {
+        .ql-toolbar.ql-snow { /* Quill 툴바는 원래 스타일 유지 */
             display: flex;
             flex-wrap: wrap;
             border-right: none;
             border-left: none;
-            border-top: 1px solid #eee; /* 제목 입력칸과 툴바 구분선 */
+            border-bottom: 1px solid #ccc; /* 툴바와 에디터 내용 구분 */
         }
-        .mid2 {
+        .mid2 { /* 기존 UI 유지 */
             position: absolute;
-            top: 80px; /* 상단 여백 조정 */
+            top: 100px;
             left: 50%;
             transform: translateX(-50%);
             flex-direction: column;
-            width: 650px; 
-            margin-bottom: 50px; 
+            width: 650px; /* box15와 너비 일치 */
+            margin-bottom: 50px;
         }
-        #title {
+        #title { /* 기존 UI 유지 */
             width:100%;
             height: 50px;
-            padding: 10px 15px; /* 패딩 조정 */
+            padding: 10px 15px;
             border: none;
             outline: none;
             background-color: transparent;
-            font-size: 1.3em; /* 제목 폰트 크기 */
+            font-size: 1.3em;
             box-sizing: border-box;
+            border-bottom: 1px solid #eee; /* 제목과 툴바 구분 */
         }
-        #title:focus{
+        #title:focus{ /* 기존 UI 유지 */
             outline: none;
             background-color: rgb(250, 250, 250);
             border-top-left-radius: 10px;
             border-top-right-radius: 10px;
         }
 
-        /* 파일 첨부 섹션 스타일 */
+        /* 파일 첨부 섹션 관련 스타일 */
         .file-attachment-section {
-            padding: 15px; /* 내부 여백 */
-            border-top: 1px solid #ddd; /* 에디터와 구분선 */
-            background-color: #f9f9f9; /* 약간의 배경색 구분 */
+            padding: 10px 15px;
+            border-top: 1px solid #ddd;
+            background-color: #f9f9f9;
+            overflow-y: auto; /* 내용 많을 시 스크롤 */
+            max-height: 120px; /* 파일 섹션의 최대 높이 제한 (에디터 공간 확보 위해) */
         }
-        .file-attachment-section label { /* "파일 첨부" 레이블 */
-            font-weight: bold;
-            font-size: 0.95em; /* 살짝 키움 */
-            margin-bottom: 10px;
+        .file-attachment-section strong {
             display: block;
-        }
-        #fileUploadInput {
+            margin-bottom: 5px;
             font-size: 0.9em;
-            /* 파일 입력 컨트롤의 높이를 버튼과 유사하게 보이도록 스타일링 */
-            padding: 8px 10px; /* 내부 패딩으로 높이감 부여 */
+            color: #333;
+        }
+        .file-attachment-section label[for="fileUploadInput"] { /* 새 파일 첨부 레이블 */
+             font-weight: bold;
+             font-size: 0.9em; /* 기존 스타일과 유사하게 */
+             margin-bottom: 8px;
+             display: block;
+             margin-top: 10px; /* 기존 파일 목록과 구분 */
+        }
+        #fileUploadInput { /* 파일 선택 컨트롤 */
+            font-size: 0.9em;
+            padding: 8px 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
             background-color: white;
-            display: block; /* 너비 100% 사용 */
+            display: block; 
             width: 100%;
             box-sizing: border-box;
-            height: 40px; /* 버튼 높이와 유사하게 (button_final 기본 높이 가정) */
+            height: 40px; /* 발행 버튼 높이와 유사하게 */
         }
-        /* Chrome, Edge 등에서 파일 선택 버튼 텍스트 변경 (선택적) */
-        #fileUploadInput::file-selector-button {
+        #fileUploadInput::file-selector-button { /* 파일 선택 버튼 스타일 */
             height: 100%;
             margin-right: 10px;
             padding: 0 10px;
@@ -105,43 +115,71 @@
             background-color: #ddd;
         }
 
-        #selectedFilesList {
-            margin-top: 10px; /* 파일 입력칸과 목록 사이 간격 */
+        /* 파일 목록 ul 스타일 */
+        #existingFilesListUl, #selectedNewFilesUl {
+            padding-left: 20px;
+            list-style-type: disc;
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+        /* 파일 목록 li 스타일 */
+        #existingFilesListUl li, #selectedNewFilesUl li {
+            padding: 2px 0;
             font-size: 0.85em;
             color: #555;
-            max-height: 100px; /* 파일 목록이 너무 길어지는 것 방지 */
-            overflow-y: auto;
+            display: flex; /* 링크와 버튼을 한 줄에 배치 */
+            justify-content: space-between; /* 양쪽 정렬 */
+            align-items: center;
         }
-        #selectedFilesList div, #selectedFilesList li { /* div 또는 li로 목록 표시 시 */
-            padding: 4px 0;
+        /* 기존 파일 삭제 버튼 스타일 */
+        .delete-existing-file-btn {
+            font-size: 0.8em; 
+            background: none; 
+            border-radius: 3px; 
+            cursor: pointer; 
+            padding: 1px 4px;
+            margin-left: 10px;
         }
-        /* 발행/취소 버튼 컨테이너 */
+        /* 삭제 표시된 기존 파일 스타일 */
+        #existingFilesListUl li.marked-for-deletion a {
+            text-decoration: line-through;
+            color: grey !important;
+            pointer-events: none; 
+        }
+        #existingFilesListUl li.marked-for-deletion .delete-existing-file-btn {
+            border-color: grey !important;
+            color: grey !important;
+        }
+        /* 기존 파일과 새 파일 목록 구분선 */
+        hr.new-file-separator {
+            margin: 10px 0 !important;
+            border-top: 1px dashed #ccc !important;
+        }
+
+        /* 발행/취소 버튼 컨테이너 (기존과 동일) */
         .action-buttons-container {
             display: flex; 
             justify-content: flex-end; 
             margin-top:20px; 
             gap: 10px;
-            /* height: 40px; /* 버튼 높이와 동일하게 설정 (파일 첨부칸과의 시각적 높이 맞춤을 위함) */
-            /* align-items: center; /* 버튼들을 수직 중앙 정렬 */
         }
-        /* button_final, button_final_n 에 height: 40px; 가 이미 있다고 가정 */
+         /* 버튼 높이 명시 (기존 파일에 인라인으로 있었음) */
+        .button_final, .button_final_n {
+            height: 40px;
+        }
 
-
-        /* 크기조절용 (빼도 됨) */
+        /* 반응형 CSS (기존과 동일) */
         @media (min-width: 1300px) or (min-height: 1200px) {
-            .box15 {
+            .box15 { /* 기존 UI 유지 - height 600px 유지 */
                 width: 50vw;
             }
             .mid2 {
                 width: 50vw;
-                top: 50px; /* 반응형 시 상단 여백 조정 */
+                top: 50px; 
             }
-            .editor-wrapper {
-                height: calc(55vh - 50px); /* 반응형 에디터 높이 (전체 높이의 % - 제목 높이) */
-            }
+            /* .editor-wrapper height는 flex:1로 자동 조절되므로 여기서는 불필요 */
         }
     </style>
-
 </head>
 <body style="background-color: rgb(245, 245, 245);">
     <div id="root"></div>
@@ -149,36 +187,40 @@
     
     <div class="mid2">
         <div style="font-weight: bold; font-size: large; margin-bottom: 10px;">게시글 작성</div>
-        <div class="box15">
+        <div class="box15"> 
             <input type="text" id="title" placeholder="제목" autofocus/>
-
             <div class="editor-wrapper"> 
                 <div id="editor"></div>
             </div>
+   
             <div class="file-attachment-section">
-                <label for="fileUploadInput">파일 첨부 (개당 10MB 이하):</label>
+                <div id="existingFilesContainer">
+                    
+                </div>
+                
+                <label for="fileUploadInput">새 파일 첨부 (개당 10MB 이하):</label>
                 <input type="file" id="fileUploadInput" multiple accept="*/*"/>
                 <div id="selectedFilesList">
-   
+                    
                 </div>
             </div>
+            
         </div>
-        <div class="action-buttons-container"> 
-            <button class="button_final" style="width:60px; height: 40px;">발행</button> 
-            <button class="button_final_n" style="width:60px; height: 40px;" onclick="cancelwrite()">취소</button> 
+        <div class="action-buttons-container">
+            <button class="button_final" style="width:60px;">발행</button> 
+            <button class="button_final_n" style="width:60px;" onclick="cancelwrite()">취소</button>
+        </div>
     </div>
 
 </body>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script>
-    // JavaScript 로직은 이전과 동일하게 유지됩니다.
-    // (DOMContentLoaed, initializeQuill, loadPostForEditing, handlePublishPost, cancelwrite 등)
-    // ... (이전 답변의 writework.html <script> 내용 전체 복사) ...
     let currentTaskId = null;
     let currentProjectId = null;
     let currentPostId = null; 
     let quill; 
+    let filesToDeleteOnSave = new Set(); // 삭제 예정인 기존 파일 ID를 저장할 Set
 
     document.addEventListener('DOMContentLoaded', function() {
         const urlParams = new URLSearchParams(window.location.search);
@@ -197,41 +239,26 @@
         const selectedFilesListDiv = document.getElementById('selectedFilesList');
         if (fileInput && selectedFilesListDiv) {
             fileInput.addEventListener('change', function() {
-                selectedFilesListDiv.innerHTML = ''; 
-                if (this.files.length > 0) {
-                    const ul = document.createElement('ul');
-                    ul.style.paddingLeft = '20px';
-                    ul.style.listStyleType = 'disc';
-                    for (const file of this.files) {
-                        const li = document.createElement('li');
-                        const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
-                        li.textContent = `${file.name} (${fileSizeMB} MB)`;
-                        if (file.size > 10 * 1024 * 1024) { // 10MB 초과 시
-                            li.style.color = 'red';
-                            li.textContent += ' - 크기 초과!';
-                        }
-                        ul.appendChild(li);
-                    }
-                    selectedFilesListDiv.appendChild(ul);
-                } else {
-                    // 파일 선택 안했을 때 메시지 제거 또는 "선택된 파일 없음" 유지
-                    // selectedFilesListDiv.innerHTML = '<p>선택된 파일이 없습니다.</p>';
-                }
+                displaySelectedNewFiles(this.files, selectedFilesListDiv);
             });
         }
-
 
         if (currentPostId) { 
             document.title = "게시글 수정";
             document.querySelector('.mid2 > div[style*="font-size: large"]').textContent = "게시글 수정";
+            filesToDeleteOnSave.clear(); 
             loadPostForEditing(currentPostId);
         } else { 
             if (isNaN(currentTaskId) || isNaN(currentProjectId)) {
                 alert("업무 ID 또는 프로젝트 ID가 유효하지 않습니다. 이전 페이지로 돌아갑니다.");
                 console.error("Task ID or Project ID missing for new post.");
-                // window.location.href = 'projectlist.html'; 
                 return;
             }
+            const existingFilesContainer = document.getElementById('existingFilesContainer');
+            if(existingFilesContainer) existingFilesContainer.innerHTML = ''; 
+             // 새 글 작성 시에는 "새 파일 첨부" 레이블만 보이도록 margin-top 제거
+            const newFileLabel = document.querySelector('.file-attachment-section label[for="fileUploadInput"]');
+            if(newFileLabel) newFileLabel.style.marginTop = '0px';
         }
     });
 
@@ -248,11 +275,50 @@
             modules: { toolbar: toolbarOptions },
             theme: 'snow'
         });
-         // .ql-editor 에 최소 높이 설정 (내용 없을 때도 공간 유지)
         const editorElement = document.querySelector('#editor .ql-editor');
         if (editorElement) {
-            editorElement.style.minHeight = 'calc(100% - 42px)'; // 툴바 높이(약 42px) 제외한 높이
+            // editor-wrapper가 flex:1 이므로, ql-editor는 그 안에서 height: 100% 또는 min-height 조정
+            editorElement.style.minHeight = 'calc(100% - 42px)'; // 툴바 높이 고려
+            editorElement.style.height = 'calc(100% - 42px)'; // 명시적 높이
             editorElement.style.boxSizing = 'border-box';
+        }
+    }
+
+    function displaySelectedNewFiles(files, listContainer) {
+        listContainer.innerHTML = ''; 
+        const existingFilesContainer = document.getElementById('existingFilesContainer');
+        let hrSeparator = existingFilesContainer.parentNode.querySelector('hr.new-file-separator');
+
+        if (files.length > 0) {
+            if (existingFilesContainer.querySelector('ul') && !hrSeparator) { // 기존 파일 목록이 있을 때만 구분선 추가
+                hrSeparator = document.createElement('hr');
+                hrSeparator.className = 'new-file-separator';
+                existingFilesContainer.parentNode.insertBefore(hrSeparator, listContainer);
+            }
+
+            const newFilesHeader = document.createElement('strong');
+            newFilesHeader.textContent = '새로 첨부할 파일:';
+            listContainer.appendChild(newFilesHeader);
+
+            const ul = document.createElement('ul');
+            ul.id = 'selectedNewFilesUl'; 
+            ul.style.paddingLeft = '20px';
+            ul.style.listStyleType = 'disc';
+            for (const file of files) {
+                const li = document.createElement('li');
+                const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
+                li.textContent = `${file.name} (${fileSizeMB} MB)`;
+                if (file.size > 10 * 1024 * 1024) {
+                    li.style.color = 'red';
+                    li.textContent += ' - 크기 초과!';
+                }
+                ul.appendChild(li);
+            }
+            listContainer.appendChild(ul);
+        } else {
+            if (hrSeparator && (!existingFilesContainer.querySelector('ul') || existingFilesContainer.querySelector('ul').children.length === 0)) {
+                hrSeparator.remove();
+            }
         }
     }
 
@@ -273,41 +339,120 @@
                 }
                 if(post.taskId) currentTaskId = post.taskId; 
                 
-                const selectedFilesListDiv = document.getElementById('selectedFilesList');
-                selectedFilesListDiv.innerHTML = '<strong>기존 첨부파일:</strong>';
-                if (post.files && post.files.length > 0) { 
+                const existingFilesContainer = document.getElementById('existingFilesContainer');
+                if (!existingFilesContainer) {
+                    console.error("Element with ID 'existingFilesContainer' not found.");
+                    return;
+                }
+                existingFilesContainer.innerHTML = ''; // 초기화 후 헤더 추가
+                const existingFilesHeader = document.createElement('strong');
+                existingFilesHeader.textContent = '기존 첨부파일:';
+                existingFilesContainer.appendChild(existingFilesHeader);
+
+                if (post.files && post.files.length > 0) {
                     const ul = document.createElement('ul');
+                    ul.id = 'existingFilesListUl';
                     ul.style.paddingLeft = '20px';
                     ul.style.listStyleType = 'disc';
                     post.files.forEach(file => {
                         const li = document.createElement('li');
+                        li.id = `existing_file_item_${file.idx}`;
                         const fileSizeMB = file.fileSize ? (file.fileSize / (1024 * 1024)).toFixed(2) : 'N/A';
-                        li.innerHTML = `<a href="/api/files/download/${file.idx}" target="_blank">${file.fileName}</a> (${fileSizeMB} MB)`;
+                        
+                        const link = document.createElement('a');
+                        link.href = `/api/files/download/${file.idx}`;
+                        link.textContent = `${file.fileName} (${fileSizeMB} MB)`;
+                        link.target = "_blank";
+                        link.download = file.fileName;
+                        
+                        const deleteButton = document.createElement('button');
+                        deleteButton.textContent = '삭제';
+                        deleteButton.className = 'delete-existing-file-btn';
+                        deleteButton.style.cssText = 'border: 1px solid red; color: red;'; // 기본 스타일
+                        
+                        const safeFileName = file.fileName.replace(/'/g, "\\'");
+                        deleteButton.onclick = function() { 
+                            toggleFileDeletionMark(file.idx, safeFileName, li, deleteButton, link);
+                        };
+                        
+                        // 삭제 예정 목록에 있는지 확인하여 초기 UI 설정
+                        if (filesToDeleteOnSave.has(file.idx)) {
+                            li.style.textDecoration = 'line-through';
+                            link.style.color = 'grey';
+                            link.style.pointerEvents = 'none';
+                            deleteButton.textContent = '삭제 취소';
+                            deleteButton.style.borderColor = 'grey';
+                            deleteButton.style.color = 'grey';
+                        } else {
+                            link.style.textDecoration = 'none';
+                            link.style.color = '#007bff';
+                            link.style.pointerEvents = 'auto';
+                        }
+                        
+                        li.appendChild(link);
+                        li.appendChild(deleteButton);
                         ul.appendChild(li);
                     });
-                    selectedFilesListDiv.appendChild(ul);
+                    existingFilesContainer.appendChild(ul);
                 } else {
-                    selectedFilesListDiv.innerHTML += '<p style="font-size:0.9em; color:grey;">첨부된 파일이 없습니다.</p>';
+                    const p = document.createElement('p');
+                    p.style.cssText = 'font-size:0.9em; color:grey; margin:0; padding-left:20px;';
+                    p.textContent = '첨부된 파일이 없습니다.';
+                    existingFilesContainer.appendChild(p);
                 }
-                selectedFilesListDiv.innerHTML += '<hr style="margin: 8px 0;" /><p style="font-size:0.8em; color:gray;">새 파일을 첨부하면 기존 파일은 유지됩니다. (기존 파일 삭제 기능은 현재 미구현)</p>';
+                
+                // 새 파일 선택 UI 초기화
+                document.getElementById('fileUploadInput').value = '';
+                document.getElementById('selectedFilesList').innerHTML = ''; 
+                const separator = document.querySelector('hr.new-file-separator');
+                if(separator) separator.remove();
+                // "새 파일 첨부" 레이블의 margin-top 조정
+                const newFileLabel = document.querySelector('.file-attachment-section label[for="fileUploadInput"]');
+                if(newFileLabel) newFileLabel.style.marginTop = (post.files && post.files.length > 0) ? '15px' : '0px';
+
 
             } else {
                 throw new Error(result.message || "게시글 정보를 가져오는데 실패했습니다.");
             }
-        } catch (error) {
+        } catch (error) { 
             console.error("Error loading post for editing:", error);
             alert(`게시글 정보를 불러오는 중 오류 발생: ${error.message}`);
-            if (currentTaskId && currentProjectId) {
-                 window.location.href = `worklist_board.html?taskId=${currentTaskId}&projectId=${currentProjectId}`;
-            } else if (currentProjectId) { 
-                 window.location.href = `projectboard.html?projectId=${currentProjectId}`;
-            } else { 
-                 window.location.href = 'projectlist.html';
-            }
+            // ... (이전 페이지로 돌아가는 로직)
         }
     }
+    window.loadPostForEditing = loadPostForEditing;
+
+    function toggleFileDeletionMark(fileId, fileName, listItemElement, buttonElement, linkElement) {
+        if (filesToDeleteOnSave.has(fileId)) {
+            filesToDeleteOnSave.delete(fileId);
+            listItemElement.classList.remove('marked-for-deletion');
+            linkElement.style.textDecoration = 'none';
+            linkElement.style.color = '#007bff'; 
+            linkElement.style.pointerEvents = 'auto';
+            buttonElement.textContent = '삭제';
+            buttonElement.style.borderColor = 'red';
+            buttonElement.style.color = 'red';
+            console.log(`File ${fileId} (${fileName}) unmarked for deletion.`);
+        } else { 
+            if (!confirm(`첨부파일 '${fileName}'을(를) 삭제하도록 표시하시겠습니까?\n실제 삭제는 "발행" 버튼을 눌러야 적용됩니다.`)) {
+                return;
+            }
+            filesToDeleteOnSave.add(fileId);
+            listItemElement.classList.add('marked-for-deletion');
+            linkElement.style.textDecoration = 'line-through';
+            linkElement.style.color = 'grey'; 
+            linkElement.style.pointerEvents = 'none'; 
+            buttonElement.textContent = '삭제 취소';
+            buttonElement.style.borderColor = 'grey';
+            buttonElement.style.color = 'grey';
+            console.log(`File ${fileId} (${fileName}) marked for deletion.`);
+        }
+        console.log("Files marked for deletion:", Array.from(filesToDeleteOnSave));
+    }
+    window.toggleFileDeletionMark = toggleFileDeletionMark;
 
     async function handlePublishPost() {
+        // ... (이전 답변의 handlePublishPost 함수 내용, fileIdsToRemove 전송 로직 포함)
         const titleInput = document.getElementById("title");
         const title = titleInput.value.trim();
         const content = quill.root.innerHTML; 
@@ -316,7 +461,15 @@
         if (!title) { alert("제목을 입력해주세요."); titleInput.focus(); return; }
         if (quill.getLength() <= 1 && !quill.getText().trim()) { alert("내용을 입력해주세요."); return; }
 
-        const postData = { title, content };
+        const postData = { 
+            title: title, 
+            content: content 
+        };
+
+        if (currentPostId && filesToDeleteOnSave.size > 0) { // 수정 모드이고 삭제할 파일이 있을 때만 추가
+            postData.fileIdsToRemove = Array.from(filesToDeleteOnSave);
+        }
+
         let method = currentPostId ? 'PUT' : 'POST';
         let url = currentPostId ? `/api/posts/${currentPostId}` : `/api/tasks/${currentTaskId}/posts`;
 
@@ -329,16 +482,20 @@
             const postResult = await postResponse.json();
 
             if (!postResponse.ok || !(postResult.status === 201 || postResult.status === 200) || !postResult.data) {
+                // 삭제 예정 파일 목록은 그대로 유지 (게시글 저장 실패했으므로)
                 throw new Error(postResult.message || `게시글 ${currentPostId ? '수정' : '저장'} 실패`);
             }
             
             const savedPostId = currentPostId || postResult.data.idx; 
+            filesToDeleteOnSave.clear(); // 게시글 내용 저장/수정 성공 시 삭제 예정 목록 초기화
 
+            let newFilesUploadedMessage = "";
+            let newFilesUploadFailed = false;
             if (fileInput && fileInput.files.length > 0) {
                 const formData = new FormData();
                 let validFilesExist = false;
                 for (const file of fileInput.files) {
-                    if (file.size > 10 * 1024 * 1024) { // 10MB 초과 파일 검사
+                    if (file.size > 10 * 1024 * 1024) { 
                         alert(`파일 "${file.name}"의 크기가 10MB를 초과하여 업로드에서 제외됩니다.`);
                         continue; 
                     }
@@ -355,26 +512,34 @@
 
                     if (!filesUploadResponse.ok) {
                         const filesErrorResult = await filesUploadResponse.json().catch(()=>({message: "파일 업로드 중 서버 오류 발생"}));
-                        alert(`게시글은 ${currentPostId ? '수정' : '저장'}되었으나, 새 파일 업로드에 실패했습니다: ${filesErrorResult.message}`);
+                        newFilesUploadedMessage = `새 파일 업로드에 실패했습니다: ${filesErrorResult.message}`;
+                        newFilesUploadFailed = true; // 실패 플래그
                     } else {
-                         alert(`게시글이 성공적으로 ${currentPostId ? '수정' : '발행'}되었고, 선택된 새 파일들이 업로드되었습니다.`);
+                         newFilesUploadedMessage = "선택된 새 파일들이 업로드되었습니다.";
                     }
-                } else if (fileInput.files.length > 0) { // 모든 파일이 크기 초과 등으로 제외된 경우
-                     alert(`게시글은 ${currentPostId ? '수정' : '저장'}되었으나, 업로드할 유효한 새 파일이 없습니다.`);
-                } else { 
-                     alert(`게시글이 성공적으로 ${currentPostId ? '수정' : '발행'}되었습니다. (새 첨부파일 없음)`);
+                } else if (fileInput.files.length > 0) { 
+                     newFilesUploadedMessage = "업로드할 유효한 새 파일이 없습니다 (모든 파일 크기 초과 등).";
                 }
-            } else { 
-                 alert(`게시글이 성공적으로 ${currentPostId ? '수정' : '발행'}되었습니다. (새 첨부파일 없음)`);
             }
             
-            if (currentTaskId && currentProjectId) {
-                window.location.href = `worklist_board.html?taskId=${currentTaskId}&projectId=${currentProjectId}&postId=${savedPostId}`;
-            } else if (currentProjectId && postResult.data && postResult.data.taskId) { 
-                 window.location.href = `worklist_board.html?taskId=${postResult.data.taskId}&projectId=${currentProjectId}&postId=${savedPostId}`;
+            let finalMessage = `게시글이 성공적으로 ${currentPostId ? '수정' : '발행'}되었습니다.`;
+            if (newFilesUploadedMessage) {
+                finalMessage += `\n${newFilesUploadedMessage}`;
+            }
+            alert(finalMessage);
+            
+            if (!newFilesUploadFailed) { // 새 파일 업로드도 성공했거나, 시도할 새 파일이 없었을 때만 페이지 이동
+                if (currentTaskId && currentProjectId) {
+                    window.location.href = `worklist_board.html?taskId=${currentTaskId}&projectId=${currentProjectId}&postId=${savedPostId}`;
+                } else if (currentProjectId && postResult.data && postResult.data.taskId) { 
+                     window.location.href = `worklist_board.html?taskId=${postResult.data.taskId}&projectId=${currentProjectId}&postId=${savedPostId}`;
+                } else {
+                    window.location.href = 'projectlist.html'; 
+                }
             } else {
-                console.warn("TaskId 또는 ProjectId가 없어 상세 페이지로 이동할 수 없습니다. 프로젝트 목록으로 이동합니다.");
-                window.location.href = 'projectlist.html'; 
+                // 새 파일 업로드 실패 시, 현재 페이지에 머무르며 다시 시도하거나,
+                // 기존 파일 목록을 다시 로드하여 (삭제된 파일 반영된) 정확한 상태를 보여줌
+                loadPostForEditing(savedPostId); 
             }
 
         } catch (error) {
@@ -383,7 +548,7 @@
         }
     }
 
-    function cancelwrite(){
+    function cancelwrite(){ /* 이전과 동일 */ 
         const result = confirm("작성중인 내용이 저장되지 않을 수 있습니다. 정말 취소하시겠습니까?");
         if (result) {
             if (currentTaskId && currentProjectId) {

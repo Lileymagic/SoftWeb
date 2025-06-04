@@ -235,14 +235,22 @@
 
                     <div style="margin: 0 10px 10px 10px;">
                         
-                        <div class="comment_box"> 
-                            <div style="font-size: medium;">나</div> 
-                            <textarea id="comment" placeholder="댓글 작성하기"></textarea> 
-                            <div style="width:100%;">
-                                <hr style="border-top: 1px solid rgb(220, 220, 220); margin: 8px 0;" /> 
+                        <div class="comment_box">
+                            <div style="font-size: medium;">나</div>
+                            <textarea id="mainCommentContent" placeholder="댓글 작성하기"></textarea> 
+                            <div style="margin-top: 8px; margin-bottom: 8px;">
+                                <label for="mainCommentFileUploadInput" style="font-size: 0.85em; color: #555; cursor:pointer;">
+                                    <img src="/icon/link.png" style="height:18px; width:18px; vertical-align: middle; margin-right: 3px;"/>
+                                    파일 첨부 (개당 10MB 이하)
+                                </label>
+                                <input type="file" id="mainCommentFileUploadInput" multiple accept="*/*" style="display: none;"/>
+                                <div id="selectedMainCommentFilesList" style="font-size: 0.8em; color: #333; margin-top: 5px;">
+                                </div>
                             </div>
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <img src="/icon/link.png" style="height:20px; width:20px; cursor:pointer;" title="파일 첨부 (구현 예정)"/>
+                            <div style="width:100%;">
+                                <hr style="border-top: 1px solid rgb(220, 220, 220); margin: 8px 0;" />
+                            </div>
+                            <div style="display: flex; justify-content: flex-end; align-items: center;">
                                 <button class="button_work2" style="width:70px;" onclick="addCommentHandler()">등록</button>
                             </div>
                         </div>
@@ -283,10 +291,11 @@
     </div>
 </body>
 <script>
+    // 전역 변수 선언 (이전과 동일)
     let currentWlbTaskId = null;
     let currentWlbProjectId = null;
     let currentSelectedPostId = null;
-    let currentSelectedPostData = null; 
+    let currentSelectedPostData = null;
 
     document.addEventListener('DOMContentLoaded', function () {
         const urlParams = new URLSearchParams(window.location.search);
@@ -297,29 +306,116 @@
         console.log("WorklistBoard Loaded. TaskID:", currentWlbTaskId, "ProjectID:", currentWlbProjectId, "PostID from URL:", postIdFromUrl);
 
         if (!isNaN(currentWlbTaskId) && !isNaN(currentWlbProjectId)) {
-            loadTaskDetailsForBoard(currentWlbTaskId);
-            // postIdFromUrl이 있으면 해당 게시글을, 없으면 목록의 첫 글을 기본으로 표시하도록 loadPostsForBoard에 전달
-            loadPostsForBoard(currentWlbTaskId, postIdFromUrl); 
-            updateWorklistBoardButtonLinks(currentWlbTaskId, currentWlbProjectId);
+            initializeWorklistBoard(currentWlbTaskId, currentWlbProjectId, postIdFromUrl);
         } else {
             console.error("Task ID or Project ID not found in URL or is invalid.");
-            const mainWDiv = document.querySelector('.mainW'); // 이 페이지의 주 표시 영역
-            if(mainWDiv) mainWDiv.innerHTML = '<p style="color:red; text-align:center; padding: 20px;">업무 또는 프로젝트 정보를 불러올 수 없습니다. (URL 파라미터 누락)</p>';
+            const mainWDiv = document.querySelector('.mainW');
+            if (mainWDiv) mainWDiv.innerHTML = '<p style="color:red; text-align:center; padding: 20px;">업무 또는 프로젝트 정보를 불러올 수 없습니다. (URL 파라미터 누락)</p>';
         }
+
+        // 메인 댓글 파일 입력 UI 설정
+        const mainCommentFileInput = document.getElementById('mainCommentFileUploadInput');
+        const selectedMainCommentFilesListDiv = document.getElementById('selectedMainCommentFilesList');
+        const mainCommentFileLabel = document.querySelector('label[for="mainCommentFileUploadInput"]');
+
+        if (mainCommentFileLabel && mainCommentFileInput) {
+            // 수정: label의 for 속성으로 충분하므로, 명시적인 click() 호출 제거
+            // mainCommentFileLabel.onclick = function() {
+            //     mainCommentFileInput.click(); 
+            // }; 
+            mainCommentFileInput.addEventListener('change', function() {
+                displaySelectedFiles(this.files, selectedMainCommentFilesListDiv, 'main_comment_file_');
+            });
+        }
+        
+        // 페이지 로드 시 댓글 입력창 비활성화 (게시글 선택 전)
+        toggleCommentForm(false); 
     });
 
-    async function loadTaskDetailsForBoard(taskId) {
-        const taskNameEl = document.getElementById('wlb_taskName');
-        if (!taskNameEl) {
-            console.error("Element with ID 'wlb_taskName' not found in original_worklist_board.html.");
-            return;
+    /**
+     * 메인 댓글 입력 폼의 활성화/비활성화 상태를 토글합니다.
+     */
+     function toggleCommentForm(enable) {
+        console.log(`[DEBUG] toggleCommentForm called with enable: ${enable}. Current postId: ${currentSelectedPostId}`);
+        const commentTextarea = document.getElementById('mainCommentContent');
+        const commentFileLabel = document.querySelector('label[for="mainCommentFileUploadInput"]');
+        const commentSubmitButton = document.querySelector('.comment_box .button_work2'); // 댓글 등록 버튼
+
+        if (commentTextarea) {
+            commentTextarea.disabled = !enable;
+            console.log(`[DEBUG] commentTextarea.disabled set to: ${commentTextarea.disabled}`);
+        } else {
+            console.error("[DEBUG] commentTextarea not found in toggleCommentForm");
         }
+
+        if (commentFileLabel) {
+            commentFileLabel.style.pointerEvents = enable ? 'auto' : 'none';
+            commentFileLabel.style.opacity = enable ? '1' : '0.5';
+            console.log(`[DEBUG] commentFileLabel pointerEvents: ${commentFileLabel.style.pointerEvents}, opacity: ${commentFileLabel.style.opacity}`);
+        } else {
+            console.error("[DEBUG] commentFileLabel not found in toggleCommentForm");
+        }
+
+        if (commentSubmitButton) {
+            commentSubmitButton.disabled = !enable;
+            console.log(`[DEBUG] commentSubmitButton.disabled set to: ${commentSubmitButton.disabled}`);
+        } else {
+            console.error("[DEBUG] commentSubmitButton not found in toggleCommentForm");
+        }
+    }
+
+
+    async function initializeWorklistBoard(taskId, projectId, postIdToSelect) {
+        await loadTaskDetailsForBoard(taskId);
+        await loadPostsForBoard(taskId, postIdToSelect);
+        updateWorklistBoardButtonLinks(taskId, projectId);
+
+        const writePostBtn = document.getElementById('wlb_writePostBtn');
+        if (writePostBtn) {
+            writePostBtn.onclick = () => {
+                window.location.href = `writework.html?taskId=${currentWlbTaskId}&projectId=${currentWlbProjectId}`;
+            };
+        }
+        const goBackBtn = document.getElementById('wlb_goBackBtn');
+        if (goBackBtn) {
+            goBackBtn.onclick = () => {
+                window.location.href = `projectboard.html?projectId=${currentWlbProjectId}`;
+            };
+        }
+    }
+    
+    function displaySelectedFiles(files, listContainer, idPrefix = 'file_') {
+        // ... (이전 답변과 동일한 함수 내용) ...
+        listContainer.innerHTML = '';
+        if (files.length > 0) {
+            const ul = document.createElement('ul');
+            ul.style.cssText = 'padding-left: 0px; list-style-type: none; margin-top: 5px;';
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const li = document.createElement('li');
+                li.id = `${idPrefix}${i}`;
+                const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
+                li.textContent = `${file.name} (${fileSizeMB} MB)`;
+                if (file.size > 10 * 1024 * 1024) {
+                    li.style.color = 'red';
+                    li.textContent += ' - 크기 초과! (업로드 제외)';
+                }
+                ul.appendChild(li);
+            }
+            listContainer.appendChild(ul);
+        }
+    }
+
+    async function loadTaskDetailsForBoard(taskId) {
+        // ... (이전 답변과 동일한 함수 내용) ...
+        const taskNameEl = document.getElementById('wlb_taskName'); 
+        if (!taskNameEl) { console.error("Element #wlb_taskName not found."); return; }
         taskNameEl.textContent = '업무명 로딩 중...';
         try {
             const response = await fetch(`/api/tasks/${taskId}`);
             if (!response.ok) {
                 if (response.status === 401) { window.location.href = "/front/login.html"; return; }
-                const errorData = await response.json().catch(() => ({ message: "업무 이름을 가져오지 못했습니다."}));
+                const errorData = await response.json().catch(() => ({message: "업무 이름을 가져오지 못했습니다."}));
                 throw new Error(errorData.message || `Failed to fetch task name: ${response.status}`);
             }
             const result = await response.json();
@@ -335,26 +431,21 @@
     }
 
     async function loadPostsForBoard(taskId, postIdToSelect = null) {
-        const postListTbodyEl = document.getElementById('wlb_postListTbody');
-        const initialPostTitleEl = document.getElementById('wlb_postTitle'); 
-
-        if (!postListTbodyEl) { // initialPostTitleEl은 없을 수도 있으므로 일단 제외
-            console.error("Element with ID 'wlb_postListTbody' for post list not found.");
-            return;
-        }
+        // ... (이전 답변과 동일한 함수 내용) ...
+        const postListTbodyEl = document.getElementById('wlb_postListTbody'); 
+        if (!postListTbodyEl) { console.error("Element #wlb_postListTbody for post list not found."); return; }
         
         postListTbodyEl.innerHTML = '<tr><td colspan="1" style="text-align:center; color:grey; padding:15px;">게시글 목록 로딩 중...</td></tr>';
-        if (!postIdToSelect) { // URL에 postId가 없을 때만 상세 영역 초기화
-            clearPostDetailArea(true); 
+        if (!postIdToSelect) { // postIdToSelect가 없으면, 즉 URL에 postId가 없거나 목록 처음 로드 시
+            clearPostDetailArea(true, "게시글을 선택해주세요."); // currentSelectedPostId = null로 설정됨
+            toggleCommentForm(false); // 댓글 폼 비활성화
         }
-
 
         try {
             const response = await fetch(`/api/tasks/${taskId}/posts`);
             if (!response.ok) {
                 if (response.status === 401) { window.location.href = "/front/login.html"; return; }
-                let errorData = { message: `서버 응답 오류: ${response.status}` };
-                try { errorData = await response.json(); } catch (e) { /* ignore */ }
+                const errorData = await response.json().catch(() => ({ message: `서버 응답 오류: ${response.status}` }));
                 throw new Error(errorData.message || `Failed to fetch posts: ${response.status}`);
             }
             const result = await response.json(); 
@@ -363,11 +454,11 @@
             if (result.status === 200 && Array.isArray(result.data)) {
                 if (result.data.length === 0) {
                     postListTbodyEl.innerHTML = '<tr><td colspan="1" style="text-align:center; color:grey; padding:15px;">이 업무에는 게시글이 없습니다.</td></tr>';
-                    if(initialPostTitleEl) initialPostTitleEl.textContent = '표시할 게시글이 없습니다.';
-                    clearPostDetailArea(true);
+                    clearPostDetailArea(true, "표시할 게시글이 없습니다.");
+                    toggleCommentForm(false); // 댓글 폼 비활성화
                 } else {
                     let postToDisplayAutomatically = postIdToSelect;
-                    if (!postIdToSelect) { // URL에 postId가 없으면 첫 번째 게시글 ID를 사용
+                    if (!postIdToSelect) {
                         postToDisplayAutomatically = result.data[0].idx;
                     }
                     
@@ -378,7 +469,7 @@
                         const postDate = new Date(post.createdAt).toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit'});
                         tr.innerHTML = `<td title="${post.title}\n작성자: ${post.authorNickname}\n작성일: ${postDate}">
                                             <div style="display: flex; justify-content: space-between; align-items: center;">
-                                                <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px;">${post.title || '제목 없음'}</span>
+                                                <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px; font-size:13px;">${post.title || '제목 없음'}</span>
                                                 <span style="font-size: 0.8em; color: #777; white-space: nowrap;">${post.authorNickname || ''}</span>
                                             </div>
                                         </td>`;
@@ -390,13 +481,13 @@
                     });
 
                     if (postToDisplayAutomatically && foundPostIdInList) {
-                        displayFullPostDetails(postToDisplayAutomatically);
-                    } else if (result.data.length > 0 && !postIdToSelect) { // URL에 없었고, 목록에 첫번째가 있다면
-                        displayFullPostDetails(result.data[0].idx);
-                    } else if (postIdToSelect && !foundPostIdInList) { // URL에 postId가 있었으나 목록에 없는 경우
-                        console.warn(`Post with ID ${postIdToSelect} from URL not found in the fetched list. Displaying placeholder.`);
-                        clearPostDetailArea(true);
-                         if(initialPostTitleEl) initialPostTitleEl.textContent = `요청하신 게시글(ID:${postIdToSelect})을 찾을 수 없습니다.`;
+                        await displayFullPostDetails(postToDisplayAutomatically); // await 추가
+                    } else if (result.data.length > 0 && !postIdToSelect) {
+                        await displayFullPostDetails(result.data[0].idx); // await 추가
+                    } else if (postIdToSelect && !foundPostIdInList) {
+                        console.warn(`Post with ID ${postIdToSelect} from URL not found in the fetched list.`);
+                        clearPostDetailArea(true, `요청하신 게시글(ID:${postIdToSelect})을 찾을 수 없습니다.`);
+                        toggleCommentForm(false); // 댓글 폼 비활성화
                     }
                 }
             } else {
@@ -404,13 +495,19 @@
             }
         } catch (error) {
             console.error("Error loading posts:", error);
-            postListTbodyEl.innerHTML = `<tr><td colspan="1" style="text-align:center; color:red; padding:15px;">게시글 로드 오류: ${error.message}</td></tr>`;
-            if(initialPostTitleEl) initialPostTitleEl.textContent = '게시글 로드 오류';
-            clearPostDetailArea(true);
+            postListTbodyEl.innerHTML = `<tr><td colspan="1" style="text-align:center; color:red; padding:15px;">게시글 로드 오류.</td></tr>`;
+            clearPostDetailArea(true, "게시글 로드 오류가 발생했습니다.");
+            toggleCommentForm(false); // 댓글 폼 비활성화
         }
     }
     
-    function clearPostDetailArea(showPlaceholder = false) {
+    function clearPostDetailArea(showPlaceholder = false, placeholderText = "게시글을 선택해주세요.") {
+        console.log(`[DEBUG] clearPostDetailArea 함수 호출됨. currentSelectedPostId가 null로 설정됩니다. Placeholder: ${showPlaceholder}, Text: ${placeholderText}`);
+        console.log('[DEBUG] clearPostDetailArea 호출 스택:', new Error().stack);
+
+        currentSelectedPostId = null;
+        currentSelectedPostData = null;
+
         const postTitleEl = document.getElementById('wlb_postTitle');
         const postMetaEl = document.getElementById('wlb_postMeta');
         const postContentEl = document.getElementById('wlb_postContent');
@@ -418,131 +515,146 @@
         const commentListEl = document.getElementById('commentlist');
         const comcountEl = document.getElementById("comcount");
         const postActionButtonsEl = document.getElementById('wlb_postActionButtons');
+        const commentTextarea = document.getElementById('mainCommentContent');
+        const commentFileInput = document.getElementById('mainCommentFileUploadInput');
+        const selectedCommentFilesDiv = document.getElementById('selectedMainCommentFilesList');
 
-        if (postTitleEl) postTitleEl.textContent = showPlaceholder ? '게시글을 선택해주세요.' : '로딩 중...';
+
+        if (postTitleEl) postTitleEl.textContent = showPlaceholder ? placeholderText : '로딩 중...';
         if (postMetaEl) postMetaEl.innerHTML = '';
-        if (postContentEl) postContentEl.innerHTML = ''; 
+        if (postContentEl) postContentEl.innerHTML = showPlaceholder ? '<p style="text-align:center; color:grey; margin-top:50px;">왼쪽 목록에서 게시글을 선택해주세요.</p>' : ''; 
         if (postFilesEl) postFilesEl.innerHTML = '';
-        if (commentListEl) commentListEl.innerHTML = '';
+        if (commentListEl) commentListEl.innerHTML = '<div style="text-align:center; color:grey; padding:10px;">댓글 정보가 없습니다.</div>';
         if (comcountEl) comcountEl.textContent = '0';
         if (postActionButtonsEl) postActionButtonsEl.style.display = 'none';
         
-        if (showPlaceholder) { // "선택해주세요" 메시지일 때만 초기화
-            currentSelectedPostId = null;
-            currentSelectedPostData = null;
+        // 댓글 폼 초기화
+        if (commentTextarea) commentTextarea.value = '';
+        if (commentFileInput) commentFileInput.value = ''; // 파일 입력 값 초기화
+        if (selectedCommentFilesDiv) selectedCommentFilesDiv.innerHTML = ''; // 선택된 파일 목록 UI 초기화
+        
+        // 댓글 폼 비활성화 (게시글이 선택되지 않았으므로)
+        if (showPlaceholder) { // 명시적으로 플레이스홀더를 보여줄 때만 댓글 폼 비활성화
+            toggleCommentForm(false);
         }
     }
 
     async function displayFullPostDetails(postId) {
-        console.log(`Displaying full post details for postId: ${postId}`);
-        currentSelectedPostId = postId; // 이 줄에서 currentSelectedPostId가 올바르게 설정됩니다!
-        
-        const postTitleEl = document.getElementById('wlb_postTitle');
-        const postMetaEl = document.getElementById('wlb_postMeta');
-        const postContentEl = document.getElementById('wlb_postContent');
-        const postFilesEl = document.getElementById('wlb_postFiles');
-        const postActionButtonsEl = document.getElementById('wlb_postActionButtons');
-        const editPostBtn = document.getElementById('wlb_editPostBtn'); // 원본 HTML의 수정 버튼 ID로 가정
-        const deletePostBtn = document.getElementById('wlb_deletePostBtn'); // 원본 HTML의 삭제 버튼 ID로 가정
+    console.log(`[DEBUG] Displaying full post details for postId: ${postId}`);
 
-        // 필수 요소들이 HTML에 있는지 확인
-        if (!postTitleEl || !postMetaEl || !postContentEl || !postFilesEl || !postActionButtonsEl || !editPostBtn || !deletePostBtn) {
-            console.error("HTML elements for displaying post details are missing. Ensure IDs (wlb_postTitle, wlb_postMeta, wlb_postContent, wlb_postFiles, wlb_postActionButtons, wlb_editPostBtn, wlb_deletePostBtn) are correctly set in your original_worklist_board.html.");
-            return;
-        }
-        
-        postTitleEl.textContent = '게시글 상세 로딩 중...';
-        postMetaEl.innerHTML = '';
-        postContentEl.innerHTML = '';
-        postFilesEl.innerHTML = '';
-        postActionButtonsEl.style.display = 'none';
+    // 1. 기존 게시글 상세 정보 영역을 먼저 초기화하고 "로딩 중..." 메시지를 표시합니다.
+    //    이때 clearPostDetailArea 내부에서 currentSelectedPostId가 일시적으로 null이 됩니다.
+    clearPostDetailArea(false);
 
+    const postTitleEl = document.getElementById('wlb_postTitle');
+    const postMetaEl = document.getElementById('wlb_postMeta');
+    const postContentEl = document.getElementById('wlb_postContent');
+    const postFilesEl = document.getElementById('wlb_postFiles');
+    const postActionButtonsEl = document.getElementById('wlb_postActionButtons');
+    const editPostBtn = document.getElementById('wlb_editPostBtn');
+    const deletePostBtn = document.getElementById('wlb_deletePostBtn');
 
-        try {
-            const response = await fetch(`/api/posts/${postId}`); 
-            if (!response.ok) {
-                if (response.status === 401) { window.location.href = "/front/login.html"; return; }
-                const errorData = await response.json().catch(() => ({message: "게시글 상세 정보를 가져오지 못했습니다."}));
-                throw new Error(errorData.message || `Failed to fetch post details: ${response.status}`);
-            }
-            const result = await response.json();
-
-            if (result.status === 200 && result.data) {
-                const postDetail = result.data;
-                currentSelectedPostData = postDetail; 
-
-                postTitleEl.textContent = postDetail.title || "제목 없음";
-                const postDate = new Date(postDetail.createdAt).toLocaleString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute:'2-digit', hour12: false});
-                // 원본 HTML의 메타 정보 구조에 맞게 author와 date를 한 div 안에 넣습니다.
-                postMetaEl.innerHTML = `
-                    <div style="display: flex; align-items: center; gap: 5px;">
-                        <img src="${postDetail.author && postDetail.author.profileImage ? postDetail.author.profileImage : '/icon/user2.png'}" style="height: 25px; width: 25px; border-radius:50%; object-fit:cover;"/>
-                        <div style="font-size: 15px;">${postDetail.author ? postDetail.author.nickname : '작성자 정보 없음'}</div>
-                    </div>
-                    <div style="font-size: 12px; color:rgb(105, 105, 105); margin-left: auto;">${postDate}</div>`;
-                
-                postContentEl.innerHTML = postDetail.content || "<p>내용 없음</p>"; 
-
-                postFilesEl.innerHTML = '';
-                if (postDetail.files && postDetail.files.length > 0) {
-                    postDetail.files.forEach(file => {
-                        const fileContainer = document.createElement('div');
-                        // 원본 HTML의 파일 링크는 하나만 표시되고 오른쪽에 있었음. 여기서는 여러 개일 수 있으므로 div로 감쌈.
-                        fileContainer.style.textAlign = 'right'; 
-                        const fileLink = document.createElement('a');
-                        fileLink.href = `/api/files/download/${file.idx}`; // 실제 파일 다운로드 API 경로
-                        fileLink.textContent = file.fileName + (file.fileSize ? ` (${(file.fileSize / 1024).toFixed(1)} KB)` : '');
-                        fileLink.style.fontSize = 'small';
-                        fileLink.style.color = 'rgb(105, 105, 105)';
-                        fileLink.style.textDecoration = 'underline';
-                        fileLink.style.cursor = 'pointer';
-                        fileLink.setAttribute('download', file.fileName); 
-                        fileLink.setAttribute('target', '_blank'); 
-                        
-                        const fileIcon = document.createElement('img');
-                        fileIcon.src = "public/icon/link.png"; // 원본 HTML의 아이콘 경로
-                        fileIcon.style.height = '20px';
-                        fileIcon.style.width = '20px';
-                        fileIcon.style.marginRight = '5px';
-                        fileIcon.style.verticalAlign = 'middle';
-                        
-                        fileContainer.appendChild(fileIcon);
-                        fileContainer.appendChild(fileLink);
-                        postFilesEl.appendChild(fileContainer);
-                    });
-                }
-                
-                // TODO: 현재 로그인한 사용자 ID와 postDetail.author.userIdx 비교하여 버튼 표시/숨김 처리
-                postActionButtonsEl.style.display = 'flex'; 
-                editPostBtn.onclick = () => editCurrentPost();
-                deletePostBtn.onclick = () => deleteCurrentPost();
-
-
-                await loadCommentsForPost(postId);
-            } else {
-                throw new Error(result.message || "게시글 상세 정보를 가져오는데 실패했습니다.");
-            }
-
-        } catch (error) {
-            console.error(`Error loading post details for postId ${postId}:`, error);
-            postTitleEl.textContent = "게시글 상세 로드 오류";
-            postContentEl.innerHTML = `<p style="color:red;">오류: ${error.message}</p>`;
-        }
+    if (!postTitleEl || !postMetaEl || !postContentEl || !postFilesEl || !postActionButtonsEl || !editPostBtn || !deletePostBtn) {
+        console.error("[DEBUG] HTML elements for displaying post details are missing.");
+        // toggleCommentForm(false); // clearPostDetailArea에서 이미 처리될 수 있음
+        return;
     }
 
-    async function loadCommentsForPost(postId) {
-        const commentListEl = document.getElementById('commentlist');
-        const comcountEl = document.getElementById("comcount");
+    try {
+        // 2. 게시글 상세 정보를 API를 통해 가져옵니다.
+        const response = await fetch(`/api/posts/${postId}`);
+        console.log(`[DEBUG] API response status for /api/posts/${postId}: ${response.status}`);
 
-        if (!commentListEl || !comcountEl) {
-            console.error("Comment list or count element not found.");
-            return;
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({ message: "게시글 상세 정보를 가져오지 못했고, 오류 응답 본문 파싱에도 실패했습니다." }));
+            console.error(`[DEBUG] API call failed for /api/posts/${postId}. Status: ${response.status}, Message: ${errorData.message}`);
+            throw new Error(errorData.message || `Failed to fetch post details: ${response.status}`);
         }
+
+        const result = await response.json();
+        console.log(`[DEBUG] API result for /api/posts/${postId}:`, result);
+
+        if (result.status === 200 && result.data) {
+            const postDetail = result.data;
+
+            // 3. API 호출이 성공하고 유효한 데이터를 받았을 때, 여기서 currentSelectedPostId와 currentSelectedPostData를 설정합니다!
+            currentSelectedPostId = postId; // <<<< 중요! 여기서 postId로 설정
+            currentSelectedPostData = postDetail;
+            console.log(`[DEBUG] currentSelectedPostId is NOW definitively set to: ${currentSelectedPostId}`);
+
+            // 4. 게시글 상세 내용을 화면에 표시합니다.
+            postTitleEl.textContent = postDetail.title || "제목 없음";
+            const postDate = new Date(postDetail.createdAt).toLocaleString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false });
+            postMetaEl.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 5px;">
+                    <img src="${postDetail.author && postDetail.author.profileImage ? postDetail.author.profileImage : '/icon/user2.png'}" style="height: 25px; width: 25px; border-radius:50%; object-fit:cover;"/>
+                    <div style="font-size: 15px;">${postDetail.author ? postDetail.author.nickname : '작성자 정보 없음'}</div>
+                </div>
+                <div style="font-size: 12px; color:rgb(105, 105, 105); margin-left: auto;">${postDate}</div>`;
+
+            postContentEl.innerHTML = postDetail.content || "<p>내용 없음</p>";
+
+            postFilesEl.innerHTML = '';
+            if (postDetail.files && postDetail.files.length > 0) {
+                postDetail.files.forEach(file => {
+                    const fileContainer = document.createElement('div');
+                    fileContainer.style.marginBottom = '3px';
+                    const fileLink = document.createElement('a');
+                    fileLink.href = `/api/files/download/${file.idx}`;
+                    const fileSizeMB = file.fileSize ? `(${(file.fileSize / 1024 / 1024).toFixed(2)} MB)` : '';
+                    fileLink.textContent = `${file.fileName} ${fileSizeMB}`;
+                    fileLink.style.cssText = 'font-size:small; color:#007bff; text-decoration:underline;';
+                    fileLink.setAttribute('download', file.fileName);
+                    fileLink.setAttribute('target', '_blank');
+
+                    const fileIcon = document.createElement('img');
+                    fileIcon.src = "/icon/link.png";
+                    fileIcon.style.cssText = 'height:16px; width:16px; margin-right:4px; vertical-align:middle;';
+
+                    fileContainer.appendChild(fileIcon);
+                    fileContainer.appendChild(fileLink);
+                    postFilesEl.appendChild(fileContainer);
+                });
+            } else {
+                postFilesEl.innerHTML = '<span style="font-size:small; color:grey;">첨부된 파일이 없습니다.</span>';
+            }
+
+            postActionButtonsEl.style.display = 'flex';
+            editPostBtn.onclick = () => editCurrentPost();
+            deletePostBtn.onclick = () => deleteCurrentPost();
+
+            // 5. 댓글을 로드하고 댓글 폼을 활성화합니다.
+            await loadCommentsForPost(postId); // 이 함수는 이제 유효한 currentSelectedPostId를 참조할 수 있습니다.
+            console.log(`[DEBUG] Post ${postId} details loaded successfully. Enabling comment form.`);
+            toggleCommentForm(true);
+
+        } else {
+            // API 응답은 왔으나 status가 200이 아니거나 result.data가 없는 경우
+            console.error(`[DEBUG] Failed to get valid data from API for post ${postId}. API Response Status: ${result.status}, Message: ${result.message}`);
+            // 이 경우 currentSelectedPostId는 초기의 clearPostDetailArea 호출로 인해 null로 유지됩니다.
+            clearPostDetailArea(true, `게시글(ID:${postId}) 정보를 가져오는데 실패했습니다 (서버 응답 오류).`);
+            // toggleCommentForm(false)는 clearPostDetailArea 내부에서 호출됩니다.
+        }
+    } catch (error) {
+        console.error(`[DEBUG] Error in displayFullPostDetails for postId ${postId}:`, error);
+        // 오류 발생 시 currentSelectedPostId는 null로 유지됩니다.
+        clearPostDetailArea(true, `게시글(ID:${postId}) 로드 중 오류가 발생했습니다.`);
+        // toggleCommentForm(false)는 clearPostDetailArea 내부에서 호출됩니다.
+    }
+}
+
+    async function loadCommentsForPost(postId) {
+        console.log(`[DEBUG] loadCommentsForPost started for postId: ${postId}`);
+        const commentListEl = document.getElementById('commentlist'); 
+        const comcountEl = document.getElementById("comcount");     
+
+        if (!commentListEl || !comcountEl) { console.error("Comment list or count element not found."); return; }
         commentListEl.innerHTML = '<div style="text-align:center; color:grey; padding:10px;">댓글 로딩 중...</div>';
         comcountEl.textContent = '0';
 
         try {
             const response = await fetch(`/api/posts/${postId}/comments`);
+            console.log(`[DEBUG] Comments API response status for post ${postId}: ${response.status}`);
             if (!response.ok) {
                 if (response.status === 401) { window.location.href = "/front/login.html"; return; }
                 const errorData = await response.json().catch(() => ({message: "댓글을 가져오지 못했습니다."}));
@@ -554,6 +666,7 @@
             if (result.status === 200 && Array.isArray(result.data)) {
                 let totalComments = 0;
                 const countCommentsRecursively = (comments) => {
+                    if (!comments) return;
                     comments.forEach(c => {
                         totalComments++;
                         if (c.childComments) countCommentsRecursively(c.childComments);
@@ -567,88 +680,295 @@
                 } else {
                     result.data.forEach(comment => renderComment(comment, commentListEl, 0));
                 }
+                console.log(`[DEBUG] Comments successfully loaded and rendered for post ${postId}`);
             } else {
                 throw new Error(result.message || "댓글 목록을 가져오는데 실패했습니다.");
+                console.error(`[DEBUG] Failed to get valid comments for post ${postId}. API Status: ${result.status}, Message: ${result.message}`);
             }
         } catch (error) {
-            console.error(`Error loading comments for post ${postId}:`, error);
-            commentListEl.innerHTML = `<div style="text-align:center; color:red; padding:10px;">댓글 로드 오류: ${error.message}</div>`;
+            console.error(`[DEBUG] Error in loadCommentsForPost for postId ${postId}:`, error);
+            // 이 catch 블록에서 currentSelectedPostId를 변경하거나 toggleCommentForm(false)를 호출하는지 확인
+            commentListEl.innerHTML = `<div style="text-align:center; color:red; padding:10px;">댓글 로드 오류.</div>`;
         }
-    }
-
-    function renderComment(commentData, parentElement, depth) {
-        const commentDiv = document.createElement('div');
-        // 사용자 원본 HTML의 댓글 구조를 따르도록 className과 내부 구조 수정
-        commentDiv.className = 'commentlist-item'; // 각 댓글 구분 및 하단 hr 스타일 위해
-        commentDiv.style.marginLeft = `${depth * 20}px`; 
-        // 원본 HTML은 <div style="width:660px;"> <hr/> </div> 로 각 댓글을 구분했으나,
-        // JS 동적 생성 시에는 각 commentDiv에 border-bottom을 주고 마지막 요소만 제거하는 것이 용이.
-        // 또는, commentDiv의 className을 .commentlist (원본과 동일)로 하고, CSS에서 .commentlist + .commentlist { margin-top, border-top } 등으로 처리
-        // 여기서는 .commentlist-item에 border-bottom을 주고, 마지막 요소는 JS에서 제거하는 방식으로 함.
-
-
-        const authorInfo = commentData.author;
-        const commentDate = new Date(commentData.createdAt).toLocaleString('ko-KR', {hour12: false, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute:'2-digit' });
-
-        // TODO: 현재 로그인한 사용자와 댓글 작성자가 같을 경우에만 삭제 버튼 활성화/표시
-        commentDiv.innerHTML = `
-            <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 5px; padding-top: 10px;">
-                <div style="display:flex;">
-                    <img src="${authorInfo && authorInfo.profileImage ? authorInfo.profileImage : '/icon/user2.png'}" style="height: 25px; width: 25px; border-radius: 50%; margin-right: 5px; object-fit:cover;" />
-                    <div style="font-size: 15px; font-weight: bold;">${authorInfo ? authorInfo.nickname : '익명'}</div>
-                </div>
-                <div></div>
-                <div>
-                    <div style="font-size: 12px; color:rgb(105, 105, 105); margin-right:10px;">${commentDate}</div>
-                </div>
-            </div>
-            <div style="margin-left:30px; margin-top:5px; margin-bottom: 8px;">
-                <div style="font-size: 13px; white-space:pre-wrap; word-break:break-all;">${commentData.content.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</div>
-            </div>
-            <div style="display: flex; justify-content: space-between; align-items:center;">
-                <div class="comment-actions"></div>
-                <div></div>
-                <button class="button_work" style="border-color:rgb(173, 98, 98); color:rgb(173, 98, 98); font-size:11px; height:20px; width:auto; margin-right: 10px;" onclick="deleteCommentHandler(${commentData.commentIdx})">삭제</button>   
-            </div>
-        `;
-
-        const replyArea = document.createElement('div');
-        replyArea.className = 'replyArea';
-        commentDiv.appendChild(replyArea);
-
-        if (depth === 0) {
-            const actionsDiv = commentDiv.querySelector('.comment-actions');
-            const replyBtn = document.createElement('button');
-            replyBtn.className = 'button_work';
-            replyBtn.style.cssText = "font-size:11px; height:20px; width:auto; padding:0 5px; margin-right:5px; cursor:pointer;";
-            replyBtn.textContent = '답글쓰기';
-
-            replyBtn.onclick = () => {
-                addReply(
-                commentData.commentIdx,    
-                replyBtn,                   
-                replyArea,                
-                depth + 1,                  
-                { childComments: [] }      
-                );
-            };
-            actionsDiv.appendChild(replyBtn);
-        }
-
-        parentElement.appendChild(commentDiv);
-        
-        // 맨 마지막 댓글의 하단 구분선 제거
-        if(parentElement.lastChild && parentElement.lastChild.style) parentElement.lastChild.style.borderBottom="none";
-        // 그 이전 댓글의 하단 구분선은 유지
-        if(parentElement.lastChild && parentElement.lastChild.previousSibling && parentElement.lastChild.previousSibling.style) parentElement.lastChild.previousSibling.style.borderBottom="1px solid rgb(235, 235, 235)";
-
-
-        if (commentData.childComments && commentData.childComments.length > 0) {
-            commentData.childComments.forEach(child => renderComment(child, replyArea, depth + 1));
-        }
+        console.log(`[DEBUG] loadCommentsForPost finished for postId: ${postId}`);
     }
     
+    async function addCommentHandler() {
+        console.log("[DEBUG] addCommentHandler invoked. currentSelectedPostId at this moment:", currentSelectedPostId); // 이 로그를 추가!
+        if (!currentSelectedPostId) {
+            alert("댓글을 작성할 게시글을 먼저 선택해주세요.");
+            return;
+        }
+
+        if (!currentSelectedPostId) {
+            alert("댓글을 작성할 게시글을 먼저 선택해주세요."); // 이 alert이 발생하는지 확인
+            return;
+        }
+        const commentInputElement = document.getElementById("mainCommentContent"); 
+        const content = commentInputElement.value.trim();
+
+        if (!content) {
+            alert("댓글 내용을 입력해주세요.");
+            commentInputElement.focus();
+            return;
+        }
+
+        const commentData = { content: content, parentCommentId: null };
+
+        try {
+            const commentResponse = await fetch(`/api/posts/${currentSelectedPostId}/comments`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(commentData)
+            });
+            const commentResult = await commentResponse.json();
+
+            if (!commentResponse.ok || !(commentResult.status === 201 && commentResult.data)) {
+                throw new Error(commentResult.message || `댓글 작성 실패 (상태: ${commentResponse.status})`);
+            }
+
+            const savedCommentId = commentResult.data.commentIdx; 
+            console.info("메인 댓글 내용 저장 성공. Comment ID:", savedCommentId);
+
+            const mainCommentFileInput = document.getElementById('mainCommentFileUploadInput'); 
+            const selectedMainCommentFilesListDiv = document.getElementById('selectedMainCommentFilesList'); 
+
+            if (mainCommentFileInput && mainCommentFileInput.files.length > 0) {
+                const formData = new FormData();
+                let validFilesExist = false;
+                for (const file of mainCommentFileInput.files) {
+                    if (file.size > 10 * 1024 * 1024) { continue; }
+                    formData.append('files', file);
+                    validFilesExist = true;
+                }
+
+                if (validFilesExist) {
+                    const filesUploadResponse = await fetch(
+                        `/api/files/upload/multiple?referenceType=COMMENT&referenceIdx=${savedCommentId}`, 
+                        { method: 'POST', body: formData }
+                    );
+                    if (!filesUploadResponse.ok) {
+                        const filesErrorResult = await filesUploadResponse.json().catch(()=>({message: "댓글 파일 업로드 중 서버 오류"}));
+                        alert(`댓글은 작성되었으나, 파일 업로드에 실패했습니다: ${filesErrorResult.message}`);
+                    } else {
+                        console.info("메인 댓글 파일 업로드 성공 for Comment ID:", savedCommentId);
+                    }
+                }
+            }
+            commentInputElement.value = "";
+            if (mainCommentFileInput) mainCommentFileInput.value = ""; 
+            if (selectedMainCommentFilesListDiv) selectedMainCommentFilesListDiv.innerHTML = ""; 
+            
+            await loadCommentsForPost(currentSelectedPostId);
+
+        } catch (error) {
+            console.error("Error creating main comment or uploading files:", error);
+            alert(`댓글 처리 중 오류 발생: ${error.message}`);
+        }
+    }
+    window.addCommentHandler = addCommentHandler;
+
+    function addReply(parentCommentId, replyButtonElement, replySlotElement, depth) {
+        // ... (이전 답변과 동일한 함수 내용 시작) ...
+        document.querySelectorAll('.reply-form-container').forEach(form => form.remove());
+
+        const replyFormContainer = document.createElement('div');
+        replyFormContainer.className = 'reply-form-container';
+        replyFormContainer.style.cssText = `margin-left: 0px; margin-top: 10px; padding: 10px; background-color: #f0f0f0; border: 1px solid #e0e0e0; border-radius: 5px;`;
+        
+        const uniqueIdSuffix = `_reply_${parentCommentId}_${new Date().getTime()}`;
+
+        replyFormContainer.innerHTML = `
+            <textarea class="reply-content-input" placeholder="답글 작성..." style="width: 100%; min-height: 50px; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 0.9em;"></textarea>
+            <div style="margin-top: 8px; margin-bottom: 8px;">
+                <label for="replyFileUploadInput${uniqueIdSuffix}" style="font-size: 0.8em; color: #555; cursor:pointer;">
+                    <img src="/icon/link.png" style="height:16px; width:16px; vertical-align: middle; margin-right: 3px;"/>
+                    파일 첨부
+                </label>
+                <input type="file" id="replyFileUploadInput${uniqueIdSuffix}" class="reply-file-upload-input" multiple style="display: none;"/>
+                <div class="selected-reply-files-list" style="font-size: 0.75em; color: #333; margin-top: 5px;"></div>
+            </div>
+            <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px;">
+                <button class="submit-reply-button button_work2" style="font-size:0.85em; padding: 4px 8px; width:auto;">답글 등록</button>
+                <button class="cancel-reply-button button_work2" style="background-color:#ddd; font-size:0.85em; padding: 4px 8px; width:auto;">취소</button>
+            </div>
+        `;
+        
+        replySlotElement.innerHTML = ''; 
+        replySlotElement.appendChild(replyFormContainer);
+        
+        const replyContentInput = replyFormContainer.querySelector('.reply-content-input');
+        const replyFileInput = replyFormContainer.querySelector(`#replyFileUploadInput${uniqueIdSuffix}`);
+        const selectedReplyFilesDiv = replyFormContainer.querySelector('.selected-reply-files-list');
+        const replyFileLabel = replyFormContainer.querySelector(`label[for="replyFileUploadInput${uniqueIdSuffix}"]`);
+        const submitReplyButton = replyFormContainer.querySelector('.submit-reply-button');
+        const cancelReplyButton = replyFormContainer.querySelector('.cancel-reply-button');
+
+        if (replyFileLabel && replyFileInput) {
+            // 수정: label의 for 속성으로 충분. 명시적 click() 제거
+            // replyFileLabel.onclick = function() { replyFileInput.click(); }; 
+            replyFileInput.addEventListener('change', function() {
+                displaySelectedFiles(this.files, selectedReplyFilesDiv, `reply_${parentCommentId}_file_`);
+            });
+        }
+        // ... (이전 답변과 동일한 함수 내용 끝 - submitReplyButton.onclick, cancelReplyButton.onclick 등) ...
+        submitReplyButton.onclick = async () => {
+            const content = replyContentInput.value.trim();
+            if (!content) {
+                alert('답글 내용을 입력하세요.');
+                replyContentInput.focus();
+                return;
+            }
+            const replyData = { content: content, parentCommentId: parentCommentId };
+            try {
+                const replyResponse = await fetch(`/api/posts/${currentSelectedPostId}/comments`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(replyData)
+                });
+                const replyResult = await replyResponse.json();
+                if (!replyResponse.ok || !(replyResult.status === 201 && replyResult.data)) {
+                    throw new Error(replyResult.message || `답글 작성 실패 (상태: ${replyResponse.status})`);
+                }
+                const savedReplyId = replyResult.data.commentIdx;
+                console.info("대댓글 내용 저장 성공. Reply ID:", savedReplyId);
+
+                if (replyFileInput && replyFileInput.files.length > 0) {
+                    const formData = new FormData();
+                    let validFilesExist = false;
+                    for (const file of replyFileInput.files) {
+                        if (file.size > 10 * 1024 * 1024) { continue; }
+                        formData.append('files', file);
+                        validFilesExist = true;
+                    }
+                    if (validFilesExist) {
+                        const filesUploadResponse = await fetch(
+                            `/api/files/upload/multiple?referenceType=COMMENT&referenceIdx=${savedReplyId}`, 
+                            { method: 'POST', body: formData }
+                        );
+                        if (!filesUploadResponse.ok) {
+                            const filesErrorResult = await filesUploadResponse.json().catch(()=>({message:"답글 파일 업로드 중 서버 오류"}));
+                            alert(`답글은 작성되었으나, 파일 업로드에 실패했습니다: ${filesErrorResult.message}`);
+                        } else {
+                             console.info("대댓글 파일 업로드 성공 for Reply ID:", savedReplyId);
+                        }
+                    }
+                }
+                replyFormContainer.remove();
+                await loadCommentsForPost(currentSelectedPostId);
+            } catch (err) {
+                console.error('Error creating reply or uploading files:', err);
+                alert(`답글 처리 중 오류 발생: ${err.message}`);
+            }
+        };
+        cancelReplyButton.onclick = () => { replyFormContainer.remove(); };
+        replyContentInput.focus();
+    }
+    window.addReply = addReply;
+
+    function renderComment(commentData, parentElement, depth) {
+        // ... (이전 답변과 동일한 함수 내용) ...
+        const commentDiv = document.createElement('div');
+        commentDiv.className = depth === 0 ? 'commentlist-item' : 'commentlist-item-re'; 
+        commentDiv.style.marginLeft = `${depth * 20}px`;
+        
+        const authorInfo = commentData.author; 
+        const commentDate = new Date(commentData.createdAt).toLocaleString('ko-KR', {hour12: false, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute:'2-digit' });
+
+        let filesHTML = '';
+        if (commentData.files && commentData.files.length > 0) { 
+            filesHTML += `<div style="margin-left:${depth > 0 ? '0px' : '33px'}; margin-top:8px; font-size:0.85em;">`;
+            commentData.files.forEach(file => {
+                const fileSizeMB = file.fileSize ? (file.fileSize / (1024 * 1024)).toFixed(2) + ' MB' : '';
+                filesHTML += `
+                    <div style="margin-bottom: 3px; display:flex; align-items:center;">
+                        <img src="/icon/link.png" style="height:14px; width:14px; margin-right:4px;"/>
+                        <a href="/api/files/download/${file.idx}" target="_blank" download="${file.fileName}" style="color: #007bff; text-decoration:underline;">
+                            ${file.fileName}
+                        </a>
+                        ${fileSizeMB ? `<span style="color:#777; font-size:0.9em; margin-left:5px;">(${fileSizeMB})</span>` : ''}
+                    </div>`;
+            });
+            filesHTML += '</div>';
+        }
+
+        commentDiv.innerHTML = `
+            <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 5px; padding-top: ${depth > 0 ? '8px' : '10px'};">
+                <div style="display:flex; align-items:center;">
+                    <img src="${authorInfo && authorInfo.profileImage ? authorInfo.profileImage : '/icon/user2.png'}" style="height: ${depth > 0 ? '22px' : '25px'}; width: ${depth > 0 ? '22px' : '25px'}; border-radius: 50%; margin-right: 8px; object-fit:cover;" />
+                    <div style="font-size: ${depth > 0 ? '13px' : '14px'}; font-weight: bold;">${authorInfo ? authorInfo.nickname : '익명'}</div>
+                </div>
+                <div style="font-size: ${depth > 0 ? '10px' : '11px'}; color:rgb(105, 105, 105); margin-right:10px;">${commentDate}</div>
+            </div>
+            <div style="margin-left:${depth > 0 ? '30px' : '33px'}; margin-top:2px; margin-bottom: 8px;">
+                <div style="font-size: ${depth > 0 ? '12px' : '13px'}; white-space:pre-wrap; word-break:break-all;">${commentData.content.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</div>
+            </div>
+            ${filesHTML}
+            <div style="margin-left:${depth > 0 ? '30px' : '33px'}; display: flex; justify-content: space-between; align-items:center; margin-top: ${filesHTML ? '8px' : '0'};">
+                <div class="comment-actions"></div>
+                <button class="button_work" style="border-color:rgb(173, 98, 98); color:rgb(173, 98, 98); font-size:10px; height:18px; line-height:1; width:auto; padding:0 4px; margin-right: 10px;" onclick="deleteCommentHandler(${commentData.commentIdx})">삭제</button>
+            </div>
+            <div class="reply-form-slot" style="margin-left:${depth > 0 ? '30px' : '33px'};"></div>
+            <div class="reply-display-area" style="margin-left:${depth > 0 ? '0px' : '0px'};"></div>
+        `;
+        
+        const replyActionContainer = commentDiv.querySelector('.comment-actions');
+        const replyFormSlot = commentDiv.querySelector('.reply-form-slot');
+        const replyDisplayArea = commentDiv.querySelector('.reply-display-area');
+
+        if (depth < 1) { // 예: 최상위 댓글에만 '답글쓰기' 버튼
+            if (replyActionContainer) {
+                const replyBtn = document.createElement('button');
+                replyBtn.className = 'button_work';
+                replyBtn.style.cssText = "font-size:10px; height:18px; line-height:1; width:auto; padding:0 4px; cursor:pointer;";
+                replyBtn.textContent = '답글쓰기';
+                replyBtn.onclick = (event) => {
+                    event.stopPropagation(); 
+                    addReply(commentData.commentIdx, replyBtn, replyFormSlot, depth + 1);
+                };
+                replyActionContainer.appendChild(replyBtn);
+            }
+        }
+        parentElement.appendChild(commentDiv);
+        
+        if (depth === 0 && parentElement.lastChild && parentElement.lastChild.style) {
+            parentElement.lastChild.style.borderBottom="none";
+            if (parentElement.lastChild.previousSibling && parentElement.lastChild.previousSibling.style) {
+                parentElement.lastChild.previousSibling.style.borderBottom = "1px solid rgb(235, 235, 235)";
+            }
+        } else if (depth > 0 && parentElement.lastChild && parentElement.lastChild.style) {
+             parentElement.lastChild.style.borderBottom="none";
+             if (parentElement.lastChild.previousSibling && parentElement.lastChild.previousSibling.style) {
+                parentElement.lastChild.previousSibling.style.borderBottom = "1px solid #f1f1f1";
+            }
+        }
+
+        if (commentData.childComments && commentData.childComments.length > 0) {
+            commentData.childComments.forEach(child => renderComment(child, replyDisplayArea, depth + 1));
+        }
+    }
+
+    async function deleteCommentHandler(commentId) { 
+        // ... (이전 답변과 동일한 함수 내용) ...
+        if (!commentId || !confirm("이 댓글을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.\n(대댓글과 첨부파일도 함께 삭제됩니다.)")) return;
+        try {
+            const response = await fetch(`/api/comments/${commentId}`, { method: 'DELETE' });
+            if (response.status === 200 || response.status === 204 || response.ok) { 
+                alert("댓글이 삭제되었습니다.");
+                await loadCommentsForPost(currentSelectedPostId); 
+            } else {
+                const result = await response.json().catch(()=>({message:"알 수 없는 오류로 삭제에 실패했습니다."}));
+                throw new Error(result.message || `댓글 삭제 실패 (상태: ${response.status})`);
+            }
+        } catch (error) {
+            console.error("Error deleting comment:", error);
+            alert(`댓글 삭제 중 오류 발생: ${error.message}`);
+        }
+    }
+    window.deleteCommentHandler = deleteCommentHandler;
+
     function updateWorklistBoardButtonLinks(taskId, projectId) {
+        // ... (이전 답변과 동일한 함수 내용) ...
         const writePostBtn = document.getElementById('wlb_writePostBtn'); 
         if (writePostBtn && taskId != null && projectId != null) {
             writePostBtn.onclick = () => {
@@ -656,7 +976,7 @@
             };
         }
 
-        const goBackBtn = document.getElementById('wlb_goBackBtn');
+        const goBackBtn = document.getElementById('wlb_goBackBtn'); 
         if (goBackBtn && projectId != null) {
             goBackBtn.onclick = () => {
                 window.location.href = `projectboard.html?projectId=${projectId}`;
@@ -664,189 +984,38 @@
         }
     }
 
-    async function addCommentHandler(){
-        if (!currentSelectedPostId) {
-            alert("댓글을 작성할 게시글을 먼저 선택해주세요.");
-            console.log("addCommentHandler: currentSelectedPostId is null or undefined.");
-            return;
-        }
-        const commentInputElement = document.getElementById("comment");
-        if (!commentInputElement) {
-            console.error("Comment input element (id='comment') not found");
-            return;
-        }
-        const content = commentInputElement.value.trim();
-        if (!content) {
-            alert("댓글 내용을 입력해주세요.");
-            commentInputElement.focus();
-            return;
-        }
-
-        const commentData = {
-            content: content,
-            parentCommentId: null 
-        };
-
-        try {
-            const response = await fetch(`/api/posts/${currentSelectedPostId}/comments`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(commentData)
-            });
-            const result = await response.json();
-
-            if (!response.ok) {
-                 throw new Error(result.message || `댓글 작성 실패 (상태: ${response.status})`);
-            }
-
-            if (response.status === 201 && result.status === 201 && result.data) {
-                commentInputElement.value = ""; 
-                await loadCommentsForPost(currentSelectedPostId); 
-            } else {
-                throw new Error(result.message || "댓글 작성은 성공했으나 응답 데이터가 올바르지 않습니다.");
-            }
-        } catch (error) {
-            console.error("Error creating comment:", error);
-            alert(`댓글 작성 중 오류 발생: ${error.message}`);
-        }
-    }
-    // 원래 HTML의 onclick="addcomment()" 와 연결하기 위해 전역 함수로 유지
-    window.addcomment = addCommentHandler; 
-    
-    async function deleteCommentHandler(commentId) { 
-        if (!commentId) return;
-        const userConfirm = confirm("이 댓글을 삭제하시겠습니까?");
-        if (!userConfirm) return;
-
-        try {
-            const response = await fetch(`/api/comments/${commentId}`, {
-                method: 'DELETE'
-            });
-            
-            if (response.status === 204 ) { 
-                alert("댓글이 삭제되었습니다.");
-                await loadCommentsForPost(currentSelectedPostId); 
-                return;
-            }
-            
-            const result = await response.json(); 
-
-            if (!response.ok) {
-                throw new Error(result.message || `댓글 삭제 실패 (상태: ${response.status})`);
-            }
-            if (result.status === 200 ) { 
-                alert(result.message || "댓글이 삭제되었습니다.");
-                await loadCommentsForPost(currentSelectedPostId); 
-            } else {
-                 throw new Error(result.message || "댓글 삭제는 성공했으나 서버 응답이 올바르지 않습니다.");
-            }
-        } catch (error) {
-            console.error("Error deleting comment:", error);
-            alert(`댓글 삭제 중 오류 발생: ${error.message}`);
-        }
-    }
-    // 원본 HTML의 onclick="deletecomment()"는 동적으로 생성되는 버튼에 의해 deleteCommentHandler(id)로 대체됨.
-    // 전역 deletecomment 함수는 필요 없을 수 있으나, 혹시 다른 곳에서 사용한다면 아래처럼 유지.
-    // function deletecomment() { /* 스텁 또는 삭제 */ }
-
-    //대댓글
-    const commentContainer = document.getElementById('commentlist');
-    function addReply(parentCommentId,btn,parentElement, depth, commentData){
-
-        // 이미 열린 대댓칸 제거
-        const openReplyForms = document.querySelectorAll('.commentlist-item-re');
-        openReplyForms.forEach(form => form.remove());
-
-        const commentDiv = document.createElement('div');
-        if (!commentDiv){
-            return;
-        } 
-        commentDiv.className = 'commentlist-item-re'; 
-
-        commentDiv.innerHTML = `
-            <div style="display: flex; flex-direction: column; gap: 5px; padding: 5; marginleft: ${depth * 30}px">
-                <textarea class="replycontent" placeholder="답글 쓰기" style="width: 100%; min-height: 60px; resize: vertical; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px;"></textarea>
-                <div style="display: flex; gap: 5px; justify-content: flex-end;">
-                    <button class="button_work2" id="addreply" style="font-size:13px; height:25px; width:auto; padding:0 8px;">등록</button>
-                </div>
-            </div>
-        `;
-
-        // 맨 마지막 댓글의 하단 구분선 제거
-        if(parentElement.lastChild && parentElement.lastChild.style) parentElement.lastChild.style.borderBottom="none";
-        // 그 이전 댓글의 하단 구분선은 유지
-        if(parentElement.lastChild && parentElement.lastChild.previousSibling && parentElement.lastChild.previousSibling.style) parentElement.lastChild.previousSibling.style.borderBottom="1px solid rgb(240, 240, 240)";
-
-        // parentElement.appendChild(commentDiv);
-        parentElement.prepend(commentDiv);
-        
-        const addReply= commentDiv.querySelector('#addreply');
-        const replycontent= commentDiv.querySelector('.replycontent');
-        
-        addReply.onclick = async () => {
-            const content = replycontent.value.trim();
-            if (!content) {
-                alert('내용을 입력하세요.');
-                replycontent.focus();
-                return;
-            }
-            try {
-                const response = await fetch(`/api/posts/${currentSelectedPostId}/comments`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        content: content,
-                        parentCommentId: parentCommentId
-                    })
-                });
-                const result = await response.json();
-                if (!response.ok) {
-                    throw new Error(result.message || `답글 등록 실패 (상태: ${response.status})`);
-                }
-                if (response.status === 201 && result.status === 201) {
-                    // 답글 등록 성공: 폼 지우고, 댓글 목록 다시 로드
-                    commentDiv.remove();
-                    await loadCommentsForPost(currentSelectedPostId);
-                } else {
-                    throw new Error(result.message || '서버 응답이 올바르지 않습니다.');
-                }
-            } catch (err) {
-                console.error('Error creating reply:', err);
-                alert(`답글 등록 중 오류 발생: ${err.message}`);
-            }
-            
-        };
-    
-
-        if (commentData.childComments && commentData.childComments.length > 0) {
-            commentData.childComments.forEach(child => renderComment(child, parentElement, depth + 1));
-        }
-    }
-
-    async function editCurrentPost() { 
-        if (currentSelectedPostId && currentSelectedPostData && currentWlbTaskId != null && currentWlbProjectId != null) {
-            const taskIdForEdit = currentSelectedPostData.taskId || currentWlbTaskId;
-            window.location.href = `writework.html?postId=${currentSelectedPostId}&taskId=${taskIdForEdit}&projectId=${currentWlbProjectId}`;
+    function editCurrentPost() { 
+        // ... (이전 답변과 동일한 함수 내용) ...
+        if (currentSelectedPostId && currentSelectedPostData && currentWlbProjectId != null) {
+            const actualTaskId = currentSelectedPostData.taskId || currentWlbTaskId; 
+            window.location.href = `writework.html?postId=${currentSelectedPostId}&taskId=${actualTaskId}&projectId=${currentWlbProjectId}`;
         } else {
-            alert("수정할 게시글 정보가 충분하지 않습니다.");
+            alert("수정할 게시글 정보가 충분하지 않습니다. 게시글을 선택했는지 확인해주세요.");
         }
     }
-    
+    window.editCurrentPost = editCurrentPost;
+
     async function deleteCurrentPost() { 
-        if (!currentSelectedPostId) {
+        // ... (이전 답변과 동일한 함수 내용) ...
+        if (!currentSelectedPostId || !currentSelectedPostData) {
             alert("삭제할 게시글이 선택되지 않았습니다.");
             return;
         }
-        const postTitleForConfirm = currentSelectedPostData ? currentSelectedPostData.title : "이";
-        const userConfirm = confirm(`'${postTitleForConfirm}' 게시글을 삭제하시겠습니까?`);
+        const postTitleForConfirm = currentSelectedPostData.title || "이";
+        const userConfirm = confirm(`'${postTitleForConfirm}' 게시글을 정말 삭제하시겠습니까?\n이 작업은 되돌릴 수 없으며, 게시글의 모든 댓글과 첨부파일도 함께 삭제됩니다.`);
         if (!userConfirm) return;
 
         try {
             const response = await fetch(`/api/posts/${currentSelectedPostId}`, { method: 'DELETE' });
-            if (response.status === 204 || (response.ok && (await response.text()) === "")) { // DELETE 성공 시 204 또는 내용 없는 200
-               alert("게시글이 삭제되었습니다.");
-               clearPostDetailArea(true); 
+            if (response.status === 204 || (response.ok && response.headers.get("content-length") === "0") ) { 
+               alert("게시글이 성공적으로 삭제되었습니다.");
+               clearPostDetailArea(true, "게시글이 삭제되었습니다. 목록에서 다른 게시글을 선택해주세요."); 
                loadPostsForBoard(currentWlbTaskId); 
+            } else if (response.ok) { 
+                const result = await response.json();
+                alert(result.message || "게시글이 성공적으로 삭제되었습니다.");
+                clearPostDetailArea(true, "게시글이 삭제되었습니다. 목록에서 다른 게시글을 선택해주세요.");
+                loadPostsForBoard(currentWlbTaskId);
             } else {
                const result = await response.json().catch(()=>({message:"알 수 없는 오류로 삭제에 실패했습니다."}));
                throw new Error(result.message || `게시글 삭제 실패 (상태: ${response.status})`);
@@ -856,12 +1025,6 @@
             alert(`게시글 삭제 중 오류 발생: ${error.message}`);
         }
     }
-    window.deletewrite = deleteCurrentPost; // 원본 HTML의 onclick="deletewrite()"와 연결
-
-    function prev(){ alert("이전 글 기능은 구현 예정입니다."); }
-    function next(){ alert("다음 글 기능은 구현 예정입니다."); }
-    window.prev = prev; 
-    window.next = next; 
-
+    window.deleteCurrentPost = deleteCurrentPost;
 </script>
 </html>
