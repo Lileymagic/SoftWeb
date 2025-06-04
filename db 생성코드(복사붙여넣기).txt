@@ -174,19 +174,20 @@ CREATE TABLE `comment` (
     CONSTRAINT `fk_comment_parent` FOREIGN KEY (`parent_comment_idx`) REFERENCES `comment` (`idx`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='게시글 및 댓글에 대한 댓글';
 
+
 -- friend (친구) 테이블
 DROP TABLE IF EXISTS `friend`;
 CREATE TABLE `friend` (
-    `user_idx1` BIGINT NOT NULL COMMENT '유저1 (항상 작은 idx 값)',
-    `user_idx2` BIGINT NOT NULL COMMENT '유저2 (항상 큰 idx 값)',
-    `status` ENUM('요청', '수락', '거절') NOT NULL DEFAULT '요청' COMMENT '친구요청 수락 여부',
-    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '친구 관계 생성 시간 (요청 또는 수락 시점)',
-    PRIMARY KEY (`user_idx1`, `user_idx2`),
-    KEY `fk_friend_user2` (`user_idx2`),
-    CONSTRAINT `fk_friend_user1` FOREIGN KEY (`user_idx1`) REFERENCES `user` (`idx`) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT `fk_friend_user2` FOREIGN KEY (`user_idx2`) REFERENCES `user` (`idx`) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT `chk_user_order` CHECK (`user_idx1` < `user_idx2`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='사용자 간 친구 관계';
+    `requester_idx` BIGINT NOT NULL COMMENT '친구 요청을 보낸 사용자의 고유 식별자',
+    `recipient_idx` BIGINT NOT NULL COMMENT '친구 요청을 받은 사용자의 고유 식별자',
+    `status` ENUM('요청', '수락', '거절') NOT NULL DEFAULT '요청' COMMENT '친구 관계 상태',
+    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '관계 생성 시간 (최초 요청 또는 상태 변경 시점)',
+    PRIMARY KEY (`requester_idx`, `recipient_idx`),
+    KEY `fk_friend_recipient_key` (`recipient_idx`),
+    CONSTRAINT `fk_friend_requester` FOREIGN KEY (`requester_idx`) REFERENCES `user` (`idx`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `fk_friend_recipient` FOREIGN KEY (`recipient_idx`) REFERENCES `user` (`idx`) ON DELETE CASCADE ON UPDATE CASCADE
+    -- chk_different_users 제약 조건 제거
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='사용자 간 친구 관계 (요청자-수신자 기반)';
 
 -- notification (알림) 테이블
 DROP TABLE IF EXISTS `notification`;
