@@ -7,6 +7,8 @@
     <script src="https://kit.fontawesome.com/289a62abf7.js" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title>Project board</title>
     <style>
         .middle_pb {
@@ -353,11 +355,12 @@
                         <div id="pjname" contenteditable="false">프로젝트 이름 로딩 중...</div>
                         <img id="edit" class="drag1" src="/icon/edit.png" style="height:20px; width:20px; margin-left: 10px; cursor:pointer;"/>
                     </div>
-                    <img src="/icon/gear.png" class="drag1" style="height:20px; width:20px; margin-right: 10px; margin-left: auto; cursor:pointer;" onclick="goToProjectManage()"/>
+                    <img src="/icon/graph.png" class="drag1" id="graphbtn" style="height:20px; width:20px; margin-right:10px; margin-left:auto; cursor:pointer;" onclick="Watchdiv3('2')" />
+                    <img src="/icon/gear.png" class="drag1" style="height:20px; width:20px; margin-right: 10px; cursor:pointer;" onclick="goToProjectManage()"/>
                 </div>
             </div>
 
-            <div class="middle7">
+            <div class="middle7" id="1">
                 <div class="box7">
                     <section class="worksection" id="todo_section">
                         <div class="workhead">To Do</div>
@@ -377,6 +380,12 @@
                         <div class="tasks-container" id="done_tasks_container">
                         </div>
                     </section>
+                </div>
+            </div>
+
+            <div class="middle7" id="2" style="display: none;">
+                <div class="box7">
+                    <canvas id="graph" width="300" height="300"></canvas>
                 </div>
             </div>
         </div>
@@ -411,6 +420,7 @@
     </div>
 </body>
 <script>
+
     let CURRENT_PROJECT_ID = null; 
 
     const nameElement = document.getElementById("pjname");
@@ -1026,5 +1036,49 @@
             memberListTbody.innerHTML = `<tr><td style="text-align:center; color:red;">멤버 목록 로드 오류.</td></tr>`;
         }
     }
+
+    Watchdiv3("1");
+    function Watchdiv3(tabIndexStr){
+        const sections = ["1","2"];
+        sections.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.style.display = (id === tabIndexStr) ? 'block' : 'none';
+            }
+        });
+
+        const btn = document.getElementById("graphbtn");
+        if(btn){
+            if(tabIndexStr === "1"){
+                btn.src = "/icon/graph.png";
+                btn.onclick = function(){ Watchdiv3("2"); };
+            } else if(tabIndexStr === "2"){
+                btn.src = "/icon/board.png";
+                btn.onclick = function(){ Watchdiv3("1"); };
+            }
+        }
+                
+    }  
+    const initiadata = [80,10,10];
+    const graph = document.getElementById("graph").getContext("2d");
+    const piechart = new Chart(graph,{
+        type:"pie",
+        data:{
+            labels:["To do", "In progress","Done"],
+            datasets:[{
+                data: initiadata,
+                backgroundColor:["rgb(192,192,192)","rgb(175,222,191)","rgb(114,230,124)"]
+            }] 
+        },
+        options: {
+            responsive: false,
+            plugins: {
+                legend: { 
+                    display: true ,
+                    position:"right"
+                }
+            }
+        }
+    });
     </script>
 </html>
