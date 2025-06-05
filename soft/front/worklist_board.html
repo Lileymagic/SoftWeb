@@ -185,6 +185,7 @@
         }
         .replyArea{
             margin-top: 10px;
+            padding-left: 10px;
             background-color: rgb(247, 247, 247);
         }
     </style>
@@ -892,6 +893,7 @@
             filesHTML += '</div>';
         }
 
+        commentDiv.classList.add("replyArea");
         commentDiv.innerHTML = `
             <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 5px; padding-top: ${depth > 0 ? '8px' : '10px'};">
                 <div style="display:flex; align-items:center;">
@@ -908,8 +910,9 @@
                 <div class="comment-actions"></div>
                 <button class="button_work" style="border-color:rgb(173, 98, 98); color:rgb(173, 98, 98); font-size:10px; height:18px; line-height:1; width:auto; padding:0 4px; margin-right: 10px;" onclick="deleteCommentHandler(${commentData.commentIdx})">삭제</button>
             </div>
-            <div class="reply-form-slot" style="margin-left:${depth > 0 ? '30px' : '33px'};"></div>
-            <div class="reply-display-area" style="margin-left:${depth > 0 ? '0px' : '0px'};"></div>
+            <!-- <div class="reply-form-slot" style="margin-left:${depth > 0 ? '30px' : '33px'};"></div> -->
+            <div class="reply-form-slot"></div>
+            <div class="reply-display-area" style="margin-left:${depth > 0 ? '0px' : '0px'}; background-color: rgb(247, 247, 247);"></div>
         `;
         
         const replyActionContainer = commentDiv.querySelector('.comment-actions');
@@ -928,6 +931,7 @@
                 };
                 replyActionContainer.appendChild(replyBtn);
             }
+            commentDiv.classList.remove("replyArea");
         }
         parentElement.appendChild(commentDiv);
         
