@@ -74,7 +74,7 @@ body {
     align-items: center;
     border-radius: 10px;
     border: none;
-    box-shadow : 0px 0px 3px rgba(150, 150, 150, 0.8);
+    box-shadow : 0px 0px 3px rgba(0, 0, 0, 0.2);
     background-color: white;
 
     padding-top: 35px;
@@ -296,6 +296,7 @@ dialog.modal3 {
     border-radius: 8px;
     box-shadow: 0 0px 4px rgba(0,0,0,0.2);
     overflow: hidden;
+    box-sizing: border-box;
 
     padding: 10px;
     margin: 0px;
@@ -551,7 +552,6 @@ textarea:focus {
 
 
 .box_introduce{
-    margin-top: 10px;
     width: 200px;
     height: 80px;
     text-overflow: ellipsis;

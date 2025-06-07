@@ -73,23 +73,24 @@
             <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
                 <img src="public/icon/user2.png" id="profileImageDisplay" alt="프로필 이미지"/>
                 
-                <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                    <label for="profileImageUrl" style="text-align: right; margin-right: 10px; font-weight: bold;">이미지 URL:</label>
-                    <input class="button_pro" style="width: 200px; margin-right:80px;" type="text" id="profileImageUrl" placeholder="프로필 이미지 URL (선택)" />
+                <div class="form-row" style="margin-bottom: 10px; margin-top: 10px;">
+                    <label for="profileImageUrl" style="text-align: right; font-weight: bold;">이미지 URL :</label>
+                    <input class="button_pro" style="margin-right: 50px;" type="text" id="profileImageUrl" placeholder="프로필 이미지 URL (선택)" />
                 </div>
 
-                <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                    <label for="nickname" style=" text-align: right; margin-right: 10px; font-weight: bold;">닉네임:</label>
-                    <input class="button_pro" style="width: 200px; margin-right:45px;" type="text" id="nickname" placeholder="2 ~ 20자"/>
+                <div class="form-row" style="margin-bottom: 10px;">
+                    <label for="nickname" style=" text-align: right; font-weight: bold;">닉네임 :</label>
+                    <input class="button_pro" style="margin-right: 50px;" type="text" id="nickname" placeholder="2 ~ 20자"/>
                 </div>
 
-                <div style="display: flex; align-items: flex-start; margin-bottom: 10px;">
-                    <label for="bio" style="width: 100px; text-align: right; margin-right: 10px; font-weight: bold; margin-top: 5px;">자기소개:</label>
-                    <textarea class="button_int" style="margin-right:100px;" id="bio" placeholder="자기소개를 입력하세요."></textarea>
+                <div class="form-row" style="margin-bottom: 10px;">
+                    <label for="bio" style="text-align: right; font-weight: bold; margin-top: 5px;">자기소개 :</label>
+                    <textarea class="button_int" style="margin-right: 50px;" id="bio" placeholder="자기소개를 입력하세요."></textarea>
                 </div>
             </div>
-            <div>
+            <div style="display: flex; flex-direction: row;">
                 <button class="button_final" style="width:70px; height: 40px; margin:5px; " onclick="saveProfile()">저장</button>
+                <button class="button_final_n" style="width:70px; height: 40px; margin:5px;" onclick="window.location.href='projectboard.html'">취소</button>
             </div>
         </div>
     </div>

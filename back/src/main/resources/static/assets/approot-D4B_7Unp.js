@@ -220,19 +220,24 @@
                 </form>
             </div>
 
-            <div style="display: flex;">
-                <img id="myPageProfileImage" src="/icon/user2.png" style="height:100px; width:100px; margin:10px; margin-right: 30px; margin-left: 20px border-radius: 50%;"/>
-                <div style="display: flex; flex-direction: column; justify-content: center; padding: 5px;">
-                    <div style="display: flex; gap: 5px;">
-                        <div class="black" id="myPageNickname" style="font-size: larger;">닉네임 로딩 중</div>
-                        <div style="color:green" id="myPageTag">#0000</div>
-                    </div>
-                    <div id="myPageDisplayId" style="color:gray;">id 로딩 중...</div>
-                    <div class="box_introduce" id="myPageBio">
-                        자기소개 로딩 중...
+            <div style="display: flex;  flex-direction: row;">
+
+                <img id="myPageProfileImage" src="/icon/user2.png" style="height:100px; width:100px; margin:10px; margin-right: 30px; margin-left: 20px; border-radius: 50%;"/>
+
+                <div style="display: flex; flex-direction: column; justify-content: center; padding: 5px; gap: 20px;">
+                
+                    <div style="display: flex;  flex-direction: column; gap: 5px;">
+                        <div style="display: flex; gap: 5px; flex-direction: row; justify-content: flex-start; align-items: flex-end;">
+                            <div class="black" id="myPageNickname" style="font-size: larger;">닉네임 로딩 중</div>
+                            <div style="color:green" id="myPageTag">#0000</div>
+                        </div>
+                        <div id="myPageDisplayId" style="color:gray;">id 로딩 중...</div>
+                        <div class="box_introduce" id="myPageBio">
+                            자기소개 로딩 중...
+                        </div>                    
                     </div>
 
-                    <div style="display: flex; flex-direction: row; margin-top: 30px;">
+                    <div style="display: flex; flex-direction: row; margin-left: auto;">
                         <button class="button_pro2" style="margin-right:5px; margin-left:7px;" onclick="document.querySelector('.modal3').close(); window.location.href='/front/profile.html';">프로필 수정</button>
                         <button class="button_pro2" onclick="logout()">로그아웃</button>
                     </div>  
