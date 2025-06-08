@@ -95,6 +95,7 @@ CREATE TABLE `task` (
     `description` TEXT NULL COMMENT '업무 설명',
     `deadline` DATETIME NULL COMMENT '업무 마감 기한',
     `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '업무 생성 시간',
+    `updated_at` TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '업무 수정 시간',
     `created_by` BIGINT NOT NULL COMMENT '업무 생성 유저 식별자',
     PRIMARY KEY (`idx`),
     KEY `fk_task_project` (`project_idx`),
