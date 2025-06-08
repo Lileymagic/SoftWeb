@@ -81,6 +81,8 @@ public class SecurityConfig {
 
                         .requestMatchers(new AntPathRequestMatcher("/api/projects/**")).authenticated()
                         .requestMatchers(new AntPathRequestMatcher("/api/users/me")).authenticated()
+
+                        .requestMatchers(new AntPathRequestMatcher("/api/projects/*/dashboard/**", "GET")).authenticated()
                         .anyRequest().authenticated()
                 )
 

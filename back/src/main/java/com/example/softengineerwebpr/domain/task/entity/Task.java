@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener; // 생성일자 자동 관리
 
 import java.time.LocalDateTime;
@@ -45,10 +46,13 @@ public class Task {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    @LastModifiedDate
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by", nullable = false, foreignKey = @ForeignKey(name = "fk_task_user_created_by"))
     private User createdBy;
-
 
     // TaskStatus Enum 정의 (별도 파일 또는 내부 클래스로 가능)
     public enum TaskStatus {
