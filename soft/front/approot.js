@@ -260,16 +260,17 @@
         const div = document.createElement("div");
         div.innerHTML=`
           <dialog class="modal2" style="border: none; background-color: transparent;">
+          <div class="friend_w_box">
             <div class="position_modal2">
               <div>
                   <div>
-                      <button class="button_friend" style="border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;" onclick="Watchdiv('friend1')">친구 목록</button>
+                      <button class="button_friend" onclick="Watchdiv('friend1')">친구 목록</button>
                   </div>
                   <div>
-                      <button class="button_friend" style="border-radius: 0px;" onclick="Watchdiv('friend2')">유저 찾기</button>
+                      <button class="button_friend" onclick="Watchdiv('friend2')">유저 찾기</button>
                   </div>
                   <div>
-                      <button class="button_friend" style="border-top-left-radius: 0px; border-top-right-radius: 0px;" onclick="Watchdiv('friend3')">요청 대기</button>
+                      <button class="button_friend" onclick="Watchdiv('friend3')">요청 대기</button>
                   </div>
               </div>
               <div class="box_friend">
@@ -286,7 +287,7 @@
                                     <th style="width: 80px;">닉네임</th>
                                     <th style="width: 80px;">이메일</th> 
                                     <th style="width: 80px;">#태그</th>
-                                    <th style="width: 80px;">관리</th>
+                                    <th style="width: 100px;">관리</th>
                                 </tr>
                             </thead>
                             <tbody id="friendListTbody"> 
@@ -308,7 +309,7 @@
                         <img src="/icon/finding.png" id="friendSearchBtn" style="width: 25px; height: 25px; margin: 5px; cursor:pointer;"/>
                     </div>
 
-                    <div class="box10" style="height: 550px; width:100%; margin-top:15px;"> 
+                    <div class="box10" style="height: 600px; width:100%; margin-top:15px;"> 
                     <div class="box_scroll">
                         <table class="table table-hover" style="border-collapse: separate; border-spacing: 0;">
                             <thead>
@@ -357,7 +358,8 @@
                   </form>
               </div>
             </div>
-          </dialog>`;
+        </div>
+        </dialog>`;
         document.body.appendChild(div);
         modal = document.querySelector('.modal2');
 

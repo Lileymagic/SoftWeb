@@ -132,13 +132,13 @@ body {
 .button_friend {
     background-color: white;
     border: none;
-    height:45px;
+    border-bottom: solid 1px rgb(235, 235, 235);
+    height:50px;
     width:205px;
-    margin: 5px;
+    padding: 5px;
     color:rgb(25, 54, 52);
     font-size: medium;
     font-weight: 700;   
-    border-radius: 4px;
     font-family: 'Pretendard-Regular';
     display: flex;
     flex-direction: column;
@@ -258,9 +258,14 @@ dialog.modal1::backdrop {
     background: transparent;
 }
 
-dialog.modal2 {
-    width: 900px;               
-    height: 900px;          
+dialog.modal2 {      
+    position: fixed;
+    top: 10%;
+    left: 50%;
+    margin: 0;
+    transform: translateX(-50%);
+
+    height: 800px;          
     padding: 20px; 
     border-radius: 8px;
     display: none;
@@ -313,16 +318,15 @@ dialog.modal3::backdrop {
 }
 
 .box_friend {    
-    border: 1px solid gray;
+    border-left: 1px solid rgb(235, 235, 235);
     height: 800px;
     width: 600px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    border-radius: 10px;
-    border: none;
-    box-shadow : 0px 0px 3px rgba(0, 0, 0, 0.2);
+    /* border-radius: 10px; */
+    /* box-shadow : 0px 0px 3px rgba(0, 0, 0, 0.2); */
     background-color: white;
 }
 .box8{
@@ -722,4 +726,17 @@ textarea:focus {
 }
 dialog.modal_pb::backdrop {
     background: rgba(0,0,0,0.2);
+}
+
+.friend_w_box {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    border-radius: 10px;
+    border: none;
+    box-shadow : 0px 0px 3px rgba(0, 0, 0, 0.2);
+    background-color: rgb(255, 255, 255);
+    overflow: hidden;
+    padding: 0;
 }
