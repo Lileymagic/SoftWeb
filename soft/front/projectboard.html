@@ -3,13 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="public/css/bootstrap.css" />
-    <link rel="stylesheet" href="public/css/styles.css">
 
     <script src="https://kit.fontawesome.com/289a62abf7.js" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
     <title>Project board</title>
@@ -18,14 +16,14 @@
             position: relative;
             width: 100%;
         }
-         .button_pb {
+        .button_pb {
             background-color:rgba(255, 255, 255, 0);
             height:40px;
             width:250px;
             color:rgb(25, 25, 52);
             border: 1px solid rgba(0, 0, 0, 0.25);
             font-size: small;
-            font-weight: 300;   
+            font-weight: 300;
             margin-bottom: 10px;
             border-radius: 4px;
             font-family: 'Pretendard-Regular';
@@ -37,7 +35,7 @@
             color:rgb(25, 54, 52);
             border: none;
             font-size: medium;
-            font-weight: 700;   
+            font-weight: 700;
             border-radius: 4px;
             font-family: 'Pretendard-Regular';
 
@@ -47,9 +45,9 @@
             align-items: center;
         }
         .modal_pb {
-            width: 500px;               
-            height: 450px;          
-            padding: 20px;   
+            width: 500px;
+            height: 450px;
+            padding: 20px;
             border-radius: 8px;
             box-shadow : 0px 0px 3px rgba(0, 0, 0, 0.2);
         }
@@ -73,7 +71,7 @@
             gap: 20px;
 
             border: none;
-            overflow-y: scroll; 
+            overflow-y: scroll;
             overflow-x: hidden;
         }
         .box7::-webkit-scrollbar{
@@ -97,8 +95,8 @@
         }
 
         .workhead {
-            position: sticky; 
-            top: 0; 
+            position: sticky;
+            top: 0;
             flex-shrink: 0;
             background-color: rgb(81,123,95);
             height:35px;
@@ -187,21 +185,21 @@
         }
         .aside_left {
             position: sticky;
-            top:0; 
-            height: 100vh;            
+            top:0;
+            height: 100vh;
             width: 300px;
             border-right: solid 1px;
             border-color: grey;
             float: left;
             background-color: white;
-            z-index: 10; 
+            z-index: 10;
         }
         .aside_left ul {
             width: 100%;
             margin: 0;
             padding: 0;
-            max-height: calc(100vh - 60px); 
-            overflow-y: auto; 
+            max-height: calc(100vh - 60px);
+            overflow-y: auto;
         }
         .aside_left li{
             width: 100%;
@@ -216,11 +214,11 @@
         .aside_left li:hover {
             background-color: rgb(230, 230, 230);
         }
-        li.on { 
-            background-color: rgb(220, 240, 220); 
-            border-left: solid 4px green; 
+        li.on {
+            background-color: rgb(220, 240, 220);
+            border-left: solid 4px green;
             font-weight: bold;
-            padding-left: 21px; 
+            padding-left: 21px;
             /* pointer-events: none; */ /* 드래그 앤 드롭을 위해 클릭 가능해야 할 수 있음 */
         }
         .box_option {
@@ -233,7 +231,7 @@
             font-size: medium;
             font-weight: bold;
             border-bottom: solid 1.5px rgb(150, 150, 150);
-        } 
+        }
         .user_and_history{
             position: sticky;
             top: 0;
@@ -246,20 +244,20 @@
             box-sizing: border-box;
             z-index: 10;
         }
-        .main_content_area { 
-            flex-grow: 1; 
-            display: flex; 
-            overflow-x: auto; 
-            height: calc(100vh - 60px); 
+        .main_content_area {
+            flex-grow: 1;
+            display: flex;
+            overflow-x: auto;
+            height: calc(100vh - 60px);
             background-color: rgb(245, 245, 245);
         }
-        .main { 
-            display: flex; 
+        .main {
+            display: flex;
             width: 100%;
             height: 100%;
-            overflow: hidden; 
+            overflow: hidden;
         }
-        .main_app_area { 
+        .main_app_area {
             display: flex;
             flex-direction: column;
             flex-grow: 1;
@@ -267,14 +265,14 @@
             overflow: hidden;
         }
         .project_memu{
-            position: sticky; 
+            position: sticky;
             top: 0;
             height: 60px;
             padding: 15px;
             border-bottom: solid 1.5px rgb(200, 200, 200);
-            background-color: white; 
-            z-index: 15; 
-            display: flex; 
+            background-color: white;
+            z-index: 15;
+            display: flex;
             align-items: center;
             flex-shrink: 0;
         }
@@ -285,233 +283,234 @@
             align-items: center;
             gap: 5px;
         }
-        .modal_wl { 
+        .modal_wl {
             position: fixed;
             top: 15%;
             left: 50%;
             margin: 0;
             transform: translateX(-50%);
             border: none;
-            background-color: transparent; 
+            background-color: transparent;
             overflow: visible;
             z-index: 50;
             padding:0;
             max-width: 90vw;
             max-height: 90vh;
         }
-        dialog.modal_wl::backdrop { 
-            background: rgba(0,0,0,0.2); 
+        dialog.modal_wl::backdrop {
+            background: rgba(0,0,0,0.2);
         }
-        .modal_hi { 
+        .modal_hi {
             position: fixed;
             top: 15%;
             left: 50%;
             margin: 0;
             transform: translateX(-50%);
             border: none;
-            background-color: transparent; 
+            background-color: transparent;
             overflow: hidden;
             z-index: 50;
             padding: 20px;
 
             width: 50%;
-            min-width: 300px;                
-            height: 60%;          
+            min-width: 300px;
+            height: 60%;
             border-radius: 8px;
             background-color: white;
             box-shadow : 0px 0px 3px rgba(0, 0, 0, 0.2);
         }
-        dialog.modal_hi::backdrop { 
-            background: rgba(0,0,0,0.2); 
+        dialog.modal_hi::backdrop {
+            background: rgba(0,0,0,0.2);
         }
         .modal_hi table tr {
             padding: 5px;
         }
     </style>
+    <script type="module" crossorigin src="/assets/approot-yBEsYrX5.js"></script>
+    <link rel="stylesheet" crossorigin href="/css/bootstrap.CdihPEXe.css">
 </head>
 
 <body>
-    <div id="root"></div>
-    <script type="module" src="approot.js"></script>
+<div id="root"></div>
 
-    <dialog class="modal_pb">
-        <div class="middle_pb" style="text-align: center;">
-            <div class="green">업무 생성</div>
-            <div style="width: 100%;">
-                <hr style="border: 1px solid rgb(0, 0, 0);"/>
+<dialog class="modal_pb">
+    <div class="middle_pb" style="text-align: center;">
+        <div class="green">업무 생성</div>
+        <div style="width: 100%;">
+            <hr style="border: 1px solid rgb(0, 0, 0);"/>
+        </div>
+
+        <div class="box_scroll" style="max-height: calc(50vh - 100px);">
+            <div class="form-row" style="margin-top:20px;">
+                <label for="worktitle" style="display:inline-block; width:90px; text-align:right; margin-right:5px;">업무 제목</label>
+                <input class="button_pb" type="text" id="worktitle" placeholder="업무 제목"/>
             </div>
-            
-            <div class="box_scroll" style="max-height: calc(50vh - 100px);">
-                <div class="form-row" style="margin-top:20px;">
-                    <label for="worktitle" style="display:inline-block; width:90px; text-align:right; margin-right:5px;">업무 제목</label>
-                    <input class="button_pb" type="text" id="worktitle" placeholder="업무 제목"/>
-                </div>
-                <div class="form-row" style="margin-top:10px; height: auto;">
-                    <label for="workcontent" style="display:inline-block; width:90px; text-align:right; margin-right:5px;">업무 내용</label>
-                    <textarea class="button_pb" id="workcontent" placeholder="업무 내용" style="height: 80px; resize: none; padding: 5px; overflow: hidden;"></textarea>
-                </div>
-                <div class="form-row" style="margin-top:10px;">
-                    <label for="deadline_pb" style="display:inline-block; width:90px; text-align:right; margin-right:5px;">마감 기한</label>
-                    <input class="button_pb" type="datetime-local" id="deadline_pb"/>
-                </div>
-                <div style="margin-top: 20px; margin-bottom: 20px; display: flex; flex-direction: row; justify-content: center; gap: 10px;">
-                    <button class="button_pb2" style="width:80px;" onclick="addwork()">생성</button>
-                    <button class="button_pb2" style="width:80px; background-color: #ccc;" onclick="document.querySelector('.modal_pb').close();">취소</button>
-                </div>
+            <div class="form-row" style="margin-top:10px; height: auto;">
+                <label for="workcontent" style="display:inline-block; width:90px; text-align:right; margin-right:5px;">업무 내용</label>
+                <textarea class="button_pb" id="workcontent" placeholder="업무 내용" style="height: 80px; resize: none; padding: 5px; overflow: hidden;"></textarea>
+            </div>
+            <div class="form-row" style="margin-top:10px;">
+                <label for="deadline_pb" style="display:inline-block; width:90px; text-align:right; margin-right:5px;">마감 기한</label>
+                <input class="button_pb" type="datetime-local" id="deadline_pb"/>
+            </div>
+            <div style="margin-top: 20px; margin-bottom: 20px; display: flex; flex-direction: row; justify-content: center; gap: 10px;">
+                <button class="button_pb2" style="width:80px;" onclick="addwork()">생성</button>
+                <button class="button_pb2" style="width:80px; background-color: #ccc;" onclick="document.querySelector('.modal_pb').close();">취소</button>
             </div>
         </div>
-    </dialog>
+    </div>
+</dialog>
 
-    <dialog class="modal_wl" id="modalWork">
-        <button onclick="document.getElementById('modalWork').close()" style="position:absolute; top:-50px; right:0; z-index:10; background:none; border:none; font-size:1.5em; color:black; cursor:pointer;">&times;</button>
-        <div id="modalContent" style="width:100%; height:100%; overflow:auto; background-color: transparent;"></div>
-    </dialog>
+<dialog class="modal_wl" id="modalWork">
+    <button onclick="document.getElementById('modalWork').close()" style="position:absolute; top:-50px; right:0; z-index:10; background:none; border:none; font-size:1.5em; color:black; cursor:pointer;">&times;</button>
+    <div id="modalContent" style="width:100%; height:100%; overflow:auto; background-color: transparent;"></div>
+</dialog>
 
-    <dialog class="modal_hi">
-        <div class="middle_pb" style="text-align: center;">
-            <div class="green" style="padding: 10px 0;">히스토리</div>
-            <hr style="border: 1px solid rgb(0, 0, 0); margin: 0;">
-            <div class="box_scroll">
-                <table class="table table-hover" style="margin-top: 10px; overflow: hidden; text-align: left;">
-                    <tbody>
-                        <tr>
-                            <td>업무 추가 (업무명)</td>
-                            <td>identification</td>
-                            <td>2025/00/00 00:00</td>
-                        </tr>
-                        <tr>
-                            <td style="color: rgb(22, 131, 22);">유저 초대 (유저아이디)</td>
-                            <td>identification</td>
-                            <td>2025/00/00 00:00</td>
-                        </tr>
-                        <tr>
-                            <td style="color: rgb(131, 22, 22);">유저 제외 (유저아이디)</td>
-                            <td>identification</td>
-                            <td>2025/00/00 00:00</td>
-                        </tr>
-                        <tr>
-                            <td>업무 (업무명) - (업무상태)</td>
-                            <td>identification</td>
-                            <td>2025/00/00 00:00</td>
-                        </tr>
+<dialog class="modal_hi">
+    <div class="middle_pb" style="text-align: center;">
+        <div class="green" style="padding: 10px 0;">히스토리</div>
+        <hr style="border: 1px solid rgb(0, 0, 0); margin: 0;">
+        <div class="box_scroll">
+            <table class="table table-hover" style="margin-top: 10px; overflow: hidden; text-align: left;">
+                <tbody>
+                <tr>
+                    <td>업무 추가 (업무명)</td>
+                    <td>identification</td>
+                    <td>2025/00/00 00:00</td>
+                </tr>
+                <tr>
+                    <td style="color: rgb(22, 131, 22);">유저 초대 (유저아이디)</td>
+                    <td>identification</td>
+                    <td>2025/00/00 00:00</td>
+                </tr>
+                <tr>
+                    <td style="color: rgb(131, 22, 22);">유저 제외 (유저아이디)</td>
+                    <td>identification</td>
+                    <td>2025/00/00 00:00</td>
+                </tr>
+                <tr>
+                    <td>업무 (업무명) - (업무상태)</td>
+                    <td>identification</td>
+                    <td>2025/00/00 00:00</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</dialog>
+
+<div class="main">
+    <aside class="aside_left">
+        <div class="box_option">프로젝트 선택</div>
+        <ul id="projectListAside">
+        </ul>
+    </aside>
+
+    <div class="main_app_area">
+        <div class="project_memu">
+            <div style="display: flex; align-items: center; font-weight: bold; width: 100%;" >
+                <div style="display: flex; align-items: center; gap: 10px; margin-left: 30px;">
+                    <div id="pjname" contenteditable="false">프로젝트 이름 로딩 중...</div>
+                    <img id="edit" class="drag1" src="/icon/edit.png" style="height:20px; width:20px; margin-left: 10px; cursor:pointer;"/>
+                </div>
+                <img src="/icon/graph.png" class="drag1" id="graphbtn" style="height:20px; width:20px; margin-right:10px; margin-left:auto; cursor:pointer;" onclick="Watchdiv3('2')" />
+                <img src="/icon/gear.png" class="drag1" style="height:20px; width:20px; margin-right: 10px; cursor:pointer;" onclick="goToProjectManage()"/>
+            </div>
+        </div>
+
+        <div class="middle7" id="1">
+            <div class="box7">
+                <section class="worksection" id="todo_section">
+                    <div class="workhead">To Do</div>
+                    <div class="tasks-container" id="todo_tasks_container">
+                    </div>
+                    <img src="/icon/add.png" id="newwork"/>
+                </section>
+
+                <section class="worksection" id="inprogress_section">
+                    <div class="workhead">In Progress</div>
+                    <div class="tasks-container" id="inprogress_tasks_container">
+                    </div>
+                </section>
+
+                <section class="worksection" id="done_section">
+                    <div class="workhead">Done</div>
+                    <div class="tasks-container" id="done_tasks_container">
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <div class="middle7" id="2" style="display: none;">
+            <div class="box7 wh100" style="justify-content: flex-start; flex-direction: column; align-items: center;">
+
+                <div style="width: calc(50vw + 10px); max-width: 830px; background-color: white; padding: 10px; border-radius: 5px; display: flex; flex-direction: column; box-sizing: border-box;">
+                    <div>
+                        <span style="font-weight: bold; font-size: large;">프로젝트 설명</span>
+                        <hr style="margin-top: 10px;">
+                    </div>
+                    <div style="flex-grow: 1; background-color: rgb(250, 250, 250); border-radius: 5px; margin: 5px; padding: 10px;">
+                        여기에 프로젝트 설명
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: center; align-items: flex-start;">
+                    <!-- 업무 진행률 차트 -->
+                    <div style="background-color: white; border: none; border-radius: 10px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); width: 450px; height: 400px; padding: 25px; margin-right: 30px;">
+                        <h3 style="font-weight: bold; font-size: 18px; margin-bottom: 15px; color: #333;">업무 진행률</h3>
+                        <div style="width: 100%; height: calc(100% - 50px); position: relative;">
+                            <canvas id="taskProgressChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- 마감일 준수율 차트 -->
+                    <div style="background-color: white; border: none; border-radius: 10px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); width: 350px; height: 400px; padding: 25px;">
+                        <h3 style="font-weight: bold; font-size: 18px; margin-bottom: 15px; color: #333;">마감일 준수율</h3>
+                        <div style="width: 100%; height: calc(100% - 50px); position: relative;">
+                            <canvas id="deadlineComplianceChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="user_and_history">
+        <div class="project_memu"></div>
+        <div style="display: flex; flex-direction: column; padding: 10px; height: 100%;">
+            <div class="users" style="margin-bottom: 10px;">
+                <div style="position: sticky; top: 0; background-color: white; padding-top:5px; padding-bottom:5px;">
+                    <span class="green" style="font-size: medium;">참여 유저</span>
+                    <hr style="margin-top: 5px; margin-bottom: 0;">
+                </div>
+                <table class="table table-hover" style="margin-top:0;">
+                    <tbody id="projectMemberListSidebar">
+                    </tbody>
+                </table>
+            </div>
+            <div class="users" style="cursor:pointer;" onclick="openhistory()">
+                <div style="position: sticky; top: 0; background-color: white; padding-top:5px; padding-bottom:5px;">
+                    <span class="green" style="font-size: medium;">히스토리</span>
+                    <hr style="margin-top: 5px; margin-bottom: 0;">
+                </div>
+                <table class="table table-hover" style="margin-top:0;">
+                    <tbody id="projectHistorySidebar">
+
                     </tbody>
                 </table>
             </div>
         </div>
-    </dialog>
 
-    <div class="main">
-        <aside class="aside_left">
-            <div class="box_option">프로젝트 선택</div>
-            <ul id="projectListAside">
-            </ul>
-        </aside>
-
-        <div class="main_app_area">
-            <div class="project_memu">
-                <div style="display: flex; align-items: center; font-weight: bold; width: 100%;" >
-                    <div style="display: flex; align-items: center; gap: 10px; margin-left: 30px;">
-                        <div id="pjname" contenteditable="false">프로젝트 이름 로딩 중...</div>
-                        <img id="edit" class="drag1" src="/icon/edit.png" style="height:20px; width:20px; margin-left: 10px; cursor:pointer;"/>
-                    </div>
-                    <img src="/icon/graph.png" class="drag1" id="graphbtn" style="height:20px; width:20px; margin-right:10px; margin-left:auto; cursor:pointer;" onclick="Watchdiv3('2')" />
-                    <img src="/icon/gear.png" class="drag1" style="height:20px; width:20px; margin-right: 10px; cursor:pointer;" onclick="goToProjectManage()"/>
-                </div>
-            </div>
-
-            <div class="middle7" id="1">
-                <div class="box7">
-                    <section class="worksection" id="todo_section">
-                        <div class="workhead">To Do</div>
-                        <div class="tasks-container" id="todo_tasks_container">
-                        </div>
-                        <img src="/icon/add.png" id="newwork"/>
-                    </section>
-
-                    <section class="worksection" id="inprogress_section">
-                        <div class="workhead">In Progress</div>
-                        <div class="tasks-container" id="inprogress_tasks_container">
-                        </div>
-                    </section>
-
-                    <section class="worksection" id="done_section">
-                        <div class="workhead">Done</div>
-                        <div class="tasks-container" id="done_tasks_container">
-                        </div>
-                    </section>
-                </div>
-            </div>
-
-            <div class="middle7" id="2" style="display: none;">
-                <div class="box7 wh100" style="justify-content: flex-start; flex-direction: column; align-items: center;">
-
-                    <div style="width: calc(50vw + 10px); max-width: 810px; background-color: white; padding: 10px; border-radius: 5px; display: flex; flex-direction: column; box-sizing: border-box;">
-                        <div>
-                            <span style="font-weight: bold; font-size: large;">프로젝트 설명</span>
-                            <hr style="margin-top: 10px;">
-                        </div>
-                        <div style="flex-grow: 1; background-color: rgb(250, 250, 250); border-radius: 5px; margin: 5px; padding: 10px;">
-                            여기에 프로젝트 설명
-                        </div>
-                    </div>
-
-                    <div style="display: flex; gap: 20px; justify-content: center;">
-                        <div style="background-color: white; border: none; border-radius: 5px; width: 30vw; max-width: 500px; height: 40vh; max-height: 400px; padding: 20px; overflow: hidden;">
-                            <span style="font-weight: bold; font-size: large;">업무 진행률</span>
-                            <hr style="margin-top: 10px; margin-bottom: 20;">
-                            <div class="fccc wh100">
-                                <div style="width: 80%; height: 80%;">
-                                    <canvas id="graph1"></canvas>                                  
-                                </div>                            
-                            </div>
-                        </div>
-                        <div style="background-color: white; border: none; border-radius: 5px; width: 20vw; max-width: 300px; height: 40vh; max-height: 400px; padding: 20px;">
-                            <span style="font-weight: bold; font-size: large;">마감일 준수율</span>  
-                            <hr style="margin-top: 10px; margin-bottom: 20;">     
-                            <div class="fccc" style="width: 80%; height: 80%; justify-content: center; align-content: center;">
-                                <div style="width: 80%; height: 20%;">
-                                    <canvas id="graph2"></canvas>                                  
-                                </div>                            
-                            </div>               
-                        </div>    
-                    </div>                    
-
-                </div>
-            </div>
-        </div>
-
-        <div class="user_and_history">
-            <div class="project_memu"></div>
-            <div style="display: flex; flex-direction: column; padding: 10px; height: 100%;">
-                <div class="users" style="margin-bottom: 10px;">
-                    <div style="position: sticky; top: 0; background-color: white; padding-top:5px; padding-bottom:5px;">
-                        <span class="green" style="font-size: medium;">참여 유저</span>
-                        <hr style="margin-top: 5px; margin-bottom: 0;">
-                    </div>
-                    <table class="table table-hover" style="margin-top:0;">
-                        <tbody id="projectMemberListSidebar">
-                        </tbody>
-                    </table>
-                </div>
-                <div class="users" style="cursor:pointer;" onclick="openhistory()">
-                    <div style="position: sticky; top: 0; background-color: white; padding-top:5px; padding-bottom:5px;">
-                        <span class="green" style="font-size: medium;">히스토리</span>
-                        <hr style="margin-top: 5px; margin-bottom: 0;">
-                    </div>
-                    <table class="table table-hover" style="margin-top:0;">
-                        <tbody id="projectHistorySidebar">
-
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-        </div>
     </div>
+</div>
 </body>
 <script>
 
-    let CURRENT_PROJECT_ID = null; 
+    let CURRENT_PROJECT_ID = null;
+
+    let taskProgressChartInstance = null;
+    let deadlineComplianceChartInstance = null;
 
     const nameElement = document.getElementById("pjname");
     const editButton = document.getElementById("edit");
@@ -528,21 +527,21 @@
         //         e.preventDefault();
         //         nameElement.blur();
         //     }
-        // });   
+        // });
         editButton.addEventListener("click",async() =>{
 
-        //nameElement.addEventListener("blur", async () => { 
+            //nameElement.addEventListener("blur", async () => {
             // nameElement.contentEditable = "false";
             // nameElement.style.outline = "none";
             // const newName = nameElement.textContent.trim();
             const newName = prompt("새 프로젝트 이름을 입력하세요.");
             oldName = nameElement.textContent;
 
-            if (newName === oldName) { 
+            if (newName === oldName) {
                 return;
             }
-            
-            if (!newName) { 
+
+            if (!newName) {
                 alert("프로젝트 이름은 비워둘 수 없습니다.");
                 nameElement.textContent = oldName;
                 return;
@@ -551,7 +550,7 @@
             if (newName.length > 255) {
                 alert("프로젝트 이름은 255자를 넘을 수 없습니다.");
                 nameElement.textContent = oldName;
-                nameElement.focus(); 
+                nameElement.focus();
                 return;
             }
 
@@ -578,9 +577,9 @@
 
                     if (apiResult.status === 200 && apiResult.data) {
                         alert("프로젝트 이름이 성공적으로 변경되었습니다.");
-                        oldName = apiResult.data.title; 
-                        nameElement.textContent = apiResult.data.title; 
-                        loadProjectListForAside(); 
+                        oldName = apiResult.data.title;
+                        nameElement.textContent = apiResult.data.title;
+                        loadProjectListForAside();
                     } else {
                         throw new Error(apiResult.message || "프로젝트 이름 변경은 성공했으나 응답이 올바르지 않습니다.");
                     }
@@ -588,10 +587,10 @@
                 } catch (error) {
                     console.error("Error updating project name:", error);
                     alert(`오류: ${error.message}`);
-                    nameElement.textContent = oldName; 
+                    nameElement.textContent = oldName;
                 }
             } else {
-                nameElement.textContent = oldName; 
+                nameElement.textContent = oldName;
             }
         });
     }
@@ -610,19 +609,19 @@
 
         // 배경 누르면 닫히게
         if (!modal.hasListener) {
-        modal.addEventListener('click', function (event) {
-            if (event.target === modal) {
-                modal.close();
-            }
-        });
-        modal.hasListener = true;
-}
+            modal.addEventListener('click', function (event) {
+                if (event.target === modal) {
+                    modal.close();
+                }
+            });
+            modal.hasListener = true;
+        }
     }
 
     function closeModal(dialog){
         if (!dialog) return;
         dialog.addEventListener('click', function(e){
-            if (e.target === dialog) { 
+            if (e.target === dialog) {
                 dialog.close();
             }
         });
@@ -638,18 +637,24 @@
 
     function refreshTasksOnBoard(projectId) {
         console.log("Refreshing tasks for project (from projectboard):", projectId);
-        if(projectId) loadTasks(projectId);
+        if(projectId) {
+            loadTasks(projectId);
+
+            const dashboardDiv = document.getElementById("2");
+            if (dashboardDiv && dashboardDiv.style.display !== 'none')
+                loadDashboardData(projectId);
+        }
     }
     window.refreshTasksOnBoard = refreshTasksOnBoard;
 
     document.addEventListener('DOMContentLoaded', () => {
         const newWorkBtn = document.getElementById('newwork');
         const modalPbInstance = document.querySelector('.modal_pb');
-        const modalWorkInstance = document.getElementById('modalWork'); 
+        const modalWorkInstance = document.getElementById('modalWork');
 
-        if (modalPbInstance) closeModal(modalPbInstance); 
-        if (modalWorkInstance) closeModal(modalWorkInstance); 
-        
+        if (modalPbInstance) closeModal(modalPbInstance);
+        if (modalWorkInstance) closeModal(modalWorkInstance);
+
         if (newWorkBtn && modalPbInstance) {
             newWorkBtn.addEventListener('click', () => {
                 if (!CURRENT_PROJECT_ID) {
@@ -657,7 +662,7 @@
                     return;
                 }
                 document.getElementById("worktitle").value = "";
-                document.getElementById("workcontent").value = ""; 
+                document.getElementById("workcontent").value = "";
                 document.getElementById("deadline_pb").value = "";
                 $textarea.style.height = `${DEFAULT_HEIGHT}px`;
                 modalPbInstance.showModal();
@@ -666,7 +671,7 @@
 
         const urlParams = new URLSearchParams(window.location.search);
         const projectIdFromUrl = urlParams.get('projectId');
-        
+
         if (projectIdFromUrl) {
             CURRENT_PROJECT_ID = parseInt(projectIdFromUrl, 10);
             if (isNaN(CURRENT_PROJECT_ID)) {
@@ -675,7 +680,7 @@
             }
             loadProjectDetails(CURRENT_PROJECT_ID);
             loadTasks(CURRENT_PROJECT_ID);
-            loadProjectMembersForSidebar(CURRENT_PROJECT_ID); 
+            loadProjectMembersForSidebar(CURRENT_PROJECT_ID);
         } else {
             document.getElementById("pjname").textContent = "프로젝트 ID가 URL에 없습니다. 프로젝트 목록에서 선택해주세요.";
         }
@@ -690,7 +695,7 @@
 
         dropZones.forEach(zone => {
             zone.addEventListener('dragover', (event) => {
-                event.preventDefault(); 
+                event.preventDefault();
                 zone.classList.add('drag-over');
             });
 
@@ -703,7 +708,7 @@
                 zone.classList.remove('drag-over');
 
                 const taskId = event.dataTransfer.getData('text/plain');
-                const draggedElement = document.querySelector(`.workbox[data-task-id="${taskId}"]`); 
+                const draggedElement = document.querySelector(`.workbox[data-task-id="${taskId}"]`);
 
                 if (!draggedElement) return;
 
@@ -717,7 +722,7 @@
                 if (targetZone.id === originalParentId) {
                     return; // 같은 컬럼에 드롭된 경우 변경 없음
                 }
-                
+
                 const taskTitle = draggedElement.querySelector('span[title]')?.title || `업무 ID ${taskId}`;
 
                 if (confirm(`"${taskTitle}" 업무의 상태를 "${newStatus}"(으)로 변경하시겠습니까?`)) {
@@ -735,12 +740,12 @@
                             throw new Error(result.message || `Failed to update task status: ${response.status}`);
                         }
 
-                        if (result.status === 200) { 
-                             // '업무가 없습니다' 메시지 제거
+                        if (result.status === 200) {
+                            // '업무가 없습니다' 메시지 제거
                             if (targetZone.innerHTML.includes('업무가 없습니다.')) {
                                 targetZone.innerHTML = '';
                             }
-                            targetZone.appendChild(draggedElement); 
+                            targetZone.appendChild(draggedElement);
                             alert("업무 상태가 변경되었습니다.");
                             // 선택적: 특정 업무의 데이터만 업데이트하거나, 전체를 다시 로드할 수 있음
                             // loadTasks(CURRENT_PROJECT_ID); // 전체 다시 로드 (가장 확실하지만 깜빡임 발생 가능)
@@ -773,11 +778,11 @@
         }
 
         const worktitleInput = document.getElementById("worktitle");
-        const workcontentInput = document.getElementById("workcontent"); 
+        const workcontentInput = document.getElementById("workcontent");
         const deadlineInput = document.getElementById("deadline_pb");
 
         const title = worktitleInput.value.trim();
-        const description = workcontentInput.value.trim();   
+        const description = workcontentInput.value.trim();
         const deadlineValue = deadlineInput.value;
         const deadline = deadlineValue ? (deadlineValue.includes('T') ? deadlineValue + ":00" : deadlineValue + "T00:00:00") : null;
 
@@ -786,11 +791,11 @@
             worktitleInput.focus();
             return;
         }
-        
+
         const taskData = {
             title: title,
             description: description,
-            deadline: deadline 
+            deadline: deadline
         };
 
         try {
@@ -802,16 +807,16 @@
                 body: JSON.stringify(taskData)
             });
 
-            const result = await response.json(); 
+            const result = await response.json();
 
-            if (!response.ok) { 
+            if (!response.ok) {
                 throw new Error(result.message || `업무 생성 실패 (상태: ${response.status})`);
             }
-            
+
             if (response.status === 201 && result.status === 201 && result.data) {
                 alert("업무가 성공적으로 생성되었습니다.");
-                appendTaskToBoard(result.data); 
-                
+                appendTaskToBoard(result.data);
+
                 worktitleInput.value = "";
                 workcontentInput.value = "";
                 deadlineInput.value = "";
@@ -825,19 +830,19 @@
             alert(`업무 생성 중 오류 발생: ${error.message}`);
         }
     }
-    window.addwork = addwork; 
+    window.addwork = addwork;
 
     async function loadProjectDetails(projectId) {
         const pjnameDiv = document.getElementById("pjname");
         pjnameDiv.textContent = `프로젝트 로딩 중... (ID: ${projectId})`;
         try {
-            const response = await fetch(`/api/projects/${projectId}`); 
+            const response = await fetch(`/api/projects/${projectId}`);
             if (!response.ok) {
                 if (response.status === 401) { window.location.href = "/front/login.html"; return; }
                 const errorResult = await response.json().catch(() => ({message: "프로젝트 정보를 가져오지 못했습니다."}));
                 throw new Error(errorResult.message || `Failed to fetch project details: ${response.status}`);
             }
-            const result = await response.json(); 
+            const result = await response.json();
             if (result.status === 200 && result.data) {
                 pjnameDiv.textContent = result.data.title;
             } else {
@@ -860,7 +865,7 @@
             return;
         }
 
-        todoContainer.innerHTML = '<div style="text-align:center; color:grey; margin-top:20px;">업무 로딩 중...</div>'; 
+        todoContainer.innerHTML = '<div style="text-align:center; color:grey; margin-top:20px;">업무 로딩 중...</div>';
         inprogressContainer.innerHTML = '<div style="text-align:center; color:grey; margin-top:20px;">업무 로딩 중...</div>';
         doneContainer.innerHTML = '<div style="text-align:center; color:grey; margin-top:20px;">업무 로딩 중...</div>';
 
@@ -871,10 +876,10 @@
                 const errorResult = await response.json().catch(() => ({message: "업무 목록을 가져오지 못했습니다."}));
                 throw new Error(errorResult.message || `Failed to fetch tasks: ${response.status}`);
             }
-            const result = await response.json(); 
+            const result = await response.json();
 
             if (result.status === 200 && Array.isArray(result.data)) {
-                todoContainer.innerHTML = ''; 
+                todoContainer.innerHTML = '';
                 inprogressContainer.innerHTML = '';
                 doneContainer.innerHTML = '';
 
@@ -888,7 +893,7 @@
                     else if (task.status === "InProgress") inprogressCount++;
                     else if (task.status === "Done") doneCount++;
                 });
-                
+
                 if (todoCount === 0) {
                     todoContainer.innerHTML = '<div style="text-align:center; color:grey; margin-top:20px;">업무가 없습니다.</div>';
                 }
@@ -907,7 +912,7 @@
             console.error("Error loading tasks:", error);
             const errorMsg = `<div style="text-align:center; color:red; margin-top:20px;">업무 로드 오류: ${error.message}</div>`;
             todoContainer.innerHTML = errorMsg;
-            inprogressContainer.innerHTML = ''; 
+            inprogressContainer.innerHTML = '';
             doneContainer.innerHTML = '';
         }
     }
@@ -919,7 +924,7 @@
 
         const workBox = document.createElement("div");
         workBox.className = "workbox";
-        workBox.setAttribute('data-task-id', taskData.idx); 
+        workBox.setAttribute('data-task-id', taskData.idx);
         workBox.setAttribute('draggable', 'true'); // 드래그 가능하도록 설정
 
         workBox.addEventListener('dragstart', (event) => {
@@ -941,7 +946,7 @@
                 alert("업무 상세 정보를 표시할 수 없습니다. (모달 설정 오류)");
                 return;
             }
-            const url = `worklist.html`; 
+            const url = `worklist.html`;
 
             modalContent.innerHTML = '<p style="text-align:center; padding:20px;">업무 상세 정보 로딩 중...</p>';
             modal.showModal();
@@ -957,21 +962,21 @@
 
                 const stylesheets = doc.querySelectorAll('link[rel="stylesheet"]');
                 stylesheets.forEach(link => {
-                if (!document.head.querySelector(`link[href="${link.getAttribute('href')}"]`)) {
-                    const newLink = document.createElement('link');
-                    newLink.rel = 'stylesheet';
-                    newLink.href = link.getAttribute('href');
-                    document.head.appendChild(newLink);
-                }
+                    if (!document.head.querySelector(`link[href="${link.getAttribute('href')}"]`)) {
+                        const newLink = document.createElement('link');
+                        newLink.rel = 'stylesheet';
+                        newLink.href = link.getAttribute('href');
+                        document.head.appendChild(newLink);
+                    }
                 });
 
                 const styles = doc.querySelectorAll('style');
-                    styles.forEach(styleTag => {
+                styles.forEach(styleTag => {
                     const newStyle = document.createElement('style');
                     newStyle.textContent = styleTag.textContent;
                     document.head.appendChild(newStyle);
                 });
-                
+
                 const content = doc.querySelector('div.mainW');
                 if (content) {
                     modalContent.innerHTML = content.innerHTML;
@@ -980,28 +985,28 @@
                     scripts.forEach(oldScript => {
                         const newScript = document.createElement('script');
                         Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
-                        newScript.textContent = oldScript.textContent; 
-                         if(oldScript.src){
-                            newScript.src = oldScript.src; 
-                            newScript.onload = () => { 
+                        newScript.textContent = oldScript.textContent;
+                        if(oldScript.src){
+                            newScript.src = oldScript.src;
+                            newScript.onload = () => {
                                 if (typeof window.initializeWorklistDetails === 'function') {
                                     window.initializeWorklistDetails(taskData.idx, CURRENT_PROJECT_ID);
                                 }
                             };
                             document.body.appendChild(newScript);
-                         } else {
-                            document.body.appendChild(newScript); 
+                        } else {
+                            document.body.appendChild(newScript);
                             if (typeof window.initializeWorklistDetails === 'function' && oldScript.textContent.includes('initializeWorklistDetails')) {
-                                setTimeout(() => { 
+                                setTimeout(() => {
                                     window.initializeWorklistDetails(taskData.idx, CURRENT_PROJECT_ID);
                                 }, 0);
                             }
-                         }
+                        }
                     });
                     if (typeof window.initializeWorklistDetails === 'function') {
                         setTimeout(() => {
-                           window.initializeWorklistDetails(taskData.idx, CURRENT_PROJECT_ID);
-                        }, 100); 
+                            window.initializeWorklistDetails(taskData.idx, CURRENT_PROJECT_ID);
+                        }, 100);
                     } else {
                         console.warn("initializeWorklistDetails not found immediately after appending scripts, check if it's in an external script or timing issues.");
                         setTimeout(() => {
@@ -1011,7 +1016,7 @@
                                 console.error("initializeWorklistDetails is still not defined. Check worklist.html script loading.");
                                 modalContent.innerHTML = '<p style="color:red; text-align:center;">업무 상세 초기화에 실패했습니다. (함수 누락)</p>';
                             }
-                        }, 500); 
+                        }, 500);
                     }
 
                 } else {
@@ -1036,7 +1041,7 @@
                 deadlineText = `마감 - ${date.getFullYear()}/${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
             } catch (e) {
                 console.warn("Invalid date format for deadline:", taskData.deadline);
-                deadlineText = `마감 - ${taskData.deadline}`; 
+                deadlineText = `마감 - ${taskData.deadline}`;
             }
         }
 
@@ -1058,9 +1063,9 @@
         }
 
         if (targetContainer) {
-            if(targetContainer.innerHTML.includes('업무가 없습니다.') || 
-            targetContainer.innerHTML.includes('업무 로딩 중...') || 
-            targetContainer.innerHTML.includes('업무 로드 오류')) {
+            if(targetContainer.innerHTML.includes('업무가 없습니다.') ||
+                targetContainer.innerHTML.includes('업무 로딩 중...') ||
+                targetContainer.innerHTML.includes('업무 로드 오류')) {
                 targetContainer.innerHTML = '';
             }
             targetContainer.appendChild(workBox);
@@ -1072,7 +1077,7 @@
         if (!projectListUl) return;
         projectListUl.innerHTML = '<li>프로젝트 목록 로딩 중...</li>';
         try {
-            const response = await fetch('/api/projects'); 
+            const response = await fetch('/api/projects');
             if (!response.ok) {
                 if (response.status === 401) { window.location.href = "/front/login.html"; return; }
                 const errorResult = await response.json().catch(() => ({message: "프로젝트 목록을 가져오지 못했습니다."}));
@@ -1091,7 +1096,7 @@
                         window.location.href = `projectboard.html?projectId=${project.idx}`;
                     };
                     if (project.idx === CURRENT_PROJECT_ID) {
-                        li.classList.add('on'); 
+                        li.classList.add('on');
                     }
                     projectListUl.appendChild(li);
                 });
@@ -1115,7 +1120,7 @@
                 const errorResult = await response.json().catch(() => ({message: "프로젝트 멤버 정보를 가져오지 못했습니다."}));
                 throw new Error(errorResult.message || `Failed to fetch project members: ${response.status}`);
             }
-            const result = await response.json(); 
+            const result = await response.json();
             if (result.status === 200 && Array.isArray(result.data)) {
                 memberListTbody.innerHTML = '';
                 if (result.data.length === 0) {
@@ -1127,8 +1132,8 @@
                         <td class="user_list">
                             <img src="${member.profileImage || '/icon/user2.png'}" style="height: 30px; width: 30px; border-radius: 50%; margin-right:5px; object-fit: cover;"/>
                             <span title="${member.nickname} (${member.role})">${member.nickname}</span>
-                            <span style="font-size: smaller; color: rgba(0, 0, 0, 0.5); margin-left: 5px;">${member.identificationCode ? '#' + member.identificationCode : ''}</span>   
-                            ${member.role === '관리자' ? '<img src="/icon/crown.png" title="관리자" style="height: 16px; width: 16px; margin-left: auto;"/>' : '<div style="margin-left: auto; width:16px;"></div>'}                                 
+                            <span style="font-size: smaller; color: rgba(0, 0, 0, 0.5); margin-left: 5px;">${member.identificationCode ? '#' + member.identificationCode : ''}</span>
+                            ${member.role === '관리자' ? '<img src="/icon/crown.png" title="관리자" style="height: 16px; width: 16px; margin-left: auto;"/>' : '<div style="margin-left: auto; width:16px;"></div>'}
                         </td>
                     `;
                     memberListTbody.appendChild(tr);
@@ -1160,117 +1165,225 @@
             } else if(tabIndexStr === "2"){
                 btn.src = "/icon/board.png";
                 btn.onclick = function(){ Watchdiv3("1"); };
+
+                if(CURRENT_PROJECT_ID)
+                    loadDashboardData(CURRENT_PROJECT_ID);
             }
         }
-                
-    }  
-    const initiadata = [80,10,10];  // to do, in progress, done
-    const graph1 = document.getElementById('graph1');
-    const ctx1 = graph1.getContext('2d');
 
-    // 화질 향샹용 (반응형 넣으면서 필요X짐)
-    /*
-    const dpr = window.devicePixelRatio;
-    graph1.width = graph1.width * dpr;
-    graph1.height = graph1.height * dpr;
-    ctx1.scale(dpr, dpr);
-    */
+    }
 
-    setTimeout(() => {  // 애니메이션 안먹어서
-       const piechart = new Chart(ctx1,{
-            type:"pie",
-            data:{
-                labels:["To do", "In progress","Done"],
-                datasets:[{
-                    data: initiadata,
-                    backgroundColor:["rgb(192,192,192)","rgb(175,222,191)","rgb(114,230,124)"]
-                }] 
+    async function loadDashboardData(projectId) {
+        if (!projectId) {
+            console.error("Project ID is required for dashboard data");
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/projects/${projectId}/dashboard/stats`);
+            if (!response.ok) {
+                if (response.status === 401) {
+                    window.location.href = "/front/login.html";
+                    return;
+                }
+                const errorResult = await response.json().catch(() => ({message: "대시보드 데이터를 가져오지 못했습니다."}));
+                throw new Error(errorResult.message || `Failed to fetch dashboard data: ${response.status}`);
+            }
+
+            const result = await response.json();
+            if (result.status === 200 && result.data) {
+                createTaskProgressChart(result.data.taskProgress);
+                createDeadlineComplianceChart(result.data.deadlineCompliance);
+            } else {
+                throw new Error(result.message || "대시보드 데이터 형식이 올바르지 않습니다.");
+            }
+        } catch (error) {
+            console.error("Error loading dashboard data:", error);
+            showChartError('taskProgressChart', `업무 진행률 데이터 로드 오류: ${error.message}`);
+            showChartError('deadlineComplianceChart', `마감일 준수율 데이터 로드 오류: ${error.message}`);
+        }
+    }
+
+    // 업무 진행률 파이 차트 생성
+    function createTaskProgressChart(taskProgressData) {
+        const canvas = document.getElementById('taskProgressChart');
+        if (!canvas) {
+            console.error("Task progress chart canvas not found");
+            return;
+        }
+
+        const ctx = canvas.getContext('2d');
+
+        // 기존 차트가 있으면 제거
+        if (taskProgressChartInstance) {
+            taskProgressChartInstance.destroy();
+        }
+
+        const data = [
+            taskProgressData.todoCount,
+            taskProgressData.inProgressCount,
+            taskProgressData.doneCount
+        ];
+
+        taskProgressChartInstance = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['To Do', 'In Progress', 'Done'],
+                datasets: [{
+                    data: data,
+                    backgroundColor: [
+                        'rgb(192,192,192)',
+                        'rgb(175,222,191)',
+                        'rgb(114,230,124)'
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
             },
             options: {
-                responsive: true,  // 반응형으로
+                responsive: true,
                 maintainAspectRatio: false,
-                animation: {  // 애니메이션
+                animation: {
                     animateRotate: true,
                     animateScale: true,
                     duration: 1000,
                     easing: 'easeOutCubic'
                 },
                 plugins: {
-                    legend: { 
-                        display: true ,
-                        position:"right"
+                    legend: {
+                        display: true,
+                        position: 'bottom',
+                        labels: {
+                            padding: 20,
+                            font: {
+                                size: 12
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.label || '';
+                                const value = context.parsed || 0;
+                                const total = taskProgressData.totalCount;
+                                const percentage = total > 0 ? Math.round((value / total) * 100) : 0;
+                                return `${label}: ${value}개 (${percentage}%)`;
+                            }
+                        }
                     }
                 }
             }
         });
-        piechart.update();
-    }, 100);
+    }
 
-    const initiadata2 = [80,10];  // 마감, 마감X
-    const graph2 = document.getElementById('graph2');
-    const ctx2 = graph2.getContext('2d');
+    // 마감일 준수율 바 차트 생성
+    function createDeadlineComplianceChart(deadlineData) {
+        const canvas = document.getElementById('deadlineComplianceChart');
+        if (!canvas) {
+            console.error("Deadline compliance chart canvas not found");
+            return;
+        }
 
+        const ctx = canvas.getContext('2d');
 
-    new Chart(ctx2, {
-        type: 'bar',
-        data: {
-            labels: [''],
-            datasets: [
-                {
-                    label: '기간 내 완료',
-                    data: [80],
-                    backgroundColor: 'rgb(114,230,124)',
-                    stack: 'progress',
-                    datalabels: {
-                        color: 'black',
-                        align: 'center',
-                        anchor: 'center',
-                        formatter: (value) => value + '%'
+        // 기존 차트가 있으면 제거
+        if (deadlineComplianceChartInstance) {
+            deadlineComplianceChartInstance.destroy();
+        }
+
+        const onTimePercentage = Math.round(deadlineData.complianceRate);
+        const overduePercentage = 100 - onTimePercentage;
+
+        deadlineComplianceChartInstance = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['완료된 업무'],
+                datasets: [
+                    {
+                        label: '기간 내 완료',
+                        data: [onTimePercentage],
+                        backgroundColor: 'rgb(114,230,124)',
+                        stack: 'progress'
+                    },
+                    {
+                        label: '기간 초과',
+                        data: [overduePercentage],
+                        backgroundColor: 'rgb(255,99,132)',
+                        stack: 'progress'
                     }
-                },
-                {
-                    label: '기간 초과',
-                    data: [20],
-                    backgroundColor: 'rgb(255,99,132)',
-                    stack: 'progress',
-                    datalabels: {
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                scales: {
+                    x: {
+                        stacked: true,
+                        display: false,
+                        min: 0,
+                        max: 100
+                    },
+                    y: {
+                        stacked: true,
                         display: false
                     }
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            indexAxis: 'y',
-            scales: {
-                x: {
-                    stacked: true,
-                    display: false,
-                    grid: { display: false },
-                    ticks: { display: false }
                 },
-                y: {
-                    stacked: true,
-                    display: false,
-                    grid: { display: false },
-                    ticks: { display: false }
-                }
-            },
-            plugins: {
-                legend: { display: false },
-                tooltip: {
-                    enabled: true,
-                    callbacks: {
-                        label: (ctx) => `${ctx.dataset.label}: ${ctx.raw}%`
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom',
+                        labels: {
+                            padding: 20,
+                            font: {
+                                size: 12
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.dataset.label || '';
+                                const value = context.parsed.x || 0;
+                                if (label === '기간 내 완료') {
+                                    return `${label}: ${deadlineData.onTimeCount}개 (${value}%)`;
+                                } else {
+                                    return `${label}: ${deadlineData.overdueCount}개 (${value}%)`;
+                                }
+                            },
+                            afterBody: function() {
+                                return `전체 완료된 업무: ${deadlineData.totalCompletedCount}개`;
+                            }
+                        }
                     }
                 },
-                datalabels: {
-                    display: true
+                animation: {
+                    duration: 1000,
+                    easing: 'easeOutCubic'
                 }
-            }
-        },
-        plugins: [ChartDataLabels]
-    });
-    </script>
+            },
+            plugins: [{
+                afterDatasetsDraw: function(chart) {
+                    const ctx = chart.ctx;
+                    ctx.save();
+                    ctx.font = 'bold 16px Arial';
+                    ctx.fillStyle = '#333';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+
+                    const chartArea = chart.chartArea;
+                    const centerX = (chartArea.left + chartArea.right) / 2;
+                    const centerY = (chartArea.top + chartArea.bottom) / 2;
+
+                    if (deadlineData.totalCompletedCount > 0) {
+                        ctx.fillText(`${onTimePercentage}%`, centerX, centerY);
+                    } else {
+                        ctx.fillText('데이터 없음', centerX, centerY);
+                    }
+                    ctx.restore();
+                }
+            }]
+        });
+    }
+</script>
 </html>
