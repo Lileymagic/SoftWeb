@@ -325,6 +325,30 @@
         .modal_hi table tr {
             padding: 5px;
         }
+        .project-description-container {
+            width: calc(50vw + 10px);
+            max-width: 830px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+        }
+        .project-description-content {
+            flex-grow: 1;
+            background-color: rgb(250, 250, 250);
+            border-radius: 5px;
+            padding: 15px;
+            line-height: 1.6;
+            color: #333;
+            min-height: 80px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .project-description-content.empty {
+            color: #888;
+            font-style: italic;
+        }
     </style>
     <script type="module" crossorigin src="/assets/approot-yBEsYrX5.js"></script>
     <link rel="stylesheet" crossorigin href="/css/bootstrap.CdihPEXe.css">
@@ -410,7 +434,7 @@
         <div class="project_memu">
             <div style="display: flex; align-items: center; font-weight: bold; width: 100%;" >
                 <div style="display: flex; align-items: center; gap: 10px; margin-left: 30px;">
-                    <div id="pjname" contenteditable="false">프로젝트 이름 로딩 중...</div>
+                    <div id="pjName" contenteditable="false">프로젝트 이름 로딩 중...</div>
                     <img id="edit" class="drag1" src="/icon/edit.png" style="height:20px; width:20px; margin-left: 10px; cursor:pointer;"/>
                 </div>
                 <img src="/icon/graph.png" class="drag1" id="graphbtn" style="height:20px; width:20px; margin-right:10px; margin-left:auto; cursor:pointer;" onclick="Watchdiv3('2')" />
@@ -444,13 +468,13 @@
         <div class="middle7" id="2" style="display: none;">
             <div class="box7 wh100" style="justify-content: flex-start; flex-direction: column; align-items: center;">
 
-                <div style="width: calc(50vw + 10px); max-width: 830px; background-color: white; padding: 10px; border-radius: 5px; display: flex; flex-direction: column; box-sizing: border-box;">
+                <div class="project-description-container">
                     <div>
                         <span style="font-weight: bold; font-size: large;">프로젝트 설명</span>
-                        <hr style="margin-top: 10px;">
+                        <hr style="margin-top: 5px;">
                     </div>
-                    <div style="flex-grow: 1; background-color: rgb(250, 250, 250); border-radius: 5px; margin: 5px; padding: 10px;">
-                        여기에 프로젝트 설명
+                    <div id="pjDescription" class="project-description-content">
+                        프로젝트 설명 로딩 중...
                     </div>
                 </div>
 
@@ -512,7 +536,7 @@
     let taskProgressChartInstance = null;
     let deadlineComplianceChartInstance = null;
 
-    const nameElement = document.getElementById("pjname");
+    const nameElement = document.getElementById("pjName");
     const editButton = document.getElementById("edit");
     if (nameElement && editButton) {
         let oldName = nameElement.textContent;
@@ -675,14 +699,14 @@
         if (projectIdFromUrl) {
             CURRENT_PROJECT_ID = parseInt(projectIdFromUrl, 10);
             if (isNaN(CURRENT_PROJECT_ID)) {
-                document.getElementById("pjname").textContent = "잘못된 프로젝트 ID입니다.";
+                document.getElementById("pjName").textContent = "잘못된 프로젝트 ID입니다.";
                 return;
             }
             loadProjectDetails(CURRENT_PROJECT_ID);
             loadTasks(CURRENT_PROJECT_ID);
             loadProjectMembersForSidebar(CURRENT_PROJECT_ID);
         } else {
-            document.getElementById("pjname").textContent = "프로젝트 ID가 URL에 없습니다. 프로젝트 목록에서 선택해주세요.";
+            document.getElementById("pjName").textContent = "프로젝트 ID가 URL에 없습니다. 프로젝트 목록에서 선택해주세요.";
         }
         loadProjectListForAside();
 
@@ -833,8 +857,15 @@
     window.addwork = addwork;
 
     async function loadProjectDetails(projectId) {
-        const pjnameDiv = document.getElementById("pjname");
-        pjnameDiv.textContent = `프로젝트 로딩 중... (ID: ${projectId})`;
+        const pjNameDiv = document.getElementById("pjName");
+        const pjDescriptionDiv = document.getElementById("pjDescription");
+
+        pjNameDiv.textContent = `프로젝트 로딩 중... (ID: ${projectId})`;
+        if (pjDescriptionDiv) {
+            pjDescriptionDiv.textContent = "프로젝트 설명 로딩 중...";
+            pjDescriptionDiv.classList.remove('empty');
+        }
+
         try {
             const response = await fetch(`/api/projects/${projectId}`);
             if (!response.ok) {
@@ -844,14 +875,32 @@
             }
             const result = await response.json();
             if (result.status === 200 && result.data) {
-                pjnameDiv.textContent = result.data.title;
+                pjNameDiv.textContent = result.data.title;
+
+                if (pjDescriptionDiv) {
+                    if (result.data.description && result.data.description.trim()) {
+                        pjDescriptionDiv.textContent = result.data.description;
+                        pjDescriptionDiv.classList.remove('empty');
+                    } else {
+                        pjDescriptionDiv.textContent = "프로젝트 설명이 없습니다.";
+                        pjDescriptionDiv.classList.add('empty');
+                    }
+                }
             } else {
-                pjnameDiv.textContent = "프로젝트 정보 로드 실패";
+                pjNameDiv.textContent = "프로젝트 정보 로드 실패";
+                if (pjDescriptionDiv) {
+                    pjDescriptionDiv.textContent = "프로젝트 설명을 불러올 수 없습니다.";
+                    pjDescriptionDiv.classList.add('empty');
+                }
                 console.error("Failed to load project details:", result.message);
             }
         } catch (error) {
             console.error("Error loading project details:", error);
-            pjnameDiv.textContent = "프로젝트 정보 로드 오류";
+            pjNameDiv.textContent = "프로젝트 정보 로드 오류";
+            if (pjDescriptionDiv) {
+                pjDescriptionDiv.textContent = "프로젝트 설명 로드 오류";
+                pjDescriptionDiv.classList.add('empty');
+            }
         }
     }
 
