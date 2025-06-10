@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
 
     <script src="https://kit.fontawesome.com/289a62abf7.js" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
@@ -350,8 +351,8 @@
             font-style: italic;
         }
     </style>
-    <script type="module" crossorigin src="/assets/approot-yBEsYrX5.js"></script>
-    <link rel="stylesheet" crossorigin href="/css/bootstrap.CdihPEXe.css">
+  <script type="module" crossorigin src="/assets/approot-yBEsYrX5.js"></script>
+  <link rel="stylesheet" crossorigin href="/css/bootstrap.CdihPEXe.css">
 </head>
 
 <body>
@@ -551,7 +552,7 @@
         //         e.preventDefault();
         //         nameElement.blur();
         //     }
-        // });   
+        // });
         editButton.addEventListener("click",async() =>{
 
             //nameElement.addEventListener("blur", async () => {
@@ -1181,8 +1182,8 @@
                         <td class="user_list">
                             <img src="${member.profileImage || '/icon/user2.png'}" style="height: 30px; width: 30px; border-radius: 50%; margin-right:5px; object-fit: cover;"/>
                             <span title="${member.nickname} (${member.role})">${member.nickname}</span>
-                            <span style="font-size: smaller; color: rgba(0, 0, 0, 0.5); margin-left: 5px;">${member.identificationCode ? '#' + member.identificationCode : ''}</span>   
-                            ${member.role === '관리자' ? '<img src="/icon/crown.png" title="관리자" style="height: 16px; width: 16px; margin-left: auto;"/>' : '<div style="margin-left: auto; width:16px;"></div>'}                                 
+                            <span style="font-size: smaller; color: rgba(0, 0, 0, 0.5); margin-left: 5px;">${member.identificationCode ? '#' + member.identificationCode : ''}</span>
+                            ${member.role === '관리자' ? '<img src="/icon/crown.png" title="관리자" style="height: 16px; width: 16px; margin-left: auto;"/>' : '<div style="margin-left: auto; width:16px;"></div>'}
                         </td>
                     `;
                     memberListTbody.appendChild(tr);
