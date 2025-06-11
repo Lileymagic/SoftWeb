@@ -102,6 +102,7 @@
             background-color: white;
             display: flex;
             flex-direction: column;
+            box-sizing: border-box;
         }
         .work_select_user_head {
             display: flex;
@@ -164,12 +165,13 @@
         }
         .work_select_content {
             width: 100%;
-            padding: 20px;      /* 패딩 적용 */
+            padding: 20px;
             box-sizing: border-box; /* 패딩이 너비/높이에 포함되도록 */
             overflow-y: auto;   /* !중요! 내부 콘텐츠가 많을 경우 여기서 스크롤 */
             flex-grow: 1;       /* 패널 내에서 헤더를 제외한 나머지 공간을 모두 차지 */
             display: flex;      /* 내부 요소(예: table) 정렬을 위해 추가할 수 있지만, 보통 block 요소들이 잘 쌓임 */
             flex-direction: column; 
+            border-radius: 3px;
         }
         .work_select_content::-webkit-scrollbar{ width: 3px; }
         .work_select_content::-webkit-scrollbar-thumb { background-color: rgba(230, 230, 230); border-radius: 10px; }
@@ -178,13 +180,12 @@
         /* Tab 3의 업무 헤더 스타일 */
         .workhead {
             position: sticky; 
-            top: -20px; /* .work_select_content의 padding 값(20px) 만큼 올려서 경계에 붙임 */
             flex-shrink: 0;
             background-color: rgb(81,123,95);
             height:30px;
-            /* width:200px; /* 고정 너비 대신 아래처럼 변경 */
-            width: calc(100% + 40px); /* .work_select_content의 좌우 padding(각 20px) 고려 */
-            margin: -20px -20px 10px -20px; /* .work_select_content의 padding 상쇄 및 하단 여백 */
+            width:200px;
+            /* width: calc(100% + 40px); */
+            margin-top: 10px; margin-bottom: 10px;
             color:white;
             display: flex;
             align-items: center; 
@@ -301,6 +302,7 @@
             -webkit-appearance: none; -moz-appearance: none; appearance: none;
             width: 28px; height: 25px;
             background-color: transparent; border: none; cursor: pointer;
+            flex-shrink: 0;
         }
         .groupcolor::-webkit-color-swatch, .groupcolor_input::-webkit-color-swatch { border-radius: 50%; border: none; }
         .groupcolor::-moz-color-swatch, .groupcolor_input::-moz-color-swatch { border-radius: 50%; border: none; }
@@ -400,7 +402,6 @@
         .find3 {
             background-color: rgba(255, 255, 255, 0);
             height: 35px;
-            width: 250px;
             color: rgb(25, 25, 52);
             border: 1px solid rgba(0, 0, 0, 0.25);
             padding: 0 10px; /* 좌우 패딩을 0 10px로 조정 */
@@ -408,6 +409,7 @@
             display: flex; /* 내부 요소 정렬을 위해 추가 */
             align-items: center; /* 수직 중앙 정렬 */
             flex-grow: 1; /* 가용 공간을 차지하도록 flex-grow 추가 */
+            min-width: 150px;
             max-width: 300px; /* 최대 너비 설정 (원하는대로 조절) */
             margin-right: 15px; /* 라디오 버튼과의 간격 조절 */
         }
@@ -487,6 +489,42 @@
             max-width: 100%; /* 부모 td의 너비에 맞춤 */
             display: inline-block; /* 툴팁이 잘 작동하도록 */
         }
+
+        [type="checkbox"] {
+            appearance: none;
+            box-sizing: border-box;
+            background-clip: content-box;
+            width: 15px;
+            height: 15px;
+            border: 1px solid rgb(70, 70, 70);
+            border-radius: 1px;
+            cursor: pointer;
+            background-color: white;
+
+            position: relative;
+            display: inline-block;
+        }
+        [type="checkbox"] {
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border: 1px solid rgb(70, 70, 70);
+            border-radius: 2px;
+            background-color: white;
+            position: relative;
+            cursor: pointer;
+            display: inline-block;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: 100%;
+        }
+
+        [type="checkbox"]:checked {
+            background-color: rgb(42, 151, 60);
+            border-color: rgb(42, 151, 60);
+            background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round' xmlns='http://www.w3.org/2000/svg'><polyline points='4 12 10 18 20 6'/></svg>");
+            /* 저거 체크 SVG */
+        }
     </style>    
   <script type="module" crossorigin src="/assets/approot-yBEsYrX5.js"></script>
   <link rel="stylesheet" crossorigin href="/css/bootstrap.CdihPEXe.css">
@@ -518,7 +556,7 @@
             <div class="button_yes_m" onclick="Saveproject()">변경사항 저장</div>
             <div class="button_cancel" onclick="Nosave()">취소</div>
         </div> 
-        <div id = "1">
+        <div style="height: 100%;" id = "1">
             <dialog class="modal_nu">
                 <div class="middle_pb">
                     <div class="green">유저 초대</div>
@@ -622,7 +660,7 @@
                                         <img src="/user2.Dp3ZRFZz.png" style="height: 30px; width: 30px; margin:5px;"/>
                                     </td>
                                     <td class="lenCut_container" style="width: 100px;">
-                                        <span class="lenCut">닉네임이아주길어요길어우하학</span>
+                                        <span class="lenCut">닉네임이아주길어요길어어어어</span>
                                         <div class="tooltip1" id="tooltip"></div>
                                     </td>
                                     <td style="width: 100px; font-size: small; color: rgba(0, 0, 0, 0.5);">identification</td>
@@ -648,7 +686,7 @@
      
             </div>
         </div>
-        <div id = "2">
+        <div style="height: 100%;" id = "2">
             <div style="display: flex; flex-direction: row; height: 100%; width: 100%;">
 
                 <div class="work_select">
@@ -754,7 +792,7 @@
 
             </div>
         </div>
-        <div id = "3">
+        <div style="height: 100%;" id = "3">
             <dialog class="modal_pb">
                 <div class="middle_pb">
                     <div class="green">업무 생성</div>
@@ -1179,15 +1217,15 @@
                             tr.dataset.groupPermissions = group.permissionBitmask || 0;
         
                             tr.innerHTML = `
-                                <td style="width: 150px;">
+                                <td style="width: 30%;">
                                     <div class="lenCut_container">
                                         <span class="lenCut group-name-display">${group.name}</span>
                                         <div class="tooltip1"></div>
                                     </div>
                                 </td>
-                                <td style="width: 50px;"><img src="/icon/edit.png" style="height:20px; width:20px; cursor:pointer;" class="edit_group_name_btn drag1" title="그룹 이름 수정"/></td>
-                                <td style="width: 150px;"><div style="display: flex; align-items: center; justify-content: center; gap: 10px;"><span>그룹 색상</span><input type="color" class="groupcolor_input" value="${group.color || '#000000'}"/></div></td>
-                                <td style="width: 150px; text-align: right;"><button class="button_expel delete_group_btn" data-group-id="${group.idx}" style="font-size:13px; width:auto; padding: 0 8px;">그룹 삭제</button></td>
+                                <td style="width: 10%;"><img src="/icon/edit.png" style="height:20px; width:20px; cursor:pointer;" class="edit_group_name_btn drag1" title="그룹 이름 수정"/></td>
+                                <td style="width: 30%;"><div style="display: flex; align-items: center; justify-content: center; gap: 10px;"><span>그룹 색상</span><input type="color" class="groupcolor_input" value="${group.color || '#000000'}"/></div></td>
+                                <td style="width: 30%; text-align: right;"><button class="button_expel delete_group_btn" data-group-id="${group.idx}" style="font-size:13px; width:auto; padding: 0 8px;">그룹 삭제</button></td>
                             `;
                             // 중요: "유저 및 권한 관리" 버튼 대신 행 전체를 클릭 가능하게 하고, 내부 버튼 클릭은 전파 중단
                             tr.onclick = (e) => {
@@ -1343,11 +1381,13 @@
                         <td style="width: 40px; text-align: center; vertical-align: middle;">
                             <input type="checkbox" class="group-member-candidate-checkbox" data-user-id="${user.userIdx}" ${isMember ? 'checked' : ''}>
                         </td>
-                        <td style="width: auto; display: flex; align-items: center; padding: 5px 0; vertical-align: middle;">
-                            <img src="${user.profileImage || '/icon/user2.png'}" alt="${user.nickname} 프로필" style="height: 35px; width: 35px; border-radius:50%; object-fit:cover; margin-right: 8px;"/>
-                            <span style="font-size: 13px; color: #333;" class="lenCut_container"><span class="lenCut">${user.nickname}</span><div class="tooltip1"></div></span>
+                        <td style="width: auto; vertical-align: middle;">
+                            <div style="display: flex; align-items: center;">
+                                <img src="${user.profileImage || '/icon/user2.png'}" alt="${user.nickname} 프로필" style="height: 35px; width: 35px; border-radius:50%; object-fit:cover; margin-right: 8px;"/>
+                                <span class="lenCut_container"><span class="lenCut">${user.nickname}</span><div class="tooltip1"></div></span>                                
+                            </div>
                         </td>
-                        <td style="vertical-align: middle; font-size: 13px; color: #777;">#${user.identificationCode}</td>
+                        <td style="vertical-align: middle; color: #3a6b5b;">#${user.identificationCode}</td>
                     `;
                     tr.onclick = function(e) {
                         if (!SELECTED_GROUP_ID) { alert("먼저 그룹을 선택하세요."); return; }
@@ -1394,8 +1434,10 @@
                             </label>
                         </td>
                     `;
-                     if (isChecked) tr.classList.add('active');
+
+                    if (isChecked) tr.classList.add('active');
         
+                    /*
                     tr.onclick = function(e) {
                         if (!SELECTED_GROUP_ID) { alert("먼저 그룹을 선택하세요."); return; }
                         const cb = this.querySelector('.permission-checkbox');
@@ -1405,6 +1447,26 @@
                         }
                         if(cb) this.classList.toggle('active', cb.checked);
                     };
+                    */
+
+                    // 텍스트 누르면 선택 안되길래 tr전체로 바꿈
+                    tr.addEventListener('click', function(e) 
+                    {
+                        if (!SELECTED_GROUP_ID) { alert("먼저 그룹을 선택하세요."); return; }
+
+                        const checkbox = this.querySelector('.permission-checkbox');
+                        const isLabelClicked = e.target.closest('label');
+
+                        if (!isLabelClicked && checkbox) 
+                        {
+                            checkbox.checked = !checkbox.checked;
+                        }
+
+                        if (checkbox) 
+                        {
+                            this.classList.toggle('active', checkbox.checked);
+                        }
+                    });
                     tbody.appendChild(tr);
                 }
             }
@@ -1649,6 +1711,66 @@
             }
         
             // (이전 스크립트의 나머지 부분: editName, attachEditListeners 등은 새로운 방식으로 대체되거나 정리됨)
+
+
+
+            // 이전의 업무할당 클릭 시 유저선택 열리는 거 일단 복구
+            let taskSelected = false;
+            const ugSelect3 = document.getElementById("ug_select_3");
+
+            document.querySelectorAll('.work_table_3 tbody').forEach(tbody => {
+                tbody.addEventListener("click", (e) => {
+                    const item = e.target.closest('tr');
+                    if (!item) return;
+
+                    if (item.classList.contains('active')) {
+                        item.classList.remove('active');
+                        taskSelected = false;
+
+                        // 사라지는 애니메이션
+                        if (ugSelect3.classList.contains("show")) {
+                            ugSelect3.classList.remove("show");
+                            setTimeout(() => {
+                                ugSelect3.style.display = "none";
+                            }, 300);
+                        }
+
+                    } else {
+                        document.querySelectorAll('.work_table_3 tbody tr').forEach(r => r.classList.remove("active"));
+                        item.classList.add("active");
+                        taskSelected = true;
+
+                        // 보이는 애니메이션
+                        if (!ugSelect3.classList.contains("show")) {
+                            ugSelect3.style.display = "block";
+                            setTimeout(() => {
+                                ugSelect3.classList.add("show");
+                            }, 10);
+                        }
+
+                    }
+                });
+
+                document.querySelector('#user_table_3 tbody').addEventListener('click', (e) => {
+                    const item = e.target.closest('tr');
+                    if (!taskSelected) {
+                        alert("먼저 업무를 선택해야 합니다.");
+                        return;
+                    }
+                    item.classList.toggle('active');
+                });
+
+                document.querySelector('#group_table_3 tbody').addEventListener('click', (e) => {
+                    const item = e.target.closest('tr');
+                    if (!taskSelected) {
+                        alert("먼저 업무를 선택해야 합니다.");
+                        return;
+                    }
+                    item.classList.toggle('active');
+                });
+            });
+
+
         </script>
     </body>
 </html>
