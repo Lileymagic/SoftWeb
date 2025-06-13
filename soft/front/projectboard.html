@@ -377,6 +377,14 @@
             padding: 25px;
             box-sizing: border-box;
         }
+        #pjName {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            cursor: default;
+        }
     </style>
 </head>
 
@@ -458,12 +466,12 @@
 
     <div class="main_app_area">
         <div class="project_memu">
-            <div style="display: flex; align-items: center; font-weight: bold; width: 100%;" >
-                <div style="display: flex; align-items: center; gap: 10px; margin-left: 30px;">
-                    <div id="pjName" contenteditable="false">프로젝트 이름 로딩 중...</div>
+            <div style="display: flex; align-items: center; font-weight: bold; width: 100%; gap: 15px;" >
+                <div style="display: flex; align-items: center; gap: 10px; margin-left: 30px; margin-right: 10px;">
+                    <div id="pjName" contenteditable="false" title="프로젝트 이름">프로젝트 이름 로딩 중...</div>
                     <img id="edit" class="drag1" src="/icon/edit.png" style="height:20px; width:20px; margin-left: 10px; cursor:pointer;"/>
                 </div>
-                <img src="/icon/graph.png" class="drag1" id="graphbtn" style="height:20px; width:20px; margin-right:10px; margin-left:auto; cursor:pointer;" onclick="Watchdiv3('2')" />
+                <img src="/icon/graph.png" class="drag1" id="graphbtn" style="height:20px; width:20px; margin-left:auto; cursor:pointer;" onclick="Watchdiv3('2')" />
                 <img src="/icon/gear.png" class="drag1" style="height:20px; width:20px; margin-right: 10px; cursor:pointer;" onclick="goToProjectManage()"/>
             </div>
         </div>
@@ -630,6 +638,7 @@
                         oldName = apiResult.data.title;
                         nameElement.textContent = apiResult.data.title;
                         loadProjectListForAside();
+                        updateTitle();
                     } else {
                         throw new Error(apiResult.message || "프로젝트 이름 변경은 성공했으나 응답이 올바르지 않습니다.");
                     }
@@ -902,6 +911,7 @@
             const result = await response.json();
             if (result.status === 200 && result.data) {
                 pjNameDiv.textContent = result.data.title;
+                updateTitle();
 
                 if (pjDescriptionDiv) {
                     if (result.data.description && result.data.description.trim()) {
@@ -1460,5 +1470,12 @@
             }]
         });
     }
+
+    // 제목 길어지면 나오는 title 갱싱
+    const pjName = document.getElementById('pjName');
+    function updateTitle() {
+        pjName.title = pjName.textContent;
+    }
+  updateTitle();
 </script>
 </html>

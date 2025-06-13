@@ -769,6 +769,14 @@
     window.addCommentHandler = addCommentHandler;
 
     function addReply(parentCommentId, replyButtonElement, replySlotElement, depth) {
+
+        // 여기의 답글쓰기 이미 열렸음 없애기
+        const existingForm = replySlotElement.querySelector('.reply-form-container');
+        if (existingForm) {
+            existingForm.remove();
+            return;
+        }
+
         // ... (이전 답변과 동일한 함수 내용 시작) ...
         document.querySelectorAll('.reply-form-container').forEach(form => form.remove());
 
