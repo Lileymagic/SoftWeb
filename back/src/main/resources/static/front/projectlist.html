@@ -531,14 +531,57 @@
         }
     }
 
-    // 초대된 프로젝트 목록 로드 (다음 단계에서 구현 - 현재는 원본 HTML의 구조만 유지)
+    /**
+     * 현재 사용자가 받은 보류 중인 프로젝트 초대 목록을 불러와 화면에 표시합니다.
+     */
     async function loadPendingInvitations() {
         const tbodyInvitePj = document.getElementById("tbody_invitepj");
-        if (!tbodyInvitePj) return;
-        // 현재는 원본 HTML에 있는 임시 tr>th 구조를 그대로 두거나, 비워두거나,
-        // "초대받은 프로젝트가 없습니다"와 같은 메시지를 표시할 수 있습니다.
-        // API 연동은 다음 단계에서 진행합니다.
-        tbodyInvitePj.innerHTML = '<tr><th>초대받은 프로젝트가 없습니다.</th></tr>'; // 비워두거나 메시지 표시
+        if (!tbodyInvitePj) {
+            console.error("초대 목록을 표시할 tbody (id='tbody_invitepj')를 찾을 수 없습니다.");
+            return;
+        }
+        tbodyInvitePj.innerHTML = '<tr><th colspan="2" style="text-align:center; color:grey; font-weight:normal;">초대 목록을 불러오는 중...</th></tr>';
+
+        try {
+            // 백엔드에 새로 추가한 API 호출
+            const response = await fetch('/api/projects/invitations/pending');
+            if (response.status === 401) {
+                alert("로그인이 필요합니다."); window.location.href = "/front/login.html"; return;
+            }
+            const result = await response.json();
+
+            if (response.ok && result.status === 200) {
+                const invitations = result.data; // ProjectResponseDto[] 형태
+                tbodyInvitePj.innerHTML = ''; // 목록 초기화
+
+                if (invitations && invitations.length > 0) {
+                    invitations.forEach(invitation => {
+                        const tr = document.createElement("tr");
+                        // 각 행에 수락/거절 버튼을 포함하여 생성
+                        tr.innerHTML = `
+                            <td style="font-size: medium; font-weight: 100;">
+                                '${invitation.title}' 프로젝트에서 초대가 왔습니다.
+                                <br>
+                                <span style="font-size:small; color:grey;">(생성자: ${invitation.createdByNickname})</span>
+                            </td>
+                            <td style="width: 120px; text-align:right;">
+                                <button class="button_yes" style="margin-right:5px;" onclick="acceptInvitation(${invitation.idx})">수락</button>
+                                <button class="button_no" onclick="rejectInvitation(${invitation.idx})">거절</button>
+                            </td>
+                        `;
+                        tbodyInvitePj.appendChild(tr);
+                    });
+                } else {
+                    tbodyInvitePj.innerHTML = '<tr><th colspan="2" style="text-align:center; color:grey; font-weight:normal;">초대받은 프로젝트가 없습니다.</th></tr>';
+                }
+            } else {
+                tbodyInvitePj.innerHTML = `<tr><th colspan="2" style="text-align:center; color:red;">초대 목록을 불러오는 데 실패했습니다.</th></tr>`;
+                console.error("Failed to load pending invitations:", result.message);
+            }
+        } catch (error) {
+            tbodyInvitePj.innerHTML = `<tr><th colspan="2" style="text-align:center; color:red;">초대 목록 로드 중 네트워크 오류 발생.</th></tr>`;
+            console.error("Error loading pending invitations:", error);
+        }
     }
 
     async function acceptInvitation(projectId) {
@@ -573,8 +616,8 @@
             });
         }
 
-        loadMyProjects();
-        loadPendingInvitations(); // 현재는 임시 데이터 또는 비어있음
+        loadMyProjects();          // 기존 참여 프로젝트 목록 로드
+        loadPendingInvitations();  // 새로 추가된 초대 요청 목록 로드
 
         // 원본 HTML에 있던 말줄임표 스크립트 위치 (수정 없음)
         document.querySelectorAll('.lenCut_container').forEach(container => {
@@ -651,6 +694,55 @@
     window.addEventListener('load', () => Watchdiv3('1'));
     window.Watchdiv3 = Watchdiv3;
 
+    /**
+     * 프로젝트 초대를 수락하는 함수
+     * @param {number} projectId 수락할 프로젝트의 ID
+     */
+    async function acceptInvitation(projectId) {
+        if (!confirm("프로젝트 초대를 수락하시겠습니까?")) return;
+
+        try {
+            const response = await fetch(`/api/projects/${projectId}/invitations/accept`, { method: 'POST' });
+            const result = await response.json();
+
+            if (response.ok && result.status === 200) {
+                alert(result.message || "초대를 수락했습니다. '참여 프로젝트' 목록에서 확인하세요.");
+                // 변경사항 반영을 위해 두 목록 모두 새로고침
+                loadMyProjects();
+                loadPendingInvitations();
+            } else {
+                throw new Error(result.message || "초대 수락에 실패했습니다.");
+            }
+        } catch (error) {
+            console.error("Error accepting invitation:", error);
+            alert(`오류: ${error.message}`);
+        }
+    }
+    window.acceptInvitation = acceptInvitation; // HTML onclick에서 호출할 수 있도록 전역에 등록
+
+    /**
+     * 프로젝트 초대를 거절하는 함수
+     * @param {number} projectId 거절할 프로젝트의 ID
+     */
+    async function rejectInvitation(projectId) {
+        if (!confirm("프로젝트 초대를 거절하시겠습니까?")) return;
+
+        try {
+            const response = await fetch(`/api/projects/${projectId}/invitations/reject`, { method: 'POST' });
+            const result = await response.json();
+
+            if (response.ok && result.status === 200) {
+                alert(result.message || "초대를 거절했습니다.");
+                loadPendingInvitations(); // 초대 목록만 새로고침
+            } else {
+                throw new Error(result.message || "초대 거절에 실패했습니다.");
+            }
+        } catch (error) {
+            console.error("Error rejecting invitation:", error);
+            alert(`오류: ${error.message}`);
+        }
+    }
+    window.rejectInvitation = rejectInvitation; // HTML onclick에서 호출할 수 있도록 전역에 등록
 
 </script>
 </html>

@@ -286,4 +286,31 @@ public class ProjectController {
         ProjectResponseDto updatedProject = projectService.updateProjectDetails(projectId, requestDto, currentUser);
         return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(), "프로젝트 정보가 성공적으로 수정되었습니다.", updatedProject));
     }
+
+    /**
+     * 현재 로그인한 사용자가 받은 보류 중(PENDING)인 프로젝트 초대 목록을 조회합니다. (새로 추가)
+     * @param authentication 현재 사용자의 인증 정보
+     * @param request HttpServletRequest
+     * @return 초대받은 프로젝트 목록
+     */
+    @GetMapping("/invitations/pending")
+    public ResponseEntity<?> getPendingInvitations(
+            Authentication authentication,
+            HttpServletRequest request) {
+
+        User currentUser = getCurrentDomainUser(authentication);
+        if (currentUser == null) {
+            ErrorResponse errorResponse = new ErrorResponse(
+                    HttpStatus.UNAUTHORIZED,
+                    "AUTH_REQUIRED",
+                    "초대 목록을 조회하려면 로그인이 필요합니다.",
+                    request.getRequestURI()
+            );
+            return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+        }
+        log.info("API 호출: 보류 중인 초대 목록 조회 by user: {}", currentUser.getNickname());
+        List<ProjectResponseDto> pendingInvitations = projectService.getPendingInvitations(currentUser);
+        return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(), "보류 중인 초대 목록 조회 성공", pendingInvitations));
+    }
+
 }

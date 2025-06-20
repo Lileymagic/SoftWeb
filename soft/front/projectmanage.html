@@ -15,7 +15,7 @@
         .aside_left{
             position: sticky;
             height: 100vh;            
-            width: 250px;
+            width: 300px;
             border-right: solid 1px;
             border-color: gray;
             float: left;
@@ -66,7 +66,6 @@
             height: 100vh;
             /* width: 10px; /* 이 값은 실제 레이아웃에 맞게 수정되어야 합니다. (예: calc(100% - 300px) 또는 부모가 flex면 flex-grow:1) */
                            /* 여기서는 JS가 #1,#2,#3을 직접 제어하므로 일단 그대로 둡니다. */
-            width: calc(100vw - 250px);
         }
         .memu_name {
             position: sticky; 
@@ -265,13 +264,13 @@
     
         /* 그룹 목록 행 스타일 (Tab 2) */
         .group_list_2{
-            /*display: flex;*/
+            display: flex;
             flex-direction: row;
             justify-content: flex-start;
             align-items: center;
             padding: 10px;
             gap: 10px;
-            /*border-bottom: solid 1px rgb(200, 200, 200);*/
+            border-bottom: solid 1px rgb(200, 200, 200);
             cursor: pointer;
         }
         .group_list_2.active{ /* tbody tr.active 규칙이 더 우선시 될 수 있음 */
@@ -492,6 +491,70 @@
             display: inline-block; /* 툴팁이 잘 작동하도록 */
         }
 
+        /* --- ✨ 신규 추가된 스타일 --- */
+        /* 참여 그룹 보기 버튼 */
+        .button_view_groups {
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .button_view_groups:hover {
+            background-color: #e0e0e0;
+        }
+
+        /* 참여 그룹 보기 모달 */
+        .modal_user_groups {
+            width: 350px;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            border: none;
+        }
+        .modal_user_groups::backdrop {
+            background: rgba(0,0,0,0.4);
+        }
+        .modal_user_groups h3 {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0 0 15px 0;
+            color: #333;
+        }
+        .modal_user_groups .group-list-container {
+            max-height: 250px;
+            overflow-y: auto;
+            border: 1px solid #eee;
+            border-radius: 4px;
+            padding: 10px;
+        }
+        .modal_user_groups .group-list-container ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .modal_user_groups .group-list-container li {
+            padding: 8px 5px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .modal_user_groups .group-list-container li:last-child {
+            border-bottom: none;
+        }
+        .modal_user_groups .modal-close-btn {
+            background-color: #ccc;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 16px;
+            margin-top: 20px;
+            float: right;
+            cursor: pointer;
+        }
+        .modal_user_groups .modal-close-btn:hover {
+            background-color: #bbb;
+        }
+
         [type="checkbox"] {
             appearance: none;
             box-sizing: border-box;
@@ -557,7 +620,16 @@
             <div class="button_yes_m" onclick="Saveproject()">변경사항 저장</div>
             <div class="button_cancel" onclick="Nosave()">취소</div>
         </div> 
-        <div style="height: 100%;" id = "1">
+        <div id = "1">
+            <dialog class="modal_user_groups">
+                <h3 id="user_groups_modal_title">참여 그룹 목록</h3>
+                <div class="group-list-container">
+                    <ul id="user_groups_list">
+                        </ul>
+                </div>
+                <button class="modal-close-btn" onclick="this.closest('dialog').close()">닫기</button>
+            </dialog>
+
             <dialog class="modal_nu">
                 <div class="middle_pb">
                     <div class="green">유저 초대</div>
@@ -568,7 +640,7 @@
                     <div style="display: flex; flex-direction: row; align-items: center; justify-content: space-between;">
                         <div class="find3">
                             <input class="button_find3" type="text" id="find_user_modal" placeholder="아이디 / 태그로 유저 검색"/> 
-                            <img src="public/icon/finding.png" style="width: 25px; height: 25px; margin-left: auto;"/>                    
+                            <img id="search_user_icon" src="public/icon/finding.png" style="width: 25px; height: 25px; margin-left: auto; cursor: pointer;"/>                    
                         </div>
                         <div class="container_radio">
                             <input type="radio" name="user_search_option" id="friend_radio" style="height:15px; width:15px; margin: 5px;" checked="checked"><label for="friend_radio">친구</label>
@@ -582,55 +654,12 @@
                                 <thead>
                                     <tr>
                                         <th style="width: 55px;"></th>
-                                        <th style="width: 100px;">닉네임</th>
-                                        <th style="width: 100px;">아이디</th>
-                                        <th style="width: 60px;">#태그</th>
+                                        <th style="width: 150px;">닉네임</th>
+                                        <th style="width: 120px;">#태그</th>
                                         <th style="width: 50px;"></th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <img src="public/icon/user2.png" style="height: 30px; width: 30px; margin:5px;"/>
-                                        </td>
-                                        <td class="lenCut_container">
-                                            <span class="lenCut">닉네임이아주아주아주길어요</span>
-                                            <div class="tooltip1"></div>                                      
-                                        </td>
-                                        <td>
-                                            <div class="lenCut_container">
-                                                <span class="lenCutE" style="font-size: small; color: rgba(0, 0, 0, 0.5);">identification123</span>                    
-                                                <div class="tooltip1"></div>                                    
-                                            </div>                    
-                                        </td>
-                                        <td>
-                                            <span style="color: #3a6b5b;">#0000</span>                                      
-                                        </td>    
-                                        <td>
-                                            <button class="button_select2">초대</button>
-                                        </td>                          
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <img src="public/icon/user2.png" style="height: 30px; width: 30px; margin:5px;"/>
-                                        </td>
-                                        <td class="lenCut_container">
-                                            <span class="lenCut">정예은</span>
-                                            <div class="tooltip1"></div>                                      
-                                        </td>
-                                        <td>
-                                            <div class="lenCut_container">
-                                                <span class="lenCutE" style="font-size: small; color: rgba(0, 0, 0, 0.5);">yeeun13</span>                    
-                                                <div class="tooltip1"></div>                                    
-                                            </div>                    
-                                        </td>
-                                        <td>
-                                            <span style="color: #3a6b5b;">#3697</span>                                      
-                                        </td>    
-                                        <td>
-                                            <button class="button_select2">초대</button>
-                                        </td>                          
-                                    </tr>
+                                <tbody id="invite_user_tbody">
                                 </tbody>
                             </table>
                         </div>
@@ -655,32 +684,18 @@
     
                     <div class="work_select_user_content">
                         <table class="table table-hover" id="user_table_1">
-                            <tbody>
+                            <thead>
                                 <tr>
-                                    <td style="width: 55px;">
-                                        <img src="public/icon/user2.png" style="height: 30px; width: 30px; margin:5px;"/>
-                                    </td>
-                                    <td class="lenCut_container" style="width: 100px;">
-                                        <span class="lenCut">닉네임이아주길어요길어어어어</span>
-                                        <div class="tooltip1" id="tooltip"></div>
-                                    </td>
-                                    <td style="width: 100px; font-size: small; color: rgba(0, 0, 0, 0.5);">identification</td>
-                                    <td style="width: 60px; color: #3a6b5b;">#0000</td>
-                                    <td style="width: 150px;">
-                                        <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; gap: 10px;">
-                                            <div class="lenCut_container">
-                                                <span class="lenCut">그룹명</span>
-                                                <div class="tooltip1" id="tooltip"></div>
-                                            </div>
-                                            <div style="background-color: black; height: 20px; width: 20px; border-radius: 50%;"></div>
-                                        </div>
-                                    </td>
-                                    <td style="width: 100px;">
-                                        <button class="button_expel" onclick="Deleteuser()">제명</button>
-                                    </td>
+                                    <th style="width: 55px;"></th>
+                                    <th style="width: 150px;">닉네임</th>
+                                    <th style="width: 120px;">인식코드</th>
+                                    <th style="width: 150px;">그룹 정보</th>
+                                    <th style="width: 100px;">관리</th>
                                 </tr>
-                            </tbody>
-                        </table>                        
+                            </thead>
+                            <tbody id="project_members_tbody">
+                                </tbody>
+                        </table>                      
                     </div>
     
                 </div>
@@ -945,7 +960,6 @@
             </div>
 
         </div>
-    </div>
 
         <script>
             // --- 전역 변수 및 설정 ---
@@ -978,22 +992,22 @@
             document.addEventListener("DOMContentLoaded", async function () {
                 const urlParams = new URLSearchParams(window.location.search);
                 CURRENT_PROJECT_ID = parseInt(urlParams.get('projectId'), 10);
-        
+
                 if (isNaN(CURRENT_PROJECT_ID)) {
                     alert("프로젝트 ID가 유효하지 않습니다. 프로젝트 목록으로 돌아갑니다.");
                     document.body.innerHTML = '<p style="color:red; text-align:center; padding: 20px;">잘못된 접근입니다. 프로젝트 ID가 필요합니다.</p>';
                     setTimeout(() => { window.location.href = 'projectlist.html'; }, 2000);
                     return;
                 }
-        
+
                 Watchdiv2('1'); // 기본 탭 설정
-        
-                const addGroupBtn = document.getElementById('add3'); // 그룹 추가 버튼 (HTML ID와 일치)
+
+                const addGroupBtn = document.getElementById('add3');
                 if (addGroupBtn) addGroupBtn.onclick = () => promptAndCreateGroup();
                 
                 const addNewTaskBtnTab3 = document.getElementById('newwork');
                 const createTaskModalInstance = document.querySelector('dialog.modal_pb'); 
-        
+
                 if (addNewTaskBtnTab3 && createTaskModalInstance) {
                     addNewTaskBtnTab3.onclick = () => {
                         if (!CURRENT_PROJECT_ID) {
@@ -1025,7 +1039,7 @@
                 const groupRadioTaskAssign = document.getElementById('groupS'); 
                 const userTableTaskAssign = document.getElementById('user_table_3');
                 const groupTableTaskAssign = document.getElementById('group_table_3');
-        
+
                 function toggleTaskAssignTables() {
                     if (!userRadioTaskAssign || !groupRadioTaskAssign || !userTableTaskAssign || !groupTableTaskAssign) return;
                     if (userRadioTaskAssign.checked) {
@@ -1043,17 +1057,40 @@
                 }
                 initializeTooltips(); 
 
-                // 유저 초대 모달 관련 스크립트 추가
                 const newUserBtn = document.getElementById('newuser');
-                const userInviteModal = document.querySelector('dialog.modal_nu');
-
-                if (newUserBtn && userInviteModal) {
-                    newUserBtn.addEventListener('click', () => {
-                        userInviteModal.showModal();
-                    });
+                if (newUserBtn) {
+                    newUserBtn.addEventListener('click', openInviteUserModal);
                 }
+
+                const userInviteModal = document.querySelector('dialog.modal_nu');
                 if (userInviteModal) {
-                    closeModal(userInviteModal); // 배경 클릭 시 모달 닫기
+                    closeModal(userInviteModal);
+                    
+                    // 라디오 버튼 변경 시 검색 결과 초기화
+                    document.getElementById('friend_radio').addEventListener('change', () => renderInviteUserList([]));
+                    document.getElementById('all_radio').addEventListener('change', () => renderInviteUserList([]));
+
+                    // ✨ 돋보기 아이콘 클릭 시에만 검색 실행
+                    const searchIcon = document.getElementById('search_user_icon');
+                    if (searchIcon) {
+                        searchIcon.addEventListener('click', loadInviteModalContent);
+                    }
+                    
+                    // ✨ Enter 키를 눌러도 검색이 되도록 편의 기능 추가
+                    const searchInput = document.getElementById('find_user_modal');
+                    if (searchInput) {
+                        searchInput.addEventListener('keydown', (event) => {
+                            if (event.key === 'Enter') {
+                                loadInviteModalContent();
+                            }
+                        });
+                    }
+
+                    // ✨ '유저 초대' 모달의 테이블에 클릭 이벤트 리스너 추가
+                    const inviteTbody = document.getElementById('invite_user_tbody');
+                    if (inviteTbody) {
+                        inviteTbody.addEventListener('click', handleInviteUserClick);
+                    }
                 }
             });
         
@@ -1132,47 +1169,49 @@
             }
         
             function Watchdiv2(tabIndexStr) {
-                const sections = ['1', '2', '3'];
-                sections.forEach(id => {
-                    const el = document.getElementById(id);
-                    if (el) el.style.display = (id === tabIndexStr) ? 'flex' : 'none';
-                    if (id === tabIndexStr) { // 활성화된 탭에 대해 flex-direction 설정
-                         el.style.flexDirection = (id === '1') ? 'column' : 'row';
-                    }
-                });
-        
-                const navLinks = document.querySelectorAll('.aside_left ul li');
-                let activeTabText = "";
-                navLinks.forEach((li, index) => {
-                    const isActive = ((index + 1).toString() === tabIndexStr);
-                    li.classList.toggle('on', isActive);
-                    if (isActive) activeTabText = li.querySelector('a').textContent;
-                });
-                document.getElementById('spanText').innerText = activeTabText || "관리";
-        
-                SELECTED_GROUP_ID = null; 
-                stagedGroupDetailChanges = {}; 
-                const ugSelect2 = document.getElementById("ug_select_2");
-                const authoritySelect2 = document.getElementById("authority_select_2");
-                const ugSelect3 = document.getElementById("ug_select_3");
-        
-                [ugSelect2, authoritySelect2, ugSelect3].forEach(panel => {
-                    if(panel) {
-                        panel.classList.remove("show");
-                        panel.style.display = "none"; // 확실히 숨김
-                    }
-                });
-                document.querySelectorAll('#group_table_2 tbody tr.active').forEach(row => row.classList.remove('active'));
-                document.querySelectorAll('#work_list_tab3 .table tbody tr.active').forEach(row => row.classList.remove('active'));
-        
-        
-                if (CURRENT_PROJECT_ID) {
-                    if (tabIndexStr === '1') { /* loadProjectMembersForTab1(); */ }
-                    else if (tabIndexStr === '2') { initializeGroupManagementTab(); }
-                    else if (tabIndexStr === '3') { initializeTaskAssignmentTab(); }
+            const sections = ['1', '2', '3'];
+            sections.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.style.display = (id === tabIndexStr) ? 'flex' : 'none';
+                if (id === tabIndexStr) { // 활성화된 탭에 대해 flex-direction 설정
+                    el.style.flexDirection = (id === '1') ? 'column' : 'row';
                 }
+            });
+
+            const navLinks = document.querySelectorAll('.aside_left ul li');
+            let activeTabText = "";
+            navLinks.forEach((li, index) => {
+                const isActive = ((index + 1).toString() === tabIndexStr);
+                li.classList.toggle('on', isActive);
+                if (isActive) activeTabText = li.querySelector('a').textContent;
+            });
+            document.getElementById('spanText').innerText = activeTabText || "관리";
+
+            SELECTED_GROUP_ID = null; 
+            stagedGroupDetailChanges = {}; 
+            const ugSelect2 = document.getElementById("ug_select_2");
+            const authoritySelect2 = document.getElementById("authority_select_2");
+            const ugSelect3 = document.getElementById("ug_select_3");
+
+            [ugSelect2, authoritySelect2, ugSelect3].forEach(panel => {
+                if(panel) {
+                    panel.classList.remove("show");
+                    panel.style.display = "none"; // 확실히 숨김
+                }
+            });
+            document.querySelectorAll('#group_table_2 tbody tr.active').forEach(row => row.classList.remove('active'));
+            document.querySelectorAll('#work_list_tab3 .table tbody tr.active').forEach(row => row.classList.remove('active'));
+
+
+            if (CURRENT_PROJECT_ID) {
+                if (tabIndexStr === '1') { 
+                    loadProjectMembersForTab1(); // ✨ 멤버 목록 로드 함수 호출
+                }
+                else if (tabIndexStr === '2') { initializeGroupManagementTab(); }
+                else if (tabIndexStr === '3') { initializeTaskAssignmentTab(); }
             }
-            window.Watchdiv2 = Watchdiv2;
+        }
+        window.Watchdiv2 = Watchdiv2;
         
             async function initializeGroupManagementTab() {
                 await fetchAndStoreProjectMembers(); // 프로젝트 전체 멤버 로드 (availableProjectUsers 업데이트)
@@ -1188,7 +1227,7 @@
                             userIdx: member.userId, // ProjectMemberResponseDto의 userId를 userIdx로 매핑
                             nickname: member.nickname,
                             identificationCode: member.identificationCode,
-                            profileImage: member.profileImage || '/icon/user2.png', // profileImage 필드가 ProjectMemberResponseDto에 있다고 가정
+                            profileImage: member.profileImage || 'public/icon/user2.png', // profileImage 필드가 ProjectMemberResponseDto에 있다고 가정
                             // '아이디' 필드는 제외하기로 했으므로 email/loginId는 가져오지 않음
                         }));
                     } else {
@@ -1382,11 +1421,9 @@
                         <td style="width: 40px; text-align: center; vertical-align: middle;">
                             <input type="checkbox" class="group-member-candidate-checkbox" data-user-id="${user.userIdx}" ${isMember ? 'checked' : ''}>
                         </td>
-                        <td style="width: auto; vertical-align: middle;">
-                            <div style="display: flex; align-items: center;">
-                                <img src="${user.profileImage || '/icon/user2.png'}" alt="${user.nickname} 프로필" style="height: 35px; width: 35px; border-radius:50%; object-fit:cover; margin-right: 8px;"/>
-                                <span class="lenCut_container"><span class="lenCut">${user.nickname}</span><div class="tooltip1"></div></span>                                
-                            </div>
+                        <td style="width: auto; display: flex; align-items: center; padding: 5px 0; vertical-align: middle;">
+                            <img src="${user.profileImage || 'public/icon/user2.png'}" alt="${user.nickname} 프로필" style="height: 35px; width: 35px; border-radius:50%; object-fit:cover; margin-right: 8px;"/>
+                            <span style="font-size: 13px; color: #333;" class="lenCut_container"><span class="lenCut">${user.nickname}</span><div class="tooltip1"></div></span>
                         </td>
                         <td style="vertical-align: middle; color: #3a6b5b;">#${user.identificationCode}</td>
                     `;
@@ -1711,6 +1748,229 @@
                 } catch (error) { /* fetchApi에서 alert 처리 */ }
             }
         
+           /**
+             * [수정] '멤버 관리' 탭의 유저 리스트를 요청된 컬럼 구조에 맞게 동기화합니다.
+             */
+            async function loadProjectMembersForTab1() {
+                if (!CURRENT_PROJECT_ID) return;
+
+                const tbody = document.getElementById("project_members_tbody");
+                // colspan을 5로 수정
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">멤버 목록을 불러오는 중...</td></tr>`;
+
+                try {
+                    const result = await fetchApi(`/api/projects/${CURRENT_PROJECT_ID}/members`);
+                    tbody.innerHTML = ''; // 기존 내용 초기화
+
+                    if (result.status === 200 && Array.isArray(result.data) && result.data.length > 0) {
+                        result.data.forEach(member => {
+                            const tr = document.createElement('tr');
+                            
+                            // ✨ 요청에 맞게 tr 내부 HTML 구조 변경
+                            tr.innerHTML = `
+                                <td style="width: 55px;">
+                                    <img src="${member.profileImage || 'public/icon/user2.png'}" style="height: 30px; width: 30px; margin:5px; border-radius:50%;"/>
+                                </td>
+                                <td class="lenCut_container" style="width: 150px;">
+                                    <span class="lenCut">${member.nickname}</span>
+                                    <div class="tooltip1"></div>
+                                </td>
+                                <td style="width: 120px; font-size: small; color: #3a6b5b;">
+                                    #${member.identificationCode}
+                                </td>
+                                <td style="width: 150px;">
+                                    <button class="button_view_groups" data-user-id="${member.userId}" data-user-nickname="${member.nickname}">
+                                        참여 그룹 보기
+                                    </button>
+                                </td>
+                                <td style="width: 100px;">
+                                    <button class="button_expel" onclick="Deleteuser(${member.userId})">제명</button>
+                                </td>
+                            `;
+                            tbody.appendChild(tr);
+                        });
+
+                        // '참여 그룹 보기' 버튼에 이벤트 리스너 추가
+                        tbody.querySelectorAll('.button_view_groups').forEach(button => {
+                            button.addEventListener('click', handleViewGroupsClick);
+                        });
+
+                    } else {
+                        // colspan을 5로 수정
+                        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">프로젝트에 멤버가 없습니다.</td></tr>`;
+                    }
+                } catch (error) {
+                    // colspan을 5로 수정
+                    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:red;">멤버 목록 로드 중 오류가 발생했습니다.</td></tr>`;
+                }
+                initializeTooltips(); // 툴팁 재초기화
+            }
+
+            /**
+             * [신규] '참여 그룹 보기' 버튼 클릭 시, 해당 유저의 그룹 목록을 모달에 표시합니다.
+             */
+            async function handleViewGroupsClick(event) {
+                const button = event.currentTarget;
+                const userId = button.dataset.userId;
+                const userNickname = button.dataset.userNickname;
+                const modal = document.querySelector('.modal_user_groups');
+                const listUl = document.getElementById('user_groups_list');
+                const title = document.getElementById('user_groups_modal_title');
+                
+                title.textContent = `${userNickname}님의 참여 그룹`;
+                listUl.innerHTML = '<li>그룹 목록을 불러오는 중...</li>';
+                modal.showModal();
+
+                try {
+                    const result = await fetchApi(`/api/projects/${CURRENT_PROJECT_ID}/users/${userId}/groups`);
+                    listUl.innerHTML = '';
+                    if (result.status === 200 && Array.isArray(result.data) && result.data.length > 0) {
+                        result.data.forEach(group => {
+                            const li = document.createElement('li');
+                            li.textContent = group.name;
+                            listUl.appendChild(li);
+                        });
+                    } else {
+                        listUl.innerHTML = '<li>소속된 그룹이 없습니다.</li>';
+                    }
+                } catch (error) {
+                    listUl.innerHTML = '<li style="color:red;">오류가 발생했습니다.</li>';
+                }
+            }
+
+            function openInviteUserModal() {
+            const userInviteModal = document.querySelector('dialog.modal_nu');
+            if (userInviteModal) {
+                // 검색창과 라디오 버튼 초기화
+                document.getElementById('find_user_modal').value = '';
+                document.getElementById('friend_radio').checked = true;
+                
+                userInviteModal.showModal();
+                
+                // ✨ 목록을 비우고 안내 메시지 표시
+                const tbody = document.getElementById('invite_user_tbody');
+                tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;">검색어를 입력하고 돋보기를 누르세요.</td></tr>`;
+            }
+        }
+
+           /**
+             * [수정] '유저 초대' 모달의 라디오 버튼 상태와 검색어에 따라 컨텐츠를 로드합니다.
+             */
+            async function loadInviteModalContent() {
+                const isFriendMode = document.getElementById('friend_radio').checked;
+                const searchInput = document.getElementById('find_user_modal');
+                const query = searchInput.value.trim().toLowerCase();
+                const tbody = document.getElementById('invite_user_tbody');
+                
+                tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;">목록을 불러오는 중...</td></tr>`;
+
+                try {
+                    if (isFriendMode) {
+                        // '친구' 모드: 먼저 모든 친구 목록을 가져옴
+                        const result = await fetchApi('/api/friends');
+                        let friends = result.data || [];
+
+                        if (query) {
+                            // 검색어가 있으면 친구 목록 내에서 필터링
+                            friends = friends.filter(friend => 
+                                friend.nickname.toLowerCase().includes(query) || 
+                                friend.identificationCode.toLowerCase().includes(query)
+                            );
+                        }
+                        renderInviteUserList(friends);
+
+                    } else {
+                        // '전체' 모드: 검색어가 있을 때만 서버에 검색 요청
+                        if (query) {
+                            const result = await fetchApi(`/api/friends/search?query=${encodeURIComponent(query)}`);
+                            renderInviteUserList(result.data || []);
+                        } else {
+                            tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;">검색어를 입력하고 돋보기를 누르세요.</td></tr>`;
+                            return;
+                        }
+                    }
+                } catch (error) {
+                    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:red;">오류가 발생했습니다.</td></tr>`;
+                }
+            }
+
+            function renderInviteUserList(users) {
+                const tbody = document.getElementById('invite_user_tbody');
+                tbody.innerHTML = '';
+
+                if (Array.isArray(users) && users.length > 0) {
+                    // UserSearchResponseDto: userIdx, nickname, identificationCode
+                    users.forEach(user => {
+                        const tr = document.createElement('tr');
+                        // ✨ 초대 버튼에 data-user-id와 data-user-nickname 속성 추가
+                        tr.innerHTML = `
+                            <td>
+                                <img src="${user.profileImage || 'public/icon/user2.png'}" style="height: 30px; width: 30px; margin:5px; border-radius:50%;"/>
+                            </td>
+                            <td class="lenCut_container" style="width: 150px;">
+                                <span class="lenCut">${user.nickname}</span>
+                                <div class="tooltip1"></div>                                      
+                            </td>
+                            <td style="width: 120px;">
+                                <span style="font-size: small; color: #3a6b5b;">#${user.identificationCode}</span>                   
+                            </td>
+                            <td style="width: 50px;">
+                                <button class="button_select2" data-user-id="${user.userIdx}" data-user-nickname="${user.nickname}">초대</button>
+                            </td>                          
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                } else {
+                    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;">해당하는 유저가 없습니다.</td></tr>`;
+                }
+                initializeTooltips();
+            }
+
+            /**
+             * [신규] '초대' 버튼 클릭을 처리하는 핸들러 함수
+             */
+            async function handleInviteUserClick(event) {
+                // 이벤트 위임을 사용했으므로, 클릭된 요소가 버튼이 아니면 무시
+                if (!event.target.matches('.button_select2')) {
+                    return;
+                }
+
+                const button = event.target;
+                const userId = button.dataset.userId;
+                const nickname = button.dataset.userNickname;
+
+                if (!userId || !CURRENT_PROJECT_ID) {
+                    alert("초대 정보를 찾을 수 없습니다.");
+                    return;
+                }
+
+                if (!confirm(`${nickname}(#${button.closest('tr').querySelector('span[style*="#3a6b5b"]').textContent.trim().substring(1)}) 님을 프로젝트에 초대하시겠습니까?`)) {
+                    return;
+                }
+
+                const requestBody = {
+                    inviteeUserId: parseInt(userId, 10)
+                };
+
+                try {
+                    await fetchApi(`/api/projects/${CURRENT_PROJECT_ID}/members`, {
+                        method: 'POST',
+                        body: JSON.stringify(requestBody)
+                    });
+                    
+                    alert(`${nickname} 님을 성공적으로 초대했습니다.`);
+                    
+                    // 피드백을 위해 버튼 상태 변경
+                    button.textContent = '초대됨';
+                    button.disabled = true;
+                    button.style.backgroundColor = '#e9e9e9';
+                    button.style.color = '#999';
+                    button.style.cursor = 'not-allowed';
+
+                } catch (error) {
+                    // fetchApi 내부에서 이미 alert 창으로 오류를 표시하므로 여기서는 추가 작업 불필요
+                }
+            }
             // (이전 스크립트의 나머지 부분: editName, attachEditListeners 등은 새로운 방식으로 대체되거나 정리됨)
 
 
@@ -1773,5 +2033,5 @@
 
 
         </script>
-    </body>
-</html>
+        </body>
+        </html>

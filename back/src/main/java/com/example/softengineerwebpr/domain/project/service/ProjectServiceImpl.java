@@ -289,4 +289,23 @@ public class ProjectServiceImpl implements ProjectService {
         log.info("사용자 {}가 프로젝트 '{}'({}) 초대를 거절했습니다. (초대 기록 삭제)", currentUser.getNickname(), project.getTitle(), projectId);
         // TODO: 초대한 사람에게 알림 등
     }
+
+    /**
+     * 현재 사용자가 받은 보류 중인 초대 목록을 조회하는 기능 구현 (새로 추가)
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<ProjectResponseDto> getPendingInvitations(User currentUser) {
+        log.info("사용자 {}의 보류 중인 초대 목록 조회", currentUser.getNickname());
+
+        // 새로 추가한 findByUserAndStatus 메소드 사용
+        List<ProjectMember> pendingMemberships = projectMemberRepository.findByUserAndStatus(currentUser, ProjectMemberStatus.PENDING);
+
+        // ProjectMember 목록에서 Project 목록을 추출하여 DTO로 변환
+        return pendingMemberships.stream()
+                .map(ProjectMember::getProject) // 각 멤버십에서 프로젝트 정보를 가져옴
+                .map(ProjectResponseDto::fromEntity) // Project 엔티티를 ProjectResponseDto로 변환
+                .collect(Collectors.toList());
+    }
+
 }
