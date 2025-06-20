@@ -258,4 +258,27 @@ public class GroupServiceImpl implements GroupService {
                 });
         log.info("그룹 '{}' 멤버 동기화 완료. 최종 멤버 수: {}", group.getName(), requestedMembers.size());
     }
+
+    /**
+     * 특정 프로젝트 내에서 특정 사용자가 속한 그룹 목록을 조회하는 기능 구현 (새로 추가)
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<GroupResponseDto> getGroupsForUserInProject(Long projectId, Long targetUserId, User currentUser) {
+        Project project = findProjectOrThrow(projectId); //
+        // 권한 확인: 현재 사용자가 이 프로젝트의 멤버인지 확인
+        checkProjectMembership(project, currentUser); //
+
+        User targetUser = findUserOrThrow(targetUserId); //
+
+        // GroupMemberRepository를 사용하여 특정 사용자의 모든 그룹 멤버십을 조회
+        List<GroupMember> memberships = groupMemberRepository.findByUser(targetUser); //
+
+        // 조회된 멤버십 중에서 현재 프로젝트에 속한 그룹들만 필터링하여 DTO로 변환
+        return memberships.stream()
+                .map(GroupMember::getGroup) // 멤버십에서 그룹 엔티티를 가져옴
+                .filter(group -> group.getProject().getIdx().equals(projectId)) // 현재 프로젝트의 그룹인지 확인
+                .map(GroupResponseDto::fromEntity) // GroupResponseDto로 변환
+                .collect(Collectors.toList());
+    }
 }

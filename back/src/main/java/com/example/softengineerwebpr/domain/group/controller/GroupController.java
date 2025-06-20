@@ -125,4 +125,21 @@ public class GroupController {
         GroupResponseDto updatedGroup = groupService.updateGroupPermissions(groupId, requestDto, currentUser);
         return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(), "그룹 권한이 성공적으로 수정되었습니다.", updatedGroup));
     }
+
+    /**
+     * 특정 프로젝트 내에서 특정 사용자가 속한 그룹 목록을 조회합니다. (새로 추가)
+     * @param projectId 프로젝트 ID
+     * @param userId 사용자 ID
+     * @param authentication 현재 인증 정보
+     * @return 사용자가 속한 그룹 목록
+     */
+    @GetMapping("/projects/{projectId}/users/{userId}/groups")
+    public ResponseEntity<ApiResponse<List<GroupResponseDto>>> getGroupsForUserInProject(
+            @PathVariable Long projectId,
+            @PathVariable Long userId,
+            Authentication authentication) {
+        User currentUser = authenticationUtil.getCurrentUser(authentication); //
+        List<GroupResponseDto> userGroups = groupService.getGroupsForUserInProject(projectId, userId, currentUser);
+        return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(), "사용자의 프로젝트 내 그룹 목록 조회 성공", userGroups));
+    }
 }

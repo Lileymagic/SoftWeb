@@ -90,4 +90,13 @@ public interface GroupService {
      * @param currentUser 현재 작업을 수행하는 사용자 (권한 검사)
      */
     void syncGroupMembers(Long groupId, GroupMemberSyncRequestDto requestDto, User currentUser);
+
+    /**
+     * 특정 프로젝트 내에서 특정 사용자가 속한 그룹 목록을 조회합니다. (새로 추가)
+     * @param projectId 프로젝트의 ID
+     * @param targetUserId 조회할 대상 사용자의 ID
+     * @param currentUser 현재 작업을 수행하는 사용자 (권한 확인용)
+     * @return 대상 사용자가 속한 그룹 목록 (GroupResponseDto 리스트)
+     */
+    List<GroupResponseDto> getGroupsForUserInProject(Long projectId, Long targetUserId, User currentUser);
 }

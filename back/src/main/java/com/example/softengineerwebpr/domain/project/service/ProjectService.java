@@ -42,4 +42,11 @@ public interface ProjectService {
     // --- 초대 수락/거절 기능 추가 ---
     void acceptProjectInvitation(Long projectId, User currentUser);
     void rejectProjectInvitation(Long projectId, User currentUser);
+
+    /**
+     * 현재 사용자가 받은 모든 보류 중(PENDING)인 프로젝트 초대 목록을 조회합니다. (새로 추가)
+     * @param currentUser 현재 사용자
+     * @return 초대받은 프로젝트의 정보가 담긴 ProjectResponseDto 리스트
+     */
+    List<ProjectResponseDto> getPendingInvitations(User currentUser);
 }
