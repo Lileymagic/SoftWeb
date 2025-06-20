@@ -20,6 +20,7 @@
             border-color: gray;
             float: left;
             background-color: rgb(220, 220, 220);
+            flex-shrink: 0;
         }
     
         .aside_left ul {
@@ -197,12 +198,17 @@
         }
     
         /* 테이블 관련 기본 스타일 */
-        tr { text-align: left; }
+        tr { 
+            text-align: left;  
+            box-sizing: border-box;
+        }
         td {
             height: 50px;
             /* max-width: 150px; /* 모든 td에 일괄 적용하는 것은 위험, 필요한 곳에만 적용 */
             text-align: left;
             vertical-align: middle;
+            background-color: transparent;
+            box-sizing: border-box;
         }
         tbody tr.active, tbody tr.active td {
             background-color: rgb(214, 238, 182) !important;
@@ -263,7 +269,7 @@
         }
     
         /* 그룹 목록 행 스타일 (Tab 2) */
-        .group_list_2{
+        /* .group_list_2{
             display: flex;
             flex-direction: row;
             justify-content: flex-start;
@@ -273,17 +279,13 @@
             border-bottom: solid 1px rgb(200, 200, 200);
             cursor: pointer;
         }
-        .group_list_2.active{ /* tbody tr.active 규칙이 더 우선시 될 수 있음 */
+        .group_list_2.active{
             background-color: rgb(214, 238, 182); 
         }
-        /* 그룹 목록의 'active'가 아닌 행에 마우스 오버 시 */
-        #tbody_group > tr.group_list_2:not(.active):hover { /* 기존 파일의 #group_table_2 선택자 대신 #tbody_group 사용 */
-            background-color: rgb(235, 235, 235); 
-        }
-        /* 위 hover 시, 내부 td 요소들의 배경을 투명하게 */
-        #tbody_group > tr.group_list_2:not(.active):hover td {
-            background-color: transparent !important; 
-        }
+
+        #tbody_group > tr.group_list_2 td {
+            border-bottom: none !important;
+        } */
     
         /* 유저,그룹,권한 선택 패널 초기 숨김 및 애니메이션 (Tab 2, Tab 3) */
         #ug_select_2, #ug_select_3, #authority_select_2 {
@@ -464,12 +466,10 @@
             width: 100%;
             border-collapse: collapse; /* 테이블 셀 간격 없이 */
         }
-        .box10 th, .box10 td {
+        .box10 th {
             padding: 8px 15px;
             border-bottom: 1px solid rgb(230, 230, 230);
             vertical-align: middle;
-        }
-        .box10 th {
             background-color: #f8f8f8;
             font-weight: bold;
             font-size: small;
@@ -590,6 +590,7 @@
             background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round' xmlns='http://www.w3.org/2000/svg'><polyline points='4 12 10 18 20 6'/></svg>");
             /* 저거 체크 SVG */
         }
+
     </style>    
 </head>
 
@@ -718,48 +719,7 @@
                     <div class="work_select_content">
                         <table class="table table-hover" id="group_table_2">
                             <tbody id="tbody_group">
-                                <tr>
-                                    <td style="width: 150px;">
-                                        <div class="lenCut_container">
-                                            <span class="lenCut" id="groupname">그룹명이 매우길다 ㅁㅁㅁㅁㅁ</span>
-                                            <div class="tooltip1" id="tooltip"></div>
-                                        </div>
-                                    </td>
-                                    <td style="width: 50px;">
-                                        <img src="/icon/edit.png" style="height:20px; width:20px;"  class="edit_gn drag1"/>
-                                    </td>
-                                    <td style="width: 150px;">
-                                        <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; gap: 10px;">
-                                            <span>그룹 색상 수정</span>
-                                            <input type="color" class="groupcolor"/>
-                                        </div>
-                                    </td>
-                                    <td style="width: 150px; align-items: end;">
-                                        <button class="button_return">유저 및 권한 관리</button>
-                                    </td>
 
-                                </tr>
-                                <tr>
-                                    <td style="width: 100px;">
-                                        <div class="lenCut_container">
-                                            <span class="lenCut" id="groupname">그룹명2</span>
-                                            <div class="tooltip1" id="tooltip"></div>
-                                        </div>
-                                    </td>
-                                    <td style="width: 50px;">
-                                        <img src="/icon/edit.png" style="height:20px; width:20px;"  class="edit_gn drag1"/>
-                                    </td>
-                                    <td style="width: 150px;">
-                                        <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; gap: 10px;">
-                                            <span>그룹 색상 수정</span>
-                                            <input type="color" class="groupcolor"/>
-                                        </div>
-                                    </td>
-                                    <td style="width: 150px; align-items: end;">
-                                        <button class="button_return">유저 및 권한 관리</button>
-                                    </td>
-
-                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -1263,7 +1223,7 @@
                                         <div class="tooltip1"></div>
                                     </div>
                                 </td>
-                                <td style="width: 10%;"><img src="/icon/edit.png" style="height:20px; width:20px; cursor:pointer;" class="edit_group_name_btn drag1" title="그룹 이름 수정"/></td>
+                                <td style="width: 10%;"><img src="public/icon/edit.png" style="height:20px; width:20px; cursor:pointer;" class="edit_group_name_btn drag1" title="그룹 이름 수정"/></td>
                                 <td style="width: 30%;"><div style="display: flex; align-items: center; justify-content: center; gap: 10px;"><span>그룹 색상</span><input type="color" class="groupcolor_input" value="${group.color || '#000000'}"/></div></td>
                                 <td style="width: 30%; text-align: right;"><button class="button_expel delete_group_btn" data-group-id="${group.idx}" style="font-size:13px; width:auto; padding: 0 8px;">그룹 삭제</button></td>
                             `;
@@ -1421,9 +1381,13 @@
                         <td style="width: 40px; text-align: center; vertical-align: middle;">
                             <input type="checkbox" class="group-member-candidate-checkbox" data-user-id="${user.userIdx}" ${isMember ? 'checked' : ''}>
                         </td>
-                        <td style="width: auto; display: flex; align-items: center; padding: 5px 0; vertical-align: middle;">
-                            <img src="${user.profileImage || 'public/icon/user2.png'}" alt="${user.nickname} 프로필" style="height: 35px; width: 35px; border-radius:50%; object-fit:cover; margin-right: 8px;"/>
-                            <span style="font-size: 13px; color: #333;" class="lenCut_container"><span class="lenCut">${user.nickname}</span><div class="tooltip1"></div></span>
+                        <td style="width: auto; padding: 5px 0;">
+                            <div style="display: flex; flex-direction: row; align-items: center;">
+                                <div style="width: 35px; height: 35px; border-radius: 50%; overflow: hidden; margin-right: 10px">
+                                    <img src="${user.profileImage || 'public/icon/user2.png'}" alt="${user.nickname} 프로필" style="height: 100%; width: 100%; object-fit:cover;"/>
+                                </div>
+                                <span style="font-size: medium; color: #333;" class="lenCut_container"><span class="lenCut">${user.nickname}</span><div class="tooltip1"></div></span>
+                            </div>
                         </td>
                         <td style="vertical-align: middle; color: #3a6b5b;">#${user.identificationCode}</td>
                     `;
