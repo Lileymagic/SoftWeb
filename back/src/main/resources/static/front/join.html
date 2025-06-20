@@ -252,8 +252,8 @@
         const nicknameInput = document.getElementById("nickname");
 
         if (!idCheckedAndAvailable) { alert("아이디 중복 확인을 완료하고 사용 가능한 아이디를 입력해주세요."); idInput.focus(); return; }
-        if (idInput.value.length < 8 || idInput.value.length > 20 || /[^A-Za-z0-9\-_]/.test(idInput.value)) {
-             alert("아이디 형식을 다시 확인해주세요 (8~20자, 영문/숫자/-_)."); idInput.focus(); return;
+        if (idInput.value.length < 4 || idInput.value.length > 20 || /[^A-Za-z0-9\-_]/.test(idInput.value)) {
+             alert("아이디 형식을 다시 확인해주세요 (4~20자, 영문/숫자/-_)."); idInput.focus(); return;
         }
         if (passwordInput.value.length < 8 || passwordInput.value.length > 20 || !/^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,20}$/.test(passwordInput.value)) {
             alert("비밀번호는 영문, 숫자, 특수문자를 최소 1개 이상 포함하여 8~20자로 입력해주세요."); passwordInput.focus(); return;
@@ -263,9 +263,9 @@
              alert("올바른 이메일 형식이 아닙니다."); emailInput.focus(); return;
         }
         if (!emailVerificationSent) { alert("이메일 인증번호를 먼저 발송하고 확인해주세요."); emailInput.focus(); return; } // 혹은 이메일 발송 상태를 더 명확히 안내
-        if (numberInput.value.length !== 4 || !/^\d{4}$/.test(numberInput.value)) { alert("인증번호는 4자리 숫자여야 합니다."); numberInput.focus(); return; }
-        if (nicknameInput.value.length < 4 || nicknameInput.value.length > 20 || /[^A-Za-z0-9\uAC00-\uD7A3\-_]/.test(nicknameInput.value)) {
-             alert("닉네임은 4자 이상 20자 이하, 한글/영문/숫자/-_ 만 사용 가능합니다."); nicknameInput.focus(); return;
+        if (numberInput.value.length !== 2 || !/^\d{4}$/.test(numberInput.value)) { alert("인증번호는 4자리 숫자여야 합니다."); numberInput.focus(); return; }
+        if (nicknameInput.value.length < 2 || nicknameInput.value.length > 20 || /[^A-Za-z0-9\uAC00-\uD7A3\-_]/.test(nicknameInput.value)) {
+             alert("닉네임은 2자 이상 20자 이하, 한글/영문/숫자/-_ 만 사용 가능합니다."); nicknameInput.focus(); return;
         }
 
         const signUpData = {

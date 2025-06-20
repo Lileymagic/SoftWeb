@@ -16,7 +16,7 @@ public class RootRedirectController {
                 && !"anonymousUser".equals(authentication.getPrincipal())) {
             return "redirect:/front/projectlist.html";
         } else {
-            return "redirect:/front/login.html";
+            return "redirect:/front/index.html";
         }
     }
 

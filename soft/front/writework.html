@@ -459,7 +459,11 @@
         const fileInput = document.getElementById('fileUploadInput');
 
         if (!title) { alert("제목을 입력해주세요."); titleInput.focus(); return; }
-        if (quill.getLength() <= 1 && !quill.getText().trim()) { alert("내용을 입력해주세요."); return; }
+
+        if (quill.getLength() <= 1 && !quill.getText().trim() && (!fileInput || fileInput.files.length === 0)) 
+        { 
+            alert("내용을 입력해주세요."); return; 
+        }
 
         const postData = { 
             title: title, 

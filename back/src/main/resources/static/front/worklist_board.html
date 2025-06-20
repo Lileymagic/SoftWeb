@@ -707,13 +707,16 @@
         const commentInputElement = document.getElementById("mainCommentContent"); 
         const content = commentInputElement.value.trim();
 
-        if (!content) {
-            alert("댓글 내용을 입력해주세요.");
+        const mainCommentFileInput = document.getElementById('mainCommentFileUploadInput'); 
+
+        const hasFiles = mainCommentFileInput && mainCommentFileInput.files.length > 0;
+        if (!content && !hasFiles) {
+            alert("댓글 내용을 입력하거나 파일을 첨부해주세요.");
             commentInputElement.focus();
             return;
         }
 
-        const commentData = { content: content, parentCommentId: null };
+        const commentData = { content: content || null, parentCommentId: null };
 
         try {
             const commentResponse = await fetch(`/api/posts/${currentSelectedPostId}/comments`, {
@@ -730,10 +733,9 @@
             const savedCommentId = commentResult.data.commentIdx; 
             console.info("메인 댓글 내용 저장 성공. Comment ID:", savedCommentId);
 
-            const mainCommentFileInput = document.getElementById('mainCommentFileUploadInput'); 
             const selectedMainCommentFilesListDiv = document.getElementById('selectedMainCommentFilesList'); 
 
-            if (mainCommentFileInput && mainCommentFileInput.files.length > 0) {
+            if (hasFiles) {
                 const formData = new FormData();
                 let validFilesExist = false;
                 for (const file of mainCommentFileInput.files) {
