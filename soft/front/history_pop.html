@@ -3,31 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>History</title>
-    <link rel="stylesheet" href="css/bootstrap.css" />
-    <link rel="stylesheet" href="css/styles.css">
+    <title>프로젝트 히스토리</title>
+    <link rel="stylesheet" href="public/css/bootstrap.css" />
+    <link rel="stylesheet" href="public/css/styles.css">
     <style>
-
+        body {
+            padding: 10px; /* 기존 바디 패딩 유지 */
+            background-color: #f8f9fa;
+        }
+        /* 새롭게 추가된 컨테이너 스타일 */
+        .main-content-wrapper {
+            width: 100%; /* 너비를 100%로 설정 */
+            padding: 0 15px; /* 좌우 패딩을 추가하여 콘텐츠가 가장자리에서 떨어지게 함 */
+            box-sizing: border-box; /* 패딩이 너비에 포함되도록 설정 */
+            margin: 0 auto; /* 필요시 가운데 정렬 */
+            /* 혹시 모를 레이아웃 문제를 위해 flex 또는 grid 관련 속성은 제외하고 기본 블록 흐름 유지 */
+        }
+        .table {
+            background-color: white;
+            font-size: 14px;
+        }
+        .table th {
+            background-color: #f2f2f2;
+        }
+        .message-row td {
+            text-align: center;
+            color: grey;
+            padding: 20px;
+        }
     </style>
 </head>
 <body>
-    <div>
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>업무 1 수정</td>
-                    <td>asdf1</td>
-                    <td>2025/05/05 12:00</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    <div class="main-content-wrapper">
+        <h3 style="margin-bottom: 15px;">히스토리</h3>
+        <div>
+            <table class="table table-hover">
+                <thead style="position: sticky; top: 0; background-color: #f2f2f2;">
+                    <tr>
+                        <th style="width: 55%;">활동 내용</th>
+                        <th style="width: 20%;">수행자</th>
+                        <th style="width: 25%;">시간</th>
+                    </tr>
+                </thead>
+                <tbody id="historyTbody">
+                    </tbody>
+            </table>
+        </div>
+    </div> <script>
+        // 페이지 로드 시 히스토리 데이터를 가져오는 함수 실행
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const projectId = urlParams.get('projectId');
+
+            if (projectId) {
+                loadProjectHistory(projectId);
+            } else {
+                const tbody = document.getElementById('historyTbody');
+                tbody.innerHTML = '<tr class="message-row"><td colspan="3" style="color:red;">프로젝트 ID를 찾을 수 없습니다.</td></tr>';
+                console.error("Project ID is missing in URL parameters.");
+            }
+        });
+
+        /**
+         * 특정 프로젝트의 히스토리 목록을 API로 조회하여 테이블에 표시합니다.
+         * @param {number} projectId 히스토리를 조회할 프로젝트의 ID
+         */
+        async function loadProjectHistory(projectId) {
+            const tbody = document.getElementById('historyTbody');
+            tbody.innerHTML = '<tr class="message-row"><td colspan="3">히스토리를 불러오는 중...</td></tr>';
+
+            try {
+                const response = await fetch(`/api/projects/${projectId}/history`);
+                
+                // 로그인 세션이 없을 경우 로그인 페이지로 리다이렉트 (선택적)
+                if (response.status === 401) {
+                    alert("로그인이 필요합니다.");
+                    window.opener.location.href = '/front/login.html'; // 부모 창을 로그인 페이지로 이동
+                    window.close(); // 팝업 닫기
+                    return;
+                }
+                
+                const result = await response.json();
+
+                if (response.ok && result.status === 200) {
+                    const histories = result.data; // HistoryResponseDto[]
+                    tbody.innerHTML = ''; // 기존 내용 초기화
+
+                    if (histories && histories.length > 0) {
+                        histories.forEach(history => {
+                            const tr = document.createElement('tr');
+                            // 날짜/시간 포맷팅
+                            const date = new Date(history.createdAt);
+                            const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+
+                            tr.innerHTML = `
+                                <td>${history.description || '-'}</td>
+                                <td>${history.createdByNickname || '시스템'}</td>
+                                <td style="font-size: 12px; color: #555;">${formattedDate}</td>
+                            `;
+                            tbody.appendChild(tr);
+                        });
+                    } else {
+                        tbody.innerHTML = '<tr class="message-row"><td colspan="3">활동 기록이 없습니다.</td></tr>';
+                    }
+                } else {
+                    throw new Error(result.message || "히스토리 정보를 가져오지 못했습니다.");
+                }
+            } catch (error) {
+                console.error("Error loading project history:", error);
+                tbody.innerHTML = `<tr class="message-row"><td colspan="3" style="color:red;">오류가 발생했습니다: ${error.message}</td></tr>`;
+            }
+        }
+    </script>
 </body>
 </html>

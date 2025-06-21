@@ -654,27 +654,17 @@
         });
     }
 
+    /**
+     * 히스토리 팝업 창을 엽니다.
+     */
     function openhistory() {
+        // CURRENT_PROJECT_ID는 projectboard.html에 이미 정의된 전역 변수여야 합니다.
         if (!CURRENT_PROJECT_ID) {
-            alert("프로젝트를 먼저 선택해주세요.");
+            alert("히스토리를 조회할 프로젝트를 먼저 선택해주세요.");
             return;
         }
-        // window.open(`history_pop.html?projectId=${CURRENT_PROJECT_ID}`, 'history', 'width=800,height=800');
-        const modal = document.querySelector('.modal_hi');
-        if (!modal.open) {
-            modal.showModal();
-            modal.blur();  // 포커스 없앰
-        }
-
-        // 배경 누르면 닫히게
-        if (!modal.hasListener) {
-            modal.addEventListener('click', function (event) {
-                if (event.target === modal) {
-                    modal.close();
-                }
-            });
-            modal.hasListener = true;
-        }
+        // projectId를 쿼리 파라미터로 전달하며 팝업 창을 엽니다.
+        window.open(`history_pop.html?projectId=${CURRENT_PROJECT_ID}`, 'history', 'width=600,height=800');
     }
 
     function closeModal(dialog){
