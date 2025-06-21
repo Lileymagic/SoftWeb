@@ -18,6 +18,7 @@ import com.example.softengineerwebpr.domain.project.entity.ProjectMemberRole;
 import com.example.softengineerwebpr.domain.project.entity.ProjectMemberStatus;
 import com.example.softengineerwebpr.domain.project.repository.ProjectMemberRepository;
 import com.example.softengineerwebpr.domain.project.repository.ProjectRepository;
+import com.example.softengineerwebpr.domain.task.repository.TaskMemberRepository;
 import com.example.softengineerwebpr.domain.user.entity.User;
 import com.example.softengineerwebpr.domain.user.repository.UserRepository;
 import com.example.softengineerwebpr.domain.history.entity.HistoryActionType; // 히스토리 Enum 임포트
@@ -43,6 +44,7 @@ public class ProjectServiceImpl implements ProjectService {
     private final GroupMemberRepository groupMemberRepository; // 이전 코드에서 사용되었으므로 유지
     private final NotificationService notificationService; // 이전 코드에서 사용되었으므로 유지
     private final HistoryService historyService;
+    private final TaskMemberRepository taskMemberRepository;
 
     // 헬퍼 메소드: 사용자가 프로젝트 관리자인지 확인 (ProjectMemberStatus.ACCEPTED 조건 포함)
     private boolean isUserProjectAdmin(User user, Project project) {
@@ -231,19 +233,19 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public void removeProjectMember(Long projectId, Long memberUserId, User currentUser) {
+        // 1. 필요한 엔티티 조회
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new BusinessLogicException(ErrorCode.PROJECT_NOT_FOUND));
 
-        // 제외할 멤버의 User 엔티티 조회 (변수명: memberToRemoveUserEntity)
         User memberToRemoveUserEntity = userRepository.findById(memberUserId)
                 .orElseThrow(() -> new BusinessLogicException(ErrorCode.USER_NOT_FOUND, "제외할 멤버를 찾을 수 없습니다."));
 
-        // 권한 확인: 현재 사용자가 프로젝트 관리자인지 확인
-        if (!isUserProjectAdmin(currentUser, project)) {
+        // 2. 권한 확인 (프로젝트 관리자인지)
+        if (!isUserProjectAdmin(currentUser, project)) { // isUserProjectAdmin 헬퍼 메소드 사용
             throw new BusinessLogicException(ErrorCode.NO_AUTHORITY_TO_MANAGE_MEMBERS, "멤버를 제외할 권한이 없습니다.");
         }
 
-        // 관리자가 자기 자신을 제외하려는 경우 방지
+        // 3. 비즈니스 규칙 확인 (자신을 제명하거나 마지막 관리자를 제명하는 것을 방지)
         if (currentUser.getIdx().equals(memberUserId)) {
             throw new BusinessLogicException(ErrorCode.CANNOT_MODIFY_OWN_ROLE_OR_REMOVE_ONESELF_AS_ADMIN, "관리자는 자신을 프로젝트에서 제외할 수 없습니다.");
         }
@@ -251,7 +253,7 @@ public class ProjectServiceImpl implements ProjectService {
         ProjectMember targetMembership = projectMemberRepository.findByUserAndProject(memberToRemoveUserEntity, project)
                 .orElseThrow(() -> new BusinessLogicException(ErrorCode.TARGET_USER_NOT_PROJECT_MEMBER));
 
-        // 마지막 관리자 제외 방지 로직
+        // 마지막 관리자인지 확인
         if (targetMembership.getRole() == ProjectMemberRole.관리자 && targetMembership.getStatus() == ProjectMemberStatus.ACCEPTED) {
             long adminCount = projectMemberRepository.findByProject(project).stream()
                     .filter(pm -> pm.getRole() == ProjectMemberRole.관리자 && pm.getStatus() == ProjectMemberStatus.ACCEPTED)
@@ -261,26 +263,29 @@ public class ProjectServiceImpl implements ProjectService {
             }
         }
 
+        // 4. (핵심 수정) 해당 프로젝트 내에서 사용자의 모든 업무 할당(TaskMember) 기록 삭제
+        taskMemberRepository.deleteAllByUserAndProject(memberToRemoveUserEntity, project);
+        log.info("프로젝트 ID {}에서 사용자 '{}'의 모든 업무 할당을 해제했습니다.", projectId, memberToRemoveUserEntity.getNickname());
+
+        // 5. 프로젝트 멤버십(ProjectMember) 기록 삭제
         projectMemberRepository.delete(targetMembership);
-        log.info("프로젝트 {}에서 멤버 {} 제외/초대취소 (수행자: {})", projectId, memberUserId, currentUser.getNickname());
+        log.info("프로젝트 ID {}에서 멤버 ID {}를 제외했습니다. (수행자: {})", projectId, memberUserId, currentUser.getNickname());
 
-        // 히스토리 기록
+        // 6. 히스토리 기록
         String historyDescription = String.format("'%s'님이 '%s'님을 프로젝트에서 제외했습니다.",
-                currentUser.getNickname(), memberToRemoveUserEntity.getNickname()); // <<== 변수명 수정
-        historyService.recordHistory(project, currentUser, HistoryActionType.멤버제거, historyDescription, memberToRemoveUserEntity.getIdx()); // <<== 변수명 수정
+                currentUser.getNickname(), memberToRemoveUserEntity.getNickname());
+        historyService.recordHistory(project, currentUser, HistoryActionType.멤버제거, historyDescription, memberToRemoveUserEntity.getIdx());
 
-        // ===== 수정된 알림 기록 로직 시작 =====
-        // 제외된 당사자에게 알림 전송
+        // 7. 알림 전송 (제외된 당사자에게)
         String notificationContent = String.format("'%s' 프로젝트에서 제외되었습니다.",
                 project.getTitle());
         notificationService.createAndSendNotification(
-                memberToRemoveUserEntity, // <<<< memberToRemove -> memberToRemoveUserEntity 로 수정
-                NotificationType.PROJECT_MEMBER_LEFT, //
+                memberToRemoveUserEntity,
+                NotificationType.PROJECT_MEMBER_LEFT,
                 notificationContent,
                 project.getIdx(),
                 "PROJECT"
         );
-        // ===== 수정된 알림 기록 로직 끝 =====
     }
 
     @Override
