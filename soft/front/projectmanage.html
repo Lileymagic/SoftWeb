@@ -1597,6 +1597,74 @@
                 }
             }
 
+            async function saveGroupChanges() {
+                if (!SELECTED_GROUP_ID) {
+                    alert("변경 사항을 저장할 그룹이 선택되지 않았습니다.");
+                    return;
+                }
+
+                // 1. UI에서 현재 설정된 값들을 수집 (이전과 동일)
+                const memberCheckboxes = document.querySelectorAll('#user_table_2 .group-member-candidate-checkbox:checked');
+                const currentMemberIds = Array.from(memberCheckboxes).map(cb => parseInt(cb.dataset.userId));
+
+                const permissionCheckboxes = document.querySelectorAll('#authority_table_2 .permission-checkbox:checked');
+                let currentPermissionsBitmask = 0;
+                permissionCheckboxes.forEach(cb => {
+                    currentPermissionsBitmask += parseInt(cb.closest('tr').dataset.permissionBit);
+                });
+                
+                // 2. 변경 여부 확인 (이전과 동일)
+                const membersChanged = JSON.stringify(originalSelectedGroupData.members.sort()) !== JSON.stringify(currentMemberIds.sort());
+                const permissionsChanged = originalSelectedGroupData.permissions !== currentPermissionsBitmask;
+                const detailsChanged = stagedGroupDetailChanges[SELECTED_GROUP_ID] && Object.keys(stagedGroupDetailChanges[SELECTED_GROUP_ID]).length > 0;
+
+                if (!membersChanged && !permissionsChanged && !detailsChanged) {
+                    alert("변경된 내용이 없습니다.");
+                    return;
+                }
+
+                if (!confirm("선택된 그룹의 변경 사항을 저장하시겠습니까?")) {
+                    return;
+                }
+                
+                try {
+                    // 3. API 호출
+                    if (detailsChanged) {
+                        const currentGroupRow = document.querySelector(`#tbody_group tr[data-group-id="${SELECTED_GROUP_ID}"]`);
+                        const originalName = currentGroupRow.dataset.groupName;
+                        const originalColor = currentGroupRow.dataset.groupColor;
+                        
+                        const body = {
+                            name: stagedGroupDetailChanges[SELECTED_GROUP_ID].name || originalName,
+                            color: stagedGroupDetailChanges[SELECTED_GROUP_ID].color || originalColor
+                        };
+                        await fetchApi(`/api/groups/${SELECTED_GROUP_ID}`, { method: 'PUT', body: JSON.stringify(body) });
+                    }
+
+                    if (membersChanged) {
+                        // ----- ▼▼▼ 핵심 수정 부분 ▼▼▼ -----
+                        // 백엔드 DTO의 필드명인 'userIds'와 일치시킵니다.
+                        const body = { userIds: currentMemberIds }; // memberUserIds -> userIds 로 수정
+                        // --------------------------------
+                        await fetchApi(`/api/groups/${SELECTED_GROUP_ID}/members`, { method: 'PUT', body: JSON.stringify(body) });
+                    }
+
+                    if (permissionsChanged) {
+                        const body = { permissionBitmask: currentPermissionsBitmask };
+                        await fetchApi(`/api/groups/${SELECTED_GROUP_ID}/permissions`, { method: 'PUT', body: JSON.stringify(body) });
+                    }
+                    
+                    alert("그룹 정보가 성공적으로 저장되었습니다.");
+
+                    // 4. 저장 후 상태 업데이트
+                    stagedGroupDetailChanges = {}; 
+                    await loadAndDisplayGroups();
+                    
+                } catch (error) {
+                    alert("변경 사항 저장 중 오류가 발생했습니다. 자세한 내용은 콘솔을 확인하세요.");
+                }
+            }
+
             // --- 기타 함수 (Save, Nosave, Returnpj 등은 이전 답변 내용 참조) ---
             // 기존 HTML의 Saveproject, Nosave, Returnpj, add3, editName 함수들은
             // 위에서 API 연동 방식으로 재구현되거나, 그 기능을 대체하는 새로운 함수들로 작성되었습니다.
