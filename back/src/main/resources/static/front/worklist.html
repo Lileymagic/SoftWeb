@@ -504,6 +504,7 @@
                     completeTaskBtn.disabled = true;
                     completeTaskBtn.style.backgroundColor = "grey";
                 }
+                refreshHistoryOnBoard(CURRENT_PROJECT_ID);
                 
                 if (window.parent && typeof window.parent.refreshTasksOnBoard === 'function') {
                     window.parent.refreshTasksOnBoard(currentWorklistProjectId);
