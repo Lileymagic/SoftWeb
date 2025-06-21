@@ -77,7 +77,7 @@ DROP TABLE IF EXISTS `project_member`;
 CREATE TABLE `project_member` (
     `user_idx` BIGINT NOT NULL COMMENT '참여한 유저 식별자',
     `project_idx` BIGINT NOT NULL COMMENT '참여된 프로젝트 식별자',
-    `role` ENUM('관리자', '일반사용자') NOT NULL DEFAULT '일반 사용자' COMMENT '이용자 권한',
+    `role` ENUM('관리자', '일반사용자') NOT NULL DEFAULT '일반사용자' COMMENT '이용자 권한',
     `status` ENUM('PENDING', 'ACCEPTED', 'REJECTED') NOT NULL DEFAULT 'PENDING' COMMENT '초대 상태', -- 초대 상태 컬럼 추가
     PRIMARY KEY (`user_idx`, `project_idx`),
     KEY `fk_project_member_project` (`project_idx`),
