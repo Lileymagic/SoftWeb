@@ -1,6 +1,7 @@
 package com.example.softengineerwebpr.domain.task.service;
 
 import com.example.softengineerwebpr.domain.task.dto.TaskCreateRequestDto;
+import com.example.softengineerwebpr.domain.task.dto.TaskMemberSyncRequestDto;
 import com.example.softengineerwebpr.domain.task.dto.TaskResponseDto;
 import com.example.softengineerwebpr.domain.task.dto.TaskUpdateRequestDto;
 import com.example.softengineerwebpr.domain.task.entity.Task; // Task.TaskStatus 접근을 위해
@@ -86,5 +87,14 @@ public interface TaskService {
      * @param currentUser      현재 작업을 수행하는 사용자 (권한 검사)
      */
     void removeMemberFromTask(Long taskId, Long userIdToRemove, User currentUser);
+
+    /**
+     * 특정 업무의 담당자를 요청된 사용자 및 그룹 멤버 목록과 동기화합니다.
+     * (기존 담당자 중 목록에 없으면 제외, 목록에 있으나 기존 담당자가 아니면 추가)
+     * @param taskId 동기화할 업무의 ID
+     * @param requestDto 동기화할 사용자 및 그룹 ID 목록을 담은 DTO
+     * @param currentUser 현재 작업을 수행하는 사용자 (권한 검사)
+     */
+    void syncTaskMembers(Long taskId, TaskMemberSyncRequestDto requestDto, User currentUser);
 
 }

@@ -23,6 +23,7 @@ export default defineConfig({
         worklist: resolve(__dirname, 'front/worklist.html'),
         worklist_board: resolve(__dirname, 'front/worklist_board.html'),
         writework: resolve(__dirname, 'front/writework.html'),
+        history_pop: resolve(__dirname, 'front/history_pop.html'),
       },
       output: {
         assetFileNames(info) {

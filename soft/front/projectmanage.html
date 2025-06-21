@@ -926,7 +926,6 @@
             const API_BASE_URL = '/api';
             let CURRENT_PROJECT_ID = null;
             let SELECTED_GROUP_ID = null; 
-            let availableProjectUsers = []; 
             let originalSelectedGroupData = {
                 name: '',
                 color: '',
@@ -947,6 +946,12 @@
             for (const key in PERMISSIONS_MAP) {
                 PERMISSION_TEXT_TO_KEY[PERMISSIONS_MAP[key].text] = PERMISSIONS_MAP[key].bit; // 텍스트로 비트값 찾기 위함
             }
+
+            let SELECTED_TASK_ID = null;
+
+            let availableProjectUsers = [];   // 업무 할당에 사용할 수 있는 프로젝트 멤버 전체 목록
+            let availableProjectGroups = [];  // 업무 할당에 사용할 수 있는 프로젝트 그룹 전체 목록
+            let originalTaskAssignees = { userIds: [], groupIds: [] }; // 선택된 업무의 원래 담당자 목록 (변경 취소 시 사용)
         
             // --- 초기화 및 기본 이벤트 리스너 ---
             document.addEventListener("DOMContentLoaded", async function () {
@@ -1128,51 +1133,52 @@
                 }
             }
         
+            // 기존 Watchdiv2 함수를 아래 내용으로 교체
             function Watchdiv2(tabIndexStr) {
-            const sections = ['1', '2', '3'];
-            sections.forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.style.display = (id === tabIndexStr) ? 'flex' : 'none';
-                if (id === tabIndexStr) { // 활성화된 탭에 대해 flex-direction 설정
-                    el.style.flexDirection = (id === '1') ? 'column' : 'row';
+                const sections = ['1', '2', '3'];
+                sections.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.style.display = (id === tabIndexStr) ? 'flex' : 'none';
+                    if (id === tabIndexStr) { // 활성화된 탭에 대해 flex-direction 설정
+                        el.style.flexDirection = (id === '1') ? 'column' : 'row';
+                    }
+                });
+
+                const navLinks = document.querySelectorAll('.aside_left ul li');
+                let activeTabText = "";
+                navLinks.forEach((li, index) => {
+                    const isActive = ((index + 1).toString() === tabIndexStr);
+                    li.classList.toggle('on', isActive);
+                    if (isActive) activeTabText = li.querySelector('a').textContent;
+                });
+                document.getElementById('spanText').innerText = activeTabText || "관리";
+
+                // 탭 전환 시 선택 상태 초기화
+                SELECTED_GROUP_ID = null; 
+                SELECTED_TASK_ID = null; // <<<< 업무 선택 ID도 초기화
+                document.querySelectorAll('#ug_select_2, #ug_select_3, #authority_select_2').forEach(panel => {
+                    if(panel) {
+                        panel.classList.remove("show");
+                        panel.style.display = "none";
+                    }
+                });
+                document.querySelectorAll('tbody tr.active').forEach(row => row.classList.remove('active'));
+
+
+                if (CURRENT_PROJECT_ID) {
+                    if (tabIndexStr === '1') { 
+                        loadProjectMembersForTab1(); // 탭 1 기능
+                    }
+                    else if (tabIndexStr === '2') { 
+                        initializeGroupManagementTab(); 
+                    }
+                    else if (tabIndexStr === '3') { 
+                        initializeTaskAssignmentTab(); // <<<< "업무 할당" 탭 초기화 함수 호출 (수정/추가된 부분)
+                    }
                 }
-            });
-
-            const navLinks = document.querySelectorAll('.aside_left ul li');
-            let activeTabText = "";
-            navLinks.forEach((li, index) => {
-                const isActive = ((index + 1).toString() === tabIndexStr);
-                li.classList.toggle('on', isActive);
-                if (isActive) activeTabText = li.querySelector('a').textContent;
-            });
-            document.getElementById('spanText').innerText = activeTabText || "관리";
-
-            SELECTED_GROUP_ID = null; 
-            stagedGroupDetailChanges = {}; 
-            const ugSelect2 = document.getElementById("ug_select_2");
-            const authoritySelect2 = document.getElementById("authority_select_2");
-            const ugSelect3 = document.getElementById("ug_select_3");
-
-            [ugSelect2, authoritySelect2, ugSelect3].forEach(panel => {
-                if(panel) {
-                    panel.classList.remove("show");
-                    panel.style.display = "none"; // 확실히 숨김
-                }
-            });
-            document.querySelectorAll('#group_table_2 tbody tr.active').forEach(row => row.classList.remove('active'));
-            document.querySelectorAll('#work_list_tab3 .table tbody tr.active').forEach(row => row.classList.remove('active'));
-
-
-            if (CURRENT_PROJECT_ID) {
-                if (tabIndexStr === '1') { 
-                    loadProjectMembersForTab1(); // ✨ 멤버 목록 로드 함수 호출
-                }
-                else if (tabIndexStr === '2') { initializeGroupManagementTab(); }
-                else if (tabIndexStr === '3') { initializeTaskAssignmentTab(); }
             }
-        }
-        window.Watchdiv2 = Watchdiv2;
-        
+            window.Watchdiv2 = Watchdiv2;
+
             async function initializeGroupManagementTab() {
                 await fetchAndStoreProjectMembers(); // 프로젝트 전체 멤버 로드 (availableProjectUsers 업데이트)
                 await loadAndDisplayGroups();        // 그룹 목록 로드 및 표시
@@ -1598,71 +1604,21 @@
         
             // 전역 함수로 Saveproject, Nosave, Returnpj 정의 (HTML onclick에서 호출)
             window.Saveproject = async function() {
-                // ... (이전 답변의 Saveproject 로직과 유사하게 구현, API 호출 부분은 fetchApi 사용) ...
-                // 주의: stagedGroupDetailChanges, originalSelectedGroupData, SELECTED_GROUP_ID 사용
-                if (!SELECTED_GROUP_ID) { alert("저장할 그룹을 선택해주세요."); return; }
-                
-                let changesMade = false;
-                const operations = [];
-        
-                // 1. 그룹 이름/색상 변경 사항
-                if (stagedGroupDetailChanges[SELECTED_GROUP_ID]) {
-                    const groupChanges = stagedGroupDetailChanges[SELECTED_GROUP_ID];
-                    const groupRow = document.querySelector(`#tbody_group tr[data-group-id="${SELECTED_GROUP_ID}"]`);
-                    // 페이로드 구성 시, staged된 이름이나 색상이 있으면 사용하고, 없으면 기존 값을 유지하려고 시도합니다.
-                    // 하지만, 위에서 추가한 함수들이 정상적으로 stagedGroupDetailChanges를 채우므로, 변경된 값이 여기에 반영됩니다.
-                    const payload = {
-                        name: groupChanges.name !== undefined ? groupChanges.name : (groupRow ? groupRow.dataset.groupName : ''),
-                        color: groupChanges.color !== undefined ? groupChanges.color : (groupRow ? groupRow.dataset.groupColor : '#000000')
-                    };
+                const activeTabLink = document.querySelector('.aside_left li.on a');
+                if (!activeTabLink) {
+                    alert("활성화된 탭을 찾을 수 없습니다.");
+                    return;
+                }
 
-                    if(groupChanges.name !== undefined || groupChanges.color !== undefined){ // 여기서 staged된 이름 또는 색상이 있으면 API 호출
-                        operations.push(
-                            fetchApi(`/api/groups/${SELECTED_GROUP_ID}`, { method: 'PUT', body: JSON.stringify(payload) })
-                            .then(res => { if (res.status === 200) changesMade = true; return res;})
-                        );
-                    }
-            }
-        
-                // 2. 멤버 변경 사항
-                const selectedUserIds = Array.from(document.querySelectorAll('#user_table_2 .group-member-candidate-checkbox:checked'))
-                                             .map(cb => parseInt(cb.dataset.userId));
-                if (JSON.stringify(originalSelectedGroupData.members.sort()) !== JSON.stringify(selectedUserIds.sort())) {
-                    operations.push(
-                        fetchApi(`/api/groups/${SELECTED_GROUP_ID}/members`, { method: 'PUT', body: JSON.stringify({ userIds: selectedUserIds }) })
-                        .then(res => { if(res.status === 200 || res.status === 204) changesMade = true; return res; })
-                    );
+                const activeTabText = activeTabLink.textContent;
+
+                if (activeTabText === '그룹 관리') {
+                    await saveGroupChanges();
+                } else if (activeTabText === '업무 할당') { // <<<< "업무 할당" 탭에 대한 분기 추가
+                    await saveTaskAssignments();
+                } else {
+                    alert("이 탭에서는 저장할 내용이 없습니다.");
                 }
-        
-                // 3. 권한 변경 사항
-                let newPermissionsBitmask = 0;
-                document.querySelectorAll('#authority_table_2 .permission-checkbox:checked').forEach(cb => {
-                    const row = cb.closest('tr');
-                    if(row && row.dataset.permissionBit) newPermissionsBitmask |= parseInt(row.dataset.permissionBit);
-                });
-                if (originalSelectedGroupData.permissions !== newPermissionsBitmask) {
-                    operations.push(
-                        fetchApi(`/api/groups/${SELECTED_GROUP_ID}/permissions`, { method: 'PUT', body: JSON.stringify({ permissionBitmask: newPermissionsBitmask }) })
-                        .then(res => { if (res.status === 200) changesMade = true; return res;})
-                    );
-                }
-        
-                if (operations.length === 0) { alert("변경된 내용이 없습니다."); return; }
-        
-                try {
-                    await Promise.all(operations);
-                    if (changesMade) {
-                        alert("그룹 변경사항이 성공적으로 저장되었습니다.");
-                        stagedGroupDetailChanges = {}; // 임시 변경사항 초기화
-                        await loadAndDisplayGroups(); // 목록 새로고침
-                        if (SELECTED_GROUP_ID) {
-                            const selectedRow = document.querySelector(`#tbody_group tr[data-group-id="${SELECTED_GROUP_ID}"]`);
-                            if (selectedRow) handleGroupSelection(SELECTED_GROUP_ID, selectedRow); // 선택 유지 및 패널 최신화
-                        }
-                    } else {
-                        alert("변경된 내용이 없거나, 서버에서 변경이 감지되지 않았습니다.");
-                    }
-                } catch (error) { /* fetchApi에서 처리 */ }
             }
         
             window.Nosave = function() { /* 이전 답변의 Nosave 로직 */ 
@@ -1687,8 +1643,35 @@
             }
             window.Returnpj = Returnpj; // Returnpj는 이전과 동일
         
-            // window.openFindid = () => alert("멤버 관리(탭1): 유저 추가 기능은 현재 구현 보류 중입니다."); // 이 함수는 이제 모달로 대체
-            window.Deleteuser = () => alert("멤버 관리(탭1): 유저 제명 기능은 현재 구현 보류 중입니다.");
+            window.Deleteuser = async function(memberUserId) {
+                if (!CURRENT_PROJECT_ID) {
+                    alert("프로젝트 ID를 찾을 수 없어 멤버를 제명할 수 없습니다.");
+                    return;
+                }
+
+                // UI에서 사용자 닉네임을 찾아서 확인 메시지에 사용
+                const userRow = document.querySelector(`#project_members_tbody tr button.button_expel[onclick="Deleteuser(${memberUserId})"]`)?.closest('tr');
+                const userNickname = userRow ? userRow.querySelector('.lenCut').textContent : `ID ${memberUserId}의 사용자`;
+
+                if (!confirm(`${userNickname} 님을 프로젝트에서 제명하시겠습니까? 이 작업은 되돌릴 수 없습니다.`)) {
+                    return;
+                }
+
+                try {
+                    // API 호출: DELETE /api/projects/{projectId}/members/{memberUserId} 
+                    await fetchApi(`/api/projects/${CURRENT_PROJECT_ID}/members/${memberUserId}`, {
+                        method: 'DELETE'
+                    });
+
+                    alert(`${userNickname} 님을 프로젝트에서 성공적으로 제명했습니다.`);
+                    
+                    // 멤버 목록을 새로고침하여 변경 사항을 반영합니다.
+                    await loadProjectMembersForTab1();
+                } catch (error) {
+                    // fetchApi 함수 내부에서 이미 오류 알림(alert)을 처리하므로 여기서는 추가 작업이 필요 없습니다.
+                }
+            };
+
             window.addwork = async function() { /* 이전 답변의 addwork 로직 (탭3 업무 생성) */ 
                 if (!CURRENT_PROJECT_ID) { alert("업무를 생성할 프로젝트 ID가 없습니다."); return; }
                 const title = document.getElementById("worktitle").value.trim(); // 모달 내 ID 사용
@@ -1938,62 +1921,190 @@
             // (이전 스크립트의 나머지 부분: editName, attachEditListeners 등은 새로운 방식으로 대체되거나 정리됨)
 
 
+            /**
+             * '업무 할당' 탭을 위한 초기화 함수
+             */
+            async function initializeTaskAssignmentTab() {
+                // 1. 할당 가능한 전체 유저와 그룹 목록을 미리 불러와 전역 변수에 저장
+                //    (이 함수들은 그룹 관리 탭에서도 사용되므로, 중복 호출을 피하기 위해
+                //     availableProjectUsers, availableProjectGroups가 비어있을 때만 호출하는 것이 좋음)
+                if (availableProjectUsers.length === 0) await fetchAndStoreProjectUsers();
+                if (availableProjectGroups.length === 0) await fetchAndStoreProjectGroups();
+                
+                // 2. 프로젝트의 모든 업무 목록을 불러와 표시
+                await loadAndDisplayTasks();
+            }
 
-            // 이전의 업무할당 클릭 시 유저선택 열리는 거 일단 복구
-            let taskSelected = false;
-            const ugSelect3 = document.getElementById("ug_select_3");
+            /**
+             * 프로젝트의 모든 그룹 목록을 가져와 전역 변수(availableProjectGroups)에 저장하는 함수
+             */
+            async function fetchAndStoreProjectGroups() {
+                try {
+                    const result = await fetchApi(`/api/projects/${CURRENT_PROJECT_ID}/groups`); //
+                    availableProjectGroups = (result.status === 200 && Array.isArray(result.data)) ? result.data : [];
+                } catch (error) { availableProjectGroups = []; }
+            }
 
-            document.querySelectorAll('.work_table_3 tbody').forEach(tbody => {
-                tbody.addEventListener("click", (e) => {
-                    const item = e.target.closest('tr');
-                    if (!item) return;
 
-                    if (item.classList.contains('active')) {
-                        item.classList.remove('active');
-                        taskSelected = false;
+            /**
+             * '업무 할당' 탭의 업무 목록을 상태별로 나누어 표시하는 함수
+             */
+            async function loadAndDisplayTasks() {
+                const todoBody = document.getElementById("todowork");
+                const inProgressBody = document.querySelector("#work_list table:nth-of-type(2) tbody");
+                const doneBody = document.querySelector("#work_list table:nth-of-type(3) tbody");
+                
+                if (!todoBody || !inProgressBody || !doneBody) {
+                    console.error("업무 목록을 표시할 tbody 요소들을 찾을 수 없습니다.");
+                    return;
+                }
 
-                        // 사라지는 애니메이션
-                        if (ugSelect3.classList.contains("show")) {
-                            ugSelect3.classList.remove("show");
-                            setTimeout(() => {
-                                ugSelect3.style.display = "none";
-                            }, 300);
+                [todoBody, inProgressBody, doneBody].forEach(tbody => tbody.innerHTML = '<tr><td style="color:grey;">업무 목록 로딩 중...</td></tr>');
+                document.getElementById("ug_select_3").style.display = "none"; // 담당자 선택 패널 숨기기
+
+                try {
+                    const result = await fetchApi(`/api/projects/${CURRENT_PROJECT_ID}/tasks`); //
+                    [todoBody, inProgressBody, doneBody].forEach(tbody => tbody.innerHTML = '');
+
+                    if (result.status === 200 && Array.isArray(result.data)) {
+                        result.data.forEach(task => { // task는 TaskResponseDto
+                            const tr = document.createElement("tr");
+                            tr.dataset.taskId = task.idx;
+                            tr.onclick = () => handleTaskSelection(task.idx, tr);
+                            tr.innerHTML = `<td style="cursor:pointer;">${task.title}</td>`;
+
+                            let targetBody;
+                            switch(task.status) { // Task.java의 TaskStatus Enum 값과 비교
+                                case 'ToDo': targetBody = todoBody; break;
+                                case 'InProgress': targetBody = inProgressBody; break;
+                                case 'Done': targetBody = doneBody; break;
+                            }
+                            if (targetBody) targetBody.appendChild(tr);
+                        });
+                    }
+                    
+                    [todoBody, inProgressBody, doneBody].forEach(tbody => {
+                        if (tbody.children.length === 0) {
+                            tbody.innerHTML = '<tr><td style="color:grey;">해당 상태의 업무가 없습니다.</td></tr>';
                         }
+                    });
+                } catch (error) {
+                    [todoBody, inProgressBody, doneBody].forEach(tbody => tbody.innerHTML = '<tr><td style="color:red;">업무 로드 실패</td></tr>');
+                }
+            }
 
-                    } else {
-                        document.querySelectorAll('.work_table_3 tbody tr').forEach(r => r.classList.remove("active"));
-                        item.classList.add("active");
-                        taskSelected = true;
+            /**
+             * 업무 선택 시, 담당자 패널을 표시하고 현재 담당자 정보를 불러오는 함수
+             */
+            async function handleTaskSelection(taskId, selectedRowElement) {
+                const assignmentPanel = document.getElementById("ug_select_3");
+                document.querySelectorAll('#work_list tbody tr.active').forEach(row => row.classList.remove('active'));
+                selectedRowElement.classList.add('active');
+                
+                SELECTED_TASK_ID = taskId;
 
-                        // 보이는 애니메이션
-                        if (!ugSelect3.classList.contains("show")) {
-                            ugSelect3.style.display = "block";
-                            setTimeout(() => {
-                                ugSelect3.classList.add("show");
-                            }, 10);
-                        }
+                assignmentPanel.style.display = "flex";
+                setTimeout(() => assignmentPanel.classList.add("show"), 10);
 
-                    }
+                try {
+                    const result = await fetchApi(`/api/tasks/${taskId}`); //
+                    const taskDetails = result.data; // TaskResponseDto
+                    
+                    const assignedUserIds = taskDetails.assignedMembers.map(u => u.userIdx);
+                    
+                    // 중요: 현재 TaskResponseDto에는 할당된 그룹 정보가 없습니다.
+                    // 따라서 그룹 할당 상태는 항상 비어있는 것으로 처리됩니다.
+                    // 향후 이 기능을 구현하려면 TaskResponseDto에 할당된 그룹 ID 목록도 포함시켜야 합니다.
+                    const assignedGroupIds = []; 
+                    
+                    originalTaskAssignees = { userIds: assignedUserIds, groupIds: assignedGroupIds };
+                    populateAssignmentPanelForTask(assignedUserIds, assignedGroupIds);
+                } catch (error) {
+                    alert("업무 담당자 정보를 불러오는 데 실패했습니다.");
+                }
+            }
+
+            /**
+             * 담당자 선택 패널에 유저와 그룹 목록을 채우고, 현재 담당자를 체크하는 함수
+             */
+            function populateAssignmentPanelForTask(assignedUserIds = [], assignedGroupIds = []) {
+                const userTbody = document.getElementById('user_table_3').querySelector('tbody');
+                const groupTbody = document.getElementById('group_table_3').querySelector('tbody');
+
+                userTbody.innerHTML = '';
+                availableProjectUsers.forEach(user => {
+                    const isAssigned = assignedUserIds.includes(user.userIdx);
+                    const tr = document.createElement('tr');
+                    if (isAssigned) tr.classList.add('active');
+                    tr.innerHTML = `
+                        <td style="width: 40px;"><input type="checkbox" class="task-assignee-checkbox" data-type="user" data-id="${user.userIdx}" ${isAssigned ? 'checked' : ''}></td>
+                        <td><img src="${user.profileImage}" style="height:30px; width:30px; border-radius:50%; margin-right:8px;">${user.nickname}</td>
+                        <td style="color:#777;">#${user.identificationCode}</td>
+                    `;
+                    tr.onclick = (e) => {
+                        const cb = e.currentTarget.querySelector('input[type="checkbox"]');
+                        if (e.target !== cb) cb.checked = !cb.checked;
+                        e.currentTarget.classList.toggle('active', cb.checked);
+                    };
+                    userTbody.appendChild(tr);
                 });
 
-                document.querySelector('#user_table_3 tbody').addEventListener('click', (e) => {
-                    const item = e.target.closest('tr');
-                    if (!taskSelected) {
-                        alert("먼저 업무를 선택해야 합니다.");
-                        return;
-                    }
-                    item.classList.toggle('active');
+                groupTbody.innerHTML = '';
+                availableProjectGroups.forEach(group => {
+                    const isAssigned = assignedGroupIds.includes(group.idx);
+                    const tr = document.createElement('tr');
+                    if (isAssigned) tr.classList.add('active');
+                    tr.innerHTML = `
+                        <td style="width: 40px;"><input type="checkbox" class="task-assignee-checkbox" data-type="group" data-id="${group.idx}" ${isAssigned ? 'checked' : ''}></td>
+                        <td style="display:flex; align-items:center; gap:8px;">
+                            <div style="width:20px; height:20px; background-color:${group.color || '#ccc'}; border-radius:50%;"></div>
+                            ${group.name}
+                        </td>
+                    `;
+                    tr.onclick = (e) => {
+                        const cb = e.currentTarget.querySelector('input[type="checkbox"]');
+                        if (e.target !== cb) cb.checked = !cb.checked;
+                        e.currentTarget.classList.toggle('active', cb.checked);
+                    };
+                    groupTbody.appendChild(tr);
                 });
+            }
 
-                document.querySelector('#group_table_3 tbody').addEventListener('click', (e) => {
-                    const item = e.target.closest('tr');
-                    if (!taskSelected) {
-                        alert("먼저 업무를 선택해야 합니다.");
-                        return;
-                    }
-                    item.classList.toggle('active');
-                });
-            });
+            /**
+             * '업무 할당' 탭의 담당자 변경사항을 저장하는 함수
+             */
+            async function saveTaskAssignments() {
+                if (!SELECTED_TASK_ID) {
+                    alert("담당자를 저장할 업무를 선택해주세요.");
+                    return;
+                }
+
+                const selectedUserIds = Array.from(document.querySelectorAll('#user_table_3 .task-assignee-checkbox:checked')).map(cb => parseInt(cb.dataset.id));
+                const selectedGroupIds = Array.from(document.querySelectorAll('#group_table_3 .task-assignee-checkbox:checked')).map(cb => parseInt(cb.dataset.id));
+
+                const usersChanged = JSON.stringify(originalTaskAssignees.userIds.sort()) !== JSON.stringify(selectedUserIds.sort());
+                const groupsChanged = JSON.stringify(originalTaskAssignees.groupIds.sort()) !== JSON.stringify(selectedGroupIds.sort());
+
+                if (!usersChanged && !groupsChanged) {
+                    alert("변경된 내용이 없습니다.");
+                    return;
+                }
+
+                const requestBody = { userIds: selectedUserIds, groupIds: selectedGroupIds }; // TaskMemberSyncRequestDto
+
+                try {
+                    await fetchApi(`/api/tasks/${SELECTED_TASK_ID}/members`, { // PUT /api/tasks/{taskId}/members
+                        method: 'PUT',
+                        body: JSON.stringify(requestBody)
+                    });
+                    alert("업무 담당자가 성공적으로 저장되었습니다.");
+                    // 변경된 내용을 원본 데이터에 반영
+                    originalTaskAssignees = { userIds: selectedUserIds, groupIds: selectedGroupIds };
+                } catch (error) {
+                    alert("담당자 저장에 실패했습니다. 이전 상태로 되돌립니다.");
+                    populateAssignmentPanelForTask(originalTaskAssignees.userIds, originalTaskAssignees.groupIds);
+                }
+            }
 
 
         </script>
