@@ -1,6 +1,7 @@
 package com.example.softengineerwebpr.domain.task.service.impl;
 
 import com.example.softengineerwebpr.common.entity.NotificationType;
+import com.example.softengineerwebpr.common.entity.Permission;
 import com.example.softengineerwebpr.common.exception.BusinessLogicException;
 import com.example.softengineerwebpr.common.exception.ErrorCode; // ErrorCode 전체 임포트
 import com.example.softengineerwebpr.domain.group.entity.GroupMember;
@@ -102,6 +103,32 @@ public class TaskServiceImpl implements TaskService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * 사용자가 특정 프로젝트에서 업무를 생성할 권한이 있는지 확인합니다.
+     * (관리자 또는 MANAGE_TASKS 권한 보유자)
+     */
+    private void checkTaskCreationPermission(User user, Project project) {
+        // 1. 프로젝트 관리자인 경우, 모든 권한을 가집니다.
+        if (isUserProjectAdmin(user, project)) {
+            return; // 권한 확인 통과
+        }
+
+        // 2. 관리자가 아닌 경우, 그룹 권한을 확인합니다.
+        // 사용자가 해당 프로젝트 내에서 속한 모든 그룹 멤버십을 조회합니다.
+        List<GroupMember> userMemberships = groupMemberRepository.findByUserAndGroup_Project(user, project);
+
+        // 사용자의 모든 그룹 권한을 비트 OR 연산으로 합산합니다.
+        int totalPermissions = userMemberships.stream()
+                .map(gm -> gm.getGroup().getPermission()) // 각 그룹의 permission 비트마스크를 가져옴
+                .filter(Objects::nonNull)
+                .reduce(0, (a, b) -> a | b); // 모든 권한을 OR 연산으로 합침
+
+        // 합산된 권한에 '업무 관리' 권한이 포함되어 있는지 비트 AND 연산으로 확인합니다.
+        if ((totalPermissions & Permission.MANAGE_TASKS.getBit()) != Permission.MANAGE_TASKS.getBit()) {
+            throw new BusinessLogicException(ErrorCode.ACCESS_DENIED, "업무를 생성할 권한이 없습니다.");
+        }
+    }
+
     // --- Service Methods ---
 
     @Override
@@ -109,6 +136,10 @@ public class TaskServiceImpl implements TaskService {
         Project project = findProjectOrThrow(projectId);
         checkProjectMembership(project, currentUser);
 
+        // ===== 2. 업무 생성 상세 권한 확인 로직 추가 =====
+        checkTaskCreationPermission(currentUser, project);
+        // ===========================================
+        
         // ===== 마감 기한 유효성 검증 로직 추가 시작 =====
         if (requestDto.getDeadline() != null && requestDto.getDeadline().isBefore(LocalDateTime.now())) {
             throw new BusinessLogicException(ErrorCode.INVALID_DEADLINE);
