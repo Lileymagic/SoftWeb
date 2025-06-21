@@ -1643,8 +1643,35 @@
             }
             window.Returnpj = Returnpj; // Returnpj는 이전과 동일
         
-            // window.openFindid = () => alert("멤버 관리(탭1): 유저 추가 기능은 현재 구현 보류 중입니다."); // 이 함수는 이제 모달로 대체
-            window.Deleteuser = () => alert("멤버 관리(탭1): 유저 제명 기능은 현재 구현 보류 중입니다.");
+            window.Deleteuser = async function(memberUserId) {
+                if (!CURRENT_PROJECT_ID) {
+                    alert("프로젝트 ID를 찾을 수 없어 멤버를 제명할 수 없습니다.");
+                    return;
+                }
+
+                // UI에서 사용자 닉네임을 찾아서 확인 메시지에 사용
+                const userRow = document.querySelector(`#project_members_tbody tr button.button_expel[onclick="Deleteuser(${memberUserId})"]`)?.closest('tr');
+                const userNickname = userRow ? userRow.querySelector('.lenCut').textContent : `ID ${memberUserId}의 사용자`;
+
+                if (!confirm(`${userNickname} 님을 프로젝트에서 제명하시겠습니까? 이 작업은 되돌릴 수 없습니다.`)) {
+                    return;
+                }
+
+                try {
+                    // API 호출: DELETE /api/projects/{projectId}/members/{memberUserId} 
+                    await fetchApi(`/api/projects/${CURRENT_PROJECT_ID}/members/${memberUserId}`, {
+                        method: 'DELETE'
+                    });
+
+                    alert(`${userNickname} 님을 프로젝트에서 성공적으로 제명했습니다.`);
+                    
+                    // 멤버 목록을 새로고침하여 변경 사항을 반영합니다.
+                    await loadProjectMembersForTab1();
+                } catch (error) {
+                    // fetchApi 함수 내부에서 이미 오류 알림(alert)을 처리하므로 여기서는 추가 작업이 필요 없습니다.
+                }
+            };
+
             window.addwork = async function() { /* 이전 답변의 addwork 로직 (탭3 업무 생성) */ 
                 if (!CURRENT_PROJECT_ID) { alert("업무를 생성할 프로젝트 ID가 없습니다."); return; }
                 const title = document.getElementById("worktitle").value.trim(); // 모달 내 ID 사용

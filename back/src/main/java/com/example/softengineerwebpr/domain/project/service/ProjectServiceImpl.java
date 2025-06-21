@@ -19,6 +19,8 @@ import com.example.softengineerwebpr.domain.project.repository.ProjectMemberRepo
 import com.example.softengineerwebpr.domain.project.repository.ProjectRepository;
 import com.example.softengineerwebpr.domain.user.entity.User;
 import com.example.softengineerwebpr.domain.user.repository.UserRepository;
+import com.example.softengineerwebpr.domain.history.entity.HistoryActionType; // 히스토리 Enum 임포트
+import com.example.softengineerwebpr.domain.history.service.HistoryService; // 히스토리 서비스 임포트
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -39,6 +41,7 @@ public class ProjectServiceImpl implements ProjectService {
     private final UserRepository userRepository;
     private final GroupMemberRepository groupMemberRepository; // 이전 코드에서 사용되었으므로 유지
     private final NotificationService notificationService; // 이전 코드에서 사용되었으므로 유지
+    private final HistoryService historyService;
 
     // 헬퍼 메소드: 사용자가 프로젝트 관리자인지 확인 (ProjectMemberStatus.ACCEPTED 조건 포함)
     private boolean isUserProjectAdmin(User user, Project project) {
@@ -254,6 +257,12 @@ public class ProjectServiceImpl implements ProjectService {
 
         projectMemberRepository.delete(targetMembership);
         log.info("프로젝트 {}에서 멤버 {} 제외/초대취소 (수행자: {})", projectId, memberUserId, currentUser.getNickname());
+
+        // ===== 히스토리 기록 로직 추가 시작 =====
+        String historyDescription = String.format("'%s'님이 '%s'님을 프로젝트에서 제외했습니다.",
+                currentUser.getNickname(), memberToRemoveUserEntity.getNickname());
+        historyService.recordHistory(project, currentUser, HistoryActionType.멤버제거, historyDescription, memberToRemoveUserEntity.getIdx());
+        // ===== 히스토리 기록 로직 추가 끝 =====
     }
 
     @Override
@@ -271,7 +280,11 @@ public class ProjectServiceImpl implements ProjectService {
         membership.acceptInvitation();
         projectMemberRepository.save(membership); // 상태 변경 후 저장
         log.info("사용자 {}가 프로젝트 '{}'({}) 초대를 수락했습니다.", currentUser.getNickname(), project.getTitle(), projectId);
-        // TODO: 초대한 사람에게 알림 등
+
+        // ===== 히스토리 기록 로직 추가 시작 =====
+        String historyDescription = String.format("'%s'님이 프로젝트에 참여했습니다.", currentUser.getNickname());
+        historyService.recordHistory(project, currentUser, HistoryActionType.멤버추가, historyDescription, currentUser.getIdx());
+        // ===== 히스토리 기록 로직 추가 끝 =====
     }
 
     @Override

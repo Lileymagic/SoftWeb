@@ -1,20 +1,11 @@
-package com.example.softengineerwebpr.domain.task.controller;
+package com.example.softengineerwebpr.domain.task.controller; //
 
-import com.example.softengineerwebpr.common.dto.ApiResponse;
+import com.example.softengineerwebpr.common.dto.ApiResponse; //
 import com.example.softengineerwebpr.domain.task.dto.*;
-import com.example.softengineerwebpr.domain.task.entity.Task; // Task.TaskStatus 접근
-import com.example.softengineerwebpr.domain.task.service.TaskService;
-import com.example.softengineerwebpr.domain.user.entity.User; // UserService에서 User를 가져오는 로직이 필요
-import com.example.softengineerwebpr.domain.auth.service.AuthService; // 필요 시 사용자 정보 조회용 (혹은 UserService에서 처리)
-
-// 현재 사용자 정보를 가져오기 위한 유틸리티 또는 서비스가 필요합니다.
-// 여기서는 ProjectController에서 사용된 것과 유사한 로직을 사용한다고 가정하거나,
-// AuthenticationPrincipal 어노테이션을 사용하여 User 객체를 직접 주입받는 방식을 고려할 수 있습니다.
-// 편의상 여기서는 UserService 또는 별도 유틸리티를 통해 User 객체를 가져온다고 가정합니다.
-// 예시: import org.springframework.security.core.annotation.AuthenticationPrincipal;
-// (실제 User 객체를 Principal로 사용하려면 CustomUserDetails 또는 유사 객체 설정 필요)
-
-import com.example.softengineerwebpr.common.util.AuthenticationUtil; // 가상의 인증 유틸리티 클래스
+import com.example.softengineerwebpr.domain.task.entity.Task;
+import com.example.softengineerwebpr.domain.task.service.TaskService; //
+import com.example.softengineerwebpr.domain.user.entity.User; //
+import com.example.softengineerwebpr.common.util.AuthenticationUtil; //
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,12 +16,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api") // API 기본 경로
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class TaskController {
 
     private final TaskService taskService;
-    private final AuthenticationUtil authenticationUtil; // 현재 사용자 정보 가져오는 유틸리티 (가정)
+    private final AuthenticationUtil authenticationUtil;
 
     /**
      * 특정 프로젝트에 새 업무 생성
@@ -89,7 +80,7 @@ public class TaskController {
     @PatchMapping("/tasks/{taskId}/status")
     public ResponseEntity<ApiResponse<TaskResponseDto>> updateTaskStatus(
             @PathVariable Long taskId,
-            @Valid @RequestBody TaskStatusUpdateRequestDto statusUpdateRequestDto, // 상태 변경용 DTO
+            @Valid @RequestBody TaskStatusUpdateRequestDto statusUpdateRequestDto,
             Authentication authentication) {
         User currentUser = authenticationUtil.getCurrentUser(authentication);
         TaskResponseDto updatedTask = taskService.updateTaskStatus(taskId, statusUpdateRequestDto.getStatus(), currentUser);
@@ -108,14 +99,38 @@ public class TaskController {
         return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(), "업무가 성공적으로 삭제되었습니다."));
     }
 
+    // ====================================================================
+    // ===== 새로 추가된 업무 담당자 동기화(Sync) API 엔드포인트 시작 =====
+    // ====================================================================
     /**
-     * 특정 업무에 담당자 할당
-     * 요청 본문에 할당할 사용자의 ID를 포함 (예: {"userId": 123})
+     * 특정 업무의 담당자를 요청된 사용자 및 그룹 멤버 목록과 동기화합니다.
+     * (기존 담당자 목록을 요청된 목록으로 덮어쓰기)
+     * * @param taskId 동기화할 업무의 ID
+     * @param requestDto 동기화할 사용자 ID 목록과 그룹 ID 목록을 담은 DTO
+     * @param authentication 현재 인증 정보
+     * @return 성공 응답
+     */
+    @PutMapping("/tasks/{taskId}/members")
+    public ResponseEntity<ApiResponse<Void>> syncTaskMembers(
+            @PathVariable Long taskId,
+            @Valid @RequestBody TaskMemberSyncRequestDto requestDto,
+            Authentication authentication) {
+        User currentUser = authenticationUtil.getCurrentUser(authentication);
+        taskService.syncTaskMembers(taskId, requestDto, currentUser);
+        return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(), "업무 담당자가 성공적으로 동기화되었습니다."));
+    }
+    // ==================================================================
+    // ===== 새로 추가된 업무 담당자 동기화(Sync) API 엔드포인트 끝 =====
+    // ==================================================================
+
+
+    /**
+     * 특정 업무에 담당자 할당 (기존: 단일 할당용)
      */
     @PostMapping("/tasks/{taskId}/members")
     public ResponseEntity<ApiResponse<TaskResponseDto>> assignMemberToTask(
             @PathVariable Long taskId,
-            @RequestBody MemberAssignmentRequestDto requestDto, // 담당자 할당용 DTO
+            @RequestBody MemberAssignmentRequestDto requestDto,
             Authentication authentication) {
         User currentUser = authenticationUtil.getCurrentUser(authentication);
         TaskResponseDto updatedTask = taskService.assignMemberToTask(taskId, requestDto.getUserId(), currentUser);
@@ -123,7 +138,7 @@ public class TaskController {
     }
 
     /**
-     * 특정 업무에서 담당자 제외
+     * 특정 업무에서 담당자 제외 (기존: 단일 제외용)
      */
     @DeleteMapping("/tasks/{taskId}/members/{userIdToRemove}")
     public ResponseEntity<ApiResponse<Void>> removeMemberFromTask(
@@ -135,28 +150,3 @@ public class TaskController {
         return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(), "업무에서 담당자가 성공적으로 제외되었습니다."));
     }
 }
-
-// --- TaskController에서 사용할 추가 DTO 정의 (별도 파일로 분리 권장) ---
-
-// package com.example.softengineerwebpr.domain.task.dto;
-// import com.example.softengineerwebpr.domain.task.entity.Task.TaskStatus;
-// import jakarta.validation.constraints.NotNull;
-// import lombok.Getter;
-// import lombok.NoArgsConstructor;
-// import lombok.Setter;
-//
-// @Getter
-// @Setter
-// @NoArgsConstructor
-// class TaskStatusUpdateRequestDto { // TaskController 내부 또는 task.dto 패키지에 생성
-//    @NotNull(message = "새로운 업무 상태는 필수입니다.")
-//    private Task.TaskStatus status;
-// }
-//
-// @Getter
-// @Setter
-// @NoArgsConstructor
-// class MemberAssignmentRequestDto { // TaskController 내부 또는 task.dto 패키지에 생성
-//    @NotNull(message = "할당할 사용자의 ID는 필수입니다.")
-//    private Long userId;
-// }
