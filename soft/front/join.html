@@ -170,8 +170,8 @@
         idCheckLabel.innerText = "중복 확인"; 
         idCheckLabel.style.color = "rgb(127,127,127)";
 
-        if (loginId.length < 8 || loginId.length > 20) {
-            alert("아이디는 8자 이상 20자 이하로 입력해주세요."); loginIdInput.focus(); return;
+        if (loginId.length < 4 || loginId.length > 20) {
+            alert("아이디는 4자 이상 20자 이하로 입력해주세요."); loginIdInput.focus(); return;
         }
         if (/[^A-Za-z0-9\-_]/.test(loginId)) {
             alert("아이디는 영어, 숫자, 대시(-), 언더스코어(_)만 사용 가능합니다."); loginIdInput.focus(); return;
