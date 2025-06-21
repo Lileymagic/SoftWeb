@@ -382,6 +382,14 @@
             overflow: hidden;
             cursor: default;
         }
+        .workbox.overdue {
+            border-left: 5px solid #d9534f; /* 마감기한 지난 업무를 위한 붉은색 왼쪽 테두리 */
+        }
+
+        /* 선택적: 마감기한 지난 업무의 글씨 색상을 약간 어둡게 하여 가독성 확보 */
+        .workbox.overdue span {
+            color: #a94442;
+        }
     </style>
   <script type="module" crossorigin src="/assets/approot-DNlXGnF4.js"></script>
   <link rel="stylesheet" crossorigin href="/css/bootstrap.D1iupR2w.css">
@@ -1000,6 +1008,17 @@
         workBox.className = "workbox";
         workBox.setAttribute('data-task-id', taskData.idx);
         workBox.setAttribute('draggable', 'true'); // 드래그 가능하도록 설정
+
+        if (taskData.deadline && taskData.status !== "Done") {
+        const deadlineDate = new Date(taskData.deadline);
+        const now = new Date();
+
+        // new Date()가 잘못된 형식을 받으면 Invalid Date 객체를 반환합니다.
+        // isNaN(date.getTime())은 해당 객체가 Invalid Date인지 확인하는 가장 확실한 방법입니다.
+        if (!isNaN(deadlineDate.getTime()) && deadlineDate < now) {
+            workBox.classList.add('overdue');
+        }
+    }
 
         workBox.addEventListener('dragstart', (event) => {
             event.dataTransfer.setData('text/plain', taskData.idx);
