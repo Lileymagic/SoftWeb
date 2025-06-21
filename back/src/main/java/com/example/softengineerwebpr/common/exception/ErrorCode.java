@@ -39,6 +39,7 @@ public enum ErrorCode {
     USER_NOT_ASSIGNED_TO_TASK(HttpStatus.NOT_FOUND, "TASK_003", "해당 사용자는 이 업무의 담당자가 아닙니다."),
     NO_AUTHORITY_TO_MANAGE_TASK(HttpStatus.FORBIDDEN, "TASK_004", "이 업무를 관리할(수정/삭제/담당자 변경 등) 권한이 없습니다."),
     TASK_ASSIGNEE_NOT_PROJECT_MEMBER(HttpStatus.BAD_REQUEST, "TASK_005", "프로젝트 멤버가 아닌 사용자는 업무에 할당할 수 없습니다."),
+    INVALID_DEADLINE(HttpStatus.BAD_REQUEST, "TASK_006", "마감 기한은 현재 시각 이후로 설정해야 합니다."),
 
     // Friend Errors
     ALREADY_FRIEND(HttpStatus.CONFLICT, "FRIEND_001", "이미 친구 관계입니다."),

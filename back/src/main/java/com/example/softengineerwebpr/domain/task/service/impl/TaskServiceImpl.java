@@ -32,6 +32,7 @@ import com.example.softengineerwebpr.domain.user.dto.UserBasicInfoDto; //
 import com.example.softengineerwebpr.domain.group.entity.Group;
 import com.example.softengineerwebpr.domain.history.entity.HistoryActionType; // 히스토리 Enum 임포트
 import com.example.softengineerwebpr.domain.history.service.HistoryService; // 히스토리 서비스 임포트
+import java.time.LocalDateTime;
 
 import java.util.*;
 import java.util.stream.Collectors; // 필요시
@@ -107,6 +108,12 @@ public class TaskServiceImpl implements TaskService {
     public TaskResponseDto createTask(Long projectId, TaskCreateRequestDto requestDto, User currentUser) {
         Project project = findProjectOrThrow(projectId);
         checkProjectMembership(project, currentUser);
+
+        // ===== 마감 기한 유효성 검증 로직 추가 시작 =====
+        if (requestDto.getDeadline() != null && requestDto.getDeadline().isBefore(LocalDateTime.now())) {
+            throw new BusinessLogicException(ErrorCode.INVALID_DEADLINE);
+        }
+        // ===== 마감 기한 유효성 검증 로직 추가 끝 =====
 
         Task task = Task.builder()
                 .project(project)
