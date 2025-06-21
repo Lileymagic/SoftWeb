@@ -89,12 +89,17 @@ public class FriendServiceImpl implements FriendService {
         friendRepository.save(friendRequest);
         log.info("친구 요청 발송: 요청자 {}, 수신자 {}", requester.getNickname(), recipient.getNickname());
 
-        // 알림 생성 (수신자에게) - 주석 처리
-        /*
-        String notificationContent = String.format("'%s#%s'님이 친구 요청을 보냈습니다.",
-                requester.getNickname(), requester.getIdentificationCode()); //
-        notificationService.createAndSendNotification(recipient, NotificationType.FRIEND_REQUEST_RECEIVED, notificationContent, requester.getIdx(), "USER"); //
-        */
+        // ===== 알림 기록 로직 추가/활성화 시작 =====
+        String notificationContent = String.format("'%s'님이 친구를 신청했습니다.",
+                requester.getNickname());
+        notificationService.createAndSendNotification(
+                recipient, // 알림을 받을 사람: 요청 받은 사람
+                NotificationType.FRIEND_REQUEST_RECEIVED, // 알림 종류
+                notificationContent,
+                requester.getIdx(), // 참조 ID: 요청 보낸 사람
+                "USER"
+        );
+        // ===== 알림 기록 로직 추가/활성화 끝 =====
     }
 
     @Override
@@ -110,12 +115,17 @@ public class FriendServiceImpl implements FriendService {
         friendRepository.save(friendRequest);
         log.info("친구 요청 수락: 수락자 {}, 요청자 {}", accepter.getNickname(), requester.getNickname());
 
-        // 알림 생성 (요청자에게) - 주석 처리
-        /*
-        String notificationContent = String.format("'%s#%s'님이 친구 요청을 수락했습니다.",
-                accepter.getNickname(), accepter.getIdentificationCode()); //
-        notificationService.createAndSendNotification(requester, NotificationType.FRIEND_REQUEST_ACCEPTED, notificationContent, accepter.getIdx(), "USER"); //
-        */
+        // ===== 알림 기록 로직 추가/활성화 시작 =====
+        String notificationContent = String.format("'%s'님이 친구 요청을 수락했습니다.",
+                accepter.getNickname());
+        notificationService.createAndSendNotification(
+                requester, // 알림을 받을 사람: 요청 보냈던 사람
+                NotificationType.FRIEND_REQUEST_ACCEPTED, // 알림 종류
+                notificationContent,
+                accepter.getIdx(), // 참조 ID: 수락한 사람
+                "USER"
+        );
+        // ===== 알림 기록 로직 추가/활성화 끝 =====
     }
 
     @Override
@@ -131,12 +141,17 @@ public class FriendServiceImpl implements FriendService {
         friendRepository.save(friendRequest);
         log.info("친구 요청 거절: 거절자 {}, 요청자 {}", rejecter.getNickname(), requester.getNickname());
 
-        // 알림 생성 (요청자에게) - 주석 처리
-        /*
-        String notificationContent = String.format("'%s#%s'님이 친구 요청을 거절했습니다.",
-                rejecter.getNickname(), rejecter.getIdentificationCode()); //
-        notificationService.createAndSendNotification(requester, NotificationType.FRIEND_REQUEST_REJECTED, notificationContent, rejecter.getIdx(), "USER"); //
-        */
+        // ===== 알림 기록 로직 추가/활성화 시작 =====
+        String notificationContent = String.format("'%s'님이 친구 요청을 거절했습니다.",
+                rejecter.getNickname());
+        notificationService.createAndSendNotification(
+                requester, // 알림을 받을 사람: 요청 보냈던 사람
+                NotificationType.FRIEND_REQUEST_REJECTED, // 알림 종류
+                notificationContent,
+                rejecter.getIdx(), // 참조 ID: 거절한 사람
+                "USER"
+        );
+        // ===== 알림 기록 로직 추가/활성화 끝 =====
     }
 
     @Override

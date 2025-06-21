@@ -13,246 +13,258 @@
   
     
     function openAlert() {
-      let modal = document.querySelector(".modal1"); 
-      
-      if (!modal) {
-        const div = document.createElement("div");
-        div.innerHTML =  `
-        <dialog class="modal1">
-        <div class="wh100" style="display:flex; flex-direction: column;">
-            <div style="padding: 10px; font-size: large; font-weight: bold;">알림</div>
-            
-            <hr style="margin: 0;">            
-            <div class="box_scroll">
-            <table class="table table-hover" style="overflow-y:auto;">
-                <tbody id="tbody_alert">
-                    <tr><td>
-                        <div style="display: flex; flex-direction: column; padding: 5px;">
-                            <span>알림 내용</span>
-                            <br/>
-                            <div style="display: flex; flex-direction: row;">
-                                <span style="font-size: small;">2025/00/00 00:00</span>
-                                <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-left: auto;"/>                                    
-                            </div>
-                        </div>
-                    </td></tr>
-                    <tr><td>
-                        <div style="display: flex; flex-direction: column; padding: 5px;">
-                            <div style="display: flex; flex-direction: row;">
-                                <span>요청 알림 내용</span>
-                                <div style="margin-left: auto; margin-right: 20px;">
-                                    <button class="button_yes">수락</button>
-                                    <button class="button_no">거부</button>                                      
-                                </div>        
-                            </div>
-                            <br/>
-                            <div style="display: flex; flex-direction: row;">
-                                <span style="font-size: small;">2025/00/00 00:00</span>
-                                <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-left: auto;"/>                                    
-                            </div>
-                        </div>
-                    </td></tr>
-                    <tr><td>
-                        <div style="display: flex; flex-direction: column; padding: 5px;">
-                            <span>스크롤 확인용</span>
-                            <br/>
-                            <div style="display: flex; flex-direction: row;">
-                                <span style="font-size: small;">2025/00/00 00:00</span>
-                                <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-left: auto;"/>                                    
-                            </div>
-                        </div>
-                    </td></tr>
-                    <tr><td>
-                        <div style="display: flex; flex-direction: column; padding: 5px;">
-                            <span>스크롤 확인용</span>
-                            <br/>
-                            <div style="display: flex; flex-direction: row;">
-                                <span style="font-size: small;">2025/00/00 00:00</span>
-                                <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-left: auto;"/>                                    
-                            </div>
-                        </div>
-                    </td></tr>
-                    <tr><td>
-                        <div style="display: flex; flex-direction: column; padding: 5px;">
-                            <span>스크롤 확인용</span>
-                            <br/>
-                            <div style="display: flex; flex-direction: row;">
-                                <span style="font-size: small;">2025/00/00 00:00</span>
-                                <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-left: auto;"/>                                    
-                            </div>
-                        </div>
-                    </td></tr>
-                    <tr><td>
-                        <div style="display: flex; flex-direction: column; padding: 5px;">
-                            <span>스크롤 확인용</span>
-                            <br/>
-                            <div style="display: flex; flex-direction: row;">
-                                <span style="font-size: small;">2025/00/00 00:00</span>
-                                <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-left: auto;"/>                                    
-                            </div>
-                        </div>
-                    </td></tr>
-                    <tr><td>
-                        <div style="display: flex; flex-direction: column; padding: 5px;">
-                            <span>스크롤 확인용</span>
-                            <br/>
-                            <div style="display: flex; flex-direction: row;">
-                                <span style="font-size: small;">2025/00/00 00:00</span>
-                                <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-left: auto;"/>                                    
-                            </div>
-                        </div>
-                    </td></tr>
-
-                </tbody>
-            </table>
-            </div>
-        <div>
-        </dialog>`;
-          document.body.appendChild(div);
-          modal = document.querySelector('.modal1'); 
-          if (modal) {
-            closeModal(modal);
-          }
-      }
-      const modalBtn = document.querySelector("#alertr"); 
-
-        const updateModalPosition = () => {
-            const rect = modalBtn.getBoundingClientRect();
-            const modalRect = modal.getBoundingClientRect();
-            modal.style.position = "fixed";
-            modal.style.left = `${rect.right - modalRect.width}px`;            
-            modal.style.top = `${rect.bottom}px`;
-        };
-
-        modalBtn.addEventListener("click", () => {
-        modal.showModal();
-        updateModalPosition();
-        });
-
-        window.addEventListener("resize", () => {
-            if (modal.open) {
-                updateModalPosition();
+        let modal = document.querySelector(".modal1"); 
+        
+        if (!modal) {
+          const div = document.createElement("div");
+          div.innerHTML =  `
+          <dialog class="modal1">
+          <div class="wh100" style="display:flex; flex-direction: column;">
+              <div style="padding: 10px; font-size: large; font-weight: bold;">알림</div>
+              
+              <hr style="margin: 0;">            
+              <div class="box_scroll">
+              <table class="table table-hover" style="overflow-y:auto;">
+                  <tbody id="tbody_alert">
+                      </tbody>
+              </table>
+              </div>
+          <div>
+          </dialog>`;
+            document.body.appendChild(div);
+            modal = document.querySelector('.modal1'); 
+            if (modal) {
+              closeModal(modal);
             }
-        });
-    }
+        }
+        const modalBtn = document.querySelector("#alertr"); 
   
-    //알람 추가 함수 
-    
-    //친구추가
-    function alAddFriend(){
-        const container = document.getElementById("tbody_alert");
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-            <td>
-                <div style="display: flex; flex-direction: column; padding: 5px;">
-                    <div style="display: flex; flex-direction: row;">
-                        <span>님께서 친구 요청을 보냈습니다.</span>
-                        <div style="margin-left: auto; margin-right: 20px;">
-                            <button class="button_yes">수락</button>
-                            <button class="button_no">거부</button>                                      
-                        </div>        
-                    </div>
-                    <br/>
-                    <div style="display: flex; flex-direction: row;">
-                        <span style="font-size: small;"></span>
-                        <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-left: auto;"/>                                    
-                    </div>
-                </div>
-            </td>
-        `;
-        container.appendChild(tr);
+          const updateModalPosition = () => {
+              const rect = modalBtn.getBoundingClientRect();
+              const modalRect = modal.getBoundingClientRect();
+              modal.style.position = "fixed";
+              modal.style.left = `${rect.right - modalRect.width}px`;            
+              modal.style.top = `${rect.bottom}px`;
+          };
+  
+          modalBtn.addEventListener("click", () => {
+              modal.showModal();
+              updateModalPosition();
+              loadNotifications(); // 알림창을 열 때마다 알림을 새로고침합니다.
+          });
+  
+          window.addEventListener("resize", () => {
+              if (modal.open) {
+                  updateModalPosition();
+              }
+          });
+      }
+  
+       /**
+     * 서버에서 알림 목록을 가져와 UI에 렌더링하는 메인 함수 (수정됨)
+     */
+    async function loadNotifications() {
+        const tbody = document.getElementById("tbody_alert");
+        if (!tbody) return;
+        tbody.innerHTML = '<tr><td style="text-align:center; color:grey; padding:20px;">알림을 불러오는 중...</td></tr>';
+
+        try {
+            const response = await fetch('/api/notifications');
+            if (!response.ok) throw new Error(`서버 오류: ${response.status}`);
+            
+            const result = await response.json();
+
+            if (result.status === 200 && Array.isArray(result.data)) {
+                tbody.innerHTML = ''; 
+                if (result.data.length === 0) {
+                    tbody.innerHTML = '<tr><td style="text-align:center; color:grey; padding:20px;">새로운 알림이 없습니다.</td></tr>';
+                    return;
+                }
+                
+                const notificationsToDisplay = result.data.slice(0, 30);
+                notificationsToDisplay.forEach(notification => {
+                    const tr = document.createElement('tr');
+                    // *** 핵심 수정 포인트 ***
+                    // 각 알림 행(tr)의 ID를 올바른 'idx' 값을 사용해 부여합니다.
+                    tr.id = `notification-${notification.idx}`; 
+                    
+                    tr.innerHTML = renderNotification(notification);
+                    tbody.appendChild(tr);
+                });
+            } else {
+                tbody.innerHTML = `<tr><td style="text-align:center; color:red; padding:20px;">알림을 불러오지 못했습니다: ${result.message}</td></tr>`;
+            }
+        } catch (error) {
+            console.error("알림 로딩 실패:", error);
+            tbody.innerHTML = `<tr><td style="text-align:center; color:red; padding:20px;">알림 로딩 중 오류가 발생했습니다.</td></tr>`;
+        }
     }
 
-    //프로젝트 초대 / 수락했을시 프로젝트 바로가기 (필요없으면 삭제제)
-    function alAddProject(){
-        const container = document.getElementById("tbody_alert");
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
+    /**
+     * 알림 데이터 객체를 받아 종류에 맞는 HTML 문자열을 반환하는 함수 (최종본)
+     */
+    function renderNotification(noti) {
+        const notificationId = noti.idx;
+        const relatedId = noti.referenceIdx;
+        const time = new Date(noti.createdAt).toLocaleString();
+        let contentHtml = '';
+
+        switch (noti.type) {
+            case 'FRIEND_REQUEST':
+                contentHtml = `
+                    <div style="display: flex; flex-direction: row; align-items: center;">
+                        <span>${noti.content}</span>
+                        <div style="margin-left: auto; margin-right: 10px; display:flex; gap:5px;">
+                            <button class="button_yes" onclick="handleFriendRequest(${relatedId}, true, ${notificationId})">수락</button>
+                            <button class="button_no" onclick="handleFriendRequest(${relatedId}, false, ${notificationId})">거부</button>
+                        </div>
+                    </div>`;
+                break;
+            case 'PROJECT_INVITED':
+                contentHtml = `
+                    <div style="display: flex; flex-direction: row; align-items: center;">
+                        <span>${noti.content}</span>
+                        <div style="margin-left: auto; margin-right: 10px; display:flex; gap:5px;">
+                            <button class="button_yes" onclick="handleProjectInvite(${relatedId}, true, ${notificationId})">수락</button>
+                            <button class="button_no" onclick="handleProjectInvite(${relatedId}, false, ${notificationId})">거부</button>
+                        </div>
+                    </div>`;
+                break;
+            default:
+                contentHtml = `<span>${noti.content}</span>`;
+                break;
+        }
+
+        return `
             <td>
-                <div style="display: flex; flex-direction: column; padding: 5px;">
-                    <div style="display: flex; flex-direction: row;">
-                        <span>${pjname} 프로젝트에 초대되었습니다. (초대자: ${nickname})</span>
-                        <div style="margin-left: auto; margin-right: 20px;">
-                            <button class="button_yes" onclick="window.location.href='projectboard.html';">수락</button>
-                            <button class="button_no">거부</button>                                      
-                        </div>        
-                    </div>
-                    <br/>
-                    <div style="display: flex; flex-direction: row;">
-                        <span style="font-size: small;">${time}</span>
-                        <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-left: auto;"/>                                    
+                <div style="display: flex; flex-direction: column; padding: 5px; gap: 8px;">
+                    ${contentHtml}
+                    <div style="display: flex; flex-direction: row; align-items: center;">
+                        <span style="font-size: small; color: grey;">${time}</span>
+                        <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-left: auto; cursor:pointer;" onclick="deleteNotification(${notificationId})"/>
                     </div>
                 </div>
-            </td>
-        `;
-        container.appendChild(tr);
+            </td>`;
     }
 
-    //업무 할당
-    function alAddWork(){
-        const container = document.getElementById("tbody_alert");
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-            <td>
-                <div style="display: flex; flex-direction: column; padding: 5px;">
-                    <div style="display: flex; flex-direction: row;">
-                        <span>${pjname}에서 사용자에게 업무가 할당되었습니다.</span>
-                        <div style="margin-left: auto; margin-right: 20px;">
-                            <button class="button">바로가기</button>
-                        </div>        
-                    </div>
-                    <br/>
-                    <div style="display: flex; flex-direction: row;">
-                        <span style="font-size: small;">${time}</span>
-                        <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-left: auto;"/>                                    
-                    </div>
-                </div>
-            </td>
-        `;
-        container.appendChild(tr);
-    }
-    //댓글
-    function alAddWork(){
-        const container = document.getElementById("tbody_alert");
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-            <td>
-                <div style="display: flex; flex-direction: column; padding: 5px;">
-                    <div style="display: flex; flex-direction: row;">
-                        <span>${worktitle} 게시글에 댓글이 되었습니다.</span>
-                        <div style="margin-left: auto; margin-right: 20px;">
-                            <button class="button">바로가기</button>
-                        </div>        
-                    </div>
-                    <br/>
-                    <div style="display: flex; flex-direction: row;">
-                        <span style="font-size: small;">${time}</span>
-                        <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-left: auto;"/>                                    
-                    </div>
-                </div>
-            </td>
-        `;
-        container.appendChild(tr);
-    }
+    /**
+     * 알림 삭제 API를 호출하고 성공 시 UI를 업데이트하는 함수 (최종본)
+     */
+    async function deleteNotification(notificationId) {
+        if (!confirm("이 알림을 삭제하시겠습니까?")) return;
 
-    //단순 통보 알람(친추 거절, 초대 거절, 프로젝트 추방?)
-    function alNotice(){
-        const container = document.getElementById("tbody_alert");
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-            <td>
-                <div style="display: flex; flex-direction: column; padding: 5px;">
-                    <span>${alerttext}</span>
-                    <br/>
-                    <div style="display: flex; flex-direction: row;">
-                        <span style="font-size: small;">${time}</span>
-                        <img src="/icon/trash.png" style="height: 20px; width: 20px; margin-left: auto;"/>                                    
-                    </div>
-                </div>
-            </td>
-        `;
-        container.appendChild(tr);
+        try {
+            const response = await fetch(`/api/notifications/${notificationId}`, { method: 'DELETE' });
+            if (response.ok) {
+                const notificationElement = document.getElementById(`notification-${notificationId}`);
+                if (notificationElement) {
+                    notificationElement.remove(); // 화면에서 해당 알림 요소 제거
+                }
+
+                const tbody = document.getElementById("tbody_alert");
+                if (tbody && tbody.children.length === 0) {
+                    tbody.innerHTML = '<tr><td style="text-align:center; color:grey; padding:20px;">새로운 알림이 없습니다.</td></tr>';
+                }
+            } else {
+                const result = await response.json().catch(() => ({ message: "알림 삭제에 실패했습니다." }));
+                throw new Error(result.message);
+            }
+        } catch (error) {
+            console.error("알림 삭제 실패:", error);
+            alert(`오류: ${error.message}`);
+        }
     }
+    window.deleteNotification = deleteNotification; // HTML onclick에서 호출 가능하도록 등록
+
+    /**
+     * '바로가기' 버튼 클릭 시, 해당 URL로 이동하고 알림을 읽음 처리하는 함수
+     * @param {string} url - 이동할 경로
+     * @param {number} notificationId - 읽음 처리할 알림의 ID
+     */
+    async function handleNotificationClick(url, notificationId) {
+        try {
+            // 알림을 읽음 처리
+            await fetch(`/api/notifications/${notificationId}/read`, { method: 'POST' });
+            // 관련 URL로 이동
+            if (url) {
+                window.location.href = url;
+            }
+        } catch (error) {
+            console.error("알림 읽음 처리 또는 이동 중 오류:", error);
+            // 에러가 발생해도 일단 이동은 시도
+            if (url) {
+                window.location.href = url;
+            }
+        }
+    }
+    window.handleNotificationClick = handleNotificationClick;
+
+    /**
+     * 친구 요청을 수락하거나 거절하는 함수
+     * @param {number} requesterUserId - 요청을 보낸 사용자의 ID
+     * @param {boolean} isAccepted - true면 수락, false면 거절
+     * @param {number} notificationId - 관련된 알림 ID (처리 후 삭제용)
+     */
+    async function handleFriendRequest(requesterUserId, isAccepted, notificationId) {
+        const action = isAccepted ? 'accept' : 'reject';
+        const confirmMessage = isAccepted ? "친구 요청을 수락하시겠습니까?" : "친구 요청을 거절하시겠습니까?";
+        if (!confirm(confirmMessage)) return;
+
+        try {
+            const response = await fetch(`/api/friends/${action}/${requesterUserId}`, { method: 'PATCH' });
+            const result = await response.json();
+
+            if (response.ok) {
+                alert(`친구 요청을 ${isAccepted ? '수락' : '거절'}했습니다.`);
+                // 성공 시 관련 알림 바로 삭제
+                deleteNotification(notificationId);
+                // 친구 목록 새로고침 (친구가 수락되었을 경우를 대비)
+                if (isAccepted && typeof loadFriendList === 'function') {
+                    loadFriendList();
+                }
+            } else {
+                throw new Error(result.message || "요청 처리에 실패했습니다.");
+            }
+        } catch (error) {
+            console.error("친구 요청 처리 실패:", error);
+            alert(`오류: ${error.message}`);
+        }
+    }
+    window.handleFriendRequest = handleFriendRequest;
+
+    /**
+     * 프로젝트 초대를 수락하거나 거절하는 함수
+     * @param {number} projectId - 초대받은 프로젝트의 ID
+     * @param {boolean} isAccepted - true면 수락, false면 거절
+     * @param {number} notificationId - 관련된 알림 ID (처리 후 삭제용)
+     */
+    async function handleProjectInvite(projectId, isAccepted, notificationId) {
+        const action = isAccepted ? 'accept' : 'reject';
+        const confirmMessage = isAccepted ? "프로젝트 초대를 수락하시겠습니까?" : "프로젝트 초대를 거절하시겠습니까?";
+        if (!confirm(confirmMessage)) return;
+
+        try {
+            const response = await fetch(`/api/projects/${projectId}/invitations/${action}`, { method: 'POST' });
+             const result = await response.json();
+
+            if (response.ok) {
+                 alert(`프로젝트 초대를 ${isAccepted ? '수락' : '거절'}했습니다.`);
+                 // 성공 시 관련 알림 바로 삭제
+                 deleteNotification(notificationId);
+                 // 수락했다면 프로젝트 목록 페이지로 이동하거나, 목록을 새로고침하는 로직 추가 가능
+                 if(isAccepted) {
+                    // 예시: 프로젝트 목록 페이지로 이동
+                    // window.location.href = '/front/projectlist.html';
+                 }
+            } else {
+                 throw new Error(result.message || "요청 처리에 실패했습니다.");
+            }
+        } catch (error) {
+             console.error("프로젝트 초대 처리 실패:", error);
+             alert(`오류: ${error.message}`);
+        }
+    }
+    window.handleProjectInvite = handleProjectInvite;
 
     function openFriend() {
       let modal = document.querySelector(".modal2");

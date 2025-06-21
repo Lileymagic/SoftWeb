@@ -1,5 +1,6 @@
 package com.example.softengineerwebpr.domain.project.service; // 사용자님의 원래 패키지 경로
 
+import com.example.softengineerwebpr.common.entity.NotificationType;
 import com.example.softengineerwebpr.common.entity.Permission;
 import com.example.softengineerwebpr.common.exception.BusinessLogicException;
 import com.example.softengineerwebpr.common.exception.ErrorCode;
@@ -135,7 +136,6 @@ public class ProjectServiceImpl implements ProjectService {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new BusinessLogicException(ErrorCode.PROJECT_NOT_FOUND));
 
-        // 프로젝트 초대 권한 확인 (예: 관리자만 초대 가능)
         if (!isUserProjectAdmin(inviter, project)) {
             throw new BusinessLogicException(ErrorCode.NO_AUTHORITY_TO_INVITE);
         }
@@ -144,27 +144,32 @@ public class ProjectServiceImpl implements ProjectService {
                 .orElseThrow(() -> new BusinessLogicException(ErrorCode.USER_NOT_FOUND, "초대할 사용자를 찾을 수 없습니다."));
 
         Optional<ProjectMember> existingMembershipOpt = projectMemberRepository.findByUserAndProject(invitee, project);
+
         if (existingMembershipOpt.isPresent()) {
             ProjectMember existingMembership = existingMembershipOpt.get();
             if (existingMembership.getStatus() == ProjectMemberStatus.ACCEPTED) {
                 throw new BusinessLogicException(ErrorCode.ALREADY_PROJECT_MEMBER);
             } else if (existingMembership.getStatus() == ProjectMemberStatus.PENDING) {
                 throw new BusinessLogicException(ErrorCode.PROJECT_INVITATION_PENDING);
-            } else if (existingMembership.getStatus() == ProjectMemberStatus.REJECTED) {
+            } else { // REJECTED 등 다른 상태일 경우, 기존 기록을 지우고 새로 초대
                 projectMemberRepository.delete(existingMembership);
                 log.info("기존 거절된 초대 기록 삭제 후 재초대: projectId={}, inviteeId={}", projectId, invitee.getIdx());
             }
         }
 
+        // ===== 수정된 부분 시작: PENDING 상태로 ProjectMember 레코드 생성 =====
         ProjectMember newInvitation = ProjectMember.builder()
                 .project(project)
                 .user(invitee)
-                .role(ProjectMemberRole.일반사용자) // 기본 역할
-                .status(ProjectMemberStatus.PENDING)
+                .role(ProjectMemberRole.일반사용자) // 초대 시 기본 역할
+                .status(ProjectMemberStatus.PENDING)  // 상태를 PENDING으로 설정
                 .build();
         projectMemberRepository.save(newInvitation);
+        // ===== 수정된 부분 끝 =====
 
         log.info("사용자 {}가 프로젝트 {}에 사용자 {}를 초대 (상태: PENDING)", inviter.getNickname(), projectId, invitee.getNickname());
+
+        // 알림 생성 호출 (기존과 동일)
         notificationService.createProjectInvitationNotification(inviter, invitee, project);
     }
 
@@ -228,24 +233,25 @@ public class ProjectServiceImpl implements ProjectService {
     public void removeProjectMember(Long projectId, Long memberUserId, User currentUser) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new BusinessLogicException(ErrorCode.PROJECT_NOT_FOUND));
+
+        // 제외할 멤버의 User 엔티티 조회 (변수명: memberToRemoveUserEntity)
         User memberToRemoveUserEntity = userRepository.findById(memberUserId)
                 .orElseThrow(() -> new BusinessLogicException(ErrorCode.USER_NOT_FOUND, "제외할 멤버를 찾을 수 없습니다."));
 
+        // 권한 확인: 현재 사용자가 프로젝트 관리자인지 확인
         if (!isUserProjectAdmin(currentUser, project)) {
             throw new BusinessLogicException(ErrorCode.NO_AUTHORITY_TO_MANAGE_MEMBERS, "멤버를 제외할 권한이 없습니다.");
         }
 
-        // 자기 자신을 제외하려는 경우 (관리자) - ProjectServiceImpl 기존 로직 참조
+        // 관리자가 자기 자신을 제외하려는 경우 방지
         if (currentUser.getIdx().equals(memberUserId)) {
             throw new BusinessLogicException(ErrorCode.CANNOT_MODIFY_OWN_ROLE_OR_REMOVE_ONESELF_AS_ADMIN, "관리자는 자신을 프로젝트에서 제외할 수 없습니다.");
         }
 
-
         ProjectMember targetMembership = projectMemberRepository.findByUserAndProject(memberToRemoveUserEntity, project)
-                // 상태와 관계없이 멤버십 정보를 가져와서 처리 (초대 상태인 멤버도 제외 가능하도록)
-                .orElseThrow(() -> new BusinessLogicException(ErrorCode.TARGET_USER_NOT_PROJECT_MEMBER, "해당 사용자는 프로젝트의 멤버(또는 초대된 멤버)가 아닙니다."));
+                .orElseThrow(() -> new BusinessLogicException(ErrorCode.TARGET_USER_NOT_PROJECT_MEMBER));
 
-        // 마지막 관리자 제외 방지 로직 (ProjectServiceImpl 기존 로직 참조)
+        // 마지막 관리자 제외 방지 로직
         if (targetMembership.getRole() == ProjectMemberRole.관리자 && targetMembership.getStatus() == ProjectMemberStatus.ACCEPTED) {
             long adminCount = projectMemberRepository.findByProject(project).stream()
                     .filter(pm -> pm.getRole() == ProjectMemberRole.관리자 && pm.getStatus() == ProjectMemberStatus.ACCEPTED)
@@ -258,11 +264,23 @@ public class ProjectServiceImpl implements ProjectService {
         projectMemberRepository.delete(targetMembership);
         log.info("프로젝트 {}에서 멤버 {} 제외/초대취소 (수행자: {})", projectId, memberUserId, currentUser.getNickname());
 
-        // ===== 히스토리 기록 로직 추가 시작 =====
+        // 히스토리 기록
         String historyDescription = String.format("'%s'님이 '%s'님을 프로젝트에서 제외했습니다.",
-                currentUser.getNickname(), memberToRemoveUserEntity.getNickname());
-        historyService.recordHistory(project, currentUser, HistoryActionType.멤버제거, historyDescription, memberToRemoveUserEntity.getIdx());
-        // ===== 히스토리 기록 로직 추가 끝 =====
+                currentUser.getNickname(), memberToRemoveUserEntity.getNickname()); // <<== 변수명 수정
+        historyService.recordHistory(project, currentUser, HistoryActionType.멤버제거, historyDescription, memberToRemoveUserEntity.getIdx()); // <<== 변수명 수정
+
+        // ===== 수정된 알림 기록 로직 시작 =====
+        // 제외된 당사자에게 알림 전송
+        String notificationContent = String.format("'%s' 프로젝트에서 제외되었습니다.",
+                project.getTitle());
+        notificationService.createAndSendNotification(
+                memberToRemoveUserEntity, // <<<< memberToRemove -> memberToRemoveUserEntity 로 수정
+                NotificationType.PROJECT_MEMBER_LEFT, //
+                notificationContent,
+                project.getIdx(),
+                "PROJECT"
+        );
+        // ===== 수정된 알림 기록 로직 끝 =====
     }
 
     @Override
@@ -285,6 +303,24 @@ public class ProjectServiceImpl implements ProjectService {
         String historyDescription = String.format("'%s'님이 프로젝트에 참여했습니다.", currentUser.getNickname());
         historyService.recordHistory(project, currentUser, HistoryActionType.멤버추가, historyDescription, currentUser.getIdx());
         // ===== 히스토리 기록 로직 추가 끝 =====
+
+        // ===== 알림 기록 로직 추가 시작 =====
+        // 프로젝트에 참여한 다른 모든 멤버들에게 새 멤버 참여 알림 전송 (선택적)
+        // 여기서는 프로젝트 생성자에게만 알림을 보내는 것으로 단순화합니다.
+        // (누가 초대를 보냈는지에 대한 정보가 없기 때문)
+        User projectCreator = project.getCreatedBy();
+        if (!projectCreator.equals(currentUser)) { // 본인이 생성한 프로젝트가 아닐 경우에만 알림
+            String notificationContent = String.format("'%s'님이 '%s' 프로젝트 초대를 수락했습니다.",
+                    currentUser.getNickname(), project.getTitle());
+            notificationService.createAndSendNotification(
+                    projectCreator,
+                    NotificationType.PROJECT_INVITE_ACCEPTED, // 보낸 초대가 수락되었다는 알림
+                    notificationContent,
+                    currentUser.getIdx(), // 참조 ID: 수락한 사람
+                    "USER"
+            );
+        }
+        // ===== 알림 기록 로직 추가 끝 =====
     }
 
     @Override
@@ -295,12 +331,19 @@ public class ProjectServiceImpl implements ProjectService {
         ProjectMember membership = projectMemberRepository.findByUserAndProject(currentUser, project)
                 .orElseThrow(() -> new BusinessLogicException(ErrorCode.NO_PENDING_INVITATION, "해당 프로젝트에 대한 초대 정보를 찾을 수 없습니다."));
 
+        // 이미 처리된 초대인지 확인합니다.
         if (membership.getStatus() != ProjectMemberStatus.PENDING) {
             throw new BusinessLogicException(ErrorCode.INVITATION_ALREADY_PROCESSED);
         }
-        projectMemberRepository.delete(membership); // 초대 거절 시 멤버십 기록 자체를 삭제
-        log.info("사용자 {}가 프로젝트 '{}'({}) 초대를 거절했습니다. (초대 기록 삭제)", currentUser.getNickname(), project.getTitle(), projectId);
-        // TODO: 초대한 사람에게 알림 등
+
+        // 1. 엔티티의 상태를 PENDING에서 REJECTED로 변경합니다.
+        membership.rejectInvitation();
+
+        // 2. 변경된 상태를 데이터베이스에 저장(업데이트)합니다.
+        projectMemberRepository.save(membership);
+        // ---------------------------------
+
+        log.info("사용자 {}가 프로젝트 '{}'({}) 초대를 거절했습니다. (상태: REJECTED)", currentUser.getNickname(), project.getTitle(), projectId);
     }
 
     /**

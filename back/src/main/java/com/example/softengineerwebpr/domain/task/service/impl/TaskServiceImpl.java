@@ -1,10 +1,12 @@
 package com.example.softengineerwebpr.domain.task.service.impl;
 
+import com.example.softengineerwebpr.common.entity.NotificationType;
 import com.example.softengineerwebpr.common.exception.BusinessLogicException;
 import com.example.softengineerwebpr.common.exception.ErrorCode; // ErrorCode 전체 임포트
 import com.example.softengineerwebpr.domain.group.entity.GroupMember;
 import com.example.softengineerwebpr.domain.group.repository.GroupMemberRepository;
 import com.example.softengineerwebpr.domain.group.repository.GroupRepository;
+import com.example.softengineerwebpr.domain.notification.service.NotificationService;
 import com.example.softengineerwebpr.domain.post.entity.Post;
 import com.example.softengineerwebpr.domain.post.repository.PostRepository;
 import com.example.softengineerwebpr.domain.project.entity.Project;
@@ -60,6 +62,7 @@ public class TaskServiceImpl implements TaskService {
     private final GroupMemberRepository groupMemberRepository;
     private final GroupRepository groupRepository;
     private final HistoryService historyService;
+    private final NotificationService notificationService;
 
     // private final NotificationService notificationService;
 
@@ -254,6 +257,22 @@ public class TaskServiceImpl implements TaskService {
         historyService.recordHistory(task.getProject(), currentUser, HistoryActionType.상태변경, historyDescription, updatedTask.getIdx());
         // ===== 히스토리 기록 로직 추가 끝 =====
 
+        // ===== 알림 기록 로직 추가 시작 =====
+        // 업무 담당자들에게 상태 변경 알림 전송 (변경을 수행한 본인 제외)
+        String notificationContent = String.format("업무 '%s'의 상태가 '%s'(으)로 변경되었습니다.",
+                updatedTask.getTitle(), newStatus.name());
+
+        getAssignedUsersForTask(updatedTask).stream()
+                .filter(member -> !member.equals(currentUser)) // 상태를 변경한 본인은 제외
+                .forEach(member -> notificationService.createAndSendNotification(
+                        member,
+                        NotificationType.TASK_STATUS_CHANGED,
+                        notificationContent,
+                        updatedTask.getIdx(),
+                        "TASK"
+                ));
+        // ===== 알림 기록 로직 추가 끝 =====
+
         List<FileResponseDto> fileDtos = fileService.getFilesForReference(FileReferenceType.TASK, updatedTask.getIdx());
         return TaskResponseDto.fromEntity(updatedTask, getAssignedUsersForTask(updatedTask), fileDtos);
     }
@@ -361,6 +380,18 @@ public class TaskServiceImpl implements TaskService {
                     TaskMember newAssignment = TaskMember.builder().task(task).user(userToAdd).build(); //
                     taskMemberRepository.save(newAssignment);
                     log.info("업무 '{}'에 담당자 '{}' 추가.", task.getTitle(), userToAdd.getNickname());
+
+                    // 알림 기록 로직
+                    if (!userToAdd.equals(currentUser)) { // 자기 자신에게 할당하는 경우는 제외
+                        String notificationContent = String.format("'%s' 업무에 담당자로 할당되었습니다.", task.getTitle());
+                        notificationService.createAndSendNotification(
+                                userToAdd,
+                                NotificationType.NEW_TASK_ASSIGNED,
+                                notificationContent,
+                                task.getIdx(),
+                                "TASK"
+                        );
+                    }
                 });
 
         // 삭제할 담당자

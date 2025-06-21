@@ -27,6 +27,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.example.softengineerwebpr.common.entity.NotificationType; // 알림 타입 임포트
+import com.example.softengineerwebpr.domain.notification.service.NotificationService; // 알림 서비스 임포트
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,7 +42,7 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
     private final ProjectMemberRepository projectMemberRepository;
-    // private final NotificationService notificationService; // 알림 기능 연동 시
+    private final NotificationService notificationService;
     private final FileService fileService; // 새로 주입
 
     // Helper 메소드 (findPostOrThrow, findCommentOrThrow, checkProjectMembership)는 기존과 동일
@@ -116,6 +118,26 @@ public class CommentServiceImpl implements CommentService {
 
         Comment savedComment = commentRepository.save(comment);
         log.info("새 댓글 작성: postId={}, commentId={}, 작성자: {}", postId, savedComment.getIdx(), currentUser.getNickname());
+
+        // ===== 알림 기록 로직 추가 시작 =====
+        if (parentComment == null) { // 최상위 댓글인 경우 -> 게시글 작성자에게 알림
+            User postAuthor = post.getUser();
+            if (!postAuthor.equals(currentUser)) { // 자신의 게시글에 댓글 단 경우는 제외
+                String content = String.format("'%s'님이 회원님의 게시글 '%s'에 댓글을 남겼습니다.",
+                        currentUser.getNickname(), post.getTitle());
+                notificationService.createAndSendNotification(postAuthor, NotificationType.NEW_COMMENT_ON_MY_POST,
+                        content, post.getIdx(), "POST");
+            }
+        } else { // 대댓글인 경우 -> 부모 댓글 작성자에게 알림
+            User parentCommentAuthor = parentComment.getUser();
+            if (!parentCommentAuthor.equals(currentUser)) { // 자신의 댓글에 답글 단 경우는 제외
+                String content = String.format("'%s'님이 회원님의 댓글에 답글을 남겼습니다.",
+                        currentUser.getNickname());
+                notificationService.createAndSendNotification(parentCommentAuthor, NotificationType.NEW_REPLY_TO_MY_COMMENT,
+                        content, post.getIdx(), "POST"); // postId 또는 parentCommentId를 참조로 사용 가능
+            }
+        }
+        // ===== 알림 기록 로직 추가 끝 =====
 
         // 파일은 별도 API로 업로드. 생성 시점에는 파일 없음.
         return CommentResponseDto.fromEntity(savedComment, Collections.emptyList()); //
