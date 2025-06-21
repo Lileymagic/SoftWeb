@@ -14,7 +14,7 @@ import lombok.Setter;
 public class SignUpRequestDto {
 
     @NotBlank(message = "로그인 아이디는 필수 입력 값입니다.")
-    @Size(min = 8, max = 20, message = "로그인 아이디는 8자 이상 20자 이하로 입력해주세요.")
+    @Size(min = 4, max = 20, message = "로그인 아이디는 4자 이상 20자 이하로 입력해주세요.")
     @Pattern(regexp = "^[a-zA-Z0-9_-]+$", message = "로그인 아이디는 영어, 숫자, 대시(-), 언더스코어(_)만 사용 가능합니다.")
     private String loginId; // 요구사항: ID (영어, 숫자, 특수문자 일부 허용 (- , _ ), 최소 8자, 최대 20자)
 
@@ -26,7 +26,7 @@ public class SignUpRequestDto {
     // 보안을 위해 최소 8자 및 복잡도(영문,숫자,특수문자 조합) 패턴 추가
 
     @NotBlank(message = "닉네임은 필수 입력 값입니다.")
-    @Size(min = 4, max = 20, message = "닉네임은 4자 이상 20자 이하로 입력해주세요.")
+    @Size(min = 2, max = 20, message = "닉네임은 2자 이상 20자 이하로 입력해주세요.")
     @Pattern(regexp = "^[a-zA-Z0-9가-힣_-]+$", message = "닉네임은 한글, 영어, 숫자, 대시(-), 언더스코어(_)만 사용 가능합니다.")
     private String nickname; // 요구사항: 닉네임 (한글, 영어, 숫자, 특수문자 일부 허용 ( - , _ ), 최소 4자, 최대 20자)
 
