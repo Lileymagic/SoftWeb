@@ -216,6 +216,7 @@
             cursor: pointer;
         }
         .aside_left li:hover {
+            
             background-color: rgb(230, 230, 230);
         }
         li.on {
@@ -335,7 +336,10 @@
             background-color: white;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            border: solid 1px rgb(240, 240, 240);
+
+            margin: 0 auto;
             box-sizing: border-box;
         }
         .project-description-content {
@@ -352,6 +356,34 @@
         .project-description-content.empty {
             color: #888;
             font-style: italic;
+        }
+        .chart-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            max-width: 830px;
+            margin: 0 auto;
+            box-sizing: border-box;
+            gap: 30px;
+        }
+        .chart_box {
+            background-color: white;
+            border: solid 1px rgb(240, 240, 240);
+            border-radius: 10px;
+            width: 30vw;
+            max-width: 450px;
+            height: 40vh;
+            max-height: 400px;
+            padding: 25px;
+            box-sizing: border-box;
+        }
+        #pjName {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            cursor: default;
         }
     </style>
 </head>
@@ -434,12 +466,12 @@
 
     <div class="main_app_area">
         <div class="project_memu">
-            <div style="display: flex; align-items: center; font-weight: bold; width: 100%;" >
-                <div style="display: flex; align-items: center; gap: 10px; margin-left: 30px;">
-                    <div id="pjName" contenteditable="false">프로젝트 이름 로딩 중...</div>
+            <div style="display: flex; align-items: center; font-weight: bold; width: 100%; gap: 15px;" >
+                <div style="display: flex; align-items: center; gap: 10px; margin-left: 30px; margin-right: 10px;">
+                    <div id="pjName" contenteditable="false" title="프로젝트 이름">프로젝트 이름 로딩 중...</div>
                     <img id="edit" class="drag1" src="/icon/edit.png" style="height:20px; width:20px; margin-left: 10px; cursor:pointer;"/>
                 </div>
-                <img src="/icon/graph.png" class="drag1" id="graphbtn" style="height:20px; width:20px; margin-right:10px; margin-left:auto; cursor:pointer;" onclick="Watchdiv3('2')" />
+                <img src="/icon/graph.png" class="drag1" id="graphbtn" style="height:20px; width:20px; margin-left:auto; cursor:pointer;" onclick="Watchdiv3('2')" />
                 <img src="/icon/gear.png" class="drag1" style="height:20px; width:20px; margin-right: 10px; cursor:pointer;" onclick="goToProjectManage()"/>
             </div>
         </div>
@@ -468,7 +500,7 @@
         </div>
 
         <div class="middle7" id="2" style="display: none;">
-            <div class="box7 wh100" style="justify-content: flex-start; flex-direction: column; align-items: center;">
+            <div class="box7 wh100" style="justify-content: flex-start; flex-direction: column; align-items: stretch;">
 
                 <div class="project-description-container">
                     <div>
@@ -480,9 +512,9 @@
                     </div>
                 </div>
 
-                <div style="display: flex; justify-content: center; align-items: flex-start;">
+                <div class="chart-container">
                     <!-- 업무 진행률 차트 -->
-                    <div style="background-color: white; border: none; border-radius: 10px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); width: 450px; height: 400px; padding: 25px; margin-right: 30px;">
+                    <div class="chart_box">
                         <h3 style="font-weight: bold; font-size: 18px; margin-bottom: 15px; color: #333;">업무 진행률</h3>
                         <div style="width: 100%; height: calc(100% - 50px); position: relative;">
                             <canvas id="taskProgressChart"></canvas>
@@ -490,7 +522,7 @@
                     </div>
 
                     <!-- 마감일 준수율 차트 -->
-                    <div style="background-color: white; border: none; border-radius: 10px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); width: 350px; height: 400px; padding: 25px;">
+                    <div class="chart_box"  style="width: 20vw; max-width: 350px;">
                         <h3 style="font-weight: bold; font-size: 18px; margin-bottom: 15px; color: #333;">마감일 준수율</h3>
                         <div style="width: 100%; height: calc(100% - 50px); position: relative;">
                             <canvas id="deadlineComplianceChart"></canvas>
@@ -606,6 +638,7 @@
                         oldName = apiResult.data.title;
                         nameElement.textContent = apiResult.data.title;
                         loadProjectListForAside();
+                        updateTitle();
                     } else {
                         throw new Error(apiResult.message || "프로젝트 이름 변경은 성공했으나 응답이 올바르지 않습니다.");
                     }
@@ -878,6 +911,7 @@
             const result = await response.json();
             if (result.status === 200 && result.data) {
                 pjNameDiv.textContent = result.data.title;
+                updateTitle();
 
                 if (pjDescriptionDiv) {
                     if (result.data.description && result.data.description.trim()) {
@@ -1436,5 +1470,12 @@
             }]
         });
     }
+
+    // 제목 길어지면 나오는 title 갱싱
+    const pjName = document.getElementById('pjName');
+    function updateTitle() {
+        pjName.title = pjName.textContent;
+    }
+  updateTitle();
 </script>
 </html>

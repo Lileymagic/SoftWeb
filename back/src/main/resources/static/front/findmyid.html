@@ -10,7 +10,7 @@
     <style>
         .button_find {
             background-color:rgba(255, 255, 255, 0);
-            height:40px;
+            height: 35px;
             width:300px;
             color:rgb(25, 25, 52);
             border: 1px solid rgba(0, 0, 0, 0.25);
@@ -19,6 +19,7 @@
             margin-bottom: 10px;
             border-radius: 4px;
             font-family: 'Pretendard-Regular';
+            flex-shrink: 0;
         }
         input:focus {
             outline: none;
@@ -42,7 +43,7 @@
         }
     </style>
   <script type="module" crossorigin src="/assets/approot-yBEsYrX5.js"></script>
-  <link rel="stylesheet" crossorigin href="/css/bootstrap.CdihPEXe.css">
+  <link rel="stylesheet" crossorigin href="/css/bootstrap.D1iupR2w.css">
 </head>
 <body style="background-color: rgb(248, 248, 248);">
     <div id="root"></div>
@@ -57,7 +58,7 @@
             </div>  
             &nbsp;
             <input class="button_find" type="text" id="email" placeholder=" 이메일"/> 
-            <button class="button_final" style="width:130px; margin-top: 20px;" onclick="findingid()">아이디 찾기</button>
+            <button class="button_final" style="height: 40px; width:130px; margin-top: 20px; flex-shrink: 0;" onclick="findingid()">아이디 찾기</button>
             <div id="findIdMessage"></div>
             <span class="login_link" onclick="window.location.href = '/front/login.html'">로그인 화면으로 돌아가기</span>
         </div>
