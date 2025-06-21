@@ -17,6 +17,7 @@ import com.example.softengineerwebpr.domain.project.entity.ProjectMemberRole; //
 import com.example.softengineerwebpr.domain.project.entity.ProjectMemberStatus; //
 import com.example.softengineerwebpr.domain.project.repository.ProjectMemberRepository; //
 import com.example.softengineerwebpr.domain.task.entity.Task; //
+import com.example.softengineerwebpr.domain.task.repository.TaskMemberRepository;
 import com.example.softengineerwebpr.domain.task.repository.TaskRepository; //
 import com.example.softengineerwebpr.domain.user.entity.User; //
 import com.example.softengineerwebpr.domain.file.entity.File; //
@@ -47,12 +48,23 @@ public class PostServiceImpl implements PostService {
     private final TaskRepository taskRepository;         //
     private final ProjectMemberRepository projectMemberRepository; //
     private final CommentRepository commentRepository;
+    private final TaskMemberRepository taskMemberRepository;
 
     // --- Helper Methods (findTaskOrThrow, checkProjectMembership, findPostOrThrow, checkPostViewPermission - 이전과 동일) ---
     private Task findTaskOrThrow(Long taskId) { /* 이전과 동일 */ return taskRepository.findById(taskId).orElseThrow(() -> new BusinessLogicException(ErrorCode.TASK_NOT_FOUND)); } //
     private void checkProjectMembership(Project project, User user) { /* 이전과 동일 */  if (!projectMemberRepository.findByUserAndProject(user, project).filter(pm -> pm.getStatus() == ProjectMemberStatus.ACCEPTED).isPresent()) { throw new BusinessLogicException(ErrorCode.NOT_PROJECT_MEMBER, "해당 프로젝트의 멤버가 아니므로 게시글을 조회할 수 없습니다."); } } //
     private Post findPostOrThrow(Long postId) { /* 이전과 동일 */ return postRepository.findById(postId).orElseThrow(() -> new BusinessLogicException(ErrorCode.RESOURCE_NOT_FOUND, "게시글을 찾을 수 없습니다. ID: " + postId)); } //
     private void checkPostViewPermission(Post post, User user) { /* 이전과 동일 */ Project project = post.getTask().getProject(); if (!projectMemberRepository.findByUserAndProject(user, project).filter(pm -> pm.getStatus() == ProjectMemberStatus.ACCEPTED).isPresent()) { throw new BusinessLogicException(ErrorCode.NOT_PROJECT_MEMBER, "해당 프로젝트의 멤버가 아니므로 게시글을 조회할 수 없습니다."); } } //
+    private boolean isUserTaskAssignee(User user, Task task) {
+        return taskMemberRepository.existsByUserAndTask(user, task);
+    }
+
+    private boolean isUserProjectAdmin(User user, Project project) {
+        return projectMemberRepository.findByUserAndProject(user, project)
+                .filter(pm -> pm.getStatus() == ProjectMemberStatus.ACCEPTED)
+                .map(pm -> pm.getRole() == ProjectMemberRole.관리자)
+                .orElse(false);
+    }
 
     @Override
     @Transactional(readOnly = true)
@@ -90,12 +102,23 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostDetailResponseDto createPost(Long taskId, PostCreateRequestDto requestDto, User currentUser) { /* 이전과 동일 (파일 처리는 별도 API 가정) */
+    public PostDetailResponseDto createPost(Long taskId, PostCreateRequestDto requestDto, User currentUser) {
         Task task = findTaskOrThrow(taskId);
         Project project = task.getProject();
+
+        // 1. 기본 권한 확인: 프로젝트 멤버인지 확인
         checkProjectMembership(project, currentUser);
 
-        Post post = Post.builder() //
+        // ===== 2. 수정/추가된 상세 권한 확인 로직 시작 =====
+        boolean isAssignedToTask = isUserTaskAssignee(currentUser, task);
+        boolean isAdmin = isUserProjectAdmin(currentUser, project);
+
+        if (!isAssignedToTask && !isAdmin) {
+            throw new BusinessLogicException(ErrorCode.ACCESS_DENIED, "업무에 할당된 담당자 또는 프로젝트 관리자만 게시글을 작성할 수 있습니다.");
+        }
+        // ===== 수정/추가된 상세 권한 확인 로직 끝 =====
+
+        Post post = Post.builder()
                 .task(task)
                 .user(currentUser)
                 .title(requestDto.getTitle())
@@ -106,16 +129,8 @@ public class PostServiceImpl implements PostService {
         log.info("새 게시글 생성: postId={}, title='{}', taskId={}, byUser={}",
                 savedPost.getIdx(), savedPost.getTitle(), taskId, currentUser.getNickname());
 
-        return PostDetailResponseDto.builder() //
-                .idx(savedPost.getIdx())
-                .title(savedPost.getTitle())
-                .content(savedPost.getContent())
-                .author(UserBasicInfoDto.fromEntity(savedPost.getUser())) //
-                .taskId(savedPost.getTask().getIdx())
-                .createdAt(savedPost.getCreatedAt())
-                .updatedAt(savedPost.getUpdatedAt())
-                .files(Collections.emptyList()) // 생성 시점에는 파일 없음
-                .build();
+        // 생성된 게시글 정보 반환
+        return PostDetailResponseDto.fromEntity(savedPost , Collections.emptyList() );
     }
 
     @Override
