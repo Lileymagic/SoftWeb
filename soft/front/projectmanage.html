@@ -1193,7 +1193,7 @@
                             userIdx: member.userId, // ProjectMemberResponseDto의 userId를 userIdx로 매핑
                             nickname: member.nickname,
                             identificationCode: member.identificationCode,
-                            profileImage: member.profileImage || 'public/icon/user2.png', // profileImage 필드가 ProjectMemberResponseDto에 있다고 가정
+                            profileImage: member.profileImage || '/icon/user2.png', // profileImage 필드가 ProjectMemberResponseDto에 있다고 가정
                             // '아이디' 필드는 제외하기로 했으므로 email/loginId는 가져오지 않음
                         }));
                     } else {
@@ -1229,7 +1229,7 @@
                                         <div class="tooltip1"></div>
                                     </div>
                                 </td>
-                                <td style="width: 10%;"><img src="public/icon/edit.png" style="height:20px; width:20px; cursor:pointer;" class="edit_group_name_btn drag1" title="그룹 이름 수정"/></td>
+                                <td style="width: 10%;"><img src="/icon/edit.png" style="height:20px; width:20px; cursor:pointer;" class="edit_group_name_btn drag1" title="그룹 이름 수정"/></td>
                                 <td style="width: 30%;"><div style="display: flex; align-items: center; justify-content: center; gap: 10px;"><span>그룹 색상</span><input type="color" class="groupcolor_input" value="${group.color || '#000000'}"/></div></td>
                                 <td style="width: 30%; text-align: right;"><button class="button_expel delete_group_btn" data-group-id="${group.idx}" style="font-size:13px; width:auto; padding: 0 8px;">그룹 삭제</button></td>
                             `;
@@ -1390,7 +1390,7 @@
                         <td style="width: auto; padding: 5px 0;">
                             <div style="display: flex; flex-direction: row; align-items: center;">
                                 <div style="width: 35px; height: 35px; border-radius: 50%; overflow: hidden; margin-right: 10px">
-                                    <img src="${user.profileImage || 'public/icon/user2.png'}" alt="${user.nickname} 프로필" style="height: 100%; width: 100%; object-fit:cover;"/>
+                                    <img src="${user.profileImage || '/icon/user2.png'}" alt="${user.nickname} 프로필" style="height: 100%; width: 100%; object-fit:cover;"/>
                                 </div>
                                 <span style="font-size: medium; color: #333;" class="lenCut_container"><span class="lenCut">${user.nickname}</span><div class="tooltip1"></div></span>
                             </div>
@@ -1784,7 +1784,7 @@
                             // ✨ 요청에 맞게 tr 내부 HTML 구조 변경
                             tr.innerHTML = `
                                 <td style="width: 55px;">
-                                    <img src="${member.profileImage || 'public/icon/user2.png'}" style="height: 30px; width: 30px; margin:5px; border-radius:50%;"/>
+                                    <img src="${member.profileImage || '/icon/user2.png'}" style="height: 30px; width: 30px; margin:5px; border-radius:50%;"/>
                                 </td>
                                 <td class="lenCut_container" style="width: 150px;">
                                     <span class="lenCut">${member.nickname}</span>
@@ -1920,7 +1920,7 @@
                         // ✨ 초대 버튼에 data-user-id와 data-user-nickname 속성 추가
                         tr.innerHTML = `
                             <td>
-                                <img src="${user.profileImage || 'public/icon/user2.png'}" style="height: 30px; width: 30px; margin:5px; border-radius:50%;"/>
+                                <img src="${user.profileImage || '/icon/user2.png'}" style="height: 30px; width: 30px; margin:5px; border-radius:50%;"/>
                             </td>
                             <td class="lenCut_container" style="width: 150px;">
                                 <span class="lenCut">${user.nickname}</span>
