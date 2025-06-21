@@ -329,6 +329,11 @@
         const assignedUserListContainerEl = document.getElementById('wl_assignedUserListContainer');
         const completeTaskBtn = document.getElementById('wl_completeTaskBtn');
 
+        // ===== 수정 버튼 요소 가져오기 (추가) =====
+        const editTaskBtn = document.getElementById('edit_task_btn');
+        const editDescBtn = document.getElementById('edit_desc_btn');
+        const editDeadlineBtn = document.getElementById('edit_deadline_btn'); // 마감 기한 수정 버튼
+
         if (!taskNameHeaderEl || !taskStatusHeaderEl || !taskDescriptionEl || !taskDeadlineEl || !assignedUserListContainerEl || !completeTaskBtn) {
             console.error("하나 이상의 업무 상세 정보 요소가 worklist.html에 없습니다. ID를 확인하세요: wl_taskNameHeader, wl_taskStatusHeader, wl_taskDescription, wl_taskDeadline, wl_assignedUserListContainer, wl_completeTaskBtn");
             return;
@@ -361,6 +366,12 @@
                     } catch (e) { deadlineText = task.deadline; }
                 }
                 taskDeadlineEl.textContent = deadlineText;
+
+                // ===== 각 수정 버튼에 onclick 이벤트 핸들러 연결 (새로 추가) =====
+                editTaskBtn.onclick = () => handleUpdateTask('title', task.title);
+                editDescBtn.onclick = () => handleUpdateTask('description', task.description);
+                editDeadlineBtn.onclick = () => showDeadlineEditor(task.deadline); // <<<< 이 부분 수정
+                // ==========================================================
 
                 assignedUserListContainerEl.innerHTML = ''; 
                 if (task.assignedMembers && task.assignedMembers.length > 0) {
@@ -528,6 +539,164 @@
             }
         });
     }
+
+    /**
+     * 업무의 특정 필드를 수정하고 API를 호출하는 공통 함수
+     * @param {'title' | 'description' | 'deadline'} field 수정할 필드명
+     * @param {string | null} currentValue 필드의 현재 값
+     */
+    async function handleUpdateTask(field, currentValue) {
+        if (!currentWorklistTaskId) return;
+
+        let newValue;
+        const requestBody = {};
+
+        // 수정할 필드에 따라 사용자에게 새 값을 입력받음
+        switch(field) {
+            case 'title':
+                newValue = prompt("새 업무 제목을 입력하세요:", currentValue || "");
+                if (newValue === null || newValue.trim() === currentValue) return; // 변경 없거나 취소
+                if (newValue.trim() === "") { alert("제목은 비워둘 수 없습니다."); return; }
+                requestBody.title = newValue.trim();
+                break;
+            case 'description':
+                newValue = prompt("새 업무 내용을 입력하세요:", currentValue || "");
+                if (newValue === null) return; // 취소
+                requestBody.description = newValue;
+                break;
+            default:
+                return;
+        }
+        
+        try {
+            // PUT /api/tasks/{taskId} API 호출
+            const response = await fetch(`/api/tasks/${currentWorklistTaskId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(requestBody)
+            });
+            const result = await response.json();
+            if (!response.ok) throw new Error(result.message || `업무 수정 실패`);
+
+            alert("업무가 성공적으로 수정되었습니다.");
+            
+            // 1. 현재 모달 내용 새로고침
+            await loadTaskDetails(currentWorklistTaskId);
+            
+            // 2. 부모 창(projectboard.html)의 칸반 보드도 새로고침
+            if (window.parent && typeof window.parent.refreshTasksOnBoard === 'function') {
+                window.parent.refreshTasksOnBoard(currentWorklistProjectId);
+            }
+            
+        } catch (error) {
+            console.error(`Error updating task ${field}:`, error);
+            alert(`오류: ${error.message}`);
+        }
+    }
+
+    /**
+     * 마감 기한 텍스트를 클릭 시 날짜/시간 입력 필드로 변경하는 함수
+     * @param {string | null} currentValue 현재 마감 기한 값 (ISO 형식의 문자열)
+     */
+    function showDeadlineEditor(currentValue) {
+        const deadlineSpan = document.getElementById('wl_taskDeadline');
+        const editBtn = document.getElementById('edit_deadline_btn');
+        const parentContainer = deadlineSpan.parentElement;
+
+        // 이미 수정 UI가 열려있다면 중복 생성 방지
+        if (parentContainer.querySelector('input[type="datetime-local"]')) {
+            return;
+        }
+
+        // 기존 텍스트와 수정 버튼 숨기기
+        deadlineSpan.style.display = 'none';
+        editBtn.style.display = 'none';
+
+        // 새로운 입력 요소들 생성
+        const input = document.createElement('input');
+        input.type = 'datetime-local';
+        input.className = 'button_pb';
+        input.style.cssText = 'width: auto; height: 30px; vertical-align: middle;';
+        
+        // datetime-local 형식(YYYY-MM-DDTHH:mm)에 맞게 기본값 설정
+        if (currentValue) {
+            input.value = currentValue.substring(0, 16).replace(' ', 'T');
+        }
+
+        const saveBtn = document.createElement('button');
+        saveBtn.textContent = '저장';
+        saveBtn.className = 'button_work';
+        saveBtn.style.cssText = 'margin-left: 10px; height: 30px;';
+
+        const cancelBtn = document.createElement('button');
+        cancelBtn.textContent = '취소';
+        cancelBtn.className = 'button_work2';
+        cancelBtn.style.cssText = 'margin-left: 5px; height: 30px;';
+
+        // 원래 UI로 되돌리는 함수
+        const restoreOriginalView = () => {
+            parentContainer.removeChild(input);
+            parentContainer.removeChild(saveBtn);
+            parentContainer.removeChild(cancelBtn);
+            deadlineSpan.style.display = '';
+            editBtn.style.display = '';
+        };
+
+        cancelBtn.onclick = restoreOriginalView;
+
+        // ===== "저장" 버튼 클릭 로직 수정 =====
+        saveBtn.onclick = async () => {
+            const newValue = input.value;
+            // TaskUpdateRequestDto 형식에 맞게 요청 본문 생성
+            const requestBody = {
+                // 다른 필드는 변경하지 않으므로, deadline 필드만 포함
+                deadline: null 
+            };
+            
+            if (newValue.trim() === "") {
+                // 사용자가 입력란을 비우면 마감기한 제거로 간주
+                requestBody.deadline = null;
+            } else {
+                const newDeadline = new Date(newValue);
+                if (isNaN(newDeadline.getTime())) { alert("잘못된 날짜 형식입니다."); return; }
+                if (newDeadline < new Date()) { alert("마감 기한은 현재 시각 이후로 설정해야 합니다."); return; }
+                // 백엔드(LocalDateTime)로 전송하기 위해 초(second) 정보 추가
+                requestBody.deadline = newValue + ':00';
+            }
+
+            try {
+                // API를 직접 호출
+                const response = await fetch(`/api/tasks/${currentWorklistTaskId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(requestBody)
+                });
+                const result = await response.json();
+                if (!response.ok) throw new Error(result.message || '업무 수정 실패');
+
+                alert("마감 기한이 성공적으로 수정되었습니다.");
+                
+                // UI 새로고침
+                await loadTaskDetails(currentWorklistTaskId);
+                if (window.parent && typeof window.parent.refreshTasksOnBoard === 'function') {
+                    window.parent.refreshTasksOnBoard(currentWorklistProjectId);
+                }
+                
+            } catch (error) {
+                console.error('Error updating deadline:', error);
+                alert(`오류: ${error.message}`);
+                // 오류 발생 시에는 입력 UI를 그대로 두어 사용자가 재시도할 수 있도록 함
+            }
+        };
+        // ===== "저장" 버튼 클릭 로직 수정 끝 =====
+
+        // 생성한 입력 요소들을 컨테이너에 추가
+        parentContainer.appendChild(input);
+        parentContainer.appendChild(saveBtn);
+        parentContainer.appendChild(cancelBtn);
+        input.focus();
+    }
+
 </script>
 </html>
 
